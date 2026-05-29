@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>論文ライブラリ｜肝オープンオルガノイド・MASH・ABM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f0e6; --paper-2:#efe9db; --ink:#23211c; --ink-soft:#564f42;
+  --line:#cabfa6; --line-soft:#ddd3bd; --accent:#2f5d44; --accent-ink:#1d3a2b;
+  --card:#fbf8f0; --shadow:rgba(40,34,20,.12);
+  --A:#3b7d72; --B:#c0632f; --C:#9c4f6c; --D:#bf942b;
+  --E:#3f6fa3; --F:#6b8e3d; --G:#8a6d3b; --H:#a23b3b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Zen Kaku Gothic New",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.7;
+  background-image:radial-gradient(circle at 12% 8%,rgba(47,93,68,.05),transparent 40%),
+                   radial-gradient(circle at 88% 92%,rgba(162,59,59,.04),transparent 45%);
+  min-height:100vh;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px}
+
+/* Header */
+header{padding:54px 0 30px;border-bottom:2px solid var(--ink);position:relative}
+header::after{content:"";position:absolute;bottom:-6px;left:0;right:0;height:1px;background:var(--ink)}
+.kicker{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:clamp(28px,5vw,46px);line-height:1.18;letter-spacing:.01em}
+h1 .em{color:var(--accent-ink);font-style:italic}
+.sub{margin-top:14px;max-width:62ch;color:var(--ink-soft);font-size:15px}
+.meta-row{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px 26px;font-family:"DM Mono",monospace;font-size:12.5px;color:var(--ink-soft)}
+.meta-row b{color:var(--ink);font-weight:500}
+
+/* Controls */
+.controls{position:sticky;top:0;z-index:20;background:linear-gradient(var(--paper) 78%,transparent);padding:20px 0 16px;margin-top:8px}
+.search{position:relative;margin-bottom:16px}
+.search input{
+  width:100%;padding:13px 16px 13px 44px;font-size:15px;font-family:inherit;color:var(--ink);
+  background:var(--card);border:1px solid var(--line);border-radius:2px;outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,93,68,.12)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.04em;cursor:pointer;user-select:none;
+  padding:6px 13px 6px 11px;border:1px solid var(--line);background:var(--card);border-radius:999px;
+  color:var(--ink-soft);display:inline-flex;align-items:center;gap:7px;transition:all .18s;
+}
+.chip .dot{width:9px;height:9px;border-radius:50%;background:var(--c,#999);flex:none}
+.chip:hover{border-color:var(--ink-soft)}
+.chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip.active .dot{box-shadow:0 0 0 2px var(--paper)}
+.chip[data-theme="all"] .dot{background:linear-gradient(90deg,var(--A),var(--C),var(--E),var(--H))}
+
+/* Count line */
+.countline{font-family:"DM Mono",monospace;font-size:12.5px;color:var(--ink-soft);margin:6px 0 20px;letter-spacing:.04em}
+
+/* Cards */
+.grid{display:grid;gap:20px}
+.card{
+  background:var(--card);border:1px solid var(--line-soft);border-left:5px solid var(--c,var(--accent));
+  border-radius:3px;padding:24px 26px;box-shadow:0 1px 0 var(--shadow);position:relative;
+  transition:box-shadow .25s,transform .25s;animation:rise .5s both;
+}
+.card:hover{box-shadow:0 10px 30px -16px var(--shadow)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card-top{display:flex;align-items:flex-start;gap:16px;justify-content:space-between}
+.num{font-family:"DM Mono",monospace;font-size:13px;color:var(--ink-soft);letter-spacing:.1em;padding-top:4px;flex:none}
+.tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:55%}
+.tag{font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border-radius:999px;color:#fff;white-space:nowrap}
+.tag.sec{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.title{font-family:"Shippori Mincho",serif;font-weight:600;font-size:20px;line-height:1.4;margin:14px 0 8px;letter-spacing:.01em}
+.cite{font-size:13.5px;color:var(--ink-soft)}
+.cite .j{color:var(--accent-ink);font-weight:500}
+.approach{display:inline-block;margin-top:10px;font-family:"DM Mono",monospace;font-size:11px;color:var(--ink-soft);border:1px dashed var(--line);padding:3px 10px;border-radius:2px}
+.row-actions{display:flex;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+.btn{
+  font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.06em;cursor:pointer;background:none;border:none;color:var(--accent-ink);
+  display:inline-flex;align-items:center;gap:7px;padding:4px 0;
+}
+.btn:hover{color:var(--B)}
+.btn .arr{transition:transform .25s}
+.card.open .btn .arr{transform:rotate(90deg)}
+.doi{font-family:"DM Mono",monospace;font-size:12px;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
+.doi:hover{color:var(--accent-ink);border-color:var(--accent)}
+
+/* Detail */
+.detail{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.card.open .detail{max-height:4000px}
+.detail-inner{padding-top:22px;margin-top:20px;border-top:1px solid var(--line-soft)}
+.sec{margin-bottom:20px}
+.sec h4{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.sec h4::before{content:"";width:14px;height:1px;background:var(--accent)}
+.sec p{font-size:14.5px;color:var(--ink)}
+.sec ul{list-style:none;font-size:14.5px}
+.sec li{position:relative;padding-left:18px;margin-bottom:5px}
+.sec li::before{content:"›";position:absolute;left:2px;color:var(--c,var(--accent));font-weight:700}
+.sec.connect{background:var(--paper-2);border-radius:3px;padding:16px 18px;border:1px solid var(--line-soft)}
+.sec.connect h4{color:var(--B)}.sec.connect h4::before{background:var(--B)}
+.sec.connect li::before{content:"◆";font-size:10px;color:var(--B)}
+table.gloss{width:100%;border-collapse:collapse;font-size:13px}
+table.gloss td{padding:5px 8px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+table.gloss td:first-child{white-space:nowrap;color:var(--accent);font-family:"DM Mono",monospace}
+table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
+.figbox{background:var(--paper-2);border:1px solid var(--line-soft);border-radius:4px;padding:14px;overflow-x:auto}
+.figbox svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+
+/* View tabs */
+.viewtabs{display:flex;gap:6px;margin-bottom:14px}
+.vtab{font-family:"DM Mono",monospace;font-size:12.5px;letter-spacing:.04em;cursor:pointer;padding:7px 16px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:2px;transition:all .18s}
+.vtab:hover{border-color:var(--ink-soft)}
+.vtab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* Glossary view */
+.glosgrid{display:grid;gap:12px}
+.glosrow{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--accent);border-radius:3px;padding:14px 18px;animation:rise .4s both}
+.glosrow .gterm{font-family:"DM Mono",monospace;font-size:15px;font-weight:500;color:var(--accent-ink)}
+.glosrow .gfull{font-size:12.5px;color:var(--ink-soft);margin-left:10px}
+.glosrow .gdesc{font-size:13.5px;color:var(--ink);margin-top:5px}
+.glosrow .grefs{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.pchip{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;padding:3px 10px;border-radius:999px;color:#fff;border:none;transition:opacity .18s}
+.pchip:hover{opacity:.8}
+
+/* inline term tooltip */
+.term{border-bottom:1px dotted var(--accent);cursor:help;color:var(--accent-ink)}
+#tip{position:fixed;z-index:999;max-width:300px;background:var(--ink);color:var(--paper);font-size:12.5px;line-height:1.5;
+  padding:8px 11px;border-radius:5px;box-shadow:0 6px 22px -6px rgba(0,0,0,.5);pointer-events:none;opacity:0;transition:opacity .12s;transform:translateY(-4px)}
+#tip.on{opacity:1}
+#tip b{font-family:"DM Mono",monospace;color:#fff;display:block;margin-bottom:2px;font-size:12px}
+#tip .tf{color:var(--line);font-size:11px;font-style:italic}
+
+/* scroll areas for long lists */
+.scrollarea{max-height:calc(100vh - 150px);overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.scrollarea::-webkit-scrollbar{width:10px}
+.scrollarea::-webkit-scrollbar-track{background:transparent}
+.scrollarea::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;border:2px solid var(--paper)}
+.scrollarea::-webkit-scrollbar-thumb:hover{background:var(--ink-soft)}
+
+/* glossary sort controls + category */
+.sortbar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:14px;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink-soft)}
+.sortbar .lbl{letter-spacing:.06em}
+.sbtn{font-family:"DM Mono",monospace;font-size:11.5px;cursor:pointer;padding:5px 12px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;transition:all .16s}
+.sbtn:hover{border-color:var(--ink-soft)}
+.sbtn.active{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.catlabel{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line-soft)}
+.catlabel:first-child{margin-top:0}
+.cattag{display:inline-block;font-family:"DM Mono",monospace;font-size:10px;padding:2px 8px;border-radius:999px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft);margin-left:8px;vertical-align:middle}
+
+/* illustration strip */
+.illus{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px}
+.illus figure{display:flex;flex-direction:column;align-items:center;gap:4px;width:74px;text-align:center}
+.illus svg{width:46px;height:46px}
+.illus figcaption{font-size:10.5px;color:var(--ink-soft);line-height:1.3}
+
+.empty{text-align:center;padding:60px 20px;color:var(--ink-soft);font-family:"DM Mono",monospace;font-size:14px}
+footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-family:"DM Mono",monospace;font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em;line-height:1.9}
+@media(max-width:640px){
+  .wrap{padding:0 14px 50px}
+  header{padding:34px 0 22px}
+  .sub{font-size:14px}
+  .meta-row{gap:8px 18px;font-size:12px}
+  .controls{padding:12px 0 12px}
+  .viewtabs .vtab{flex:1;text-align:center;padding:9px 8px}
+  .search input{font-size:16px;padding:12px 14px 12px 40px}
+  .chips{gap:6px}
+  .chip{font-size:11px;padding:5px 10px}
+  .sortbar{font-size:11px;gap:6px}
+  .sortbar .lbl{flex-basis:100%;margin-bottom:2px}
+  .sbtn{font-size:11px;padding:6px 11px}
+  .card{padding:18px 16px}
+  .card-top{flex-direction:column;gap:8px}
+  .tags{max-width:100%;justify-content:flex-start}
+  .title{font-size:17px}
+  .cite{font-size:12.5px}
+  .row-actions{gap:10px}
+  .doi{font-size:11px;word-break:break-all}
+  .scrollarea{max-height:none;overflow:visible;padding-right:0}
+  .sec p,.sec li{font-size:14px}
+  .illus figure{width:64px}
+  .illus svg{width:40px;height:40px}
+  .figbox{padding:10px}
+  #tip{max-width:78vw;font-size:13px}
+  .glosrow{padding:12px 14px}
+}
+@media(hover:none){.term{border-bottom:1px dashed var(--accent)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kicker">Reading Log · CNS &amp; sister journals</div>
+  <h1>論文ライブラリ<br><span class="em">肝オープンオルガノイド・MASH・ABM</span></h1>
+  <p class="sub">CNS本誌＋姉妹誌から、テーマに関わる論文を毎日1本ずつ蓄積。各エントリは要約・和訳・背景課題・達成・limitation・「自分の研究との接続」で構成。</p>
+  <div class="meta-row">
+    <span>収録 <b id="total">0</b> 本</span>
+    <span>テーマ <b>A–H</b></span>
+    <span>更新 <b id="updated">—</b></span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="viewtabs" id="viewtabs">
+    <button class="vtab active" data-view="papers">論文で見る</button>
+    <button class="vtab" data-view="terms">用語で探す</button>
+  </div>
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="q" type="text" placeholder="タイトル・著者・誌名・本文で検索…" autocomplete="off">
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+
+<div class="countline" id="countline"></div>
+<div class="sortbar" id="sortbar" style="display:none">
+  <span class="lbl">並び替え：</span>
+  <button class="sbtn active" data-sort="alpha">アルファベット順</button>
+  <button class="sbtn" data-sort="cat">ジャンル別</button>
+  <button class="sbtn" data-sort="first">初出論文順</button>
+  <button class="sbtn" data-sort="count">登場論文数順</button>
+</div>
+<div class="grid scrollarea" id="grid"></div>
+<div id="glosview" class="scrollarea" style="display:none"></div>
+<div id="tip"></div>
+
+<footer>
+  論文ライブラリ — 肝オープンオルガノイド／MASH／ABM<br>
+  ※Abstractは著作権配慮のため要約パラフレーズ。原文は各エントリのDOI/URLから取得可。<br>
+  新エントリは下部スクリプトの <b>PAPERS</b> 配列の先頭に追記してください（Coworkタスクが自動追記）。
+</footer>
+</div>
+
+<script>
+/* ===== テーマ定義 ===== */
+const THEMES={
+  A:{name:"培養系・モデル構築",c:"var(--A)"},
+  B:{name:"線維化メカニズム(HSC)",c:"var(--B)"},
+  C:{name:"免疫・炎症(KC/MΦ)",c:"var(--C)"},
+  D:{name:"脂肪化・脂質/代謝",c:"var(--D)"},
+  E:{name:"LSEC・血管・zonation",c:"var(--E)"},
+  F:{name:"数理・in silico(ABM)",c:"var(--F)"},
+  G:{name:"オミクス・空間解析",c:"var(--G)"},
+  H:{name:"治療・創薬標的/再生",c:"var(--H)"}
+};
+
+/* ===== データ：新しい論文はこの配列の先頭（[ の直後）にオブジェクトを追加 ===== */
+const PAPERS=[
+  /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
+  {
+    id:"07",
+    title:"ACLY/ACSS2二重阻害薬EVT0185がMASHの脂肪化・HSC活性化・線維化を軽減",
+    authors:"Di Pastena F, Gautam J, Lally JSV, Fayyazi R, Grasset E, Bhattacharya D, Fidelito G, Ahmadi E, Townsend LK, Batchuluun B, et al. (Steinberg GR)",
+    journal:"Cell Metabolism",
+    year:2026,
+    vol:"38(1): 33–49.e10",
+    doi:"10.1016/j.cmet.2025.11.015",
+    url:"https://www.cell.com/cell-metabolism/fulltext/S1550-4131(25)00529-7",
+    primary:"D",
+    tags:["D","B","H"],
+    approach:"in vivo (4マウスモデル) ＋ scRNA-seq/空間TX ＋ ヒト肝スライス ＋ 初代HSC",
+    figure:"<svg viewBox='0 0 640 270' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar07' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--ink-soft)'/></marker><marker id='ar07h' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--H)'/></marker></defs><text x='12' y='16' font-size='11' fill='var(--ink-soft)'>アセチルCoAの2産生経路（ACLY/ACSS2）がsteatosisとHSC活性化を同時駆動 → EVT0185で遮断</text><rect x='8' y='26' width='286' height='108' rx='7' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.2' stroke-dasharray='5 3'/><text x='151' y='42' text-anchor='middle' font-size='11' fill='var(--D)'>肝細胞</text><rect x='16' y='50' width='86' height='34' rx='5' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.3'/><text x='59' y='65' text-anchor='middle' font-size='11'>クエン酸</text><text x='59' y='79' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>→ ACLY</text><rect x='16' y='94' width='86' height='34' rx='5' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.3'/><text x='59' y='109' text-anchor='middle' font-size='11'>酢酸</text><text x='59' y='123' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>→ ACSS2</text><ellipse cx='155' cy='81' rx='38' ry='22' fill='var(--paper)' stroke='var(--D)' stroke-width='1.8'/><text x='155' y='77' text-anchor='middle' font-size='10' fill='var(--D)'>アセチルCoA</text><text x='155' y='90' text-anchor='middle' font-size='10' fill='var(--D)'>ハブ</text><line x1='102' y1='68' x2='120' y2='76' stroke='var(--ink-soft)' marker-end='url(#ar07)'/><line x1='102' y1='111' x2='120' y2='92' stroke='var(--ink-soft)' marker-end='url(#ar07)'/><rect x='214' y='50' width='72' height='56' rx='5' fill='var(--paper)' stroke='var(--D)' stroke-width='1.3'/><text x='250' y='71' text-anchor='middle' font-size='11'>DNL</text><text x='250' y='86' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>TG蓄積</text><text x='250' y='101' text-anchor='middle' font-size='10' fill='var(--D)'>steatosis</text><line x1='193' y1='81' x2='212' y2='81' stroke='var(--ink-soft)' marker-end='url(#ar07)'/><rect x='8' y='148' width='286' height='112' rx='7' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.2' stroke-dasharray='5 3'/><text x='151' y='164' text-anchor='middle' font-size='11' fill='var(--B)'>肝星細胞 (HSC)</text><rect x='16' y='172' width='98' height='36' rx='5' fill='var(--paper)' stroke='var(--B)' stroke-width='1.3'/><text x='65' y='187' text-anchor='middle' font-size='11'>ACSS2 ↑</text><text x='65' y='202' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>酢酸代謝 ↑</text><rect x='130' y='172' width='106' height='36' rx='5' fill='var(--paper)' stroke='var(--B)' stroke-width='1.3'/><text x='183' y='187' text-anchor='middle' font-size='11'>コレステロール</text><text x='183' y='202' text-anchor='middle' font-size='10' fill='var(--B)'>合成 ↑</text><rect x='76' y='220' width='152' height='32' rx='5' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='152' y='240' text-anchor='middle' font-size='12' fill='var(--B)'>HSC活性化 → 線維化</text><line x1='114' y1='208' x2='133' y2='222' stroke='var(--ink-soft)' marker-end='url(#ar07)'/><line x1='183' y1='208' x2='172' y2='220' stroke='var(--ink-soft)' marker-end='url(#ar07)'/><rect x='334' y='82' width='148' height='74' rx='7' fill='var(--paper)' stroke='var(--H)' stroke-width='2'/><text x='408' y='108' text-anchor='middle' font-size='13' fill='var(--H)'>EVT0185</text><text x='408' y='126' text-anchor='middle' font-size='11' fill='var(--H)'>ACLY ＋ ACSS2</text><text x='408' y='143' text-anchor='middle' font-size='11' fill='var(--H)'>二重阻害</text><path d='M334,100 C314,100 310,78 294,78' fill='none' stroke='var(--H)' stroke-dasharray='4 3' stroke-width='1.5' marker-end='url(#ar07h)'/><text x='296' y='74' font-size='10' fill='var(--H)'>⊣ ACLY</text><path d='M334,150 C314,150 310,195 294,195' fill='none' stroke='var(--H)' stroke-dasharray='4 3' stroke-width='1.5' marker-end='url(#ar07h)'/><text x='296' y='207' font-size='10' fill='var(--H)'>⊣ ACSS2</text><rect x='510' y='50' width='120' height='36' rx='5' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='570' y='66' text-anchor='middle' font-size='11.5' fill='var(--D)'>Steatosis 軽減</text><text x='570' y='81' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>TG・DNL ↓</text><rect x='510' y='174' width='120' height='36' rx='5' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='570' y='190' text-anchor='middle' font-size='11.5' fill='var(--B)'>線維化 解消</text><text x='570' y='205' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>MASH 改善</text><line x1='286' y1='78' x2='508' y2='68' stroke='var(--ink-soft)' stroke-width='1' stroke-dasharray='3 3' marker-end='url(#ar07)'/><line x1='228' y1='236' x2='508' y2='194' stroke='var(--ink-soft)' stroke-width='1' stroke-dasharray='3 3' marker-end='url(#ar07)'/><path d='M482,105 C495,105 500,72 508,68' fill='none' stroke='var(--H)' stroke-width='1.5' marker-end='url(#ar07h)'/><path d='M482,150 C495,150 500,186 508,192' fill='none' stroke='var(--H)' stroke-width='1.5' marker-end='url(#ar07h)'/></svg>",
+    method_figure:"<svg viewBox='0 0 640 230' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m07' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><text x='18' y='18' font-size='12' fill='var(--ink-soft)'>4種MASHマウスモデル × EVT0185 → scRNA-seq/空間TX解析 ＋ ヒト肝・HSC検証</text><rect x='8' y='30' width='138' height='50' rx='7' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='77' y='52' text-anchor='middle' font-size='11.5'>4種MASHマウス</text><text x='77' y='69' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>HFHSD/WD+CCl4 他</text><rect x='8' y='96' width='138' height='50' rx='7' fill='var(--paper)' stroke='var(--H)' stroke-width='1.8'/><text x='77' y='118' text-anchor='middle' font-size='11.5' fill='var(--H)'>EVT0185 投与</text><text x='77' y='135' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>± セマグルチド</text><line x1='77' y1='80' x2='77' y2='94' stroke='var(--accent)' marker-end='url(#m07)'/><rect x='194' y='36' width='152' height='50' rx='7' fill='var(--paper-2)' stroke='var(--G)' stroke-width='1.5'/><text x='270' y='58' text-anchor='middle' font-size='11.5'>scRNA-seq</text><text x='270' y='75' text-anchor='middle' font-size='10.5' fill='var(--G)'>＋ 空間TX</text><rect x='194' y='98' width='152' height='50' rx='7' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/><text x='270' y='120' text-anchor='middle' font-size='11.5'>HSC ACSS2/</text><text x='270' y='136' text-anchor='middle' font-size='10.5' fill='var(--B)'>コレステロール解析</text><path d='M146,57 C164,57 174,62 192,62' fill='none' stroke='var(--accent)' marker-end='url(#m07)'/><path d='M146,120 C164,120 174,120 192,122' fill='none' stroke='var(--accent)' marker-end='url(#m07)'/><rect x='402' y='28' width='228' height='50' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='516' y='50' text-anchor='middle' font-size='11.5'>ヒト肝スライス</text><text x='516' y='66' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>DNL阻害を確認</text><rect x='402' y='92' width='228' height='50' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='516' y='114' text-anchor='middle' font-size='11.5'>ヒト初代HSC in vitro</text><text x='516' y='130' text-anchor='middle' font-size='10' fill='var(--B)'>TGFβ1活性化をブロック</text><path d='M346,60 C370,60 388,52 400,50' fill='none' stroke='var(--accent)' marker-end='url(#m07)'/><path d='M346,123 C370,123 388,116 400,116' fill='none' stroke='var(--accent)' marker-end='url(#m07)'/><rect x='402' y='158' width='228' height='56' rx='7' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='516' y='180' text-anchor='middle' font-size='11.5'>アウトカム</text><text x='516' y='197' text-anchor='middle' font-size='10' fill='var(--D)'>TG ↓ / 線維化 ↓ / MASH解消</text><text x='516' y='211' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>bempedoic acid 単独より有効</text><path d='M270,148 C270,164 340,172 400,178' fill='none' stroke='var(--accent)' stroke-dasharray='3 3' marker-end='url(#m07)'/></svg>",
+    abstract_ja:"MASHは脂肪化・炎症・HSC活性化による線維化を特徴とする。アセチルCoAはDNLとコレステロール合成の中核代謝ハブで、クエン酸からACLY、または酢酸からACSSS2を介して産生される。本研究は、ACLYとACSSS2の二重阻害薬EVT0185が血清・肝臓TG・インスリン抵抗性・線維化を4種の独立したMASHマウスモデルで有意に軽減することを示した。EVT0185はin vivo・in vitroでHSCを直接標的にして活性化を抑制し、scRNA-seqと空間TXによりHSCでのACSSS2依存の酢酸代謝とコレステロール合成がHSC活性化の主要ドライバーと判明した。ヒト肝スライスでDNLを阻害し、TGFβ1誘導ヒト初代HSC活性化をブロック。ACLY＋ACSS2の二重阻害がMASH・肝線維化の有望治療戦略であることを示した。",
+    background:"MASHのHSC活性化・線維化の代謝的ドライバーは不明。アセチルCoAはDNL・コレステロール合成の必須代謝ハブで、ACLY（クエン酸→アセチルCoA）とACSSS2（酢酸→アセチルCoA）の2経路が供給する。ACLY単独阻害は既存薬だが、二経路同時遮断による脂肪化・線維化の同時標的は未検証。HSC自体の酢酸代謝・コレステロール合成が活性化の必須ドライバーかも不明だった。",
+    achievements:[
+      "EVT0185が4種の独立したMASHマウスモデルで血清・肝TG、インスリン抵抗性、MASH病理、線維化を有効に解消（セマグルチド相乗効果、ACLY単独阻害より有効）。",
+      "EVT0185がHSCをin vivo・in vitroで直接標的にして活性化を抑制（HSC特異的効果）。",
+      "scRNA-seq＋空間TXにより、HSCでのACSSS2依存の酢酸代謝抑制とコレステロール合成低下が線維化解消の主要ドライバーと解明。",
+      "ヒト肝スライスでのDNL阻害、TGFβ1誘導ヒト初代HSC活性化のブロックを実証（ヒト妥当性）。"
+    ],
+    limitations:[
+      "4種のマウスモデルが中心で、ヒトでの安全性・薬物動態・有効性はまだ臨床前段階。",
+      "EVT0185の骨格筋・脂肪組織など肝外への影響の詳細は不明。",
+      "既存承認薬（レズメチロム等）との直接比較なし。",
+      "in vivoでのACLYとACSSS2それぞれの個別寄与（steatosis vs fibrosis）のさらなる切り分けが必要。"
+    ],
+    connection:[
+      "steatosisの分子基盤を補完：自系の堅牢な脂肪化の機構としてACLY（クエン酸→アセチルCoA）とACSSS2（酢酸→アセチルCoA）の二経路が主要ドライバーと示す。SREBP1c・FASN・ACACへのリードアウトに加え、コレステロール合成（HMGCR）も評価軸に追加できる。",
+      "線維化の点火ヒント：HSC活性化がHSC自身のACSSS2依存酢酸代謝とコレステロール合成に必須。酢酸添加でHSCセカンドヒット設計、ACSS2阻害でネガコンが可能。",
+      "ABM実装：「アセチルCoA産生速度→HSCコレステロール合成速度→HSC活性化確率→COL1A1産生速度」のルール化が可能。代謝フラックスを状態変数に。",
+      "既収録との接続：#03（TGFβ→ATF4→HSC転写）との組み合わせでHSC活性化の転写（#03）＋代謝（本論文）の二面が揃う。#04（炎症→DNL亢進）と合わせ炎症→代謝→steatosis連鎖モデルへ。#06（ABM/iHSC再活性化）のエネルギー源としてACSSS2依存酢酸代謝をHSCエージェントパラメータに組み込める。"
+    ],
+    glossary:[
+      {term:"ACLY",full:"ATP citrate lyase",desc:"クエン酸→アセチルCoAを産生する酵素。DNL・コレステロール合成の主要供給源"},
+      {term:"ACSS2",full:"acyl-CoA synthetase short chain 2",desc:"酢酸→アセチルCoAを産生する酵素。HSCの活性化・線維化に必要"},
+      {term:"DNL",full:"de novo lipogenesis",desc:"アセチルCoAから脂肪酸を新規合成する経路。肝steatosisの主因"},
+      {term:"EVT0185",full:"EVT0185 (Espervita dual ACLY/ACSS2 inhibitor)",desc:"ACLYとACSSS2の初の二重阻害薬。MASH・線維化を前臨床で解消"},
+      {term:"SREBP1c",full:"sterol regulatory element-binding protein 1c",desc:"インスリン・糖応答性の脂肪酸合成マスター転写因子"},
+      {term:"HMGCR",full:"3-hydroxy-3-methylglutaryl-CoA reductase",desc:"コレステロール合成の律速酵素（スタチン標的）"},
+      {term:"bempedoic acid",full:"bempedoic acid (ETC-1002)",desc:"ACLY単独阻害薬（高コレステロール血症承認済み）。EVT0185との比較対照"}
+    ]
+  },
+  {
+    id:"06",
+    title:"HSCのKappaベース多スケールモデル — 不活化ループが線維化進行を駆動",
+    authors:"Bouguéon M, Legagneux V, Hazard O, Bomo J, Siegel A, Feret J, Théret N, Maini PK, Alber M, Kaleta C",
+    journal:"PLOS Computational Biology",
+    year:2024,
+    vol:"20(7):e1011858",
+    doi:"10.1371/journal.pcbi.1011858",
+    url:"https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1011858",
+    primary:"F",
+    tags:["F","B","G"],
+    approach:"規則ベースモデル(Kappa) ＋ CCl4マウス ＋ ヒトNASH RNAseq",
+    figure:"<svg viewBox='0 0 640 268' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar06' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker><marker id='ar06b' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--B)'/></marker><marker id='ar06f' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--F)'/></marker></defs><rect x='20' y='96' width='110' height='48' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='75' y='117' text-anchor='middle' font-size='12.5' fill='var(--ink)'>qHSC</text><text x='75' y='135' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>静止期</text><line x1='130' y1='120' x2='198' y2='120' stroke='var(--ink-soft)' marker-end='url(#ar06)'/><text x='164' y='112' text-anchor='middle' font-size='10' fill='var(--B)'>TGFβ1</text><rect x='200' y='96' width='118' height='48' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='259' y='117' text-anchor='middle' font-size='12.5' fill='var(--ink)'>aHSC</text><text x='259' y='135' text-anchor='middle' font-size='10.5' fill='var(--B)'>活性化→ECM産生</text><line x1='318' y1='120' x2='386' y2='120' stroke='var(--B)' marker-end='url(#ar06b)'/><rect x='388' y='96' width='136' height='48' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='456' y='117' text-anchor='middle' font-size='12.5' fill='var(--ink)'>ECM 過剰沈着</text><text x='456' y='135' text-anchor='middle' font-size='11' fill='var(--B)'>→ 線維化</text><rect x='200' y='188' width='118' height='50' rx='7' fill='var(--paper-2)' stroke='var(--F)' stroke-width='2.4'/><text x='259' y='209' text-anchor='middle' font-size='12.5' fill='var(--ink)'>iHSC</text><text x='259' y='228' text-anchor='middle' font-size='10.5' fill='var(--F)'>不活化状態（中間）</text><line x1='259' y1='144' x2='259' y2='186' stroke='var(--ink-soft)' marker-end='url(#ar06)'/><text x='278' y='170' font-size='10' fill='var(--ink-soft)'>不活化</text><path d='M201,212 C154,212 148,136 197,126' fill='none' stroke='var(--F)' stroke-width='2.6' marker-end='url(#ar06f)'/><text x='132' y='177' text-anchor='middle' font-size='11' fill='var(--F)'>再活性化</text><text x='132' y='193' text-anchor='middle' font-size='10' fill='var(--F)'>(TGFβ1)</text><rect x='542' y='174' width='92' height='60' rx='5' fill='var(--paper-2)' stroke='var(--F)' stroke-dasharray='4 3'/><text x='588' y='196' text-anchor='middle' font-size='11' fill='var(--F)'>★ 鍵回路</text><text x='588' y='213' text-anchor='middle' font-size='11' fill='var(--F)'>不活化ループ</text><text x='588' y='228' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>線維化持続の必須要素</text><text x='20' y='258' font-size='11' fill='var(--G)'>iHSC蓄積 ∝ 線維化ステージ（NASH患者RNAseqで確認）→ 新規マーカー</text></svg>",
+    method_figure:"<svg viewBox='0 0 640 238' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m06' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><text x='20' y='20' font-size='12' fill='var(--ink-soft)'>規則ベースモデル構築 → マウス＋ヒトデータで2重バリデーション</text><rect x='16' y='34' width='158' height='80' rx='8' fill='var(--paper)' stroke='var(--F)' stroke-width='2'/><text x='95' y='58' text-anchor='middle' font-size='12'>Kappaモデル構築</text><text x='95' y='76' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>HSC 7状態・TGFβ1ルール</text><text x='95' y='93' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>確率的シミュレーション</text><text x='95' y='108' text-anchor='middle' font-size='10.5' fill='var(--F)'>inactivation loop 解析</text><rect x='238' y='34' width='158' height='80' rx='8' fill='var(--paper)' stroke='var(--ink-soft)' stroke-width='1.5'/><text x='317' y='58' text-anchor='middle' font-size='12'>CCl4 マウスモデル</text><text x='317' y='76' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>線維化 + 退縮コース</text><text x='317' y='93' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>HSC 各状態数を定量</text><text x='317' y='108' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>→ パラメータ調整</text><rect x='462' y='34' width='162' height='80' rx='8' fill='var(--paper)' stroke='var(--G)' stroke-width='1.5'/><text x='543' y='58' text-anchor='middle' font-size='12'>NASH患者 RNAseq</text><text x='543' y='76' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>線維化ステージ F0–F4</text><text x='543' y='93' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>iHSCマーカー発現解析</text><text x='543' y='108' text-anchor='middle' font-size='10' fill='var(--G)'>→ iHSC蓄積確認</text><rect x='68' y='162' width='190' height='56' rx='8' fill='var(--paper)' stroke='var(--F)' stroke-width='1.5'/><text x='163' y='183' text-anchor='middle' font-size='11.5' fill='var(--ink)'>不活化ループが線維化持続に必須</text><text x='163' y='202' text-anchor='middle' font-size='10.5' fill='var(--F)'>退縮シミュレーションも実施</text><rect x='374' y='162' width='192' height='56' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='470' y='183' text-anchor='middle' font-size='11.5' fill='var(--ink)'>iHSC = 線維化新規マーカー</text><text x='470' y='202' text-anchor='middle' font-size='10.5' fill='var(--B)'>ヒトNASHで確認</text><path d='M174,114 L163,160' stroke='var(--accent)' marker-end='url(#m06)'/><path d='M317,114 C317,138 240,148 258,160' stroke='var(--accent)' fill='none' marker-end='url(#m06)'/><path d='M543,114 C543,140 492,150 466,160' stroke='var(--accent)' fill='none' marker-end='url(#m06)'/></svg>",
+    abstract_ja:"HSCは慢性肝疾患で活性化しECMを過剰産生して線維化を引き起こす。本研究はKappaグラフ書き換え言語を用いた初の規則ベース多スケールモデルを構築し、TGFβ1が制御するHSCの7状態遷移（静止qHSC・活性化aHSC・不活化iHSC・老化・アポトーシス等）を記述した。シミュレーション解析からiHSC→aHSCの「再活性化ループ（不活化ループ）」が線維化持続の必須回路であることが示された。CCl4マウスモデルとNASH患者RNAseqによる二重バリデーションでiHSC蓄積が線維化ステージと相関することを確認し、iHSCを線維化進行の新規マーカー候補として提示した。線維化退縮（reversion）条件のシミュレーションも実施し、不活化ループ制御が治療標的になりうることを示唆した。",
+    background:"HSCは静止期（qHSC）から活性化（aHSC）→筋線維芽細胞化してECMを過剰産生することが線維化の中心機構。一部の活性化HSCは「不活化（iHSC）」という中間状態へ移行することも知られていたが、この不活化→再活性化ループが線維化の進行・持続にどの程度寄与するかの定量的理解が不足。従来の単純な2状態（静止↔活性化）モデルでは線維化維持のダイナミクスを再現できなかった。",
+    achievements:[
+      "Kappa言語を使った7状態HSCプラスティシティモデル（qHSC・aHSC・iHSC・老化・アポトーシス等）を初構築。",
+      "シミュレーションにより「iHSC再活性化ループ」が線維化持続に必須であることを計算的に証明。",
+      "CCl4マウスモデルの実験データでモデルパラメータを調整・バリデーション。",
+      "NASH患者RNAseqデータでiHSC蓄積が線維化ステージと相関することを確認 → iHSCが線維化進行の新規マーカーとして提示。",
+      "線維化退縮のシミュレーション実施 → 不活化ループ制御が治療標的になりうることを示唆。"
+    ],
+    limitations:[
+      "TGFβ1–HSC軸に特化したモデルで、KC・LSEC・肝細胞との多細胞クロストークは組み込まれていない。",
+      "CCl4化学傷害モデルが主バリデーション系で、MASLD特有の代謝的文脈（脂肪化→炎症→線維化）は直接検証されていない。",
+      "Kappaモデルは確率的なwell-mixed空間を仮定し、類洞内のzonationや空間的分布を記述できない。",
+      "NASH患者データは相関解析が中心で、iHSCの線維化における因果的役割の直接実証は不十分。"
+    ],
+    connection:[
+      "ABM実装に直結：7状態HSCモデルの遷移ルール（TGFβ1濃度→qHSC活性化確率、iHSC蓄積→再活性化確率）をそのまま私のABMのHSCエージェントの「状態マシン」として流用できる。ABM設計の最も直接的な参照文献。",
+      "線維化が「点かない」問題への計算的答え：iHSC再活性化ループを回すには閾値以上のTGFβ1刺激の継続が必要。KCを入れてLPSセカンドヒット→TGFβ1供給継続→iHSC再活性化→線維化点火という仮説が計算的に支持される。",
+      "KC除去→線維化退縮シナリオ：KCがフェロトーシスで脱落（#02）→TGFβ1供給途絶→iHSCが再活性化できず線維化退縮、という回路をABMでシミュレーションし「KCが線維化持続に必須か」を予測できる。",
+      "既収録との連結：#03（ATF4→HSC転写プログラム）はaHSCの内部スイッチを担い、本論文はaHSCがいかに生み出されるか（iHSC再活性化の外部ダイナミクス）を記述 → 二層構造（エージェント状態遷移＋転写スイッチ）のABM設計が可能。#05（LSEC capillarization）との連結では、LSEC状態変化がiHSC再活性化の空間的引き金になるという仮説も立てられる。"
+    ],
+    glossary:[
+      {term:"qHSC",full:"quiescent hepatic stellate cell",desc:"静止期HSC。ビタミンA脂質滴を貯蔵し非活性状態"},
+      {term:"aHSC",full:"activated hepatic stellate cell",desc:"活性化HSC。αSMA・I型コラーゲン産生する筋線維芽細胞様状態"},
+      {term:"iHSC",full:"inactivated hepatic stellate cell",desc:"不活化HSC。活性化後に仮静止した中間状態。TGFβ1で再活性化可能。線維化マーカー候補"},
+      {term:"Kappa",full:"Kappa rule-based modeling language",desc:"生化学反応・状態遷移を分子書き換えルールで記述するグラフ言語。確率的シミュレーションに使用"},
+      {term:"ECM",full:"extracellular matrix",desc:"細胞外基質。コラーゲン・フィブロネクチン等。線維化で過剰沈着し臓器硬化を招く"},
+      {term:"reversion",full:"fibrosis reversion",desc:"線維化退縮。TGFβ1供給停止→iHSC再活性化低下→ECM分解が進む現象"}
+    ]
+  },
+  {
+    id:"05",
+    title:"miR-325-3p搭載核酸スフィア（SNA）がLSECのcapillarizationを是正し肝線維化を治療",
+    authors:"Liu W, Liu Y, Zhang L, Li L, Yang W, Li J, He W",
+    journal:"Nature Communications",
+    year:2025,
+    vol:"16:4517",
+    doi:"10.1038/s41467-025-59885-x",
+    url:"https://www.nature.com/articles/s41467-025-59885-x",
+    primary:"E",
+    tags:["E","H","B"],
+    approach:"in vivo (mouse) ＋ AI ＋ ナノ核酸",
+    figure:"<svg viewBox='0 0 640 240' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar05' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><g font-size='12.5' fill='var(--ink)'><rect x='12' y='28' width='150' height='52' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='87' y='49' text-anchor='middle'>MSC 分泌物</text><text x='87' y='67' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>AIで活性本体を探索</text><rect x='200' y='28' width='150' height='52' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='275' y='49' text-anchor='middle'>miR-325-3p</text><text x='275' y='67' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>⊣ Ptprm</text><rect x='388' y='28' width='160' height='52' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='468' y='49' text-anchor='middle' font-size='12'>アクチン細胞骨格</text><text x='468' y='67' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>再編</text><rect x='200' y='148' width='200' height='56' rx='7' fill='var(--paper)' stroke='var(--E)' stroke-width='2'/><text x='300' y='172' text-anchor='middle'>LSEC fenestrae 回復</text><text x='300' y='191' text-anchor='middle' font-size='11.5' fill='var(--E)'>capillarization 逆転</text><rect x='430' y='150' width='200' height='54' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='530' y='173' text-anchor='middle'>HSC活性化↓</text><text x='530' y='191' text-anchor='middle' font-size='11.5' fill='var(--B)'>→ 線維化 軽減</text><line x1='162' y1='54' x2='198' y2='54' stroke='var(--ink-soft)' marker-end='url(#ar05)'/><line x1='350' y1='54' x2='386' y2='54' stroke='var(--ink-soft)' marker-end='url(#ar05)'/><path d='M468,80 C468,118 300,120 300,146' fill='none' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#ar05)'/><line x1='400' y1='176' x2='428' y2='176' stroke='var(--ink-soft)' marker-end='url(#ar05)'/></g><text x='12' y='228' font-size='11.5' fill='var(--H)'>送達：miR-325-3pを球状核酸(SNA)化 → Scara/SR-A介在エンドサイトーシスで線維化LSECへ特異的内在化</text></svg>",
+    method_figure:"<svg viewBox='0 0 640 240' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m05' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><text x='20' y='22' font-size='12' fill='var(--ink-soft)'>AIでMSC分泌miRNAを同定 → SNA化 → 3種の線維化マウスへ投与</text><g font-size='12' fill='var(--ink)'><rect x='18' y='38' width='150' height='50' rx='8' fill='var(--paper)' stroke='var(--G)' stroke-width='1.5'/><text x='93' y='59' text-anchor='middle' font-size='11.5'>AI×MSC分泌解析</text><text x='93' y='76' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>→ miR-325-3p</text><rect x='18' y='104' width='150' height='52' rx='8' fill='var(--paper)' stroke='var(--H)' stroke-width='1.5'/><text x='93' y='125' text-anchor='middle' font-size='11.5'>SNA ナノ粒子化</text><text x='93' y='142' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>担体不要・球状核酸</text><rect x='250' y='72' width='150' height='96' rx='8' fill='var(--paper-2)' stroke='var(--line)'/><text x='325' y='100' text-anchor='middle' font-size='12'>線維化マウス</text><text x='325' y='120' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>CCl4 / TAA / BDL</text><text x='325' y='140' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>SNAを投与</text><rect x='452' y='36' width='172' height='52' rx='8' fill='var(--paper)' stroke='var(--E)' stroke-width='1.5'/><text x='538' y='57' text-anchor='middle' font-size='11.5'>LSEC fenestrae 回復</text><text x='538' y='74' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>SEM/マーカーで評価</text><rect x='452' y='100' width='172' height='50' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='538' y='121' text-anchor='middle' font-size='11.5'>線維化 有意に軽減</text><text x='538' y='137' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>コラーゲン定量</text><rect x='452' y='162' width='172' height='48' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='538' y='182' text-anchor='middle' font-size='11'>有害作用なし</text><text x='538' y='198' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>安全性評価</text><path d='M168,63 C200,63 200,108 248,112' fill='none' stroke='var(--accent)' marker-end='url(#m05)'/><path d='M168,130 C200,130 220,124 248,122' fill='none' stroke='var(--accent)' marker-end='url(#m05)'/><path d='M400,108 C424,108 428,64 450,62' fill='none' stroke='var(--accent)' marker-end='url(#m05)'/><path d='M400,120 C424,120 428,124 450,125' fill='none' stroke='var(--accent)' marker-end='url(#m05)'/><path d='M400,132 C424,132 428,184 450,186' fill='none' stroke='var(--accent)' marker-end='url(#m05)'/></g></svg>",
+    abstract_ja:"LSECは肝線維化進行に伴い有窓(fenestrae)を失いcapillarization(毛細血管化)する。MSC移植はこれを是正し線維化を軽減できるが臨床応用に制約が多い。本研究はAIでMSC分泌物を解析し、capillarization是正の活性本体としてmiR-325-3pを同定。miR-325-3pは標的Ptprmを抑えてアクチン細胞骨格を再編しfenestraeを再形成する。MSC療法の代替として、miR-325-3pを多価提示する球状核酸(SNA)ナノ粒子を開発。SNAはScara/SR-A介在のクラスリン依存エンドサイトーシスで線維化LSECに特異的に内在化する。CCl4・TAA・BDLの3モデルで、SNAはLSEC有窓を回復・capillarizationを逆転させ、有害作用なく線維化を有意に軽減した。LSEC標的核酸医薬の新たな道を示す。",
+    background:"健常LSECは有窓・無基底膜の特殊内皮で、HSCを静止状態に保つなど肝恒常性に寄与する。線維化過程ではLSECがfenestraeを失い基底膜をもつ毛細血管様内皮へ脱分化(capillarization)し、これがHSC活性化・線維化を促す上流イベントとされる。capillarization是正は線維化を巻き戻しうる標的だが、これを担う分子と送達手段が未確立だった。MSC移植は有効だが製造・品質・安全性の制約で臨床化が難しい。",
+    achievements:[
+      "AI駆動でMSC分泌物を解析し、capillarization是正の活性本体としてmiR-325-3pを同定(MSC効果がmiR-325-3p依存と実証)。",
+      "miR-325-3pの直接標的がPtprmで、これを抑制しアクチン細胞骨格を再編→fenestrae再形成という機序を解明。",
+      "miR-325-3pを多価提示する球状核酸(SNA)ナノ粒子を設計(担体不要)。",
+      "SNAがScara/SR-A介在のクラスリン依存エンドサイトーシスで線維化LSECに選択的内在化することを示した。",
+      "CCl4・TAA・BDLの3独立モデルでLSEC有窓を回復・capillarizationを逆転し、有害事象なく線維化を有意に軽減。"
+    ],
+    limitations:[
+      "すべてマウスモデルでの治療実証で、ヒトLSECでの有効性・薬物動態・免疫原性は未確立。",
+      "線維化確立後の治療効果が中心で、長期/反復投与時の安全性・耐性は今後の課題。",
+      "Ptprm抑制の全身的影響、Scara依存取り込みのLSEC特異性の絶対度は更なる検討が必要。",
+      "MASLD/MASH特異的(脂質・代謝駆動)モデルでの検証は限定的で、化学傷害・胆汁うっ滞モデル中心。"
+    ],
+    connection:[
+      "LSEC=4細胞共培養の機能的意味づけ：capillarization(有窓喪失)が線維化の上流ドライバーであることを治療介入で逆に証明。LSECを『線維化点火/抑制のスイッチ細胞』へ格上げできる。",
+      "線維化リードアウト(LSEC側)：fenestrae密度・capillarizationマーカー(CD31/CD34↑)、Ptprm、Scara発現が、LSECの健常→capillarized移行の指標に。#01のEC–HSCクロストークと合わせEC状態軸が補強。",
+      "酸素・代謝との接点：LSEC有窓維持は酸素・ずり応力・VEGFに感受性。好気条件を保つ本系は生理的LSEC表現型を維持しやすく、capillarizationの点火条件を制御変数にできる。",
+      "逆方向の対照ツール：miR-325-3p/SNAを共培養添加→LSECを健常側へ戻しHSC活性化・線維化が抑制されるかを試せるネガコン。逆にPtprm高発現/capillarization誘導で線維化を点火する正方向操作も設計可。",
+      "ABM：『LSEC状態(有窓 vs capillarized)→HSC活性化確率』を状態遷移ルール化。#02(KC由来シグナル)・#03(HSC内ATF4スイッチ)と連結しEC軸を多細胞カスケードに追加できる。",
+      "既収録との接続：#01はEC–HSCクロストークを相関・空間で示したが、本論文(#05)はLSEC状態の是正で線維化が巻き戻ることを因果・治療で示し、内皮起点の線維化制御を補完。"
+    ],
+    glossary:[
+      {term:"capillarization",full:"sinusoidal capillarization",desc:"LSECが有窓を失い毛細血管様内皮へ脱分化する病的変化。線維化の上流"},
+      {term:"fenestrae",full:"LSEC fenestrae",desc:"LSEC膜上の有窓(小孔)。物質交換と肝恒常性に必須"},
+      {term:"miR-325-3p",full:"microRNA-325-3p",desc:"MSC分泌のマイクロRNA。Ptprmを標的にLSEC有窓を回復"},
+      {term:"Ptprm",full:"protein tyrosine phosphatase receptor type M",desc:"miR-325-3pの標的。抑制でアクチン細胞骨格再編→fenestrae再形成"},
+      {term:"SNA",full:"spherical nucleic acid",desc:"核酸を球状に多価提示するナノ粒子。担体不要でLSEC送達"},
+      {term:"Scara / SR-A",full:"scavenger receptor class A",desc:"SNAをクラスリン依存エンドサイトーシスで取り込むLSEC受容体"},
+      {term:"MSC",full:"mesenchymal stem cell",desc:"間葉系幹細胞。分泌物(miR-325-3p)でcapillarizationを是正"},
+      {term:"BDL",full:"bile duct ligation",desc:"胆管結紮による胆汁うっ滞性肝線維化モデル"},
+      {term:"TAA",full:"thioacetamide",desc:"肝毒で線維化を誘導する実験モデル試薬"},
+      {term:"CCl4",full:"carbon tetrachloride",desc:"四塩化炭素。代表的な化学傷害性肝線維化モデル"}
+    ]
+  },
+  {
+    id:"04",
+    title:"iPSCベース統合型MPSで脂肪組織炎症がMASLD発症の主ドライバーと実証",
+    authors:"Qi L, Groeger M, Sharma A, Goswami I, Chen E, Zhong F, Ram A, Healy K, Hsiao EC, Willenbring H, Stahl A",
+    journal:"Nature Communications",
+    year:2024,
+    vol:"15:7991",
+    doi:"10.1038/s41467-024-52258-w",
+    url:"https://www.nature.com/articles/s41467-024-52258-w",
+    primary:"A",
+    tags:["A","C","D","H"],
+    approach:"iPSC-MPS（脂肪・肝・マクロファージ）",
+    figure:"<svg viewBox='0 0 640 250' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar04' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><g font-size='13' fill='var(--ink)'><rect x='20' y='24' width='170' height='52' rx='7' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='105' y='46' text-anchor='middle'>iADIPO</text><text x='105' y='64' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>脂肪量↑ (WAT)</text><rect x='330' y='24' width='200' height='52' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='430' y='46' text-anchor='middle'>M1-iMAC</text><text x='430' y='64' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>脂肪組織炎症</text><rect x='20' y='162' width='170' height='48' rx='7' fill='var(--paper-2)' stroke='var(--line)' stroke-dasharray='4 3'/><text x='105' y='184' text-anchor='middle' fill='var(--ink-soft)'>HIR 誘導されず</text><text x='105' y='201' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>量だけでは不十分</text><rect x='290' y='150' width='270' height='60' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='425' y='176' text-anchor='middle'>iHEP 脂質蓄積</text><text x='425' y='196' text-anchor='middle' font-size='12' fill='var(--B)'>→ インスリン抵抗性 / MASLD</text><line x1='105' y1='76' x2='105' y2='160' stroke='var(--ink-soft)' stroke-dasharray='4 3' marker-end='url(#ar04)'/><path d='M430,76 C430,118 425,126 425,148' fill='none' stroke='var(--ink-soft)' stroke-width='1.5' marker-end='url(#ar04)'/><text x='452' y='120' font-size='11' fill='var(--ink-soft)'>TNFα + 遊離脂肪酸</text></g><text x='20' y='238' font-size='11.5' fill='var(--A)'>セマグルチド → iADIPO の GLP1R → 抗炎症・肝保護（肝への直接作用は軽微）</text></svg>",
+    method_figure:"<svg viewBox='0 0 640 230' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m04' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><text x='20' y='22' font-size='12' fill='var(--ink-soft)'>同一iPSC株 → 3細胞へ分化 → 相互接続MPS（共通循環培地, ~48h）</text><g font-size='12' fill='var(--ink)'><rect x='24' y='44' width='80' height='40' rx='20' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='64' y='69' text-anchor='middle' font-size='11'>iPSC</text><rect x='150' y='40' width='118' height='48' rx='8' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='209' y='62' text-anchor='middle'>iADIPO槽</text><text x='209' y='79' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>脂肪比 最大30:1</text><rect x='150' y='100' width='118' height='48' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='209' y='128' text-anchor='middle'>iHEP槽</text><rect x='150' y='160' width='118' height='48' rx='8' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='209' y='182' text-anchor='middle'>iMAC槽</text><text x='209' y='198' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>±M1分極</text><rect x='320' y='70' width='150' height='108' rx='8' fill='var(--paper-2)' stroke='var(--line)'/><text x='395' y='118' text-anchor='middle' font-size='12'>共通循環培地</text><text x='395' y='136' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>細胞間クロストーク</text><path d='M104,64 C120,64 130,64 148,64' fill='none' stroke='var(--accent)' marker-end='url(#m04)'/><line x1='268' y1='64' x2='318' y2='100' stroke='var(--line)'/><line x1='268' y1='124' x2='318' y2='124' stroke='var(--line)'/><line x1='268' y1='184' x2='318' y2='148' stroke='var(--line)'/><rect x='500' y='70' width='124' height='50' rx='8' fill='var(--paper)' stroke='var(--A)' stroke-width='1.5'/><text x='562' y='91' text-anchor='middle' font-size='11'>±セマグルチド</text><text x='562' y='108' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>薬剤介入</text><rect x='500' y='132' width='124' height='50' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='562' y='153' text-anchor='middle' font-size='11'>読み出し</text><text x='562' y='169' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>HGP/脂質/サイトカイン</text><path d='M470,124 C484,124 488,95 498,95' fill='none' stroke='var(--accent)' marker-end='url(#m04)'/><path d='M470,124 C484,124 488,155 498,155' fill='none' stroke='var(--accent)' marker-end='url(#m04)'/></g></svg>",
+    abstract_ja:"同一ヒトiPS細胞株から分化させたiADIPO・iHEP・iMACを相互接続型MPSで共培養。WAT量の増大のみでは生理的範囲でHIRは誘導されず、M1-iMACによる脂肪組織炎症がiHEP脂質蓄積とMPS全体のインスリン抵抗性を惹起することを実証した。セマグルチドは脂肪細胞のGLP1Rを介して抗炎症・肝保護効果を発揮（肝細胞への直接作用は軽微）。MASLD発症の細胞間クロストーク解析・創薬スクリーニングの動物代替基盤として有望。",
+    background:"WATへのM1マクロファージ浸潤（炎症）がHIRを招くとされるが、WAT量増大と炎症のどちらが主ドライバーかはヒト系で切り分けられていなかった。GLP-1受容体作動薬の肝保護機序（脂肪 vs 肝直接作用）も未解決だった。",
+    achievements:[
+      "等遺伝子iPSC由来iADIPO・iHEP・iMACを相互接続した3臓器MPSを初構築。",
+      "WAT量の増大のみ（iADIPO-iHEP比最大30:1）ではHIR未誘導。炎症（M1-iMAC）が決定的ドライバーと実証。",
+      "M1-iMAC由来TNFα＋遊離脂肪酸がiHEP脂質蓄積・HIRをドライブする機序を定量的に解明。",
+      "セマグルチドはiADIPO特異的GLP1R作動で肝保護 → セマグルチドの肝保護がアディポサイト依存であることを示した。"
+    ],
+    limitations:[
+      "HSC・LSECを含まず線維化再現なし。",
+      "iADIPOは皮下脂肪的特性優位。内臓脂肪特性は不完全。",
+      "培養期間が短く（~48h）慢性進行の長期動態は扱えない。",
+      "PDMSによる疎水性薬物吸着の制限（一部検証済み）。"
+    ],
+    connection:[
+      "KC（≒M1-iMAC）導入の正当化：炎症性マクロファージが肝MASLD発症を駆動することの定量的根拠。LPS等セカンドヒット戦略の機序的支柱。",
+      "MPS培地中のTNFα・遊離脂肪酸・アディポネクチン定量は肝オープンオルガノイドの培地解析プロトコルの雛形になる。",
+      "HSC・LSECを欠く点が自系との差別化軸。4細胞共培養でfibrosis達成すれば本論文の正統な発展として位置づけ可。",
+      "#02（KC-NCF1→フェロトーシス）+ #03（ATF4→HSC活性化）と合わせKC→炎症→HSC→線維化の多段階カスケードの論拠が固まる。"
+    ],
+    glossary:[
+      {term:"iADIPO",full:"iPSC-derived adipocyte",desc:"iPSC由来白色脂肪細胞"},
+      {term:"iHEP",full:"iPSC-derived hepatocyte",desc:"iPSC由来肝細胞"},
+      {term:"iMAC",full:"iPSC-derived macrophage",desc:"iPSC由来マクロファージ（M0/M1）"},
+      {term:"MPS",full:"Microphysiological System",desc:"ミクロフィジオロジカルシステム（臓器チップ総称）"},
+      {term:"HIR",full:"Hepatic Insulin Resistance",desc:"肝インスリン抵抗性"},
+      {term:"WAT",full:"White Adipose Tissue",desc:"白色脂肪組織"},
+      {term:"HGP",full:"Hepatic Glucose Production",desc:"肝糖産生；HIRの機能リードアウト"},
+      {term:"GLP1R",full:"Glucagon-Like Peptide-1 Receptor",desc:"GLP-1受容体；セマグルチドの標的"},
+      {term:"PDMS",full:"Polydimethylsiloxane",desc:"MPSデバイス材料；疎水性薬物吸着注意"},
+      {term:"PCK1",full:"Phosphoenolpyruvate Carboxykinase 1",desc:"糖新生律速酵素；HIRマーカー"},
+      {term:"ADIPOQ",full:"Adiponectin (gene)",desc:"インスリン感受性アディポカイン"},
+      {term:"TNF",full:"Tumor Necrosis Factor",desc:"炎症性サイトカイン；M1-iMACが大量分泌"},
+      {term:"PPARA",full:"Peroxisome Proliferator-Activated Receptor Alpha",desc:"肝β酸化促進核内受容体"}
+    ]
+  },
+  {
+    id:"03",
+    title:"ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動",
+    authors:"Feng Y-X, et al.",
+    journal:"Nature Communications",
+    year:"2025",
+    vol:"16, 524",
+    doi:"10.1038/s41467-024-55738-1",
+    url:"https://www.nature.com/articles/s41467-024-55738-1",
+    primary:"B", tags:["G","H"],
+    approach:"in vivo (mouse) ＋ ヒトデータ ＋ 低分子阻害剤",
+    figure:"<svg viewBox='0 0 640 200' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar03' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><text x='320' y='28' text-anchor='middle' font-size='11.5' fill='var(--ink-soft)'>TGFβ が ATF4 を再構成（ERストレス非依存の非定型プログラム）</text><g font-size='12.5' fill='var(--ink)'><rect x='14' y='80' width='86' height='44' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='57' y='107' text-anchor='middle'>TGFβ</text><rect x='150' y='80' width='104' height='44' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='202' y='107' text-anchor='middle'>ATF4</text><rect x='304' y='72' width='170' height='60' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='389' y='96' text-anchor='middle' font-size='12'>非定型エンハンサー</text><text x='389' y='115' text-anchor='middle' font-size='11.5' fill='var(--ink-soft)'>→ EMT/線維化遺伝子</text><rect x='524' y='80' width='102' height='44' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='575' y='100' text-anchor='middle' font-size='12'>HSC活性化</text><text x='575' y='116' text-anchor='middle' font-size='11.5' fill='var(--B)'>→ 線維化</text><line x1='100' y1='102' x2='148' y2='102' stroke='var(--ink-soft)' marker-end='url(#ar03)'/><line x1='254' y1='102' x2='302' y2='102' stroke='var(--ink-soft)' marker-end='url(#ar03)'/><line x1='474' y1='102' x2='522' y2='102' stroke='var(--ink-soft)' marker-end='url(#ar03)'/><line x1='202' y1='158' x2='202' y2='126' stroke='var(--C)' stroke-width='2'/><line x1='184' y1='150' x2='220' y2='150' stroke='var(--C)' stroke-width='2.5'/><text x='202' y='176' text-anchor='middle' font-size='11' fill='var(--C)'>低分子翻訳阻害剤 ⊣</text></g></svg>",
+    method_figure:"<svg viewBox='0 0 640 230' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m03' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><g font-size='12' fill='var(--ink)'><rect x='18' y='34' width='180' height='62' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='108' y='58' text-anchor='middle' font-size='12.5'>HSC特異的 Atf4</text><text x='108' y='76' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>条件付きKO マウス</text><text x='108' y='90' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>(Cre-loxP)</text><rect x='18' y='126' width='180' height='56' rx='8' fill='var(--paper-2)' stroke='var(--line)'/><text x='108' y='150' text-anchor='middle' font-size='12'>対照 (flox)</text><text x='108' y='168' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>同腹仔比較</text><rect x='248' y='80' width='150' height='56' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='323' y='104' text-anchor='middle' font-size='12'>肝線維化を誘導</text><text x='323' y='121' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>線維化モデル</text><rect x='440' y='34' width='184' height='56' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='532' y='56' text-anchor='middle' font-size='11.5'>線維化・αSMA・</text><text x='532' y='73' text-anchor='middle' font-size='11.5'>COL1A1 定量</text><rect x='440' y='104' width='184' height='50' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='532' y='125' text-anchor='middle' font-size='11'>±ATF4翻訳阻害剤</text><text x='532' y='141' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>低分子で治療試験</text><rect x='440' y='168' width='184' height='46' rx='8' fill='var(--paper)' stroke='var(--G)' stroke-width='1.5'/><text x='532' y='189' text-anchor='middle' font-size='11'>ヒト肝データ</text><text x='532' y='205' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>ATF4発現↔線維化 相関</text><path d='M198,72 C220,72 226,104 246,106' fill='none' stroke='var(--accent)' marker-end='url(#m03)'/><path d='M198,150 C220,150 226,116 246,112' fill='none' stroke='var(--accent)' marker-end='url(#m03)'/><path d='M398,100 C418,100 420,66 438,64' fill='none' stroke='var(--accent)' marker-end='url(#m03)'/><path d='M398,112 C418,112 420,126 438,128' fill='none' stroke='var(--accent)' marker-end='url(#m03)'/></g></svg>",
+    abstract:"肝線維化は肝硬変等へ進行する難治性疾患で有効な標的治療がない。本研究はERストレス応答のマスター転写因子ATF4が、HSCにおいてストレス応答とは独立したエピジェネティックプログラムを介して線維化を促進すると同定。ATF4は通常UPR遺伝子を制御するが、線維化条件下ではEMT関連遺伝子の転写を活性化する。HSC特異的ATF4欠損はin vivoで線維化を抑制。機序として、TGFβがATF4を再構成しプロ線維化EMT遺伝子の転写活性化のための固有エンハンサープログラムを編成する。ヒトでもHSC ATF4発現と線維化進行が強く相関。ATF4翻訳を標的とする低分子阻害剤が線維化を有効に軽減した。",
+    abstract_ja:"肝線維化は有効治療がない難治性疾患。ERストレス応答中心転写因子ATF4が、HSCでストレス応答非依存のエピジェネティックプログラムを駆動して線維化を進めると示した。ATF4は通常UPR遺伝子を制御するが線維化環境ではEMT遺伝子群を活性化。HSC特異的ATF4欠損で線維化抑制。TGFβがATF4を再プログラムしプロ線維化EMT遺伝子用の独自エンハンサーを組み立てる。ヒトでもHSC ATF4発現は線維化進行と相関し、ATF4翻訳阻害の低分子が線維化を軽減した。",
+    background:"HSC活性化(静止期→筋線維芽細胞化、αSMA・I型コラーゲン産生)が線維化の中心だが、TGFβ下流でHSCのゲノムワイド転写リプログラミングを統御する因子は不明。ATF4はER/統合的ストレス応答の文脈で語られてきたが、ストレス非依存の線維化ドライバーとしての役割は未知。標的治療不在も課題。",
+    achievements:[
+      "ATF4をHSC活性化・線維化の新規ドライバーとして同定(ERストレス/UPRとは独立の機能)。",
+      "TGFβがATF4を再構成し、プロ線維化EMT遺伝子を駆動する固有のエンハンサープログラムを編成することをエピゲノム的に解明。",
+      "HSC特異的ATF4欠損でin vivo線維化が抑制されることを実証。",
+      "ヒトデータでHSC ATF4発現と線維化進行の強い相関を確認。",
+      "ATF4翻訳を標的とする低分子阻害剤で線維化を軽減し創薬標的性を提示。"
+    ],
+    limitations:[
+      "主にマウスモデル＋ヒトは相関解析中心で、ヒトでの因果・治療効果は未確立。",
+      "ATF4は全身で必須のストレス応答因子であり、全身投与時の安全域・HSC特異的デリバリーは別途検討要。",
+      "「ストレス非依存」とするが、生理的線維化での代謝/ストレス環境との切り分けはin vitro依存が大きい。",
+      "間葉系であるHSCでEMT遺伝子プログラムを論じる枠組みの解釈には注意。"
+    ],
+    connection:[
+      "線維化点火の転写スイッチ候補：TGFβ→ATF4→EMT様エンハンサー群というHSC内部の点火スイッチを提供。KCセカンドヒット(#02)由来TGFβがHSCのATF4経由で線維化を起動する上流-下流仮説を立てられる。",
+      "操作ノブ＆リードアウト：ATF4 KD/低分子翻訳阻害を共培養に導入すれば「線維化を消す」ネガコンに。ATF4標的EMT/線維化遺伝子(COL1A1, αSMA等)を線維化リードアウトに使える。",
+      "酸素・代謝との接点：ATF4はISR/ER・ミトコンドリアストレスのハブ。好気的代謝を回す本系で酸素可用性がATF4活性とHSC運命にどう効くか問える。",
+      "ABM：「TGFβ濃度→HSCのATF4活性化しきい値→EMT/コラーゲン遺伝子ON→筋線維芽細胞化確率」をルール化。#02と組みKC→TGFβ→HSC-ATF4→線維化を連結。",
+      "既収録との接続：#01(EC–HSCクロストーク)・#02(KC機構)が「HSCをどう刺激するか(上流)」を示すのに対し、本論文は「刺激後HSCが内部でどう線維化プログラムを起動するか(下流転写機構)」を補完。"
+    ],
+    glossary:[
+      {term:"ATF4", full:"activating transcription factor 4", desc:"ER/統合的ストレス応答の中心転写因子。線維化では非定型にEMT遺伝子を活性化"},
+      {term:"EMT", full:"epithelial-mesenchymal transition", desc:"上皮間葉転換。ATF4が線維化条件下で関連遺伝子群を駆動"},
+      {term:"ER stress", full:"endoplasmic reticulum stress", desc:"小胞体ストレス。UPRを誘導"},
+      {term:"UPR", full:"unfolded protein response", desc:"不全タンパク応答。ATF4の本来の制御対象"},
+      {term:"ISR", full:"integrated stress response", desc:"統合的ストレス応答。ATF4がハブ"},
+      {term:"TGFβ", full:"transforming growth factor beta", desc:"HSC活性化の保存ドライバー。ATF4を再構成"},
+      {term:"αSMA", full:"alpha-smooth muscle actin (ACTA2)", desc:"活性化HSC/筋線維芽細胞マーカー・線維化リードアウト"},
+      {term:"HSC", full:"hepatic stellate cell", desc:"肝星細胞。活性化→筋線維芽細胞化で線維化の中心"}
+    ]
+  },
+  {
+    id:"02",
+    title:"NCF1がKupffer細胞のフェロトーシス感受性を制御しMASHを悪化させる",
+    authors:"Zhang J, Wang Y, … Holmdahl R, et al.",
+    journal:"Cell Metabolism",
+    year:"2024",
+    vol:"36(8), 1745–1763.e6",
+    doi:"10.1016/j.cmet.2024.05.008",
+    url:"https://pubmed.ncbi.nlm.nih.gov/38851189/",
+    primary:"C", tags:["D","H"],
+    approach:"in vivo (mouse) ＋ ヒト試料・遺伝学",
+    figure:"<svg viewBox='0 0 640 230' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar02' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><g font-size='11.5' fill='var(--ink)'><rect x='8' y='30' width='140' height='48' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='78' y='51' text-anchor='middle'>マクロファージ</text><text x='78' y='68' text-anchor='middle' font-size='12' fill='var(--C)'>NCF1↑</text><rect x='176' y='30' width='128' height='48' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='240' y='58' text-anchor='middle'>酸化リン脂質 (OxPL)↑</text><rect x='332' y='30' width='128' height='48' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='396' y='51' text-anchor='middle'>肝細胞 TLR4</text><text x='396' y='68' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>感知</text><rect x='488' y='30' width='140' height='48' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='558' y='58' text-anchor='middle'>ヘプシジン↑</text><rect x='8' y='140' width='140' height='48' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='78' y='168' text-anchor='middle'>KC 鉄沈着</text><rect x='176' y='140' width='140' height='48' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='246' y='161' text-anchor='middle'>KC フェロトーシス</text><text x='246' y='178' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>常在KC脱落</text><rect x='344' y='140' width='128' height='48' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='408' y='168' text-anchor='middle'>MoMΦ 浸潤</text><rect x='500' y='140' width='128' height='48' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='564' y='168' text-anchor='middle' fill='var(--B)'>MASH 悪化</text><line x1='148' y1='54' x2='174' y2='54' stroke='var(--ink-soft)' marker-end='url(#ar02)'/><line x1='304' y1='54' x2='330' y2='54' stroke='var(--ink-soft)' marker-end='url(#ar02)'/><line x1='460' y1='54' x2='486' y2='54' stroke='var(--ink-soft)' marker-end='url(#ar02)'/><path d='M558,78 C558,110 78,108 78,138' fill='none' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#ar02)'/><line x1='148' y1='164' x2='174' y2='164' stroke='var(--ink-soft)' marker-end='url(#ar02)'/><line x1='316' y1='164' x2='342' y2='164' stroke='var(--ink-soft)' marker-end='url(#ar02)'/><line x1='472' y1='164' x2='498' y2='164' stroke='var(--ink-soft)' marker-end='url(#ar02)'/></g></svg>",
+    method_figure:"<svg viewBox='0 0 640 240' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m02' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><g font-size='12' fill='var(--ink)'><text x='20' y='22' font-size='12' fill='var(--ink-soft)'>食餌でMASH誘導 × NCF1遺伝子型を操作 → KC運命を解析</text><rect x='18' y='38' width='150' height='50' rx='8' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='93' y='60' text-anchor='middle' font-size='12'>MASH食</text><text x='93' y='77' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>MCD食 / 高脂肪食</text><rect x='18' y='104' width='150' height='52' rx='8' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='93' y='124' text-anchor='middle' font-size='11.5'>MΦ特異的 NCF1-KO</text><text x='93' y='141' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>細胞種を切り分け</text><rect x='18' y='170' width='150' height='52' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='93' y='190' text-anchor='middle' font-size='11.5'>NCF1-90H ノックイン</text><text x='93' y='207' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>ヒト低機能多型 再現</text><rect x='250' y='96' width='150' height='66' rx='8' fill='var(--paper-2)' stroke='var(--line)'/><text x='325' y='124' text-anchor='middle' font-size='12'>肝 KC を解析</text><text x='325' y='142' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>鉄/脂質過酸化/浸潤</text><rect x='452' y='40' width='172' height='50' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='538' y='61' text-anchor='middle' font-size='11.5'>KCフェロトーシス</text><text x='538' y='78' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>常在KC脱落・MASH</text><rect x='452' y='104' width='172' height='50' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='538' y='125' text-anchor='middle' font-size='11.5'>NCF1-90Hで軽減</text><text x='538' y='141' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>治療標的性</text><rect x='452' y='168' width='172' height='50' rx='8' fill='var(--paper)' stroke='var(--G)' stroke-width='1.5'/><text x='538' y='189' text-anchor='middle' font-size='11.5'>ヒトMASLD試料</text><text x='538' y='205' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>NCF1発現 相関</text><path d='M168,62 C200,62 220,120 248,124' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/><path d='M168,130 C200,130 220,129 248,129' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/><path d='M168,196 C200,196 220,138 248,134' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/><path d='M400,120 C424,120 428,68 450,65' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/><path d='M400,129 C424,129 428,128 450,129' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/><path d='M400,138 C424,138 428,190 450,193' fill='none' stroke='var(--accent)' marker-end='url(#m02)'/></g></svg>",
+    abstract:"Kupffer細胞(KC)の自己複製能の低下はMASHの炎症を招く。本研究はNCF1をKCの鉄恒常性の重要制御因子として同定。NCF1はヒトMASLD・MASHマウスの肝マクロファージ/樹状細胞で発現上昇する。マクロファージのNCF1(樹状細胞のものではない)がKCの鉄過剰・フェロトーシス・単球由来MΦ浸潤を引き起こしMASHを増悪。機序として、マクロファージNCF1が増やす酸化リン脂質がTLR4依存的に肝細胞のヘプシジン産生を促し、KC鉄沈着と続くKCフェロトーシスを招く。ヒト低機能多型NCF190HはマウスでKCフェロトーシスとMASHを軽減した。",
+    abstract_ja:"KCの自己複製障害はMASHの炎症を引き起こす。NCF1をKC鉄恒常性の重要制御因子として同定。NCF1はヒトMASLD・MASHマウスの肝MΦと樹状細胞で発現上昇。マクロファージNCF1は(樹状細胞NCF1とは異なり)KCの鉄過剰・フェロトーシス・単球由来MΦ浸潤を誘発しMASH進行を悪化。機序的には、マクロファージNCF1により増えた酸化リン脂質がTLR4依存的に肝細胞ヘプシジン産生を促進し、KC鉄沈着と続くKCフェロトーシスをもたらす。ヒト低機能多型NCF190HはマウスでKCフェロトーシスとMASHを軽減する。",
+    background:"MASHでは常在KCが減り単球由来MΦに置換される現象が知られるが、KCが「なぜ・どのように」失われるかの分子機構が不明だった。鉄・酸化ストレスとKC運命を結ぶ経路、特にヒトでの妥当性が課題。",
+    achievements:[
+      "NCF1(NADPHオキシダーゼ構成因子)をKC鉄恒常性の制御因子として同定。",
+      "細胞種特異的に切り分け：マクロファージNCF1がKC鉄過剰・フェロトーシス・MoMΦ浸潤を駆動(樹状細胞NCF1は不関与)。",
+      "経路解明：マクロファージNCF1→酸化リン脂質↑→肝細胞TLR4→ヘプシジン↑→KC鉄沈着→KCフェロトーシス。",
+      "ヒト遺伝学的裏付け：低機能多型NCF190HがKCフェロトーシスとMASHを軽減＝治療標的性。"
+    ],
+    limitations:[
+      "主にマウスモデル(MCD食・高脂肪食)依存。ヒトは試料・遺伝学的相関が中心。",
+      "NCF1/NADPHオキシダーゼは全身の自然免疫に必須で、阻害の安全域や肝特異的介入の実現性は別途検討要。",
+      "フェロトーシス以外のKC death/置換機構との相対寄与は未整理。"
+    ],
+    connection:[
+      "「免疫系の不在→KCを入れてセカンドヒット」戦略の機構的支柱。OxPL–TLR4–ヘプシジン–鉄–フェロトーシス経路を提供し、LPSに加え酸化リン脂質・鉄もヒット軸候補に。",
+      "リードアウト候補：KC鉄沈着・脂質過酸化(フェロトーシス指標)、ヘプシジン、MoMΦ浸潤マーカー。",
+      "重要注意：高糖・高脂質＋好気条件でKC自身がフェロトーシスで脱落しうる→共培養でのKC生存・自己複製モニタリングが必要。",
+      "ABM：KCのフェロトーシス／単球由来MΦへの置換を「細胞死・補充の確率ルール」として実装する好例。鉄・OxPL濃度を状態変数に。",
+      "#01との接続：#01はLAMのlp-PLA2(PLA2G7)がOxPL代謝を担うと示し、本論文がそのOxPL–KC鉄–フェロトーシス軸の因果を実証(#01は本論文を引用)。OxPLが共通ハブ。"
+    ],
+    glossary:[
+      {term:"NCF1", full:"neutrophil cytosolic factor 1", desc:"NADPHオキシダーゼ構成因子。KC鉄恒常性を制御"},
+      {term:"NADPH oxidase", full:"NADPH oxidase complex", desc:"活性酸素産生酵素複合体。NCF1が構成因子"},
+      {term:"KC", full:"Kupffer cell", desc:"肝常在マクロファージ。炎症・セカンドヒットの担い手"},
+      {term:"TLR4", full:"Toll-like receptor 4", desc:"自然免疫受容体。OxPLを感知しヘプシジン産生を促す"},
+      {term:"OxPL", full:"oxidized phospholipid", desc:"酸化リン脂質。TLR4を介しヘプシジン誘導、KC運命のハブ"},
+      {term:"hepcidin", full:"hepcidin (HAMP)", desc:"ヘプシジン。鉄代謝制御ホルモン。KC鉄沈着を促す"},
+      {term:"ferroptosis", full:"ferroptosis", desc:"鉄依存・脂質過酸化による細胞死。KC脱落の機構"},
+      {term:"MoMΦ", full:"monocyte-derived macrophage", desc:"単球由来マクロファージ。常在KC減少時に浸潤"}
+    ]
+  },
+  {
+    id:"01",
+    title:"ヒトMASLDの空間マルチオミクスatlas",
+    authors:"Li Z, Luo G, … Bai F, Chai J.",
+    journal:"Nature Genetics",
+    year:"2025",
+    vol:"57, 3112–3125",
+    doi:"10.1038/s41588-025-02407-8",
+    url:"https://www.nature.com/articles/s41588-025-02407-8",
+    primary:"G", tags:["C","D","B","E","H"],
+    approach:"ヒト組織(61例) · single-cell＋空間 · in vitro検証",
+    figure:"<svg viewBox='0 0 640 240' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar01' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto'><path d='M0,0 L8,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><g font-size='12.5' fill='var(--ink)'><rect x='10' y='86' width='120' height='62' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='70' y='112' text-anchor='middle'>ヒトMASLD肝</text><text x='70' y='130' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>61例 (対照/MASL/MASH)</text><rect x='200' y='18' width='190' height='40' rx='7' fill='var(--paper-2)' stroke='var(--line)'/><text x='295' y='43' text-anchor='middle' font-size='12'>single-cell RNA-seq</text><rect x='200' y='96' width='190' height='40' rx='7' fill='var(--paper-2)' stroke='var(--line)'/><text x='295' y='121' text-anchor='middle' font-size='12'>空間トランスクリプトーム</text><rect x='200' y='174' width='190' height='40' rx='7' fill='var(--paper-2)' stroke='var(--line)'/><text x='295' y='199' text-anchor='middle' font-size='12'>空間メタボローム</text><rect x='430' y='14' width='200' height='62' rx='7' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='530' y='38' text-anchor='middle' font-size='12'>LAM: MITF→FAO</text><text x='530' y='57' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>HGF分泌で肝保護</text><rect x='430' y='90' width='200' height='62' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='530' y='114' text-anchor='middle' font-size='12'>中心静脈EC–HSC</text><text x='530' y='133' text-anchor='middle' font-size='11' fill='var(--B)'>RSPO3–LGR6 線維化</text><rect x='430' y='166' width='200' height='58' rx='7' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='530' y='190' text-anchor='middle' font-size='12'>MASLD特異的</text><text x='530' y='208' text-anchor='middle' font-size='11' fill='var(--ink-soft)'>リン脂質蓄積 (lp-PLA2)</text><line x1='130' y1='104' x2='198' y2='40' stroke='var(--ink-soft)' marker-end='url(#ar01)'/><line x1='130' y1='117' x2='198' y2='116' stroke='var(--ink-soft)' marker-end='url(#ar01)'/><line x1='130' y1='130' x2='198' y2='192' stroke='var(--ink-soft)' marker-end='url(#ar01)'/><line x1='390' y1='40' x2='428' y2='45' stroke='var(--ink-soft)' marker-end='url(#ar01)'/><line x1='390' y1='116' x2='428' y2='119' stroke='var(--ink-soft)' marker-end='url(#ar01)'/><line x1='390' y1='194' x2='428' y2='192' stroke='var(--ink-soft)' marker-end='url(#ar01)'/></g></svg>",
+    method_figure:"<svg viewBox='0 0 640 210' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m01' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs><g font-size='12' fill='var(--ink)'><rect x='16' y='66' width='150' height='80' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='91' y='94' text-anchor='middle' font-size='12.5'>ヒト肝生検 61例</text><text x='91' y='114' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>対照10 / MASL17</text><text x='91' y='130' text-anchor='middle' font-size='10.5' fill='var(--ink-soft)'>/ MASH34</text><rect x='226' y='14' width='160' height='44' rx='8' fill='var(--paper-2)' stroke='var(--G)'/><text x='306' y='40' text-anchor='middle' font-size='11.5'>scRNA-seq (54万細胞)</text><rect x='226' y='78' width='160' height='44' rx='8' fill='var(--paper-2)' stroke='var(--G)'/><text x='306' y='104' text-anchor='middle' font-size='11.5'>空間TX (Visium)</text><rect x='226' y='142' width='160' height='44' rx='8' fill='var(--paper-2)' stroke='var(--G)'/><text x='306' y='168' text-anchor='middle' font-size='11.5'>空間メタボローム</text><rect x='446' y='52' width='178' height='44' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/><text x='535' y='72' text-anchor='middle' font-size='11'>統合解析・空間マップ</text><text x='535' y='88' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>zonation/細胞間相互作用</text><rect x='446' y='112' width='178' height='48' rx='8' fill='var(--paper)' stroke='var(--D)' stroke-width='1.5'/><text x='535' y='132' text-anchor='middle' font-size='11'>細胞株でin vitro検証</text><text x='535' y='149' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>MITF OE/KD・OCR</text><path d='M166,96 C190,96 200,36 224,36' fill='none' stroke='var(--accent)' marker-end='url(#m01)'/><path d='M166,104 C190,104 200,100 224,100' fill='none' stroke='var(--accent)' marker-end='url(#m01)'/><path d='M166,116 C190,116 200,164 224,164' fill='none' stroke='var(--accent)' marker-end='url(#m01)'/><path d='M386,100 C414,100 420,74 444,74' fill='none' stroke='var(--accent)' marker-end='url(#m01)'/><path d='M535,96 L535,110' stroke='var(--accent)' marker-end='url(#m01)'/></g></svg>",
+    abstract:"ヒトMASLDは世界最多の慢性肝疾患。対照10・MASL 17・MASH 34の計61症例から単一細胞＋空間トランスクリプトーム＋空間メタボロームの統合マップを構築。脂質関連マクロファージ(LAM)の脂質処理能を制御する鍵転写因子としてMITFを同定し、LAMがHGF分泌を介して肝保護的に働くことを示した。空間解析で進行MASHに富む線維化遺伝子プログラムを抽出し、線維化巣での中心静脈内皮細胞–HSCのプロ線維化クロストークを示唆。空間メタボロームではMASLD特異的リン脂質蓄積を捉え、LAMのlp-PLA2(PLA2G7)を介したリン脂質代謝との関連を提示した。",
+    abstract_ja:"MASLDは世界的に主要な慢性肝疾患。対照10・MASL 17・MASH 34の計61のヒト肝から単一細胞・空間トランスクリプトーム・空間メタボロームの統合地図を作製。LAMの脂質処理能の鍵制御因子としてMITFを同定し、LAMがHGF分泌を介して肝保護的役割を担うことを示した。空間解析で進行MASHに富む線維化関連遺伝子プログラムを描出し、線維化領域での中心静脈内皮細胞とHSCのプロ線維化クロストークを示唆。空間メタボロームはMASLD特異的リン脂質蓄積を示し、LAMのlp-PLA2を介したリン脂質代謝との関連を示した。",
+    background:"MASLは炎症・線維化を伴うMASHへ進行し肝硬変・肝癌に至る。scRNA-seqで非実質細胞の不均一性は解像されたが空間情報が欠落。肝は門脈〜中心静脈の酸素・栄養勾配(zonation)に沿って機能が分かれ、病態も空間文脈で見る必要がある。トランスクリプトームとメタボロームを同一組織上で統合する基盤も未整備だった。",
+    achievements:[
+      "54万細胞・約4.8万Visiumスポット・約84万MSデータ点の大規模ヒト空間マルチオミクスatlas(Web公開)。",
+      "MITFをLAM特異的マスター転写因子と同定→PGC1α–PPARγ–FAO軸でミトコンドリア機能・脂質処理能を増強(OE/KD・OCRで実証)。",
+      "LAMのHGF–MET軸による肝保護的役割を提示。",
+      "線維化遺伝子トピック(COL1A1/COL1A2,LOXL1等)を空間抽出し、進行MASH(F3–4)で中心静脈EC↔HSCのRSPO3–LGR6クロストークを線維化巣に同定。",
+      "MASLD特異的リン脂質(超長鎖脂肪酸含有PE/PC/PA)蓄積とLAMのPLA2G7の空間共局在を提示。"
+    ],
+    limitations:[
+      "性別の偏り：対照が全例女性、MASLD群は男性優位→性差の影響を排除できない。",
+      "空間メタボローム×トランスクリプトーム統合は隣接切片の高い類似性と手動ランドマークが必要で全データには未適用。",
+      "RSPO3–LGR6軸やLAM機構は主に計算予測＋細胞株検証にとどまり生体内因果は未確立。"
+    ],
+    connection:[
+      "酸化的代謝という主題が直結：LAMのMITF–PGC1α–PPARγ–FAO軸＝MΦの酸化的リン酸化の話で、酸素透過膜で好気的代謝を回す肝オープンオルガノイドのコンセプトと響き合う。",
+      "線維化の点火に直接ヒント：中心静脈EC–HSCのRSPO3–LGR6が線維化巣ドライバー。内皮を入れる意義づけ＋線維化マーカー候補(COL1A1,LOXL1,THY1,RSPO3,LGR6)。",
+      "zonation視点：線維化はpericentral優位→内皮種やリガンド添加で「中心静脈ニッチ」を疑似再現する設計余地。",
+      "ABM入力：細胞種別の発現プログラムとリガンド–受容体相互作用を確率ルールに落とす際の参照データ。"
+    ],
+    glossary:[
+      {term:"LAM", full:"lipid-associated macrophage", desc:"脂質関連マクロファージ。MITFで脂質処理能を制御"},
+      {term:"MITF", full:"microphthalmia-associated transcription factor", desc:"LAMの脂質処理を司るマスター転写因子"},
+      {term:"PGC1α / PPARγ", full:"PPARG coactivator 1α / PPAR gamma", desc:"ミトコンドリア生合成・FAO・脂質代謝の転写制御"},
+      {term:"FAO", full:"fatty acid oxidation", desc:"脂肪酸β酸化。LAMの脂質処理能の中核"},
+      {term:"HGF / MET", full:"hepatocyte growth factor / its receptor", desc:"LAMが分泌しMET経由で肝保護的に働く軸"},
+      {term:"lp-PLA2 (PLA2G7)", full:"lipoprotein-associated phospholipase A2", desc:"LAMのリン脂質代謝酵素。酸化リン脂質代謝に関与"},
+      {term:"RSPO3 / LGR6", full:"R-spondin 3 / LGR6 receptor", desc:"中心静脈EC–HSCのプロ線維化クロストーク軸"},
+      {term:"COL1A1/2, LOXL1, THY1", full:"collagen I, lysyl oxidase-like 1, Thy-1", desc:"線維化遺伝子プログラム/活性化HSCマーカー"},
+      {term:"zonation", full:"hepatic zonation", desc:"門脈〜中心静脈の代謝勾配に沿った肝小葉の機能分化"},
+      {term:"Visium / scRNA-seq", full:"spatial transcriptomics / single-cell RNA-seq", desc:"空間・単一細胞オミクス手法"}
+    ]
+  }
+];
+
+/* ===== イラスト素材（自前インラインSVG） ===== */
+const ICONS={
+  mouse:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><ellipse cx='27' cy='30' rx='13' ry='9' fill='var(--paper-2)'/><circle cx='14' cy='24' r='7' fill='var(--paper-2)'/><circle cx='11' cy='18' r='3.5' fill='var(--paper-2)'/><circle cx='12' cy='24' r='1.2' fill='var(--ink-soft)' stroke='none'/><path d='M40 32 q6 1 5 7'/></svg>",
+  human:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><circle cx='24' cy='15' r='7' fill='var(--paper-2)'/><path d='M11 41 q0-13 13-13 t13 13' fill='var(--paper-2)'/></svg>",
+  liver:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--B)' stroke-width='1.6'><path d='M7 18 q18-7 34-3 q3 12-6 20 q-10 7-19 1 q-9-7-9-18z' fill='var(--paper-2)'/><path d='M30 16 q2 6-1 11'/></svg>",
+  hepatocyte:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--B)' stroke-width='1.6'><path d='M24 7 L40 16 L40 32 L24 41 L8 32 L8 16 Z' fill='var(--paper-2)'/><circle cx='24' cy='24' r='6' fill='var(--B)' opacity='.25'/></svg>",
+  macrophage:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--C)' stroke-width='1.4'><path d='M24 6 l3 5 5-3 0 6 6 1-4 4 4 4-6 1 0 6-5-3-3 5-3-5-5 3 0-6-6-1 4-4-4-4 6-1 0-6 5 3z' fill='var(--paper-2)'/><circle cx='24' cy='24' r='5' fill='var(--C)' opacity='.25'/></svg>",
+  stellate:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--B)' stroke-width='1.4'><path d='M24 5 l4 13 13-6-9 11 12 6-14 1 3 12-9-9-9 9 3-12-14-1 12-6-9-11 13 6z' fill='var(--paper-2)'/><circle cx='24' cy='24' r='4.5' fill='var(--B)' opacity='.25'/></svg>",
+  endothelial:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--E)' stroke-width='1.6'><path d='M5 16 h38 M5 32 h38'/><ellipse cx='17' cy='24' rx='3' ry='4' fill='var(--E)' opacity='.3'/><ellipse cx='31' cy='24' rx='3' ry='4' fill='var(--E)' opacity='.3'/></svg>",
+  adipocyte:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--D)' stroke-width='1.6'><circle cx='24' cy='24' r='17' fill='var(--paper-2)'/><circle cx='24' cy='24' r='11' fill='var(--D)' opacity='.2'/><circle cx='20' cy='20' r='2.5' fill='var(--D)' opacity='.5' stroke='none'/></svg>",
+  chip:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--accent)' stroke-width='1.6'><rect x='6' y='12' width='36' height='24' rx='4' fill='var(--paper-2)'/><circle cx='16' cy='24' r='4' fill='var(--D)' opacity='.4'/><circle cx='24' cy='24' r='4' fill='var(--B)' opacity='.4'/><circle cx='32' cy='24' r='4' fill='var(--C)' opacity='.4'/><path d='M2 24 h4 M42 24 h4'/></svg>",
+  dish:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--accent)' stroke-width='1.6'><ellipse cx='24' cy='26' rx='18' ry='9' fill='var(--paper-2)'/><ellipse cx='24' cy='24' rx='18' ry='9'/><circle cx='18' cy='24' r='1.6' fill='var(--accent)' stroke='none'/><circle cx='27' cy='27' r='1.6' fill='var(--accent)' stroke='none'/><circle cx='30' cy='22' r='1.6' fill='var(--accent)' stroke='none'/></svg>",
+  omics:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--G)' stroke-width='1.6'><path d='M12 8 q12 8 0 16 q-12 8 0 16 M24 8 q-12 8 0 16 q12 8 0 16'/><path d='M14 13 h8 M14 35 h8' opacity='.6'/><rect x='32' y='30' width='3' height='12' fill='var(--G)' stroke='none'/><rect x='37' y='24' width='3' height='18' fill='var(--G)' stroke='none'/><rect x='42' y='34' width='3' height='8' fill='var(--G)' stroke='none'/></svg>",
+  drug:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--A)' stroke-width='1.6'><g transform='rotate(-35 24 24)'><rect x='8' y='18' width='32' height='13' rx='6.5' fill='var(--paper-2)'/><line x1='24' y1='18' x2='24' y2='31'/><rect x='8' y='18' width='16' height='13' rx='6.5' fill='var(--A)' opacity='.2' stroke='none'/></g></svg>",
+  geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
+};
+const paperIcons={
+  "01":[{ic:"human",cap:"ヒト肝61例"},{ic:"omics",cap:"空間オミクス"},{ic:"macrophage",cap:"LAM"},{ic:"endothelial",cap:"中心静脈EC"}],
+  "02":[{ic:"mouse",cap:"MASH食マウス"},{ic:"geneko",cap:"NCF1遺伝子改変"},{ic:"macrophage",cap:"KC"},{ic:"liver",cap:"鉄/フェロトーシス"}],
+  "03":[{ic:"mouse",cap:"ATF4-KOマウス"},{ic:"stellate",cap:"HSC"},{ic:"drug",cap:"翻訳阻害剤"},{ic:"human",cap:"ヒト相関"}],
+  "04":[{ic:"chip",cap:"iPSC-MPS"},{ic:"adipocyte",cap:"iADIPO"},{ic:"hepatocyte",cap:"iHEP"},{ic:"macrophage",cap:"M1-iMAC"},{ic:"drug",cap:"セマグルチド"}],
+  "05":[{ic:"mouse",cap:"線維化3モデル"},{ic:"endothelial",cap:"LSEC capillarization"},{ic:"drug",cap:"SNA核酸医薬"},{ic:"liver",cap:"線維化軽減"}],
+  "06":[{ic:"stellate",cap:"HSC 7状態モデル"},{ic:"mouse",cap:"CCl4バリデーション"},{ic:"human",cap:"NASH患者RNAseq"},{ic:"liver",cap:"線維化退縮シミュレーション"}],
+  "07":[{ic:"mouse",cap:"4種MASHモデル"},{ic:"hepatocyte",cap:"DNL/steatosis"},{ic:"stellate",cap:"HSC活性化"},{ic:"drug",cap:"EVT0185"},{ic:"omics",cap:"scRNA-seq/空間TX"}]
+};
+
+/* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
+const CAT_ORDER=["細胞・組織","遺伝子・タンパク質","シグナル・経路","代謝・分子","プロセス・現象","手法・モデル","疾患・病態"];
+const CATINFO={
+  "lam":{cat:"細胞・組織",long:"脂質関連マクロファージ。MITFを介して脂質処理能（β酸化）を高め、HGF分泌で肝保護的にも働く特殊なマクロファージ亜集団。"},
+  "mitf":{cat:"遺伝子・タンパク質",long:"メラノサイトで有名な転写因子だが、LAMでは脂質処理（PGC1α–PPARγ–FAO軸）を司るマスター制御因子として機能する。"},
+  "pgc1α / pparγ":{cat:"シグナル・経路",long:"ミトコンドリア生合成・脂肪酸酸化・脂質代謝・インスリン感受性を制御する転写コアクチベーター/核内受容体の軸。"},
+  "fao":{cat:"代謝・分子",long:"脂肪酸β酸化。ミトコンドリアで脂肪酸をエネルギーに変える経路で、LAMの脂質処理能の中核をなす。"},
+  "hgf / met":{cat:"シグナル・経路",long:"肝細胞増殖因子とその受容体チロシンキナーゼ。LAMが分泌するHGFがMETを介して肝細胞を保護・再生方向に導く。"},
+  "lp-pla2 (pla2g7)":{cat:"遺伝子・タンパク質",long:"リポタンパク関連ホスホリパーゼA2。酸化リン脂質の代謝に関わる分泌酵素で、LAMに発現し炎症性脂質環境を左右する。"},
+  "rspo3 / lgr6":{cat:"シグナル・経路",long:"Wntシグナルを増強するR-spondin3とその受容体LGR6。中心静脈内皮細胞–HSC間のプロ線維化クロストークを担う。"},
+  "col1a1/2, loxl1, thy1":{cat:"遺伝子・タンパク質",long:"I型コラーゲン（線維化ECM主成分）、架橋酵素LOXL1、活性化HSCマーカーTHY1。いずれも線維化遺伝子プログラムの代表的リードアウト。"},
+  "zonation":{cat:"プロセス・現象",long:"肝小葉が門脈〜中心静脈の酸素・栄養勾配に沿って代謝機能を分業する空間的特徴。病態も帯域依存に現れる。"},
+  "visium / scrna-seq":{cat:"手法・モデル",long:"組織切片上で遺伝子発現を空間的に測る空間トランスクリプトーム（Visium）と、細胞1個ずつ発現を測るscRNA-seq。"},
+  "ncf1":{cat:"遺伝子・タンパク質",long:"NADPHオキシダーゼの細胞質構成因子（p47phox）。マクロファージで活性酸素産生を介しKCの鉄恒常性とフェロトーシス感受性を制御する。"},
+  "nadph oxidase":{cat:"遺伝子・タンパク質",long:"膜・細胞質サブユニットからなる活性酸素（ROS）産生酵素複合体。自然免疫の酸化的殺菌に必須でNCF1が構成因子。"},
+  "kc":{cat:"細胞・組織",long:"クッパー細胞。肝類洞に常在するマクロファージで、炎症・貪食・セカンドヒット応答の主役。MASHでは脱落・置換が進む。"},
+  "tlr4":{cat:"遺伝子・タンパク質",long:"Toll様受容体4。LPSや酸化リン脂質などを感知する自然免疫受容体で、肝細胞ではヘプシジン産生を誘導する。"},
+  "oxpl":{cat:"代謝・分子",long:"酸化リン脂質。酸化ストレス下で生じる脂質で、TLR4を介した炎症シグナルやKCの鉄・運命制御のハブとなる。"},
+  "hepcidin":{cat:"遺伝子・タンパク質",long:"肝細胞が分泌する鉄代謝制御ホルモン。鉄の細胞内貯留を促し、KCの鉄沈着→フェロトーシスを後押しする。"},
+  "ferroptosis":{cat:"プロセス・現象",long:"鉄依存的な脂質過酸化により起こる制御性細胞死。MASHではKC脱落の機構として働く。"},
+  "momφ":{cat:"細胞・組織",long:"単球由来マクロファージ。常在KCが減少・脱落した際に肝へ浸潤して置き換わり、炎症を増幅する。"},
+  "atf4":{cat:"遺伝子・タンパク質",long:"統合的ストレス応答/ER応答の中心転写因子。線維化条件下ではストレス非依存にEMT/線維化遺伝子用の非定型エンハンサーを駆動する。"},
+  "emt":{cat:"プロセス・現象",long:"上皮間葉転換。上皮細胞が間葉系様の運動性・ECM産生性を獲得する過程。線維化遺伝子プログラムと関連する。"},
+  "er stress":{cat:"プロセス・現象",long:"小胞体に未成熟タンパク質が蓄積するストレス状態。UPRを誘導し、ATF4を活性化する。"},
+  "upr":{cat:"プロセス・現象",long:"不全タンパク応答。ERストレスを解消するための転写・翻訳プログラムで、ATF4が本来制御する対象。"},
+  "isr":{cat:"プロセス・現象",long:"統合的ストレス応答。様々なストレスがeIF2αリン酸化に収束し、ATF4をハブとして遺伝子発現を再編する仕組み。"},
+  "tgfβ":{cat:"シグナル・経路",long:"TGFβ。HSC活性化・線維化を駆動する最も保存されたサイトカイン。本ライブラリではATF4を再プログラムする上流因子として登場。"},
+  "αsma":{cat:"遺伝子・タンパク質",long:"α平滑筋アクチン（ACTA2）。静止期HSCが筋線維芽細胞へ活性化した指標で、線維化の代表的リードアウト。"},
+  "hsc":{cat:"細胞・組織",long:"肝星細胞。類洞周囲のビタミンA貯蔵細胞で、活性化して筋線維芽細胞化しコラーゲンを産生する＝線維化の中心。"},
+  "iadipo":{cat:"細胞・組織",long:"iPSC由来白色脂肪細胞。MPSで脂肪組織側を担い、GLP1R高発現でセマグルチド応答も再現する。"},
+  "ihep":{cat:"細胞・組織",long:"iPSC由来肝細胞。MPSで肝側を担い、脂質蓄積・インスリン抵抗性のリードアウトを提供する。"},
+  "imac":{cat:"細胞・組織",long:"iPSC由来マクロファージ。M0/M1へ分極可能で、M1化させると脂肪組織炎症（TNFα）を再現する。"},
+  "mps":{cat:"手法・モデル",long:"ミクロフィジオロジカルシステム（臓器チップ）。複数の細胞/臓器槽を循環培地でつなぎ生理的相互作用を再現する培養基盤。"},
+  "hir":{cat:"疾患・病態",long:"肝インスリン抵抗性。インスリンが効かず肝糖産生が抑制されない状態で、MASLD発症の代謝的指標。"},
+  "wat":{cat:"細胞・組織",long:"白色脂肪組織。エネルギー貯蔵とアディポカイン分泌を担い、内臓WATの拡大・炎症がMASLDと強く相関する。"},
+  "hgp":{cat:"代謝・分子",long:"肝糖産生。糖新生・グリコーゲン分解による肝からの糖放出で、HIRの機能的リードアウト。"},
+  "glp1r":{cat:"遺伝子・タンパク質",long:"GLP-1受容体。セマグルチド等GLP-1作動薬の標的で、脂肪細胞に高発現し抗炎症・代謝改善に寄与する。"},
+  "pdms":{cat:"手法・モデル",long:"ポリジメチルシロキサン。MPS/臓器チップの主要素材。柔軟・透明だが疎水性薬物を非特異吸着しうる点に注意が要る。"},
+  "pck1":{cat:"遺伝子・タンパク質",long:"ホスホエノールピルビン酸カルボキシキナーゼ1。糖新生の律速酵素で、HIRのマーカー遺伝子。"},
+  "adipoq":{cat:"遺伝子・タンパク質",long:"アディポネクチン遺伝子。脂肪細胞由来のインスリン感受性・抗炎症アディポカインで、炎症時に低下する。"},
+  "tnf":{cat:"シグナル・経路",long:"腫瘍壊死因子（TNFα）。M1マクロファージが大量分泌する炎症性サイトカインで、肝のインスリン抵抗性・脂肪化を誘導する。"},
+  "ppara":{cat:"遺伝子・タンパク質",long:"PPARα。肝の脂肪酸β酸化を促進する核内受容体で、セマグルチド処理で発現が増える。"},
+  "capillarization":{cat:"プロセス・現象",long:"sinusoidal capillarization。LSECが特徴的な有窓と無基底膜性を失い連続基底膜をもつ毛細血管様内皮へ脱分化する病的変化で、HSC活性化・線維化を促す上流イベント。"},
+  "fenestrae":{cat:"細胞・組織",long:"LSEC膜上に開く有窓(小孔)構造。血漿と肝細胞間の物質交換やHSCの静止維持に必須で、線維化で失われる。"},
+  "mir-325-3p":{cat:"遺伝子・タンパク質",long:"MSCが分泌するマイクロRNA。標的Ptprmを抑制してLSECのアクチン細胞骨格を再編し、有窓を再形成してcapillarizationを逆転させる。"},
+  "ptprm":{cat:"遺伝子・タンパク質",long:"受容体型タンパク質チロシンホスファターゼM。miR-325-3pの直接標的で、抑制によりアクチン細胞骨格が再編されfenestraeが再形成される。"},
+  "sna":{cat:"手法・モデル",long:"球状核酸(spherical nucleic acid)。核酸を担体なしに球状へ多価提示するナノ構造で、Scara介在エンドサイトーシスを介しLSECへ核酸を送達する。"},
+  "scara / sr-a":{cat:"遺伝子・タンパク質",long:"スカベンジャー受容体クラスA。線維化LSECに発現し、SNAをクラスリン依存エンドサイトーシスで選択的に取り込む受容体。"},
+  "msc":{cat:"細胞・組織",long:"間葉系幹細胞。分泌するmiR-325-3pを介してLSECのcapillarizationを是正し線維化を軽減するが、移植療法には製造・安全性の制約がある。"},
+  "bdl":{cat:"手法・モデル",long:"胆管結紮(bile duct ligation)。胆汁うっ滞性の肝線維化を誘導する代表的なマウスモデル。"},
+  "taa":{cat:"手法・モデル",long:"チオアセトアミド。反復投与で肝傷害・線維化を誘導する実験モデル試薬。"},
+  "ccl4":{cat:"手法・モデル",long:"四塩化炭素。小葉中心性の肝傷害を介して線維化を誘導する最も古典的な化学傷害モデル。"},
+  "qhsc":{cat:"細胞・組織",long:"静止期肝星細胞（quiescent HSC）。ビタミンA脂質滴を貯蔵し線維化を誘発しない非活性状態。TGFβ1刺激によりaHSCへ移行する。"},
+  "ahsc":{cat:"細胞・組織",long:"活性化肝星細胞（activated HSC）。TGFβ1により誘導されαSMA・I型コラーゲンを産生する筋線維芽細胞様状態。線維化ECMの主な産生源。"},
+  "ihsc":{cat:"細胞・組織",long:"不活化肝星細胞（inactivated HSC）。活性化後に一時的な静止様状態に移行した中間状態。完全な静止期HSCとは異なりTGFβ1刺激で素早く再活性化でき、NASH患者の線維化ステージと相関して蓄積する。"},
+  "kappa":{cat:"手法・モデル",long:"Kappaグラフ書き換え言語。分子や細胞の状態を「接触パターンの書き換えルール」として記述し、規則ベースの確率的シミュレーションを可能にする。複雑な多状態システムを少数のルールで表現できる。"},
+  "ecm":{cat:"代謝・分子",long:"細胞外基質（extracellular matrix）。コラーゲン（主にI型）・フィブロネクチン・ラミニン等からなる三次元ネットワーク。線維化では活性化HSCによる過剰産生が組織硬化・肝機能障害を招く。"},
+  "reversion":{cat:"プロセス・現象",long:"線維化退縮（fibrosis reversion）。TGFβ1供給が途絶えたり治療介入が入ると、iHSCの再活性化が低下しECMが徐々に分解されて線維化が退縮する現象。iHSC不活化ループの制御が治療標的として注目される。"},
+  "acly":{cat:"遺伝子・タンパク質",long:"ATPクエン酸リアーゼ（ATP citrate lyase）。ミトコンドリア由来クエン酸をアセチルCoAに変換する細胞質酵素。肝細胞のDNLとコレステロール合成のアセチルCoA供給の主経路を担い、MASHの脂肪化・線維化の代謝ハブとして注目される。"},
+  "acss2":{cat:"遺伝子・タンパク質",long:"アセチルCoAシンテターゼ2（acyl-CoA synthetase short chain 2）。酢酸をアセチルCoAに変換する酵素。ACLY依存経路とは独立に機能し、特に肝星細胞（HSC）においてACSSS2依存の酢酸代謝がコレステロール合成・HSC活性化・線維化を駆動することが示されている。"},
+  "dnl":{cat:"代謝・分子",long:"肝臓の脂質新生（de novo lipogenesis）。糖や酢酸由来のアセチルCoAを出発点として脂肪酸を新規合成する代謝経路。インスリン・糖・高栄養状態で誘導され、MASH・肥満に伴う肝TG蓄積（steatosis）の主要原因の一つ。SREBP1cやChREBPが転写制御を担う。"},
+  "evt0185":{cat:"手法・モデル",long:"Espervita Therapeuticsが開発した初のACLY＋ACSS2二重阻害薬。4種のMASHマウスモデルで脂肪化・インスリン抵抗性・線維化を解消し、セマグルチドとの相乗効果を示した前臨床段階の研究ツール兼創薬候補。"},
+  "srebp1c":{cat:"遺伝子・タンパク質",long:"ステロール調節エレメント結合タンパク質1c（sterol regulatory element-binding protein 1c）。インスリン・糖・エネルギー過剰に応答してFASN・ACACA等の脂肪酸合成酵素遺伝子を活性化するマスター転写因子。肝DNL誘導・steatosisの中心因子。"},
+  "hmgcr":{cat:"遺伝子・タンパク質",long:"HMG-CoAレダクターゼ（3-hydroxy-3-methylglutaryl-CoA reductase）。コレステロール合成経路の律速酵素でスタチン薬の標的。HSCではACSSS2由来アセチルCoAがHMGCR経路を活性化し、コレステロール合成増加→HSC活性化→線維化を促すことが示されている。"},
+  "bempedoic acid":{cat:"手法・モデル",long:"高コレステロール血症に承認されたACLY単独阻害薬（ETC-1002）。スタチン不耐患者に用いられる。EVT0185との比較対照として使用され、ACLY単独より二重（ACLY＋ACSS2）阻害がMASHと線維化に対してより有効であることを示す基準となった。"}
+};
+
+/* ===== 描画 ===== */
+let activeTheme="all", query="", currentView="papers", sortMode="alpha";
+const grid=document.getElementById("grid");
+const glosview=document.getElementById("glosview");
+const chipsBox=document.getElementById("chips");
+
+// chips
+chipsBox.innerHTML='<span class="chip active" data-theme="all"><span class="dot"></span>すべて</span>'+
+  Object.entries(THEMES).map(([k,v])=>`<span class="chip" data-theme="${k}"><span class="dot" style="background:${v.c}"></span>${k}·${v.name}</span>`).join("");
+chipsBox.addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  activeTheme=c.dataset.theme;
+  [...chipsBox.children].forEach(x=>x.classList.toggle("active",x===c));
+  render();
+});
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();refresh();});
+
+// view tabs
+const viewtabs=document.getElementById("viewtabs");
+viewtabs.addEventListener("click",e=>{
+  const t=e.target.closest(".vtab"); if(!t)return;
+  currentView=t.dataset.view;
+  [...viewtabs.children].forEach(x=>x.classList.toggle("active",x===t));
+  // chips & search placeholder adapt to view
+  chipsBox.style.display = currentView==="papers" ? "flex" : "none";
+  document.getElementById("q").placeholder = currentView==="papers"
+    ? "タイトル・著者・誌名・本文で検索…" : "略語・正式名・説明で用語検索…（例: TGFβ）";
+  refresh();
+});
+
+function refresh(){
+  const papersView=currentView==="papers";
+  grid.style.display=papersView?"grid":"none";
+  glosview.style.display=papersView?"none":"block";
+  document.getElementById("sortbar").style.display=papersView?"none":"flex";
+  chipsBox.style.display=papersView?"flex":"none";
+  papersView?render():renderGlossary();
+}
+
+// sort controls
+const sortbar=document.getElementById("sortbar");
+sortbar.addEventListener("click",e=>{
+  const b=e.target.closest(".sbtn"); if(!b)return;
+  sortMode=b.dataset.sort;
+  [...sortbar.querySelectorAll(".sbtn")].forEach(x=>x.classList.toggle("active",x===b));
+  renderGlossary();
+});
+
+/* ===== 用語ツールチップ ===== */
+// 全論文glossaryから term(lower)->{term,desc} の索引を作る（本文中の用語に注釈を付ける用）
+const TOOLTIP_TERMS=(()=>{
+  const m=new Map();
+  PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{
+    const k=(g.term||"").toLowerCase();
+    if(k&&!m.has(k)) m.set(k,{term:g.term,desc:g.desc||""});
+  }));
+  return m;
+})();
+function annotate(text){
+  if(!text) return text||"";
+  let s=String(text), tokens=[];
+  const keys=[...TOOLTIP_TERMS.keys()].sort((a,b)=>b.length-a.length);
+  for(const k of keys){
+    const orig=TOOLTIP_TERMS.get(k).term;
+    const idx=s.indexOf(orig);
+    if(idx>=0){
+      const tk=""+tokens.length+"";
+      s=s.slice(0,idx)+tk+s.slice(idx+orig.length);
+      tokens.push(TOOLTIP_TERMS.get(k));
+    }
+  }
+  tokens.forEach((o,i)=>{
+    const tip=(o.desc||o.term).replace(/"/g,"&quot;");
+    s=s.replace(""+i+"",`<span class="term" data-tip="${tip}" data-t="${o.term.replace(/"/g,'&quot;')}">${o.term}</span>`);
+  });
+  return s;
+}
+// floating tooltip (event delegation)
+const tipEl=document.getElementById("tip");
+document.addEventListener("mouseover",e=>{
+  const t=e.target.closest(".term"); if(!t)return;
+  tipEl.innerHTML=`<b>${t.dataset.t||""}</b>${t.dataset.tip||""}`;
+  tipEl.classList.add("on"); positionTip(e);
+});
+document.addEventListener("mousemove",e=>{ if(tipEl.classList.contains("on")&&e.target.closest(".term")) positionTip(e); });
+document.addEventListener("mouseout",e=>{ if(e.target.closest(".term")) tipEl.classList.remove("on"); });
+function positionTip(e){
+  const pad=14, w=tipEl.offsetWidth, h=tipEl.offsetHeight;
+  let x=e.clientX+pad, y=e.clientY+pad;
+  if(x+w>innerWidth-8) x=e.clientX-w-pad;
+  if(y+h>innerHeight-8) y=e.clientY-h-pad;
+  tipEl.style.left=Math.max(6,x)+"px"; tipEl.style.top=Math.max(6,y)+"px";
+}
+// タッチ端末：用語タップでツールチップ表示／別所タップで閉じる
+function showTipAt(t,cx,cy){
+  tipEl.innerHTML=`<b>${t.dataset.t||""}</b>${t.dataset.tip||""}`;
+  tipEl.classList.add("on");
+  positionTip({clientX:cx,clientY:Math.max(cy,tipEl.offsetHeight+20)});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".term");
+  if(t){
+    const r=t.getBoundingClientRect();
+    if(tipEl.classList.contains("on")&&tipEl._for===t){tipEl.classList.remove("on");tipEl._for=null;}
+    else{showTipAt(t,r.left+r.width/2,r.top); tipEl._for=t;}
+    e.stopPropagation();
+  }else if(!e.target.closest("#tip")){
+    tipEl.classList.remove("on"); tipEl._for=null;
+  }
+},true);
+
+function tagHTML(p){
+  const prim=`<span class="tag" style="background:${THEMES[p.primary].c}">${p.primary}·${THEMES[p.primary].name}</span>`;
+  const sec=(p.tags||[]).map(t=>`<span class="tag sec">${t}</span>`).join("");
+  return prim+sec;
+}
+function matches(p){
+  const themeOK = activeTheme==="all" || p.primary===activeTheme || (p.tags||[]).includes(activeTheme);
+  if(!themeOK) return false;
+  if(!query) return true;
+  const blob=[p.title,p.authors,p.journal,p.year,p.abstract,p.abstract_ja,p.background,
+    (p.achievements||[]).join(" "),(p.limitations||[]).join(" "),(p.connection||[]).join(" ")].join(" ").toLowerCase();
+  return blob.includes(query);
+}
+function render(){
+  const list=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent=
+    `表示 ${list.length} / ${PAPERS.length} 本`+(activeTheme!=="all"?`　·　テーマ ${activeTheme}`:"")+(query?`　·　"${query}"`:"");
+  if(!list.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';return;}
+  grid.innerHTML=list.map((p,i)=>`
+    <article class="card" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
+      <div class="card-top">
+        <span class="num">№ ${p.id}</span>
+        <div class="tags">${tagHTML(p)}</div>
+      </div>
+      <h2 class="title">${p.title}</h2>
+      <div class="cite"><span class="j">${p.journal}</span> ${p.vol||""} (${p.year}) · ${p.authors}</div>
+      <span class="approach">${p.approach||""}</span>
+      <div class="row-actions">
+        <button class="btn toggle"><span class="arr">▸</span> 詳細を${"開く"}</button>
+        <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文 · DOI: ${p.doi}</a>
+      </div>
+      <div class="detail"><div class="detail-inner">
+        ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
+        ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
+        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
+        <div class="sec"><h4>Abstract（和訳要約）</h4><p>${annotate(p.abstract_ja||p.abstract||"")}</p></div>
+        <div class="sec"><h4>背景と課題</h4><p>${annotate(p.background)}</p></div>
+        <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
+        <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
+        <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
+        ${(p.glossary&&p.glossary.length)?`<div class="sec"><h4>用語メモ</h4><table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table></div>`:""}
+      </div></div>
+    </article>`).join("");
+  grid.querySelectorAll(".card").forEach(card=>{
+    card.querySelector(".toggle").addEventListener("click",()=>{
+      const open=card.classList.toggle("open");
+      card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
+    });
+  });
+}
+/* ===== 用語ビュー ===== */
+function buildGlossaryIndex(){
+  const map=new Map(); // key: term(lower) -> {term, full, desc, papers:[{id,primary}]}
+  PAPERS.forEach(p=>{
+    (p.glossary||[]).forEach(g=>{
+      const key=(g.term||"").toLowerCase();
+      if(!key)return;
+      if(!map.has(key)) map.set(key,{term:g.term,full:g.full||"",desc:g.desc||"",papers:[]});
+      const e=map.get(key);
+      if(!e.papers.some(x=>x.id===p.id)) e.papers.push({id:p.id,primary:p.primary});
+      if(!e.full&&g.full) e.full=g.full;
+      if(!e.desc&&g.desc) e.desc=g.desc;
+    });
+  });
+  return [...map.values()].sort((a,b)=>a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
+}
+function enrich(g){
+  const info=CATINFO[g.term.toLowerCase()]||{};
+  return {...g,
+    cat:info.cat||"その他",
+    detail:info.long||g.desc||"",
+    minId:Math.min(...g.papers.map(p=>Number(p.id))),
+    count:g.papers.length};
+}
+function glosRowHTML(g){
+  return `<div class="glosrow">
+    <span class="gterm">${g.term}</span><span class="gfull">${g.full}</span>
+    ${sortMode!=="cat"?`<span class="cattag">${g.cat}</span>`:""}
+    <div class="gdesc">${g.detail}</div>
+    <div class="grefs">${g.papers.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(pp=>
+      `<button class="pchip" style="background:${THEMES[pp.primary].c}" data-id="${pp.id}">№${pp.id}</button>`).join("")}</div>
+  </div>`;
+}
+function renderGlossary(){
+  const all=buildGlossaryIndex().map(enrich);
+  let list=query
+    ? all.filter(g=>[g.term,g.full,g.detail,g.cat].join(" ").toLowerCase().includes(query))
+    : all;
+  const byAlpha=(a,b)=>a.term.toLowerCase().localeCompare(b.term.toLowerCase());
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent=
+    `用語 ${list.length} / ${all.length} 件`+(query?`　·　"${query}"`:"");
+  if(!list.length){glosview.innerHTML='<div class="empty">該当する用語がありません</div>';return;}
+  let html="";
+  if(sortMode==="cat"){
+    const cats=[...CAT_ORDER,"その他"];
+    cats.forEach(c=>{
+      const rows=list.filter(g=>g.cat===c).sort(byAlpha);
+      if(!rows.length)return;
+      html+=`<div class="catlabel">${c}　(${rows.length})</div><div class="glosgrid">${rows.map(glosRowHTML).join("")}</div>`;
+    });
+  }else{
+    if(sortMode==="first") list=list.slice().sort((a,b)=>a.minId-b.minId||byAlpha(a,b));
+    else if(sortMode==="count") list=list.slice().sort((a,b)=>b.count-a.count||byAlpha(a,b));
+    else list=list.slice().sort(byAlpha);
+    html=`<div class="glosgrid">${list.map(glosRowHTML).join("")}</div>`;
+  }
+  glosview.innerHTML=html;
+  glosview.querySelectorAll(".pchip").forEach(b=>{
+    b.addEventListener("click",()=>jumpToPaper(b.dataset.id));
+  });
+}
+function jumpToPaper(id){
+  // 論文ビューへ切替＆フィルタ解除して必ず表示
+  currentView="papers"; query=""; activeTheme="all";
+  document.getElementById("q").value="";
+  [...viewtabs.children].forEach(x=>x.classList.toggle("active",x.dataset.view==="papers"));
+  [...chipsBox.children].forEach(x=>x.classList.toggle("active",x.dataset.theme==="all"));
+  chipsBox.style.display="flex";
+  document.getElementById("q").placeholder="タイトル・著者・誌名・本文で検索…";
+  refresh();
+  requestAnimationFrame(()=>{
+    const cards=[...grid.querySelectorAll(".card")];
+    const card=cards.find(c=>c.querySelector(".num")?.textContent.includes(id));
+    if(card){
+      if(!card.classList.contains("open")) card.querySelector(".toggle").click();
+      card.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+  });
+}
+
+// updated date = newest entry year-ish placeholder → use today on open
+document.getElementById("updated").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit"});
+refresh();
+</script>
+</body>
+</html>
