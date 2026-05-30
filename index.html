@@ -122,6 +122,11 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .vtab{font-family:"DM Mono",monospace;font-size:12.5px;letter-spacing:.04em;cursor:pointer;padding:7px 16px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:2px;transition:all .18s}
 .vtab:hover{border-color:var(--ink-soft)}
 .vtab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.moretab{display:none;font-family:"DM Mono",monospace;font-size:12.5px;letter-spacing:.04em;cursor:pointer;padding:7px 16px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:2px}
+.moretab.has-active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.moretab .mchev{transition:transform .18s;display:inline-block}
+.moretab.open .mchev{transform:rotate(180deg)}
+.tabmore{display:contents}
 
 /* Phase1: highlight / fav / memo / filters / stats */
 mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1px}
@@ -296,6 +301,11 @@ table.board td.bnum{white-space:nowrap}
 .illus figcaption{font-size:10.5px;color:var(--ink-soft);line-height:1.3}
 
 .empty{text-align:center;padding:60px 20px;color:var(--ink-soft);font-family:"DM Mono",monospace;font-size:14px}
+.pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;margin-top:22px}
+.pager button{font-family:"DM Mono",monospace;font-size:12px;cursor:pointer;padding:6px 11px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:6px;transition:.15s}
+.pager button:hover:not(:disabled){border-color:var(--ink-soft)}
+.pager .pgnum.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pager button:disabled{opacity:.4;cursor:default}
 footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-family:"DM Mono",monospace;font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em;line-height:1.9}
 @media(max-width:640px){
   .wrap{padding:0 14px 50px}
@@ -303,7 +313,12 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   .sub{font-size:14px}
   .meta-row{gap:8px 18px;font-size:12px}
   .controls{padding:12px 0 12px}
-  .viewtabs .vtab{flex:1;text-align:center;padding:9px 8px}
+  .viewtabs{flex-wrap:wrap;gap:6px}
+  .viewtabs .vtab{flex:0 0 auto;text-align:center;padding:8px 12px;font-size:12px}
+  .moretab{display:inline-block;flex:0 0 auto;padding:8px 12px;font-size:12px}
+  .tabmore{display:none;flex-basis:100%}
+  .tabmore.open{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .tabmore.open .vtab{flex:0 0 auto}
   .search input{font-size:16px;padding:12px 14px 12px 40px}
   #filterToggle{display:flex}
   .controls.terms #filterToggle{display:none}
@@ -349,11 +364,14 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
     <button class="vtab active" data-view="papers">論文で見る</button>
     <button class="vtab" data-view="board">研究ボード</button>
     <button class="vtab" data-view="terms">用語で探す</button>
-    <button class="vtab" data-view="net">用語ネットワーク</button>
-    <button class="vtab" data-view="zone">zonation地図</button>
-    <button class="vtab" data-view="quiz">用語クイズ</button>
-    <button class="vtab" data-view="feed">新着検索</button>
-    <button class="vtab" data-view="stats">統計</button>
+    <button type="button" class="moretab" id="moretab">その他 <span class="mchev">▾</span></button>
+    <span class="tabmore" id="tabmore">
+      <button class="vtab" data-view="net">用語ネットワーク</button>
+      <button class="vtab" data-view="zone">zonation地図</button>
+      <button class="vtab" data-view="quiz">用語クイズ</button>
+      <button class="vtab" data-view="feed">新着検索</button>
+      <button class="vtab" data-view="stats">統計</button>
+    </span>
   </div>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -378,6 +396,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   <button class="sbtn" data-sort="count">登場論文数順</button>
 </div>
 <div class="grid scrollarea" id="grid"></div>
+<div id="pager" class="pager"></div>
 <div id="glosview" class="scrollarea" style="display:none"></div>
 <div id="netview"></div>
 <div id="boardview"></div>
@@ -994,10 +1013,20 @@ document.getElementById("q").addEventListener("input",e=>{query=e.target.value.t
 
 // view tabs
 const viewtabs=document.getElementById("viewtabs");
+const moretab=document.getElementById("moretab");
+const tabmore=document.getElementById("tabmore");
+moretab.addEventListener("click",()=>{
+  const open=tabmore.classList.toggle("open");
+  moretab.classList.toggle("open",open);
+});
 viewtabs.addEventListener("click",e=>{
   const t=e.target.closest(".vtab"); if(!t)return;
   currentView=t.dataset.view;
-  [...viewtabs.children].forEach(x=>x.classList.toggle("active",x===t));
+  viewtabs.querySelectorAll(".vtab").forEach(x=>x.classList.toggle("active",x===t));
+  // 「その他」内のタブが選択されたら親ボタンを強調＆ドロップダウンを閉じる
+  const inMore=tabmore.contains(t);
+  moretab.classList.toggle("has-active",inMore);
+  tabmore.classList.remove("open"); moretab.classList.remove("open");
   document.getElementById("q").placeholder = currentView==="terms"
     ? "略語・正式名・説明で用語検索…（例: TGFβ）" : "タイトル・著者・誌名・本文で検索…";
   refresh();
@@ -1009,6 +1038,7 @@ const feedview=document.getElementById("feedview");
 function refresh(){
   const v=currentView;
   grid.style.display=v==="papers"?"grid":"none";
+  document.getElementById("pager").style.display=v==="papers"?"":"none";
   glosview.style.display=v==="terms"?"block":"none";
   netview.style.display=v==="net"?"block":"none";
   boardview.style.display=v==="board"?"block":"none";
@@ -1149,13 +1179,34 @@ function hl(text){
   while(idx>=0){ out+=s.slice(pos,idx)+"<mark>"+s.slice(idx,idx+query.length)+"</mark>"; pos=idx+query.length; idx=s.toLowerCase().indexOf(query,pos); }
   return out+s.slice(pos);
 }
+const PAGE_SIZE=20; let paperPage=1, lastSig=null;
+const pagerEl=document.getElementById("pager");
+function renderPager(total){
+  const pages=Math.ceil(total/PAGE_SIZE);
+  if(pages<=1){ pagerEl.innerHTML=""; return; }
+  let btns="";
+  for(let p=1;p<=pages;p++) btns+=`<button class="pgnum${p===paperPage?" on":""}" data-p="${p}">${p}</button>`;
+  pagerEl.innerHTML=`<button class="pgnav" data-p="${paperPage-1}" ${paperPage<=1?"disabled":""}>← 前</button>${btns}<button class="pgnav" data-p="${paperPage+1}" ${paperPage>=pages?"disabled":""}>次 →</button>`;
+  pagerEl.querySelectorAll("button[data-p]").forEach(b=>b.addEventListener("click",()=>{
+    const np=+b.dataset.p; if(np<1||np>pages)return; paperPage=np; render();
+    grid.scrollIntoView({behavior:"smooth",block:"start"});
+  }));
+}
 function render(){
-  const list=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
+  const full=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
   document.getElementById("total").textContent=PAPERS.length;
   const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
+  // フィルタが変わったら1ページ目に戻す
+  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter;
+  if(sig!==lastSig){ paperPage=1; lastSig=sig; }
+  const pages=Math.max(1,Math.ceil(full.length/PAGE_SIZE));
+  if(paperPage>pages) paperPage=pages;
+  const start=(paperPage-1)*PAGE_SIZE;
+  const list=full.slice(start,start+PAGE_SIZE);
+  const rangeNote = full.length>PAGE_SIZE ? `（${start+1}–${start+list.length}件目を表示）` : "";
   document.getElementById("countline").textContent=
-    `表示 ${list.length} / ${PAPERS.length} 本`+themeNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
-  if(!list.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';return;}
+    `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
+  if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';pagerEl.innerHTML="";return;}
   grid.innerHTML=list.map((p,i)=>`
     <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
       <div class="card-top">
@@ -1215,6 +1266,7 @@ function render(){
     card.querySelectorAll(".relchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
   });
   populateCitations(grid);
+  renderPager(PAPERS.filter(matches).length);
 }
 /* ===== 用語ビュー ===== */
 function buildGlossaryIndex(){
