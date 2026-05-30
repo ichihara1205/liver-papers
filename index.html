@@ -206,6 +206,41 @@ table.board td.bnum{white-space:nowrap}
 .hsrc{display:flex;gap:6px}
 .tlwrap{overflow-x:auto}
 .tldot circle{transition:.15s} .tldot:hover circle{stroke:var(--ink);stroke-width:2}
+/* zonation */
+.zonewrap{max-width:1000px;margin:0 auto}
+.zfig{margin-bottom:20px}
+.zgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.zcol{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper-2);min-height:90px}
+.zcol.pp{border-top:3px solid var(--B)} .zcol.pc{border-top:3px solid var(--F)} .zcol.both{border-top:3px solid var(--accent)}
+.zhd{font-family:"DM Mono",monospace;font-size:12px;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.zhd span{display:block;font-weight:400;font-size:10px;color:var(--ink-soft);margin-top:2px}
+.zchip{display:block;width:100%;text-align:left;margin:5px 0;font-size:12px;padding:6px 9px;border-radius:8px;border:1px solid var(--line);border-left:3px solid var(--c);background:var(--paper);color:var(--ink);cursor:pointer}
+.zchip:hover{background:var(--card)} .zchip .zn{font-family:"DM Mono",monospace;font-size:10px;color:var(--ink-soft);margin-right:4px}
+.zempty,.zonenote{font-size:11px;color:var(--ink-soft)} .zonenote{margin-top:14px;line-height:1.6}
+/* quiz */
+.quizwrap{max-width:640px;margin:0 auto}
+.quizbar{display:flex;justify-content:space-between;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink-soft);margin-bottom:12px}
+.quizcard{border:1px solid var(--line);border-radius:14px;padding:20px;background:var(--paper-2)}
+.qstem{font-size:14px;line-height:1.7;margin-bottom:16px}
+.qterm{font-size:18px;color:var(--accent-ink)} .qfull{font-size:12px;color:var(--ink-soft)}
+.qopts{display:flex;flex-direction:column;gap:8px}
+.qopt{text-align:left;font-size:13px;line-height:1.6;padding:10px 13px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;transition:.12s}
+.qopt:hover:not(:disabled){border-color:var(--ink-soft)}
+.qopt.correct{border-color:var(--B);background:color-mix(in srgb,var(--B) 14%,var(--paper))}
+.qopt.wrong{border-color:var(--E);background:color-mix(in srgb,var(--E) 14%,var(--paper))}
+.qopt:disabled{cursor:default}
+.qfb{margin-top:14px;font-size:13px;line-height:1.7;min-height:20px} .qfb .ok{color:var(--B);font-weight:700} .qfb .ng{color:var(--E);font-weight:700}
+.qact{margin-top:14px;text-align:right}
+/* feed */
+.feedwrap{max-width:760px;margin:0 auto}
+.feedpresets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.fpre{font-size:12px;padding:6px 11px;border-radius:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.fpre:hover{border-color:var(--accent);color:var(--accent)}
+.feedrow{display:flex;gap:8px} .feedrow input{flex:1;font-size:13px;padding:8px 11px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.feedresult{margin-top:16px} .feedlist{display:flex;flex-direction:column;gap:2px}
+.feeditem{padding:11px 12px;border-bottom:1px solid var(--line-soft)} .feeditem.have{background:color-mix(in srgb,var(--B) 7%,transparent);border-radius:8px}
+.ftitle{font-size:13.5px;line-height:1.55;color:var(--ink);text-decoration:none;font-weight:500} .ftitle:hover{color:var(--accent-ink);text-decoration:underline}
+.fmeta{font-size:11px;color:var(--ink-soft);margin-top:4px} .fhave{color:var(--B);font-weight:700}
 .todogrp{margin-bottom:16px;border:1px solid var(--line-soft);border-radius:6px;padding:12px 14px;background:var(--card)}
 .todohd{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);margin-bottom:8px;font-weight:600}
 .todohd span{font-family:"Shippori Mincho",serif}
@@ -315,6 +350,9 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
     <button class="vtab" data-view="board">研究ボード</button>
     <button class="vtab" data-view="terms">用語で探す</button>
     <button class="vtab" data-view="net">用語ネットワーク</button>
+    <button class="vtab" data-view="zone">zonation地図</button>
+    <button class="vtab" data-view="quiz">用語クイズ</button>
+    <button class="vtab" data-view="feed">新着検索</button>
     <button class="vtab" data-view="stats">統計</button>
   </div>
   <div class="search">
@@ -343,6 +381,9 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
 <div id="glosview" class="scrollarea" style="display:none"></div>
 <div id="netview"></div>
 <div id="boardview"></div>
+<div id="zoneview"></div>
+<div id="quizview"></div>
+<div id="feedview"></div>
 <div id="statsview"></div>
 <div id="tip"></div>
 
@@ -962,12 +1003,18 @@ viewtabs.addEventListener("click",e=>{
   refresh();
 });
 
+const zoneview=document.getElementById("zoneview");
+const quizview=document.getElementById("quizview");
+const feedview=document.getElementById("feedview");
 function refresh(){
   const v=currentView;
   grid.style.display=v==="papers"?"grid":"none";
   glosview.style.display=v==="terms"?"block":"none";
   netview.style.display=v==="net"?"block":"none";
   boardview.style.display=v==="board"?"block":"none";
+  zoneview.style.display=v==="zone"?"block":"none";
+  quizview.style.display=v==="quiz"?"block":"none";
+  feedview.style.display=v==="feed"?"block":"none";
   statsview.style.display=v==="stats"?"block":"none";
   document.getElementById("sortbar").style.display=v==="terms"?"flex":"none";
   document.getElementById("filterbar").style.display=v==="papers"?"flex":"none";
@@ -978,6 +1025,9 @@ function refresh(){
   else if(v==="terms") renderGlossary();
   else if(v==="net") renderNetwork();
   else if(v==="board") renderBoard();
+  else if(v==="zone") renderZonation();
+  else if(v==="quiz") renderQuiz();
+  else if(v==="feed") renderFeed();
   else renderStats();
 }
 
@@ -1421,6 +1471,147 @@ function buildTimeline(){
     g+=`<g class="tldot" data-id="${p.id}" style="cursor:pointer"><circle cx='${cx}' cy='${cy}' r='8' fill='${THEMES[p.primary].c}'/><text x='${cx}' y='${cy+3}' text-anchor='middle' font-size='9' fill='#fff' font-weight='700'>${p.id}</text><title>№${p.id} ${p.title}</title></g>`;
   });
   return `<div class="tlwrap"><svg viewBox='0 0 ${W} ${H}' width='100%' preserveAspectRatio='xMidYMid meet'>${g}</svg></div>`;
+}
+
+/* ===== zonation 地図（肝小葉ゾーン対応） ===== */
+// ゾーン手がかり語（小文字部分一致）。1=門脈域(高O2), 3=中心静脈域(低O2)
+const ZONE_KW={
+  pp:["urea","gluconeogen","糖新生","β-ox","β酸化","oxidat","酸化的","oxphos","好気","bile acid","胆汁酸","ass1","arg1","pck1","門脈","periportal","zone 1","zone1"],
+  pc:["cyp2e1","glutamine synth","glul","gs陽性","wnt","β-catenin","βカテニン","lipogen","脂肪生成","de novo","dnl","acly","acss2","steato","脂肪化","脂肪滴","rspo","lgr","中心静脈","pericentral","perivenous","zone 3","zone3","ballooning","風船様"]
+};
+function paperText(p){
+  const s=p.struct||{};
+  return [p.title,p.approach,p.abstract_ja,s.ignite,(s.triggers||[]).join(" "),(s.readout||[]).join(" "),(s.cells||[]).join(" "),(p.glossary||[]).map(g=>g.term+" "+g.full+" "+g.desc).join(" ")].join(" ").toLowerCase();
+}
+function zoneScores(p){ const t=paperText(p); let pp=0,pc=0;
+  ZONE_KW.pp.forEach(k=>{ if(t.includes(k))pp++; }); ZONE_KW.pc.forEach(k=>{ if(t.includes(k))pc++; });
+  return {pp,pc};
+}
+function renderZonation(){
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent="肝小葉のゾーン（門脈域＝高O2 ↔ 中心静脈域＝低O2）に各論文を対応づけ。脂肪化/線維化は中心静脈域から始まりやすい。";
+  const buckets={pp:[],pc:[],both:[],none:[]};
+  PAPERS.forEach(p=>{ const {pp,pc}=zoneScores(p);
+    if(pp&&pc) buckets.both.push(p); else if(pp&&pp>=pc) buckets.pp.push(p);
+    else if(pc) buckets.pc.push(p); else buckets.none.push(p);
+  });
+  const chip=p=>`<button class="zchip" data-id="${p.id}" style="--c:${THEMES[p.primary].c}" title="${p.title}"><span class="zn">№${p.id}</span> ${p.title.length>26?p.title.slice(0,25)+"…":p.title}</button>`;
+  const col=(ttl,sub,arr,cls)=>`<div class="zcol ${cls}"><div class="zhd">${ttl}<span>${sub}</span></div>${arr.length?arr.map(chip).join(""):'<span class="zempty">該当なし</span>'}</div>`;
+  // 模式図
+  const svg=`<div class="zfig"><svg viewBox='0 0 640 130' width='100%'>
+    <defs><linearGradient id='zo2' x1='0' x2='1'><stop offset='0' stop-color='var(--B)' stop-opacity='0.85'/><stop offset='1' stop-color='var(--F)' stop-opacity='0.85'/></linearGradient></defs>
+    <rect x='20' y='44' width='600' height='20' rx='10' fill='url(#zo2)'/>
+    <circle cx='30' cy='54' r='14' fill='var(--paper)' stroke='var(--B)' stroke-width='2'/><text x='30' y='58' text-anchor='middle' font-size='9' fill='var(--B)' font-weight='700'>PV</text>
+    <circle cx='610' cy='54' r='14' fill='var(--paper)' stroke='var(--F)' stroke-width='2'/><text x='610' y='58' text-anchor='middle' font-size='9' fill='var(--F)' font-weight='700'>CV</text>
+    <text x='120' y='30' text-anchor='middle' font-size='11' fill='var(--B)' font-weight='600'>門脈域 Zone1（高O2）</text>
+    <text x='120' y='86' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>糖新生・β酸化・尿素回路</text>
+    <text x='520' y='30' text-anchor='middle' font-size='11' fill='var(--F)' font-weight='600'>中心静脈域 Zone3（低O2）</text>
+    <text x='520' y='86' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>脂肪生成・CYP2E1・脂肪化/線維化起点</text>
+    <text x='320' y='112' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>← 酸素分圧の勾配（あなたの酸素透過膜系が再現する軸）→</text>
+  </svg></div>`;
+  zoneview.innerHTML=`<div class="zonewrap">${svg}
+    <div class="zgrid">
+      ${col("門脈域 Zone1","高O2・酸化代謝",buckets.pp,"pp")}
+      ${col("両域にまたがる","勾配全体",buckets.both,"both")}
+      ${col("中心静脈域 Zone3","低O2・脂肪化/線維化",buckets.pc,"pc")}
+    </div>
+    <div class="zonenote">※ 各論文の本文・トリガー・用語からゾーン手がかり語を自動判定（厳密な実験的局在ではなく目安）。ゾーン非特異：${buckets.none.map(p=>"№"+p.id).join(" ")||"なし"}</div></div>`;
+  zoneview.querySelectorAll(".zchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
+}
+
+/* ===== 用語クイズ（glossaryから4択自動生成） ===== */
+const QUIZ_KEY="liverPapers_quiz_v1";
+let quizState=(()=>{ try{return JSON.parse(localStorage.getItem(QUIZ_KEY))||{best:0};}catch(e){return {best:0};} })();
+let quizRun=null;
+function quizPool(){ const seen=new Set(),out=[];
+  PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{ const k=(g.term||"").toLowerCase(); const desc=g.desc||g.full;
+    if(!k||!desc||seen.has(k))return; seen.add(k); out.push({term:g.term,full:g.full||"",desc:desc,pid:p.id}); }));
+  return out;
+}
+function newQuizQ(){ const pool=quizPool(); if(pool.length<4)return null;
+  const sh=pool.slice().sort(()=>Math.random()-0.5); const ans=sh[0];
+  const opts=[ans,...sh.slice(1,4)].sort(()=>Math.random()-0.5);
+  return {ans,opts};
+}
+function renderQuiz(){
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent="ライブラリの用語から4択クイズ。正式名/説明を当てます（スコアは端末内保存）。";
+  const pool=quizPool();
+  if(pool.length<4){ quizview.innerHTML='<p class="boardnote">用語が4件未満のためクイズを作成できません。</p>'; return; }
+  if(!quizRun) quizRun={q:newQuizQ(),score:0,n:0,answered:false};
+  drawQuiz();
+}
+function drawQuiz(){
+  const r=quizRun, q=r.q;
+  const opts=q.opts.map((o,i)=>`<button class="qopt" data-i="${i}" ${r.answered?"disabled":""}>${o.desc}</button>`).join("");
+  quizview.innerHTML=`<div class="quizwrap">
+    <div class="quizbar"><span>スコア ${r.score} / ${r.n}</span><span>最高 ${quizState.best}</span></div>
+    <div class="quizcard">
+      <div class="qstem">この用語の説明は？<br><b class="qterm">${q.ans.term}</b>${q.ans.full?` <span class="qfull">（${q.ans.full}）</span>`:""}</div>
+      <div class="qopts">${opts}</div>
+      <div class="qfb" id="qfb"></div>
+      <div class="qact"><button class="genbtn" id="qnext" ${r.answered?"":"style=visibility:hidden"}>次の問題 →</button></div>
+    </div></div>`;
+  quizview.querySelectorAll(".qopt").forEach(b=>b.addEventListener("click",()=>{
+    if(r.answered)return; r.answered=true; const i=+b.dataset.i, ok=q.opts[i]===q.ans; r.n++;
+    if(ok){ r.score++; if(r.score>quizState.best){quizState.best=r.score; try{localStorage.setItem(QUIZ_KEY,JSON.stringify(quizState));}catch(e){}} }
+    else { r.score=0; }
+    quizview.querySelectorAll(".qopt").forEach((bb,j)=>{ bb.disabled=true;
+      if(q.opts[j]===q.ans) bb.classList.add("correct"); else if(j===i) bb.classList.add("wrong"); });
+    document.getElementById("qfb").innerHTML = ok
+      ? `<span class="ok">正解！</span> 出典 <button class="relchip mini" data-id="${q.ans.pid}">№${q.ans.pid}</button>`
+      : `<span class="ng">不正解</span> 正しくは：${q.ans.desc} ／ 出典 <button class="relchip mini" data-id="${q.ans.pid}">№${q.ans.pid}</button>${r.score===0?"（連続正解リセット）":""}`;
+    const nx=document.getElementById("qnext"); nx.style.visibility="visible";
+    document.getElementById("qfb").querySelectorAll(".relchip").forEach(x=>x.addEventListener("click",()=>jumpToPaper(x.dataset.id)));
+  }));
+  const nb=document.getElementById("qnext"); if(nb) nb.addEventListener("click",()=>{ quizRun.q=newQuizQ(); quizRun.answered=false; drawQuiz(); });
+}
+
+/* ===== 新着検索（PubMed E-utilities, ブラウザ側） ===== */
+const FEED_PRESETS=[
+  {label:"MASH×線維化", term:'(MASH OR NASH OR MASLD) AND (fibrosis OR "stellate cell")'},
+  {label:"肝オルガノイド/MPS", term:'(liver organoid OR liver-on-chip OR liver MPS OR hepatic spheroid)'},
+  {label:"Kupffer/マクロファージ", term:'(Kupffer cell OR liver macrophage) AND (fibrosis OR inflammation OR NASH)'},
+  {label:"LSEC/類洞内皮", term:'(liver sinusoidal endothelial OR LSEC) AND (NASH OR fibrosis OR capillarization)'},
+  {label:"in silico/ABM 肝", term:'(agent-based model OR in silico) AND (liver OR hepatic)'}
+];
+let feedInit=false;
+function libDOIset(){ return new Set(PAPERS.map(p=>(p.doi||"").toLowerCase().trim()).filter(Boolean)); }
+function renderFeed(){
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent="PubMedの新着検索（直近の論文候補）。既収録は✓表示。クリックでPubMedを開く。";
+  if(feedInit){ return; }
+  feedInit=true;
+  feedview.innerHTML=`<div class="feedwrap">
+    <div class="feedctrl">
+      <div class="feedpresets">${FEED_PRESETS.map((p,i)=>`<button class="fpre" data-i="${i}">${p.label}</button>`).join("")}</div>
+      <div class="feedrow"><input id="feedq" type="text" placeholder="自由検索語（PubMed構文可）…"><button class="genbtn" id="feedgo">🔍 検索</button></div>
+    </div>
+    <div class="feedresult" id="feedresult"><p class="boardnote">上のボタン、または検索語を入れて実行してください。</p></div></div>`;
+  feedview.querySelectorAll(".fpre").forEach(b=>b.addEventListener("click",()=>{ const t=FEED_PRESETS[+b.dataset.i].term; document.getElementById("feedq").value=t; runFeed(t); }));
+  document.getElementById("feedgo").addEventListener("click",()=>runFeed(document.getElementById("feedq").value.trim()));
+  document.getElementById("feedq").addEventListener("keydown",e=>{ if(e.key==="Enter")runFeed(e.target.value.trim()); });
+}
+async function runFeed(term){
+  const box=document.getElementById("feedresult"); if(!term){ box.innerHTML='<p class="boardnote">検索語を入れてください。</p>'; return; }
+  box.innerHTML='<p class="boardnote">PubMedに問い合わせ中…</p>';
+  try{
+    const base="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+    const es=await fetch(base+"esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax=15&term="+encodeURIComponent(term));
+    const ej=await es.json(); const ids=(ej.esearchresult&&ej.esearchresult.idlist)||[];
+    if(!ids.length){ box.innerHTML='<p class="boardnote">該当なし。</p>'; return; }
+    const ss=await fetch(base+"esummary.fcgi?db=pubmed&retmode=json&id="+ids.join(","));
+    const sj=await ss.json(); const r=sj.result||{}; const libDoi=libDOIset();
+    const rows=ids.map(id=>{ const a=r[id]; if(!a)return "";
+      const doi=((a.articleids||[]).find(x=>x.idtype==="doi")||{}).value||"";
+      const have=doi&&libDoi.has(doi.toLowerCase());
+      const yr=(a.pubdate||"").slice(0,4);
+      return `<div class="feeditem${have?" have":""}">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener" class="ftitle">${a.title||"(no title)"}</a>
+        <div class="fmeta">${a.fulljournalname||a.source||""} · ${yr}${have?' <span class="fhave">✓ 既収録</span>':""}</div></div>`;
+    }).join("");
+    box.innerHTML=`<div class="feedlist">${rows}</div>`;
+  }catch(e){ box.innerHTML='<p class="boardnote">取得に失敗しました（ネットワーク制限の可能性）。時間をおいて再実行するか、PubMedで直接検索してください。</p>'; }
 }
 
 /* ===== 用語共起ネットワーク ===== */
