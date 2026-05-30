@@ -27,26 +27,29 @@ body{
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px}
 
 /* Header */
-header{padding:54px 0 30px;border-bottom:2px solid var(--ink);position:relative}
+header{padding:26px 0 16px;border-bottom:2px solid var(--ink);position:relative}
 header::after{content:"";position:absolute;bottom:-6px;left:0;right:0;height:1px;background:var(--ink)}
-.kicker{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
-h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:clamp(28px,5vw,46px);line-height:1.18;letter-spacing:.01em}
-h1 .em{color:var(--accent-ink);font-style:italic}
-.sub{margin-top:14px;max-width:62ch;color:var(--ink-soft);font-size:15px}
-.meta-row{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px 26px;font-family:"DM Mono",monospace;font-size:12.5px;color:var(--ink-soft)}
+.kicker{font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:clamp(21px,3.4vw,31px);line-height:1.18;letter-spacing:.01em}
+h1 .em{color:var(--accent-ink);font-style:italic;font-size:.82em}
+.sub{margin-top:8px;max-width:74ch;color:var(--ink-soft);font-size:12.5px;line-height:1.6}
+.meta-row{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 22px;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink-soft)}
 .meta-row b{color:var(--ink);font-weight:500}
 
 /* Controls */
-.controls{position:sticky;top:0;z-index:20;background:linear-gradient(var(--paper) 78%,transparent);padding:20px 0 16px;margin-top:8px}
-.search{position:relative;margin-bottom:16px}
+.controls{position:sticky;top:0;z-index:20;background:linear-gradient(var(--paper) 84%,transparent);padding:12px 0 10px;margin-top:6px}
+.tabrow{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+.search{position:relative;margin:0;flex:0 1 250px;min-width:170px;margin-left:auto}
 .search input{
-  width:100%;padding:13px 16px 13px 44px;font-size:15px;font-family:inherit;color:var(--ink);
-  background:var(--card);border:1px solid var(--line);border-radius:2px;outline:none;transition:border-color .2s,box-shadow .2s;
+  width:100%;padding:9px 14px 9px 38px;font-size:14px;font-family:inherit;color:var(--ink);
+  background:var(--card);border:1px solid var(--line);border-radius:6px;outline:none;transition:border-color .2s,box-shadow .2s;
 }
 .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,93,68,.12)}
-.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.5}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-#filterToggle{display:none;width:100%;font-family:"DM Mono",monospace;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:2px;padding:11px 14px;cursor:pointer;align-items:center;justify-content:space-between;margin-bottom:10px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px;max-height:0;overflow:hidden;transition:max-height .25s ease}
+.chips.show{max-height:60vh;overflow:auto;margin-top:8px}
+#filterToggle{display:inline-flex;width:auto;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;align-items:center;gap:6px}
+#filterToggle.open{background:var(--accent);color:var(--paper);border-color:var(--accent)}
 #filterToggle .fchev{transition:transform .2s}
 #filterToggle.open .fchev{transform:rotate(180deg)}
 .chip{
@@ -101,6 +104,13 @@ h1 .em{color:var(--accent-ink);font-style:italic}
 .card.open .detail{max-height:4000px}
 .detail-inner{padding-top:22px;margin-top:20px;border-top:1px solid var(--line-soft)}
 .sec{margin-bottom:20px}
+.kimo{display:flex;gap:11px;align-items:flex-start;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 13%,var(--paper)),var(--paper-2));border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px;margin-bottom:22px;box-shadow:0 2px 10px color-mix(in srgb,var(--accent) 10%,transparent)}
+.kimo-ic{font-size:20px;line-height:1.2;flex-shrink:0}
+.kimo-lbl{display:block;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;font-weight:700}
+.kimo p,.kimo>div{font-size:14.5px;color:var(--ink);line-height:1.6}
+.kw{font-weight:700;color:var(--ink);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 30%,transparent) 0);padding:0 1px}
+.closebar{margin-bottom:0;display:flex;justify-content:center;padding-top:6px}
+.toggle-bottom{opacity:.85}
 .sec h4{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;display:flex;align-items:center;gap:8px}
 .sec h4::before{content:"";width:14px;height:1px;background:var(--accent)}
 .sec p{font-size:14.5px;color:var(--ink)}
@@ -306,24 +316,26 @@ table.board td.bnum{white-space:nowrap}
 .pager button:hover:not(:disabled){border-color:var(--ink-soft)}
 .pager .pgnum.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .pager button:disabled{opacity:.4;cursor:default}
-footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-family:"DM Mono",monospace;font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em;line-height:1.9}
+footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-family:"DM Mono",monospace;font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em;line-height:1.9}
+footer summary{cursor:pointer;list-style:none;font-size:11px;opacity:.7}
+footer summary::-webkit-details-marker{display:none}
+footer summary::before{content:"ℹ ";opacity:.6}
+footer .footinner{margin-top:8px}
 @media(max-width:640px){
   .wrap{padding:0 14px 50px}
-  header{padding:34px 0 22px}
-  .sub{font-size:14px}
+  header{padding:22px 0 14px}
+  .sub{font-size:12px;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
   .meta-row{gap:8px 18px;font-size:12px}
-  .controls{padding:12px 0 12px}
-  .viewtabs{flex-wrap:wrap;gap:6px}
+  .controls{padding:10px 0 10px}
+  .tabrow{gap:8px}
+  .viewtabs{flex-wrap:wrap;gap:6px;flex:1 1 100%}
   .viewtabs .vtab{flex:0 0 auto;text-align:center;padding:8px 12px;font-size:12px}
   .moretab{display:inline-block;flex:0 0 auto;padding:8px 12px;font-size:12px}
   .tabmore{display:none;flex-basis:100%}
   .tabmore.open{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
   .tabmore.open .vtab{flex:0 0 auto}
-  .search input{font-size:16px;padding:12px 14px 12px 40px}
-  #filterToggle{display:flex}
-  .controls.terms #filterToggle{display:none}
-  .chips{gap:6px;max-height:0;overflow:hidden;transition:max-height .25s ease;margin-bottom:0}
-  .chips.show{max-height:60vh;overflow:auto;margin-bottom:4px}
+  .search{flex:1 1 100%;margin-left:0}
+  .search input{font-size:16px;padding:11px 14px 11px 38px}
   .chip{font-size:11px;padding:5px 10px}
   .sortbar{font-size:11px;gap:6px}
   .sortbar .lbl{flex-basis:100%;margin-bottom:2px}
@@ -360,31 +372,34 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
 </header>
 
 <div class="controls">
-  <div class="viewtabs" id="viewtabs">
-    <button class="vtab active" data-view="papers">論文で見る</button>
-    <button class="vtab" data-view="board">研究ボード</button>
-    <button class="vtab" data-view="terms">用語で探す</button>
-    <button type="button" class="moretab" id="moretab">その他 <span class="mchev">▾</span></button>
-    <span class="tabmore" id="tabmore">
-      <button class="vtab" data-view="net">用語ネットワーク</button>
-      <button class="vtab" data-view="zone">zonation地図</button>
-      <button class="vtab" data-view="quiz">用語クイズ</button>
-      <button class="vtab" data-view="feed">新着検索</button>
-      <button class="vtab" data-view="stats">統計</button>
-    </span>
+  <div class="tabrow">
+    <div class="viewtabs" id="viewtabs">
+      <button class="vtab active" data-view="papers">論文で見る</button>
+      <button class="vtab" data-view="board">研究ボード</button>
+      <button class="vtab" data-view="terms">用語で探す</button>
+      <button type="button" class="moretab" id="moretab">その他 <span class="mchev">▾</span></button>
+      <span class="tabmore" id="tabmore">
+        <button class="vtab" data-view="net">用語ネットワーク</button>
+        <button class="vtab" data-view="zone">zonation地図</button>
+        <button class="vtab" data-view="quiz">用語クイズ</button>
+        <button class="vtab" data-view="feed">新着検索</button>
+        <button class="vtab" data-view="stats">統計</button>
+      </span>
+    </div>
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="text" placeholder="検索…" autocomplete="off">
+    </div>
   </div>
-  <div class="search">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <input id="q" type="text" placeholder="タイトル・著者・誌名・本文で検索…" autocomplete="off">
-  </div>
-  <button id="filterToggle" type="button" aria-expanded="false">テーマで絞り込み<span class="fchev">▾</span></button>
-  <div class="chips" id="chips"></div>
   <div class="filterbar" id="filterbar">
+    <button id="filterToggle" type="button" aria-expanded="false">テーマで絞り込み<span class="fchev">▾</span></button>
+    <button class="favfilter" id="randbtn" title="ランダムで1本ひらく">🎲 ランダム</button>
     <button class="modetoggle" id="modetoggle" title="複数テーマ選択時の論理">OR</button>
     <button class="favfilter" id="favfilter">★ お気に入りのみ</button>
     <button class="favfilter" id="readfilter" title="読了ステータスで絞り込み">📖 すべて</button>
     <button class="favfilter" id="printbtn" title="表示中の論文をPDF/印刷（ブラウザのPDF保存が使えます）">🖨 PDF / 印刷</button>
   </div>
+  <div class="chips" id="chips"></div>
 </div>
 
 <div class="countline" id="countline"></div>
@@ -407,9 +422,12 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
 <div id="tip"></div>
 
 <footer>
-  論文ライブラリ — 肝オープンオルガノイド／MASH／ABM<br>
-  ※Abstractは著作権配慮のため要約パラフレーズ。原文は各エントリのDOI/URLから取得可。<br>
-  新エントリは下部スクリプトの <b>PAPERS</b> 配列の先頭に追記してください（Coworkタスクが自動追記）。
+  <details>
+    <summary>このライブラリについて</summary>
+    <div class="footinner">論文ライブラリ — 肝オープンオルガノイド／MASH／ABM<br>
+    ※Abstractは著作権配慮のため要約パラフレーズ。原文は各エントリのDOI/URLから取得可。<br>
+    新エントリは下部スクリプトの <b>PAPERS</b> 配列の先頭に追記してください（Coworkタスクが自動追記）。</div>
+  </details>
 </footer>
 </div>
 
@@ -1007,6 +1025,10 @@ readfilter.addEventListener("click",()=>{
   render();
 });
 document.getElementById("printbtn").addEventListener("click",()=>window.print());
+document.getElementById("randbtn").addEventListener("click",()=>{
+  const p=PAPERS[Math.floor(Math.random()*PAPERS.length)];
+  jumpToPaper(p.id);
+});
 syncChipActive();
 setFilterLabel();
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();refresh();});
@@ -1098,6 +1120,23 @@ function annotate(text){
     s=s.replace(""+i+"",`<span class="term" data-tip="${tip}" data-t="${o.term.replace(/"/g,'&quot;')}">${o.term}</span>`);
   });
   return s;
+}
+// 自動キーワード太字（高シグナルな病態・結果語のみ。タグ内は触らない）
+const KEYWORDS=["線維化点火","セカンドヒット","HSC活性化","風船様変性","酸素透過膜","好気的代謝","エージェントベースモデル","クッパー細胞","肝星細胞","線維化","脂肪化","炎症","点火","好気的","オルガノイド","ABM","MASH","MASLD","NASH","steatosis","fibrosis","ballooning"];
+const KWRE=new RegExp("("+KEYWORDS.slice().sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","g");
+function emphasize(html){
+  if(!html) return html||"";
+  // タグ(<...>)はそのまま、テキスト断片だけキーワードを<b>で囲む
+  return String(html).replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=>tag?tag:txt.replace(KWRE,'<b class="kw">$1</b>'));
+}
+function em(text){ return emphasize(annotate(text)); }
+// 「この論文のキモ」：線維化点火のカギ→接続→達成 の順で1文拾う
+function keyTakeaway(p){
+  const s=p.struct||{};
+  if(s.ignite) return s.ignite;
+  if(p.connection&&p.connection[0]) return p.connection[0];
+  if(p.achievements&&p.achievements[0]) return p.achievements[0];
+  return "";
 }
 // floating tooltip (event delegation)
 const tipEl=document.getElementById("tip");
@@ -1221,17 +1260,19 @@ function render(){
         <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文 · DOI: ${p.doi}</a>
       </div>
       <div class="detail"><div class="detail-inner">
+        ${keyTakeaway(p)?`<div class="kimo"><span class="kimo-ic">💡</span><div><span class="kimo-lbl">この論文のキモ</span>${em(keyTakeaway(p))}</div></div>`:""}
         <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
-        <div class="sec"><h4>Abstract（和訳要約）</h4><p>${annotate(p.abstract_ja||p.abstract||"")}</p></div>
-        <div class="sec"><h4>背景と課題</h4><p>${annotate(p.background)}</p></div>
-        <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
-        <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
-        <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
+        <div class="sec"><h4>Abstract（和訳要約）</h4><p>${em(p.abstract_ja||p.abstract||"")}</p></div>
+        <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
+        <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
+        <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
+        <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
         ${(p.glossary&&p.glossary.length)?`<div class="sec"><h4>用語メモ</h4><table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table></div>`:""}
         ${(()=>{ const rel=relatedPapers(p); return rel.length?`<div class="sec"><h4>関連論文</h4><div class="related">${rel.map(o=>`<button class="relchip" data-id="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">№${o.q.id}</span> ${o.q.title}</button>`).join("")}</div></div>`:""; })()}
+        <div class="sec closebar"><button class="btn toggle-bottom"><span class="arr">▴</span> 詳細を閉じる</button></div>
       </div></div>
     </article>`).join("");
   grid.querySelectorAll(".card").forEach(card=>{
@@ -1239,6 +1280,13 @@ function render(){
     card.querySelector(".toggle").addEventListener("click",()=>{
       const open=card.classList.toggle("open");
       card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
+    });
+    // 詳細末尾の「閉じる」→閉じてカード冒頭へ戻る
+    const tb=card.querySelector(".toggle-bottom");
+    if(tb) tb.addEventListener("click",()=>{
+      card.classList.remove("open");
+      card.querySelector(".toggle").innerHTML='<span class="arr">▸</span> 詳細を開く';
+      card.scrollIntoView({behavior:"smooth",block:"start"});
     });
     // ★お気に入り
     card.querySelector(".fav").addEventListener("click",e=>{
@@ -1332,14 +1380,20 @@ function renderGlossary(){
 }
 function jumpToPaper(id){
   // 論文ビューへ切替＆フィルタ解除して必ず表示
-  currentView="papers"; query=""; activeThemes.clear(); favOnly=false;
+  currentView="papers"; query=""; activeThemes.clear(); favOnly=false; readFilter="";
   document.getElementById("q").value="";
   favfilter.classList.remove("on");
-  [...viewtabs.children].forEach(x=>x.classList.toggle("active",x.dataset.view==="papers"));
+  readfilter.textContent=READ_FILTER_LABEL[""]; readfilter.classList.remove("on");
+  viewtabs.querySelectorAll(".vtab").forEach(x=>x.classList.toggle("active",x.dataset.view==="papers"));
+  moretab.classList.remove("has-active","open"); tabmore.classList.remove("open");
   syncChipActive();
-  chipsBox.style.display="flex";
   setFilterLabel();
-  document.getElementById("q").placeholder="タイトル・著者・誌名・本文で検索…";
+  document.getElementById("q").placeholder="検索…";
+  // 対象がどのページにあるか算出してそのページへ
+  const full=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
+  const idx=full.findIndex(p=>String(p.id)===String(id));
+  if(idx>=0) paperPage=Math.floor(idx/PAGE_SIZE)+1;
+  lastSig=null; // ページ強制反映
   refresh();
   requestAnimationFrame(()=>{
     const cards=[...grid.querySelectorAll(".card")];
