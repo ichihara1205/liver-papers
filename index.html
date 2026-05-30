@@ -152,6 +152,28 @@ mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1
 .rotbadge .rc{font-family:"DM Mono",monospace;font-size:11px;color:var(--ink-soft)}
 .rotbadge.miss{border-style:dashed;opacity:.6}
 .rotbadge.miss .rc{color:var(--B)}
+/* related papers */
+.related{display:flex;flex-direction:column;gap:8px}
+.relchip{text-align:left;font-family:inherit;font-size:13px;line-height:1.45;color:var(--ink);cursor:pointer;background:var(--paper-2);border:1px solid var(--line-soft);border-left:4px solid var(--c,var(--accent));border-radius:3px;padding:9px 12px;transition:background .15s}
+.relchip:hover{background:var(--card)}
+.relchip .rn{font-family:"DM Mono",monospace;font-size:11px;color:var(--ink-soft);margin-right:6px}
+/* term network */
+#netview{display:none}
+#netview svg{width:100%;height:auto;background:var(--paper-2);border:1px solid var(--line-soft);border-radius:6px}
+.net-cap{font-size:12.5px;color:var(--ink-soft);margin:10px 2px;line-height:1.6}
+.net-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:8px 2px 16px;font-size:11.5px;color:var(--ink-soft)}
+.net-legend span{display:inline-flex;align-items:center;gap:5px}
+.net-legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+#netview .node.dim{opacity:.15}
+#netview .edge.dim{opacity:.05}
+#netview .edge.hi{stroke:var(--B)!important;stroke-opacity:.85!important}
+#netview .node.hi text{font-weight:700}
+@media print{
+  .controls,.viewtabs,.filterbar,#sortbar,.row-actions .btn,.fav,.memo,#tip,footer .b,#filterToggle{display:none!important}
+  .detail{max-height:none!important;overflow:visible!important}
+  .card{break-inside:avoid;box-shadow:none;border:1px solid #ccc;animation:none}
+  body{background:#fff}
+}
 
 /* Glossary view */
 .glosgrid{display:grid;gap:12px}
@@ -247,6 +269,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   <div class="viewtabs" id="viewtabs">
     <button class="vtab active" data-view="papers">論文で見る</button>
     <button class="vtab" data-view="terms">用語で探す</button>
+    <button class="vtab" data-view="net">用語ネットワーク</button>
     <button class="vtab" data-view="stats">統計</button>
   </div>
   <div class="search">
@@ -258,6 +281,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   <div class="filterbar" id="filterbar">
     <button class="modetoggle" id="modetoggle" title="複数テーマ選択時の論理">OR</button>
     <button class="favfilter" id="favfilter">★ お気に入りのみ</button>
+    <button class="favfilter" id="printbtn" title="表示中の論文をPDF/印刷（ブラウザのPDF保存が使えます）">🖨 PDF / 印刷</button>
   </div>
 </div>
 
@@ -271,6 +295,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
 </div>
 <div class="grid scrollarea" id="grid"></div>
 <div id="glosview" class="scrollarea" style="display:none"></div>
+<div id="netview"></div>
 <div id="statsview"></div>
 <div id="tip"></div>
 
@@ -724,6 +749,7 @@ let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView
 const grid=document.getElementById("grid");
 const glosview=document.getElementById("glosview");
 const statsview=document.getElementById("statsview");
+const netview=document.getElementById("netview");
 const chipsBox=document.getElementById("chips");
 
 /* ===== ユーザーデータ（端末内保存：★・メモ） ===== */
@@ -782,6 +808,7 @@ favfilter.addEventListener("click",()=>{
   favfilter.classList.toggle("on",favOnly);
   render();
 });
+document.getElementById("printbtn").addEventListener("click",()=>window.print());
 syncChipActive();
 setFilterLabel();
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();refresh();});
@@ -801,6 +828,7 @@ function refresh(){
   const v=currentView;
   grid.style.display=v==="papers"?"grid":"none";
   glosview.style.display=v==="terms"?"block":"none";
+  netview.style.display=v==="net"?"block":"none";
   statsview.style.display=v==="stats"?"block":"none";
   document.getElementById("sortbar").style.display=v==="terms"?"flex":"none";
   document.getElementById("filterbar").style.display=v==="papers"?"flex":"none";
@@ -809,6 +837,7 @@ function refresh(){
   document.querySelector(".controls").classList.toggle("terms",v!=="papers");
   if(v==="papers") render();
   else if(v==="terms") renderGlossary();
+  else if(v==="net") renderNetwork();
   else renderStats();
 }
 
@@ -890,6 +919,17 @@ function tagHTML(p){
   return prim+sec;
 }
 function paperThemes(p){ const s=new Set(p.tags||[]); s.add(p.primary); return s; }
+function glossSet(p){ return new Set((p.glossary||[]).map(g=>(g.term||"").toLowerCase())); }
+// 共有テーマ・共通用語から関連論文を自動算出（上位3本）
+function relatedPapers(p){
+  const pt=paperThemes(p), pg=glossSet(p);
+  return PAPERS.filter(q=>q.id!==p.id).map(q=>{
+    const qt=paperThemes(q), qg=glossSet(q);
+    let st=0; pt.forEach(t=>{ if(qt.has(t)) st++; });
+    let sg=0; pg.forEach(t=>{ if(qg.has(t)) sg++; });
+    return {q, score:st*2+sg, st, sg};
+  }).filter(o=>o.score>0).sort((a,b)=>b.score-a.score).slice(0,3);
+}
 function matches(p){
   if(favOnly && !isFav(p.id)) return false;
   if(activeThemes.size){
@@ -945,6 +985,7 @@ function render(){
         <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
         <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${annotate(x)}</li>`).join("")}</ul></div>
         ${(p.glossary&&p.glossary.length)?`<div class="sec"><h4>用語メモ</h4><table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table></div>`:""}
+        ${(()=>{ const rel=relatedPapers(p); return rel.length?`<div class="sec"><h4>関連論文</h4><div class="related">${rel.map(o=>`<button class="relchip" data-id="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">№${o.q.id}</span> ${o.q.title}</button>`).join("")}</div></div>`:""; })()}
       </div></div>
     </article>`).join("");
   grid.querySelectorAll(".card").forEach(card=>{
@@ -967,6 +1008,8 @@ function render(){
       ud(id).memo=ta.value; saveUserData();
       saved.classList.add("show"); clearTimeout(tmr); tmr=setTimeout(()=>saved.classList.remove("show"),1200);
     });
+    // 関連論文リンク
+    card.querySelectorAll(".relchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
   });
 }
 /* ===== 用語ビュー ===== */
@@ -1078,10 +1121,93 @@ function renderStats(){
     return `<div class="rotbadge${miss?" miss":""}"><span class="rk" style="color:${THEMES[k].c}">${k}</span><span class="rn">${THEMES[k].name}</span><span class="rc">${miss?"未収録":n+"本"}</span></div>`;
   }).join("");
   const covered=Object.values(themeCnt).filter(n=>n>0).length;
+  // 月別 収録数（added=収録日 基準。未設定は「記録なし」）
+  const monCnt={}; PAPERS.forEach(p=>{ const m=(p.added&&/^\d{4}-\d{2}/.test(p.added))?p.added.slice(0,7):"記録なし"; monCnt[m]=(monCnt[m]||0)+1; });
+  const mons=Object.keys(monCnt).sort();
+  const maxM=Math.max(1,...Object.values(monCnt));
+  const monBars=mons.map(m=>{ const n=monCnt[m], w=Math.round(n/maxM*100);
+    return `<div class="bar-row"><span class="lab">${m}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:var(--H)"></div></div><span class="val">${n}</span></div>`;
+  }).join("");
   statsview.innerHTML=`
     <div class="statsec"><h3>テーマA〜H 巡回カバレッジ（${covered}/8）</h3><div class="rotgrid">${badges}</div></div>
     <div class="statsec"><h3>テーマ別 収録数（primary基準）</h3>${themeBars}</div>
+    <div class="statsec"><h3>月別 収録数（収録日ベース）</h3>${monBars}</div>
     <div class="statsec"><h3>発表年別 収録数</h3>${yearBars}</div>`;
+}
+
+/* ===== 用語共起ネットワーク ===== */
+const CATCOLOR={
+  "細胞・組織":"var(--C)","遺伝子・タンパク質":"var(--H)","シグナル・経路":"var(--F)",
+  "代謝・分子":"var(--D)","プロセス・現象":"var(--B)","手法・モデル":"var(--A)","疾患・病態":"var(--E)","その他":"var(--accent)"
+};
+function renderNetwork(){
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent="同じ論文に一緒に登場した用語どうしを線で結んでいます";
+  // ノード（用語）と共起エッジを構築
+  const nodeMap=new Map(); // key->{term,cat,papers:Set}
+  PAPERS.forEach(p=>{
+    (p.glossary||[]).forEach(g=>{
+      const k=(g.term||"").toLowerCase(); if(!k)return;
+      if(!nodeMap.has(k)){ const info=CATINFO[k]||{}; nodeMap.set(k,{term:g.term,cat:info.cat||"その他",papers:new Set()}); }
+      nodeMap.get(k).papers.add(p.id);
+    });
+  });
+  const catIdx=t=>{ const i=CAT_ORDER.indexOf(t); return i<0?CAT_ORDER.length:i; };
+  const nodes=[...nodeMap.values()].sort((a,b)=>catIdx(a.cat)-catIdx(b.cat)||a.term.localeCompare(b.term));
+  const idxOf=new Map(nodes.map((n,i)=>[n.term.toLowerCase(),i]));
+  // エッジ
+  const eMap=new Map();
+  PAPERS.forEach(p=>{
+    const ts=[...new Set((p.glossary||[]).map(g=>(g.term||"").toLowerCase()).filter(Boolean))];
+    for(let a=0;a<ts.length;a++)for(let b=a+1;b<ts.length;b++){
+      const i=idxOf.get(ts[a]), j=idxOf.get(ts[b]); if(i==null||j==null)continue;
+      const key=i<j?i+"-"+j:j+"-"+i; eMap.set(key,(eMap.get(key)||0)+1);
+    }
+  });
+  // レイアウト（円周）
+  const N=nodes.length, VB=820, cx=VB/2, cy=VB/2, R=VB/2-150;
+  const pos=nodes.map((n,i)=>{ const ang=-Math.PI/2+2*Math.PI*i/N; return {x:cx+R*Math.cos(ang),y:cy+R*Math.sin(ang),ang}; });
+  const maxC=Math.max(1,...nodes.map(n=>n.papers.size));
+  const maxW=Math.max(1,...eMap.values());
+  let edgeSVG="";
+  eMap.forEach((w,key)=>{
+    const [i,j]=key.split("-").map(Number);
+    const op=0.18+0.55*(w/maxW), sw=1+2.4*(w/maxW);
+    edgeSVG+=`<line class="edge e-${i} e-${j}" x1='${pos[i].x.toFixed(1)}' y1='${pos[i].y.toFixed(1)}' x2='${pos[j].x.toFixed(1)}' y2='${pos[j].y.toFixed(1)}' stroke='var(--line)' stroke-width='${sw.toFixed(2)}' stroke-opacity='${op.toFixed(2)}'/>`;
+  });
+  let nodeSVG="";
+  nodes.forEach((n,i)=>{
+    const r=5+7*(n.papers.size/maxC), col=CATCOLOR[n.cat]||"var(--accent)";
+    const side=Math.cos(pos[i].ang)>=0?"start":"end";
+    const lx=pos[i].x+(side==="start"?r+5:-(r+5)), ly=pos[i].y+4;
+    nodeSVG+=`<g class="node n-${i}" data-i="${i}" style="cursor:pointer">`
+      +`<circle cx='${pos[i].x.toFixed(1)}' cy='${pos[i].y.toFixed(1)}' r='${r.toFixed(1)}' fill='${col}'/>`
+      +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family="DM Mono,monospace">${n.term}</text>`
+      +`</g>`;
+  });
+  const legend=[...CAT_ORDER,"その他"].filter(c=>nodes.some(n=>n.cat===c))
+    .map(c=>`<span><i style="background:${CATCOLOR[c]}"></i>${c}</span>`).join("");
+  netview.innerHTML=`
+    <div class="net-legend">${legend}</div>
+    <svg viewBox="0 0 ${VB} ${VB}" xmlns="http://www.w3.org/2000/svg">${edgeSVG}${nodeSVG}</svg>
+    <div class="net-cap">丸の大きさ＝登場した論文数、線の濃さ＝一緒に登場した回数、色＝用語のジャンル。丸をクリックするとその用語のつながりだけ強調します（もう一度クリックで解除）。</div>`;
+  // クリックで近傍ハイライト
+  const svg=netview.querySelector("svg"); let sel=null;
+  function clearHi(){ svg.querySelectorAll(".edge,.node").forEach(el=>el.classList.remove("hi","dim")); }
+  svg.querySelectorAll(".node").forEach(g=>{
+    g.addEventListener("click",()=>{
+      const i=g.dataset.i;
+      if(sel===i){ sel=null; clearHi(); return; }
+      sel=i; clearHi();
+      svg.querySelectorAll(".node,.edge").forEach(el=>el.classList.add("dim"));
+      svg.querySelectorAll(".e-"+i).forEach(e=>{ e.classList.remove("dim"); e.classList.add("hi"); });
+      // つながっている相手ノードも復帰
+      svg.querySelectorAll(".e-"+i).forEach(e=>{
+        e.classList.forEach(cl=>{ if(/^e-\d+$/.test(cl)){ const j=cl.slice(2); svg.querySelector(".n-"+j)?.classList.remove("dim"); } });
+      });
+      g.classList.remove("dim"); g.classList.add("hi");
+    });
+  });
 }
 
 // updated date = newest entry year-ish placeholder → use today on open
