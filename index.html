@@ -119,6 +119,40 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .vtab:hover{border-color:var(--ink-soft)}
 .vtab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
+/* Phase1: highlight / fav / memo / filters / stats */
+mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1px}
+.fav{flex:none;background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:var(--line);padding:2px 4px;transition:transform .15s,color .15s}
+.fav:hover{transform:scale(1.2)}
+.fav.on{color:var(--D)}
+.card-top .left{display:flex;align-items:center;gap:8px}
+.memo{margin-top:6px}
+.memo textarea{width:100%;font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--paper-2);border:1px solid var(--line-soft);border-radius:3px;padding:9px 11px;resize:vertical;min-height:54px;outline:none}
+.memo textarea:focus{border-color:var(--accent)}
+.memo .saved{font-family:"DM Mono",monospace;font-size:10.5px;color:var(--accent);opacity:0;transition:opacity .2s;margin-left:6px}
+.memo .saved.show{opacity:1}
+.filterbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+.modetoggle{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 12px}
+.modetoggle.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.favfilter{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 12px}
+.favfilter.on{background:var(--D);color:#fff;border-color:var(--D)}
+.chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* stats view */
+#statsview{display:none}
+.statsec{margin-bottom:30px}
+.statsec h3{font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+.bar-row .lab{flex:none;width:160px;color:var(--ink);font-family:"DM Mono",monospace;font-size:11.5px}
+.bar-track{flex:1;background:var(--paper-2);border-radius:3px;height:20px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.bar-row .val{flex:none;width:28px;text-align:right;font-family:"DM Mono",monospace;color:var(--ink-soft);font-size:11.5px}
+.rotgrid{display:flex;flex-wrap:wrap;gap:10px}
+.rotbadge{display:flex;flex-direction:column;gap:4px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:10px 14px;min-width:96px;background:var(--card)}
+.rotbadge .rk{font-family:"DM Mono",monospace;font-weight:700;font-size:15px}
+.rotbadge .rn{font-size:10.5px;color:var(--ink-soft);text-align:center;line-height:1.3}
+.rotbadge .rc{font-family:"DM Mono",monospace;font-size:11px;color:var(--ink-soft)}
+.rotbadge.miss{border-style:dashed;opacity:.6}
+.rotbadge.miss .rc{color:var(--B)}
+
 /* Glossary view */
 .glosgrid{display:grid;gap:12px}
 .glosrow{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--accent);border-radius:3px;padding:14px 18px;animation:rise .4s both}
@@ -213,6 +247,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   <div class="viewtabs" id="viewtabs">
     <button class="vtab active" data-view="papers">論文で見る</button>
     <button class="vtab" data-view="terms">用語で探す</button>
+    <button class="vtab" data-view="stats">統計</button>
   </div>
   <div class="search">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
@@ -220,6 +255,10 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
   </div>
   <button id="filterToggle" type="button" aria-expanded="false">テーマで絞り込み<span class="fchev">▾</span></button>
   <div class="chips" id="chips"></div>
+  <div class="filterbar" id="filterbar">
+    <button class="modetoggle" id="modetoggle" title="複数テーマ選択時の論理">OR</button>
+    <button class="favfilter" id="favfilter">★ お気に入りのみ</button>
+  </div>
 </div>
 
 <div class="countline" id="countline"></div>
@@ -232,6 +271,7 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-fa
 </div>
 <div class="grid scrollarea" id="grid"></div>
 <div id="glosview" class="scrollarea" style="display:none"></div>
+<div id="statsview"></div>
 <div id="tip"></div>
 
 <footer>
@@ -680,18 +720,37 @@ const CATINFO={
 };
 
 /* ===== 描画 ===== */
-let activeTheme="all", query="", currentView="papers", sortMode="alpha";
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha";
 const grid=document.getElementById("grid");
 const glosview=document.getElementById("glosview");
+const statsview=document.getElementById("statsview");
 const chipsBox=document.getElementById("chips");
+
+/* ===== ユーザーデータ（端末内保存：★・メモ） ===== */
+const UD_KEY="liverPapers_userData_v1";
+let userData=(()=>{ try{return JSON.parse(localStorage.getItem(UD_KEY))||{};}catch(e){return {};} })();
+function saveUserData(){ try{localStorage.setItem(UD_KEY,JSON.stringify(userData));}catch(e){} }
+function ud(id){ return userData[id]||(userData[id]={}); }
+function isFav(id){ return !!(userData[id]&&userData[id].fav); }
 
 // chips
 chipsBox.innerHTML='<span class="chip active" data-theme="all"><span class="dot"></span>すべて</span>'+
   Object.entries(THEMES).map(([k,v])=>`<span class="chip" data-theme="${k}"><span class="dot" style="background:${v.c}"></span>${k}·${v.name}</span>`).join("");
 const filterToggle=document.getElementById("filterToggle");
 const fLabel="テーマで絞り込み";
+function syncChipActive(){
+  [...chipsBox.children].forEach(x=>{
+    const t=x.dataset.theme;
+    x.classList.toggle("active", t==="all" ? activeThemes.size===0 : activeThemes.has(t));
+  });
+  // AND/OR トグルは2つ以上選択時のみ意味を持つ
+  modetoggle.style.display = activeThemes.size>=2 ? "inline-block" : "none";
+}
 function setFilterLabel(){
-  const txt = activeTheme==="all" ? fLabel : (activeTheme+"·"+(THEMES[activeTheme]?THEMES[activeTheme].name:""));
+  let txt;
+  if(activeThemes.size===0) txt=fLabel;
+  else if(activeThemes.size===1){ const t=[...activeThemes][0]; txt=t+"·"+(THEMES[t]?THEMES[t].name:""); }
+  else txt=[...activeThemes].sort().join(themeMode==="AND"?" & ":" / ");
   filterToggle.innerHTML=txt+'<span class="fchev">▾</span>';
 }
 filterToggle.addEventListener("click",()=>{
@@ -701,15 +760,29 @@ filterToggle.addEventListener("click",()=>{
 });
 chipsBox.addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
-  activeTheme=c.dataset.theme;
-  [...chipsBox.children].forEach(x=>x.classList.toggle("active",x===c));
-  // mobile: collapse after pick & reflect chosen theme on the button
-  chipsBox.classList.remove("show");
-  filterToggle.classList.remove("open");
-  filterToggle.setAttribute("aria-expanded","false");
+  const t=c.dataset.theme;
+  if(t==="all") activeThemes.clear();
+  else { if(activeThemes.has(t)) activeThemes.delete(t); else activeThemes.add(t); }
+  syncChipActive();
   setFilterLabel();
   render();
 });
+// AND/OR トグル
+const modetoggle=document.getElementById("modetoggle");
+modetoggle.addEventListener("click",()=>{
+  themeMode = themeMode==="OR" ? "AND" : "OR";
+  modetoggle.textContent=themeMode;
+  modetoggle.classList.toggle("on",themeMode==="AND");
+  setFilterLabel(); render();
+});
+// ★お気に入りのみ
+const favfilter=document.getElementById("favfilter");
+favfilter.addEventListener("click",()=>{
+  favOnly=!favOnly;
+  favfilter.classList.toggle("on",favOnly);
+  render();
+});
+syncChipActive();
 setFilterLabel();
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();refresh();});
 
@@ -719,21 +792,24 @@ viewtabs.addEventListener("click",e=>{
   const t=e.target.closest(".vtab"); if(!t)return;
   currentView=t.dataset.view;
   [...viewtabs.children].forEach(x=>x.classList.toggle("active",x===t));
-  // chips & search placeholder adapt to view
-  chipsBox.style.display = currentView==="papers" ? "flex" : "none";
-  document.getElementById("q").placeholder = currentView==="papers"
-    ? "タイトル・著者・誌名・本文で検索…" : "略語・正式名・説明で用語検索…（例: TGFβ）";
+  document.getElementById("q").placeholder = currentView==="terms"
+    ? "略語・正式名・説明で用語検索…（例: TGFβ）" : "タイトル・著者・誌名・本文で検索…";
   refresh();
 });
 
 function refresh(){
-  const papersView=currentView==="papers";
-  grid.style.display=papersView?"grid":"none";
-  glosview.style.display=papersView?"none":"block";
-  document.getElementById("sortbar").style.display=papersView?"none":"flex";
-  chipsBox.style.display=papersView?"flex":"none";
-  document.querySelector(".controls").classList.toggle("terms",!papersView);
-  papersView?render():renderGlossary();
+  const v=currentView;
+  grid.style.display=v==="papers"?"grid":"none";
+  glosview.style.display=v==="terms"?"block":"none";
+  statsview.style.display=v==="stats"?"block":"none";
+  document.getElementById("sortbar").style.display=v==="terms"?"flex":"none";
+  document.getElementById("filterbar").style.display=v==="papers"?"flex":"none";
+  chipsBox.style.display=v==="papers"?"flex":"none";
+  // テーマ絞り込みUIは論文ビューのみ
+  document.querySelector(".controls").classList.toggle("terms",v!=="papers");
+  if(v==="papers") render();
+  else if(v==="terms") renderGlossary();
+  else renderStats();
 }
 
 // sort controls
@@ -813,34 +889,53 @@ function tagHTML(p){
   const sec=(p.tags||[]).map(t=>`<span class="tag sec">${t}</span>`).join("");
   return prim+sec;
 }
+function paperThemes(p){ const s=new Set(p.tags||[]); s.add(p.primary); return s; }
 function matches(p){
-  const themeOK = activeTheme==="all" || p.primary===activeTheme || (p.tags||[]).includes(activeTheme);
-  if(!themeOK) return false;
+  if(favOnly && !isFav(p.id)) return false;
+  if(activeThemes.size){
+    const pt=paperThemes(p);
+    const ok = themeMode==="AND"
+      ? [...activeThemes].every(t=>pt.has(t))
+      : [...activeThemes].some(t=>pt.has(t));
+    if(!ok) return false;
+  }
   if(!query) return true;
   const blob=[p.title,p.authors,p.journal,p.year,p.abstract,p.abstract_ja,p.background,
     (p.achievements||[]).join(" "),(p.limitations||[]).join(" "),(p.connection||[]).join(" ")].join(" ").toLowerCase();
   return blob.includes(query);
 }
+// 検索語ハイライト（HTMLタグを壊さないようプレーン文字列にのみ適用）
+function hl(text){
+  if(!query||!text) return text==null?"":String(text);
+  const s=String(text);
+  const i=s.toLowerCase().indexOf(query);
+  if(i<0) return s;
+  let out="",pos=0,idx=i;
+  while(idx>=0){ out+=s.slice(pos,idx)+"<mark>"+s.slice(idx,idx+query.length)+"</mark>"; pos=idx+query.length; idx=s.toLowerCase().indexOf(query,pos); }
+  return out+s.slice(pos);
+}
 function render(){
   const list=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
   document.getElementById("total").textContent=PAPERS.length;
+  const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
   document.getElementById("countline").textContent=
-    `表示 ${list.length} / ${PAPERS.length} 本`+(activeTheme!=="all"?`　·　テーマ ${activeTheme}`:"")+(query?`　·　"${query}"`:"");
+    `表示 ${list.length} / ${PAPERS.length} 本`+themeNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
   if(!list.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';return;}
   grid.innerHTML=list.map((p,i)=>`
-    <article class="card" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
+    <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
       <div class="card-top">
-        <span class="num">№ ${p.id}</span>
+        <div class="left"><span class="num">№ ${p.id}</span><button class="fav${isFav(p.id)?" on":""}" title="お気に入り" aria-label="お気に入り">${isFav(p.id)?"★":"☆"}</button></div>
         <div class="tags">${tagHTML(p)}</div>
       </div>
-      <h2 class="title">${p.title}</h2>
-      <div class="cite"><span class="j">${p.journal}</span> ${p.vol||""} (${p.year}) · ${p.authors}</div>
-      <span class="approach">${p.approach||""}</span>
+      <h2 class="title">${hl(p.title)}</h2>
+      <div class="cite"><span class="j">${hl(p.journal)}</span> ${p.vol||""} (${p.year}) · ${hl(p.authors)}</div>
+      <span class="approach">${hl(p.approach||"")}</span>
       <div class="row-actions">
         <button class="btn toggle"><span class="arr">▸</span> 詳細を${"開く"}</button>
         <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文 · DOI: ${p.doi}</a>
       </div>
       <div class="detail"><div class="detail-inner">
+        <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
@@ -853,9 +948,24 @@ function render(){
       </div></div>
     </article>`).join("");
   grid.querySelectorAll(".card").forEach(card=>{
+    const id=card.dataset.id;
     card.querySelector(".toggle").addEventListener("click",()=>{
       const open=card.classList.toggle("open");
       card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
+    });
+    // ★お気に入り
+    card.querySelector(".fav").addEventListener("click",e=>{
+      e.stopPropagation();
+      const f=!isFav(id); ud(id).fav=f; saveUserData();
+      const b=e.currentTarget; b.classList.toggle("on",f); b.textContent=f?"★":"☆";
+      if(favOnly) render();
+    });
+    // メモ（入力のたびに保存）
+    const ta=card.querySelector(".memo textarea"), saved=card.querySelector(".memo .saved");
+    let tmr;
+    ta.addEventListener("input",()=>{
+      ud(id).memo=ta.value; saveUserData();
+      saved.classList.add("show"); clearTimeout(tmr); tmr=setTimeout(()=>saved.classList.remove("show"),1200);
     });
   });
 }
@@ -923,22 +1033,55 @@ function renderGlossary(){
 }
 function jumpToPaper(id){
   // 論文ビューへ切替＆フィルタ解除して必ず表示
-  currentView="papers"; query=""; activeTheme="all";
+  currentView="papers"; query=""; activeThemes.clear(); favOnly=false;
   document.getElementById("q").value="";
+  favfilter.classList.remove("on");
   [...viewtabs.children].forEach(x=>x.classList.toggle("active",x.dataset.view==="papers"));
-  [...chipsBox.children].forEach(x=>x.classList.toggle("active",x.dataset.theme==="all"));
+  syncChipActive();
   chipsBox.style.display="flex";
   setFilterLabel();
   document.getElementById("q").placeholder="タイトル・著者・誌名・本文で検索…";
   refresh();
   requestAnimationFrame(()=>{
     const cards=[...grid.querySelectorAll(".card")];
-    const card=cards.find(c=>c.querySelector(".num")?.textContent.includes(id));
+    const card=cards.find(c=>c.dataset.id===id);
     if(card){
       if(!card.classList.contains("open")) card.querySelector(".toggle").click();
       card.scrollIntoView({behavior:"smooth",block:"start"});
     }
   });
+}
+
+/* ===== 統計ビュー ===== */
+function renderStats(){
+  document.getElementById("total").textContent=PAPERS.length;
+  document.getElementById("countline").textContent=`全 ${PAPERS.length} 本の収録状況`;
+  // テーマ別カウント（primary基準）
+  const themeCnt={}; Object.keys(THEMES).forEach(k=>themeCnt[k]=0);
+  PAPERS.forEach(p=>{ if(themeCnt[p.primary]!=null) themeCnt[p.primary]++; });
+  const maxT=Math.max(1,...Object.values(themeCnt));
+  const themeBars=Object.keys(THEMES).map(k=>{
+    const n=themeCnt[k], w=Math.round(n/maxT*100);
+    return `<div class="bar-row"><span class="lab">${k}·${THEMES[k].name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${THEMES[k].c}"></div></div><span class="val">${n}</span></div>`;
+  }).join("");
+  // 年別カウント
+  const yearCnt={}; PAPERS.forEach(p=>{ const y=p.year||"?"; yearCnt[y]=(yearCnt[y]||0)+1; });
+  const years=Object.keys(yearCnt).sort();
+  const maxY=Math.max(1,...Object.values(yearCnt));
+  const yearBars=years.map(y=>{
+    const n=yearCnt[y], w=Math.round(n/maxY*100);
+    return `<div class="bar-row"><span class="lab">${y}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:var(--accent)"></div></div><span class="val">${n}</span></div>`;
+  }).join("");
+  // A〜H巡回バッジ（primaryで何本カバーしたか／未カバーを強調）
+  const badges=Object.keys(THEMES).map(k=>{
+    const n=themeCnt[k], miss=n===0;
+    return `<div class="rotbadge${miss?" miss":""}"><span class="rk" style="color:${THEMES[k].c}">${k}</span><span class="rn">${THEMES[k].name}</span><span class="rc">${miss?"未収録":n+"本"}</span></div>`;
+  }).join("");
+  const covered=Object.values(themeCnt).filter(n=>n>0).length;
+  statsview.innerHTML=`
+    <div class="statsec"><h3>テーマA〜H 巡回カバレッジ（${covered}/8）</h3><div class="rotgrid">${badges}</div></div>
+    <div class="statsec"><h3>テーマ別 収録数（primary基準）</h3>${themeBars}</div>
+    <div class="statsec"><h3>発表年別 収録数</h3>${yearBars}</div>`;
 }
 
 // updated date = newest entry year-ish placeholder → use today on open
