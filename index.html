@@ -144,6 +144,11 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .cinema .cchip.on{color:#fff;border-color:var(--B);background:var(--B)}
 .cinema .pulse{transform-box:fill-box;transform-origin:center;animation:cpulse 1.5s ease-in-out infinite}
 @keyframes cpulse{0%,100%{opacity:1}50%{opacity:.5}}
+.cinema .fade{opacity:0;transition:opacity .55s ease}
+.cinema .fade.on{opacity:1}
+.cinema .sway{transform-box:fill-box;transform-origin:center;animation:csway 3s ease-in-out infinite}
+@keyframes csway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+.cinema svg text{user-select:none}
 
 /* View tabs */
 .viewtabs{display:flex;gap:6px;margin-bottom:14px}
@@ -468,11 +473,6 @@ const PAPERS=[
   {
     id:"09",
     added:"2026-05-30",
-    scenes:[
-      {label:"健常",color:"E",cap:"静止期HSC（qHSC）がRSPO3を十分に供給し、肝細胞のzonation・代謝が正常に保たれる。",acts:[]},
-      {label:"HSC活性化",color:"B",cap:"① HSCが活性化（aHSC）するとRSPO3が低下し、WNT/βカテニンシグナルが減弱する。",acts:["hsc"]},
-      {label:"zonation障害→線維化",color:"B",cap:"② Zone3のCYP450・再生能が落ち、肝代謝・解毒が破綻 → MASLD/ALDが悪化し線維化が進む。",acts:["collagen"]}
-    ],
     title:"HSCがR-spondin 3を介して肝細胞のzonation・再生・代謝を制御",
     authors:"Sugimoto A†, Saito Y†, Wang G†, Sun Q, Lin C, Lee KH, Geng Y, Rajbhandari P, Hernandez C, Steffani M, Qie J, Savage T, Goyal DM, ..., Augustin HG, Schwabe RF",
     journal:"Nature",
@@ -526,11 +526,6 @@ const PAPERS=[
   {
     id:"08",
     added:"2026-05-30",
-    scenes:[
-      {label:"代償性肝硬変",color:"B",cap:"代償性肝硬変（MELD 10–17）。HSCが活性化しコラーゲンが沈着した線維化肝。",acts:["hsc","collagen"]},
-      {label:"自家M2マクロファージ輸注",color:"H",cap:"① 自己単球をex vivoでM2-likeマクロファージに分化させ、静脈内輸注して肝へ送達。",acts:["drug"]},
-      {label:"抗炎症・線維化退縮",color:"C",cap:"② 抗炎症サイトカインプロファイルへ移行し、線維化が退縮。治療群は肝関連死ゼロ（探索的シグナル）。",acts:["regress"]}
-    ],
     title:"自家マクロファージ療法フェーズ2 RCTが肝関連死ゼロと探索的抗炎症シグナルを示す",
     authors:"Brennan PN, MacMillan M, Manship T, Moroni F, Glover A, Troland D, MacPherson I, Graham C, Aird R, Semple SIK, Morris DM, Fraser AR, Pass C, McGowan NWA, Turner ML, Manson L, Lachlan NJ, Dillon JF, Kilpatrick AM, Campbell JDM, Fallowfield JA, Forbes SJ",
     journal:"Nature Medicine",
@@ -580,12 +575,6 @@ const PAPERS=[
   {
     id:"07",
     added:"2026-05-30",
-    scenes:[
-      {label:"健常",color:"E",cap:"健常な肝類洞。肝細胞・LSEC・KC・HSCが定常状態にある。",acts:[]},
-      {label:"脂肪化",color:"D",cap:"① アセチルCoA供給（ACLY/ACSS2）が亢進し、肝細胞にDNL由来の脂肪滴が蓄積（steatosis）。",acts:["lipids"]},
-      {label:"線維化",color:"B",cap:"② HSCがACSS2/コレステロール合成を介して活性化し、コラーゲンを過剰産生 → 線維化。",acts:["hsc","collagen"]},
-      {label:"EVT0185",color:"H",cap:"③ ACLY＋ACSS2を二重阻害するEVT0185が脂肪化とHSC活性化を同時に抑え、線維化が退縮。",acts:["drug","regress"]}
-    ],
     title:"ACLY/ACSS2二重阻害薬EVT0185がMASHの脂肪化・HSC活性化・線維化を軽減",
     authors:"Di Pastena F, Gautam J, Lally JSV, Fayyazi R, Grasset E, Bhattacharya D, Fidelito G, Ahmadi E, Townsend LK, Batchuluun B, et al. (Steinberg GR)",
     journal:"Cell Metabolism",
@@ -638,11 +627,6 @@ const PAPERS=[
   {
     id:"06",
     added:"2026-05-30",
-    scenes:[
-      {label:"静止期",color:"E",cap:"静止期HSC（qHSC）が星形の突起を保つ定常状態。",acts:[]},
-      {label:"活性化",color:"B",cap:"① TGFβ1刺激でqHSC→aHSCへ活性化し、ECM産生で線維化が進む。",acts:["hsc","collagen"]},
-      {label:"不活化ループ",color:"F",cap:"② 一部は不活化(iHSC)へ転じるが容易に再活性化する。この不活化ループの存在が線維化の持続に必須——規則ベースモデルで同定。",acts:["regress"]}
-    ],
     title:"HSCのKappaベース多スケールモデル — 不活化ループが線維化進行を駆動",
     authors:"Bouguéon M, Legagneux V, Hazard O, Bomo J, Siegel A, Feret J, Théret N, Maini PK, Alber M, Kaleta C",
     journal:"PLOS Computational Biology",
@@ -695,12 +679,6 @@ const PAPERS=[
   {
     id:"05",
     added:"2026-05-30",
-    scenes:[
-      {label:"健常",color:"E",cap:"LSECの小孔（fenestrae）が開き、HSCは静止期にある健常な類洞。",acts:[]},
-      {label:"線維化",color:"B",cap:"① 病態進行でLSECが小孔を失い（capillarization）、HSCが活性化してコラーゲンを沈着 → 線維化。",acts:["capillarize","hsc","collagen"]},
-      {label:"SNA投与",color:"H",cap:"② miR-325-3pを球状核酸(SNA)化し、線維化LSECへ特異的に送達。",acts:["drug"]},
-      {label:"回復",color:"E",cap:"③ LSECのfenestraeが回復しHSC活性化が抑えられ、線維化が有意に軽減。",acts:["regress"]}
-    ],
     title:"miR-325-3p搭載核酸スフィア（SNA）がLSECのcapillarizationを是正し肝線維化を治療",
     authors:"Liu W, Liu Y, Zhang L, Li L, Yang W, Li J, He W",
     journal:"Nature Communications",
@@ -759,11 +737,6 @@ const PAPERS=[
   {
     id:"04",
     added:"2026-05-30",
-    scenes:[
-      {label:"統合MPS",color:"E",cap:"iPSC由来の肝・脂肪・血管などを統合したMPSの定常状態。",acts:[]},
-      {label:"脂肪化",color:"D",cap:"① 遊離脂肪酸（FFA）負荷で肝細胞に脂肪滴が蓄積（steatosis）。",acts:["lipids"]},
-      {label:"脂肪組織炎症が主ドライバー",color:"C",cap:"② M1マクロファージ由来のTNFα＋FFAがMASLD発症の主ドライバー。WAT量増大だけでは不十分。※本系はHSC/LSEC欠如のため線維化は未達。",acts:["kc","cytokine"]}
-    ],
     title:"iPSCベース統合型MPSで脂肪組織炎症がMASLD発症の主ドライバーと実証",
     authors:"Qi L, Groeger M, Sharma A, Goswami I, Chen E, Zhong F, Ram A, Healy K, Hsiao EC, Willenbring H, Stahl A",
     journal:"Nature Communications",
@@ -822,12 +795,6 @@ const PAPERS=[
   {
     id:"03",
     added:"2026-05-29",
-    scenes:[
-      {label:"静止期HSC",color:"E",cap:"静止期HSC（qHSC）が定常状態にある。",acts:[]},
-      {label:"ATF4スイッチON",color:"B",cap:"① ATF4の非定型エンハンサープログラムが活性化HSCの内部転写スイッチとして働き、qHSC→aHSCへ転換させる。",acts:["hsc"]},
-      {label:"線維化",color:"B",cap:"② aHSCがECM・コラーゲンを過剰産生し線維化が進行。",acts:["collagen"]},
-      {label:"ATF4阻害",color:"H",cap:"③ ATF4を標的にした低分子阻害剤がHSC活性化を抑え、線維化を抑制（線維化ネガコンに使える）。",acts:["drug","regress"]}
-    ],
     title:"ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動",
     authors:"Feng Y-X, et al.",
     journal:"Nature Communications",
@@ -883,12 +850,6 @@ const PAPERS=[
   {
     id:"02",
     added:"2026-05-29",
-    scenes:[
-      {label:"健常",color:"E",cap:"健常な肝類洞。クッパー細胞（KC）は定常状態にある。",acts:[]},
-      {label:"脂肪化",color:"D",cap:"① 過栄養で肝細胞に脂肪滴が蓄積し、酸化リン脂質（OxPL）が増える。",acts:["lipids"]},
-      {label:"KC鉄沈着・フェロトーシス",color:"C",cap:"② NCF1→OxPL→TLR4→ヘプシジンでKCに鉄が沈着しフェロトーシス感受性が上昇、炎症が増悪（KC自体が脱落しうる）。",acts:["lps","kc","cytokine"]},
-      {label:"線維化",color:"B",cap:"③ 炎症シグナルがHSCを刺激し線維化が進む（部分的）。",acts:["collagen"]}
-    ],
     title:"NCF1がKupffer細胞のフェロトーシス感受性を制御しMASHを悪化させる",
     authors:"Zhang J, Wang Y, … Holmdahl R, et al.",
     journal:"Cell Metabolism",
@@ -942,12 +903,6 @@ const PAPERS=[
   {
     id:"01",
     added:"2026-05-29",
-    scenes:[
-      {label:"健常",color:"E",cap:"健常なヒト肝小葉。空間マルチオミクスで全細胞の配置を解析。",acts:[]},
-      {label:"脂肪化",color:"D",cap:"① 肝細胞に脂肪滴が蓄積（steatosis）。",acts:["lipids"]},
-      {label:"LAM集積・炎症",color:"C",cap:"② 脂質関連マクロファージ（LAM）が集積し炎症が進む。",acts:["kc","cytokine"]},
-      {label:"線維化（pericentral優位）",color:"B",cap:"③ 中心静脈EC–HSCのRSPO3–LGR6が線維化巣のドライバー。HSC活性化→コラーゲン沈着がpericentral優位に進行。",acts:["hsc","collagen"]}
-    ],
     title:"ヒトMASLDの空間マルチオミクスatlas",
     authors:"Li Z, Luo G, … Bai F, Chai J.",
     journal:"Nature Genetics",
@@ -1412,35 +1367,24 @@ function renderPager(total){
 }
 
 /* ============================================================
-   LiverCinema — 共通アニメ再生エンジン（方式④）
-   各論文は小さな scenes データだけ持てばよい：
-     scenes:[ {label,色,cap,acts:[...]} , ... ]
-   色は "B"/"C"/"D"/"E"/"F"/"H" のいずれか（CSS変数に対応）
-   acts に使えるキー：
-     lipids     肝細胞に脂肪滴が膨らむ（steatosis）
-     lps        血流からLPS粒子が流入
-     kc         クッパー細胞が活性化（発色）
-     cytokine   KC→HSCへサイトカイン粒子が飛ぶ
-     hsc        星細胞が星形→筋線維芽細胞へ変形・活性化
-     collagen   コラーゲン線維が織り込まれる（線維化）
-     capillarize LSECの小孔が閉じる（capillarization）
-     drug       治療薬トークンが現れ最終ステップを⊣阻害
-     regress    コラーゲンが退縮（線維化の解消）
+   CinemaKit — イラスト型アニメの共通部品（方式④v2）
+   各論文は CINEMA[id] = { vb?, dwell?, svg, build(K) } を持つ：
+     vb   : viewBox（省略時 "0 0 720 430"）
+     svg  : 静的な絵（細胞・分子などをidつきで配置。defs/gradientのidは論文番号で名前空間化）
+     build(K): K のヘルパーで scenes 配列を返す。各 scene = {color,cap,run()}
+   K：$(id)取得 / cE生成 / T(遅延) / raf / show・hide(フェード) /
+      pulse・unpulse / morph・attr / flow(粒子) / strike(阻害弾) /
+      markX(⊣) / grow(拡大) / draw(線を描く)
    ============================================================ */
-const CINEMA_NS="http://www.w3.org/2000/svg";
-function cel(t,a){const e=document.createElementNS(CINEMA_NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
-function colorVar(c){return /^[A-H]$/.test(c)?`var(--${c})`:(c||"var(--accent)");}
+const SVGNS="http://www.w3.org/2000/svg";
+function cE(t,a,parent){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(parent)parent.appendChild(e);return e;}
 
-function LiverCinema(root, scenes){
-  scenes = scenes && scenes.length ? scenes : [];
-  root.classList.add("cinema");
-  root.innerHTML="";
-  const DWELL=3200, TOTAL=Math.max(1,scenes.length)*DWELL;
-
-  // --- DOM骨格 ---
+function mountCinema(mount, def){
+  mount.classList.add("cinema"); mount.innerHTML="";
+  const vb=def.vb||"0 0 720 430";
   const stage=document.createElement("div"); stage.className="cstage";
   const slabel=document.createElement("div"); slabel.className="slabel"; stage.appendChild(slabel);
-  const svg=cel("svg",{viewBox:"0 0 700 440"}); stage.appendChild(svg);
+  const svg=cE("svg",{viewBox:vb}); stage.appendChild(svg);
   const cap=document.createElement("div"); cap.className="ccap";
   const ctl=document.createElement("div"); ctl.className="cctl";
   const playBtn=document.createElement("button"); playBtn.className="cprimary"; playBtn.textContent="▶ 再生";
@@ -1449,167 +1393,414 @@ function LiverCinema(root, scenes){
   const fill=document.createElement("div"); fill.className="cfill"; track.appendChild(fill);
   ctl.append(playBtn,resetBtn,track);
   const chips=document.createElement("div"); chips.className="cchips";
-  root.append(stage,cap,ctl,chips);
+  mount.append(stage,cap,ctl,chips);
 
-  // --- defs ---
-  svg.innerHTML=`<defs>
-    <linearGradient id="cbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23242c"/><stop offset="1" stop-color="#191a20"/></linearGradient>
-    <linearGradient id="clumen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3026"/><stop offset="1" stop-color="#4a3a2c"/></linearGradient>
-    <radialGradient id="clipid" cx="0.35" cy="0.32" r="0.7"><stop offset="0" stop-color="#ffe9a8"/><stop offset="1" stop-color="#d9a441"/></radialGradient>
-    <radialGradient id="ckc" cx="0.4" cy="0.35" r="0.75"><stop offset="0" stop-color="#c98aa6"/><stop offset="1" stop-color="#9c4f6c"/></radialGradient>
-    <path id="cflow" d="M-40,150 C150,120 520,180 760,150" fill="none"/>
-  </defs>`;
-
-  // --- 背景・類洞 ---
-  const add=(t,a,parent)=>{const e=cel(t,a);(parent||svg).appendChild(e);return e;};
-  add("rect",{x:0,y:0,width:700,height:440,fill:"url(#cbg)"});
-  add("path",{d:"M0,108 C180,82 520,134 700,104 L700,196 C520,224 180,172 0,198 Z",fill:"url(#clumen)",opacity:"0.92"});
-  add("path",{d:"M0,108 C180,82 520,134 700,104",fill:"none",stroke:"var(--E)","stroke-width":"2.4"});
-  add("path",{d:"M0,198 C180,172 520,224 700,196",fill:"none",stroke:"var(--E)","stroke-width":"2.4"});
-  const fen=add("g",{}); // fenestrae
-  const ftxt=add("text",{x:14,y:155,"font-size":"11",fill:"rgba(255,255,255,.5)"}); ftxt.textContent="類洞（血流）";
-
-  // --- 血流粒子（常時） ---
-  const rbcs=add("g",{});
-  for(let i=0;i<7;i++){
-    const c=cel("ellipse",{rx:7,ry:4.4,fill:"#e8d5c8",opacity:"0.85"});
-    const am=cel("animateMotion",{dur:(5+Math.random()*2.5)+"s",repeatCount:"indefinite",begin:(-i*0.9)+"s",rotate:"auto"});
-    am.appendChild(cel("mpath",{href:"#cflow"})); c.appendChild(am); rbcs.appendChild(c);
-  }
-
-  // --- 肝細胞（脂肪滴グループ付き） ---
-  const hepDrops=[];
-  [[120,52],[300,46],[480,58]].forEach(([x,y])=>{
-    const g=add("g",{transform:`translate(${x},${y})`});
-    add("polygon",{points:"0,-26 24,-13 24,13 0,26 -24,13 -24,-13",fill:"#cdbfa6",stroke:"#a8987b","stroke-width":"1.6",opacity:"0.95"},g);
-    add("circle",{cx:0,cy:0,r:7,fill:"#8a7a5c"},g);
-    const d=add("g",{opacity:"0"},g); hepDrops.push(d);
-  });
-
-  // --- クッパー細胞 ---
-  const kc=add("g",{transform:"translate(360,150)"});
-  const kcBody=add("path",{d:"M0,-20 C16,-22 26,-8 22,6 C30,16 14,26 0,22 C-16,28 -28,14 -22,2 C-30,-12 -14,-24 0,-20 Z",fill:"#5d6470",stroke:"#828a96","stroke-width":"1.4"},kc);
-  add("circle",{cx:-3,cy:0,r:6,fill:"#3a3f48"},kc);
-  add("text",{x:0,y:42,"text-anchor":"middle","font-size":"10.5",fill:"rgba(255,255,255,.7)"},kc).textContent="クッパー細胞";
-
-  // --- 星細胞 HSC ---
-  const hsc=add("g",{transform:"translate(300,300)"});
-  const QUIET="M0,-8 L18,-22 L6,-4 L26,-2 L7,4 L16,20 L1,7 L-14,22 L-4,4 L-24,3 L-5,-3 L-15,-20 Z";
-  const ACTIVE="M-30,-7 C-10,-12 12,-12 32,-6 C40,-3 40,3 32,6 C12,12 -10,12 -30,7 C-38,3 -38,-3 -30,-7 Z";
-  const hscBody=add("path",{d:QUIET,fill:"#c98f7e",stroke:"var(--B)","stroke-width":"1.4",opacity:"0.95"},hsc);
-  add("circle",{cx:0,cy:0,r:5.5,fill:"#7a3a2c"},hsc);
-  const hscLabel=add("text",{x:0,y:46,"text-anchor":"middle","font-size":"10.5",fill:"rgba(255,255,255,.7)"},hsc);
-  hscLabel.textContent="肝星細胞（静止期）";
-
-  // --- コラーゲン・粒子・薬 レイヤ ---
-  const collagen=add("g",{stroke:"var(--B)","stroke-width":"2.2",fill:"none",opacity:"0"});
-  const particles=add("g",{});
-  const drugLayer=add("g",{});
-
-  // ===== 効果（acts）=====
   let timers=[], rafs=[];
-  const clearT=()=>{timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];};
+  const clr=()=>{timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];};
+  const fluxLayer=()=>svg.querySelector('[data-layer="flux"]');
 
-  function buildFenestrae(){ fen.innerHTML="";
-    for(let i=0;i<16;i++){const x=30+i*42,y=110+Math.sin(i)*1.5;
-      fen.appendChild(cel("circle",{cx:x,cy:y,r:2.4,fill:"#1b1c22",opacity:"0.9"}));}
-  }
-  const EFFECTS={
-    lipids(){ hepDrops.forEach((d,gi)=>{ d.setAttribute("opacity","1");
-      [[-9,-2],[8,-6],[-2,8],[12,6]].forEach((p,k)=>{
-        const c=cel("circle",{cx:p[0],cy:p[1],r:0.5,fill:"url(#clipid)",stroke:"#b8862f","stroke-width":"0.6"}); d.appendChild(c);
-        const target=3+Math.random()*4, t0=performance.now()+gi*120+k*180, dur=1400;
-        const step=now=>{const q=Math.min(1,(now-t0)/dur); if(q>0)c.setAttribute("r",(0.5+(target-0.5)*q).toFixed(2)); if(q<1)rafs.push(requestAnimationFrame(step));};
-        rafs.push(requestAnimationFrame(step));
-      });});
+  const K={
+    $:id=>svg.querySelector('#'+id),
+    cE:(t,a)=>cE(t,a),
+    T:(fn,ms)=>{const id=setTimeout(fn,ms);timers.push(id);return id;},
+    raf:fn=>{const id=requestAnimationFrame(fn);rafs.push(id);return id;},
+    show(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.add("on");});},
+    hide(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.remove("on");});},
+    pulse(id){const e=svg.querySelector('#'+id);if(e)(e.querySelector('.box')||e).classList.add("pulse");},
+    unpulse(id){const e=svg.querySelector('#'+id);if(e)(e.querySelector('.box')||e).classList.remove("pulse");},
+    morph(id,d){const e=svg.querySelector('#'+id);if(e)e.setAttribute("d",d);},
+    attr(id,k,v){const e=svg.querySelector('#'+id);if(e)e.setAttribute(k,v);},
+    text(id,s){const e=svg.querySelector('#'+id);if(e)e.textContent=s;},
+    flow(x0,y0,x1,y1,color,o){o=o||{};const fl=fluxLayer(),n=o.n||4,dur=o.dur||1.1,gap=o.gap||0.25,loop=o.loop||1,r=o.r||3.4;
+      for(let L=0;L<loop;L++)for(let i=0;i<n;i++){K.T(()=>{
+        const c=cE("circle",{r:r,fill:color},fl);
+        const mk=(at,vv)=>cE("animate",{attributeName:at,values:vv,dur:dur+"s",fill:"freeze"},c);
+        mk("cx",x0+";"+x1).beginElement();mk("cy",y0+";"+y1).beginElement();mk("opacity","0.95;0.95;0").beginElement();
+        K.T(()=>c.remove(),(dur+0.3)*1000);
+      },(L*n+i)*gap*1000);}
     },
-    lps(){ emit(-20,150,360,150,"#caa15a",4,0); },
-    kc(){ kcBody.setAttribute("fill","url(#ckc)"); },
-    cytokine(){ emit(360,150,300,300,"var(--C)",6,0); },
-    hsc(){ hscBody.setAttribute("d",ACTIVE); hscBody.setAttribute("fill","#b0432f"); hscLabel.textContent="肝星細胞（活性化＝筋線維芽細胞）"; },
-    collagen(){ collagen.setAttribute("opacity","1");
-      ["M70,250 C200,230 320,265 360,255 C470,235 560,270 640,250",
-       "M80,275 C220,300 340,268 430,288 C520,305 590,278 650,295",
-       "M60,300 C190,278 300,312 400,295 C500,280 580,312 645,300",
-       "M90,320 C210,345 330,316 440,335 C540,352 600,322 655,338"].forEach((d,i)=>{
-        timers.push(setTimeout(()=>{ const p=cel("path",{d:d,"stroke-dasharray":"700","stroke-dashoffset":"700"}); collagen.appendChild(p);
-          const an=cel("animate",{attributeName:"stroke-dashoffset",from:"700",to:"0",dur:"1.6s",fill:"freeze"}); p.appendChild(an); an.beginElement();
-        }, i*420));});
+    strike(x0,y0,x1,y1,o){o=o||{};const fl=fluxLayer(),dur=o.dur||0.7,r=o.r||5.5,color=o.color||"var(--H)";
+      const c=cE("circle",{r:r,fill:color},fl);
+      const mk=(at,vv)=>cE("animate",{attributeName:at,values:vv,dur:dur+"s",fill:"freeze"},c);
+      mk("cx",x0+";"+x1).beginElement();mk("cy",y0+";"+y1).beginElement();
+      K.T(()=>c.remove(),(dur+0.05)*1000);
     },
-    capillarize(){ [...fen.children].forEach((c,i)=>{ timers.push(setTimeout(()=>{
-        const an=cel("animate",{attributeName:"r",from:c.getAttribute("r"),to:"0",dur:"0.9s",fill:"freeze"}); c.appendChild(an); an.beginElement();
-      }, i*40)); });
-    },
-    drug(){ const g=drugLayer;
-      const cap2=cel("g",{transform:"translate(150,392)"});
-      cap2.appendChild(cel("rect",{x:-46,y:-16,width:92,height:30,rx:14,fill:"var(--H)",opacity:"0.95"}));
-      const t=cel("text",{x:0,y:5,"text-anchor":"middle","font-size":"12",fill:"#fff"}); t.textContent="治療薬"; cap2.appendChild(t);
-      g.appendChild(cap2);
-      const blk=cel("text",{x:330,y:262,"font-size":"15",fill:"var(--H)"}); blk.textContent="⊣"; g.appendChild(blk);
-    },
-    regress(){ collagen.setAttribute("opacity","1");
-      [...collagen.children].forEach((p,i)=>{ timers.push(setTimeout(()=>{
-        const an=cel("animate",{attributeName:"opacity",from:"1",to:"0.15",dur:"1.2s",fill:"freeze"}); p.appendChild(an); an.beginElement();
-      }, i*250)); }); }
+    markX(x,y,color){const fl=fluxLayer();const t=cE("text",{x:x,y:y+5,"text-anchor":"middle","font-size":"17","font-weight":"700",fill:color||"var(--H)"},fl);t.textContent="⊣";
+      cE("animate",{attributeName:"opacity",values:"0;1",dur:"0.3s",fill:"freeze"},t).beginElement();},
+    grow(id,to,dur,from){const e=svg.querySelector('#'+id),c=(e&&(e.querySelector('.box')||e));if(!c)return;const f=(from!=null?from:+(c.getAttribute("r")||3)),t0=performance.now();
+      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(f+(to-f)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);},
+    draw(parentId,paths,o){o=o||{};const dur=o.dur||1.3,gap=o.gap||0.4,w=o.w||2.6,color=o.color||"var(--B)",len=o.len||180;
+      const g=svg.querySelector('#'+parentId); if(!g)return; g.setAttribute("opacity","1");
+      paths.forEach((d,i)=>K.T(()=>{const p=cE("path",{d:d,fill:"none",stroke:color,"stroke-width":w,"stroke-dasharray":len,"stroke-dashoffset":len},g);
+        cE("animate",{attributeName:"stroke-dashoffset",values:len+";0",dur:dur+"s",fill:"freeze"},p).beginElement();
+      },i*gap*1000));},
   };
-  function emit(x0,y0,x1,y1,color,n,delay){
-    for(let i=0;i<n;i++){ timers.push(setTimeout(()=>{
-      const c=cel("circle",{cx:x0,cy:y0,r:3.2,fill:color,opacity:"0.95"}); particles.appendChild(c);
-      const a=cel("animate",{attributeName:"cx",from:x0,to:x1,dur:"1.1s",fill:"freeze"});
-      const b=cel("animate",{attributeName:"cy",from:y0,to:y1,dur:"1.1s",fill:"freeze"});
-      const o=cel("animate",{attributeName:"opacity",values:"0.95;0.95;0",dur:"1.3s",fill:"freeze"});
-      c.append(a,b,o); a.beginElement();b.beginElement();o.beginElement();
-      timers.push(setTimeout(()=>c.remove(),1400));
-    }, delay+i*220)); }
-  }
 
-  // ===== リセット／再生 =====
-  function applyActs(acts){ (acts||[]).forEach(k=>{ if(EFFECTS[k]) EFFECTS[k](); }); }
-  function reset(){
-    clearT();
-    hepDrops.forEach(d=>{d.innerHTML="";d.setAttribute("opacity","0");});
-    collagen.innerHTML=""; collagen.setAttribute("opacity","0");
-    particles.innerHTML=""; drugLayer.innerHTML=""; buildFenestrae();
-    kcBody.setAttribute("fill","#5d6470");
-    hscBody.setAttribute("d",QUIET); hscBody.setAttribute("fill","#c98f7e"); hscLabel.textContent="肝星細胞（静止期）";
+  const scenes=def.build(K)||[];
+  const DWELL=def.dwell||3500, TOTAL=Math.max(1,scenes.length)*DWELL;
+  function colC(c){return /^[A-H]$/.test(c)?("var(--"+c+")"):(c||"var(--accent)");}
+
+  function reset(){ clr(); svg.innerHTML=def.svg+'<g data-layer="flux"></g>';
     slabel.textContent=scenes.length?("SCENE 1 / "+scenes.length):"";
-    cap.textContent="▶ 再生を押すと、病態の流れが一続きで進みます。"; cap.style.borderColor="var(--accent)";
+    cap.textContent="▶ 再生を押すと、絵が字幕に沿って動きます。"; cap.style.borderColor="var(--accent)";
     fill.style.width="0"; setChip(-1);
   }
-  function play(){
-    reset(); const start=performance.now();
-    scenes.forEach((s,i)=>{ timers.push(setTimeout(()=>{
-      slabel.textContent="SCENE "+(i+1)+" / "+scenes.length;
-      cap.textContent=s.cap||""; cap.style.borderColor=colorVar(s.color);
-      applyActs(s.acts); setChip(i);
-    }, i*DWELL)); });
-    const tick=now=>{ const q=Math.min(1,(now-start)/TOTAL); fill.style.width=(q*100)+"%"; if(q<1)rafs.push(requestAnimationFrame(tick)); };
-    rafs.push(requestAnimationFrame(tick));
+  function play(){ reset(); const start=performance.now();
+    scenes.forEach((s,i)=>K.T(()=>{ slabel.textContent="SCENE "+(i+1)+" / "+scenes.length;
+      cap.textContent=s.cap||""; cap.style.borderColor=colC(s.color); s.run&&s.run(); setChip(i);
+    }, i*DWELL));
+    const tick=now=>{const q=Math.min(1,(now-start)/TOTAL);fill.style.width=(q*100)+"%";if(q<1)K.raf(tick);};K.raf(tick);
   }
-  function jump(idx){ reset();
-    for(let k=0;k<=idx;k++){ slabel.textContent="SCENE "+(k+1)+" / "+scenes.length;
-      cap.textContent=scenes[k].cap||""; cap.style.borderColor=colorVar(scenes[k].color); applyActs(scenes[k].acts); }
-    setChip(idx); fill.style.width=(scenes.length>1?idx/(scenes.length-1)*100:100)+"%";
-  }
-  // チップ
-  const chipEls=scenes.map((s,i)=>{ const c=document.createElement("div"); c.className="cchip";
-    c.textContent="S"+(i+1); c.title=s.label||""; c.onclick=()=>jump(i); chips.appendChild(c); return c; });
-  function setChip(idx){ chipEls.forEach((c,i)=>c.classList.toggle("on",i===idx)); }
+  function jump(idx){ reset(); for(let k=0;k<=idx;k++){ slabel.textContent="SCENE "+(k+1)+" / "+scenes.length;
+    cap.textContent=scenes[k].cap||""; cap.style.borderColor=colC(scenes[k].color); scenes[k].run&&scenes[k].run(); }
+    setChip(idx); fill.style.width=(scenes.length>1?idx/(scenes.length-1)*100:100)+"%"; }
+  const chipEls=scenes.map((s,i)=>{const c=document.createElement("div");c.className="cchip";c.textContent="S"+(i+1);c.title=s.label||"";c.onclick=()=>jump(i);chips.appendChild(c);return c;});
+  function setChip(idx){chipEls.forEach((c,i)=>c.classList.toggle("on",i===idx));}
 
   playBtn.onclick=play; resetBtn.onclick=reset; track.onclick=play;
   reset();
-  return {play,reset,el:root};
+  return {play,reset};
 }
 
-/* 詳細を開いた時に、その論文のアニメを生成＆自動再生（1回だけ） */
+/* ===== 論文別ビルダー登録 ===== */
+const CINEMA={};
+
+/* №07 EVT0185（ACLY/ACSS2二重阻害） */
+CINEMA["07"]={
+  svg:`<defs>
+    <radialGradient id="hepg7" cx="0.4" cy="0.32" r="0.85"><stop offset="0" stop-color="#f6e7c8"/><stop offset="1" stop-color="#dcc18c"/></radialGradient>
+    <radialGradient id="dropg7" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#d9a441"/></radialGradient>
+    <radialGradient id="accg7" cx="0.4" cy="0.35" r="0.7"><stop offset="0" stop-color="#fff2c0"/><stop offset="1" stop-color="#e8b73a"/></radialGradient>
+    <radialGradient id="pillg7" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#d98a8a"/><stop offset="1" stop-color="#a23b3b"/></radialGradient>
+    <marker id="aB7" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="var(--B)"/></marker>
+  </defs>
+  <rect x="0" y="0" width="720" height="430" fill="#eef3f6"/>
+  <g id="hep">
+    <path d="M40,70 C60,40 150,30 210,48 C280,40 330,70 320,130 C345,180 320,250 250,262 C180,280 70,270 48,210 C20,170 22,100 40,70 Z" fill="url(#hepg7)" stroke="#c2a268" stroke-width="2.5"/>
+    <ellipse cx="120" cy="120" rx="26" ry="22" fill="#b79a64" opacity="0.85"/><ellipse cx="120" cy="120" rx="11" ry="10" fill="#8a7038"/>
+    <text x="185" y="60" font-size="11" fill="#9c7b3a">肝細胞</text>
+    <g id="gateACLY"><circle cx="62" cy="160" r="11" fill="#fff" stroke="var(--D)" stroke-width="2.4"/><text x="62" y="186" text-anchor="middle" font-size="10" font-weight="600" fill="var(--D)">ACLY</text></g>
+    <g id="gateACSS2"><circle cx="62" cy="220" r="11" fill="#fff" stroke="var(--D)" stroke-width="2.4"/><text x="62" y="246" text-anchor="middle" font-size="10" font-weight="600" fill="var(--D)">ACSS2</text></g>
+    <g id="acc" class="fade"><circle cx="150" cy="190" r="15" fill="url(#accg7)" stroke="#c79320" stroke-width="1.5"/><text x="150" y="194" text-anchor="middle" font-size="8.5" fill="#7a5a12">AcCoA</text></g>
+  </g>
+  <g id="feed" class="fade">
+    <g><circle cx="18" cy="160" r="8" fill="#cfe0ee" stroke="var(--E)" stroke-width="1.4"/><text x="18" y="146" text-anchor="middle" font-size="9" fill="var(--ink-soft)">クエン酸</text></g>
+    <g><circle cx="18" cy="220" r="8" fill="#cfe0ee" stroke="var(--E)" stroke-width="1.4"/><text x="18" y="240" text-anchor="middle" font-size="9" fill="var(--ink-soft)">酢酸</text></g>
+  </g>
+  <g id="drops"></g>
+  <g id="hsc" transform="translate(470,300)">
+    <path id="hscShape" d="M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z" fill="#d6a08e" stroke="var(--B)" stroke-width="1.6"/>
+    <circle cx="0" cy="0" r="7" fill="#7a3a2c"/>
+    <text id="hscCap" x="0" y="52" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">肝星細胞</text>
+    <g id="hscIn" class="fade">
+      <g id="acss2tag"><rect x="-120" y="-50" width="70" height="24" rx="12" fill="#fff" stroke="var(--B)" stroke-width="1.6"/><text x="-85" y="-33" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--B)">ACSS2↑</text></g>
+      <line x1="-50" y1="-38" x2="-13" y2="-8" stroke="var(--B)" stroke-width="1.4" marker-end="url(#aB7)"/>
+      <g id="choltag"><polygon points="-95,16 -80,8 -65,16 -65,32 -80,40 -95,32" fill="#fff" stroke="var(--B)" stroke-width="1.6"/><text x="-80" y="27" text-anchor="middle" font-size="8" fill="var(--B)">Chol</text><text x="-80" y="56" text-anchor="middle" font-size="9.5" fill="var(--B)">合成↑</text></g>
+      <line x1="-63" y1="24" x2="-15" y2="6" stroke="var(--B)" stroke-width="1.4" marker-end="url(#aB7)"/>
+    </g>
+  </g>
+  <g id="collagen" opacity="0"></g>
+  <g id="pill" class="fade" transform="translate(600,70)">
+    <rect x="-44" y="-16" width="88" height="32" rx="16" fill="url(#pillg7)" stroke="#7e2b2b" stroke-width="1.5"/>
+    <rect x="-44" y="-16" width="44" height="32" rx="16" fill="#e8b3b3" opacity="0.6"/>
+    <text x="0" y="5" text-anchor="middle" font-size="11" font-weight="600" fill="#fff">EVT0185</text>
+  </g>
+  <g id="goodend" class="fade" transform="translate(600,300)">
+    <circle r="40" fill="#fff" stroke="var(--B)" stroke-width="2.4"/>
+    <text x="0" y="-4" text-anchor="middle" font-size="13" fill="var(--B)">線維化</text><text x="0" y="15" text-anchor="middle" font-size="13" fill="var(--B)">退縮 ✓</text>
+  </g>`,
+  build(K){
+    const dropPos=[[170,110],[210,140],[150,150],[230,100],[195,185],[120,200],[250,165],[175,225],[235,210],[140,90]];
+    const QUIET="M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z";
+    const SPINDLE="M-40,-8 C-14,-15 16,-15 42,-7 C52,-3 52,3 42,7 C16,15 -14,15 -40,8 C-50,3 -50,-3 -40,-8 Z";
+    function addDrops(){const g=K.$("drops");dropPos.forEach((p,i)=>K.T(()=>{
+      const c=K.cE("circle",{cx:p[0],cy:p[1],r:1,fill:"url(#dropg7)",stroke:"#b8862f","stroke-width":"0.7"});g.appendChild(c);
+      const t0=performance.now(),target=8+Math.random()*7,dur=1400;
+      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+    },i*160));}
+    function shrinkDrops(){const g=K.$("drops");[...g.children].forEach((c,i)=>K.T(()=>{
+      const from=+c.getAttribute("r"),t0=performance.now(),dur=1300;
+      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(from*(1-0.8*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+    },i*70));}
+    return [
+      {color:"E",cap:"健常な肝類洞。肝細胞・LSEC・KC・HSCが定常状態にある。",run(){K.show(["feed"]);}},
+      {color:"D",cap:"① アセチルCoA供給（ACLY/ACSS2）が亢進し、肝細胞にDNL由来の脂肪滴が蓄積（steatosis）。",run(){
+        K.show(["acc"]);
+        K.flow(18,160,62,160,"#7ea8d0",{loop:2});K.flow(18,220,62,220,"#7ea8d0",{loop:2});
+        K.T(()=>{K.flow(62,160,150,190,"#e8b73a",{loop:2});K.flow(62,220,150,190,"#e8b73a",{loop:2});},800);
+        K.pulse("acc");K.T(addDrops,1400);
+      }},
+      {color:"B",cap:"② HSCがACSS2/コレステロール合成を介して活性化し、コラーゲンを過剰産生 → 線維化。",run(){
+        K.show(["hscIn"]);
+        K.flow(230,200,350,263,"#e8b73a",{dur:1.3,loop:2});
+        K.T(()=>{K.pulse("acss2tag");K.pulse("choltag");
+          K.flow(386,263,470,300,"var(--B)",{dur:0.9,loop:2});K.flow(380,316,470,300,"var(--B)",{dur:0.9,loop:2});},1100);
+        K.T(()=>{K.morph("hscShape",SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化（筋線維芽細胞）");
+          K.unpulse("acss2tag");K.unpulse("choltag");},2000);
+        K.T(()=>K.draw("collagen",["M430,300 C470,285 510,290 545,288","M428,318 C475,332 515,322 548,326","M432,335 C470,322 512,340 548,334"],{len:160}),2700);
+      }},
+      {color:"H",cap:"③ ACLY＋ACSS2を二重阻害するEVT0185が脂肪化とHSC活性化を同時に抑え、線維化が退縮。",run(){
+        K.show(["pill"]);
+        K.T(()=>{K.strike(600,70,62,160);K.strike(600,70,62,220);K.strike(600,70,360,262);
+          K.T(()=>{
+            ["gateACLY","gateACSS2"].forEach(g=>{const c=K.$(g).querySelector("circle");c.setAttribute("stroke","var(--H)");c.setAttribute("fill","#f0d2d2");});
+            K.markX(62,160);K.markX(62,220);K.markX(360,262);
+            K.$("acss2tag").querySelector("rect").setAttribute("stroke","var(--H)");
+            K.unpulse("acc");shrinkDrops();
+            K.attr("collagen","opacity","0.28");K.attr("hscShape","opacity","0.5");
+            K.show(["goodend"]);
+          },780);
+        },800);
+      }},
+    ];
+  }
+};
+
+/* ===== 共通グリフ（絵の部品。文字列を返す） ===== */
+const GLYPH={
+  QUIET:"M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z",
+  SPINDLE:"M-40,-8 C-14,-15 16,-15 42,-7 C52,-3 52,3 42,7 C16,15 -14,15 -40,8 C-50,3 -50,-3 -40,-8 Z",
+  bg:(c)=>`<rect x="0" y="0" width="720" height="430" fill="${c||'#eef3f6'}"/>`,
+  lip:(s)=>`<radialGradient id="lip${s}" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#d9a441"/></radialGradient>`,
+  arrow:(s,col)=>`<marker id="ar${s}" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="${col||'var(--ink-soft)'}"/></marker>`,
+  title:(t)=>`<text x="360" y="22" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${t}</text>`,
+  hep:(x,y,sx,sy,label)=>`<g><path transform="translate(${x},${y}) scale(${sx||1},${sy||1})" d="M0,30 C8,8 60,2 95,12 C140,4 175,22 168,60 C188,88 175,128 130,135 C85,148 18,142 6,108 C-12,84 -8,50 0,30 Z" fill="url(#hepg)" stroke="#c2a268" stroke-width="2"/>${label?`<text x="${x+ (sx||1)*84}" y="${y+8}" font-size="10.5" fill="#9c7b3a">${label}</text>`:''}</g>`,
+  stellate:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Shape" d="${GLYPH.QUIET}" fill="#d6a08e" stroke="var(--B)" stroke-width="1.6"/><circle cx="0" cy="0" r="7" fill="#7a3a2c"/><text id="${id}Cap" x="0" y="52" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label||'肝星細胞'}</text></g>`,
+  kupffer:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Body" d="M0,-20 C16,-22 26,-8 22,6 C30,16 14,26 0,22 C-16,28 -28,14 -22,2 C-30,-12 -14,-24 0,-20 Z" fill="#5d6470" stroke="#828a96" stroke-width="1.4"/><circle cx="-3" cy="0" r="6" fill="#3a3f48"/><text x="0" y="40" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label||'クッパー細胞'}</text></g>`,
+  pill:(id,x,y,label,w)=>{w=w||92;return `<g id="${id}" class="fade" transform="translate(${x},${y})"><rect x="${-w/2}" y="-16" width="${w}" height="32" rx="16" fill="url(#pillg)" stroke="#7e2b2b" stroke-width="1.5"/><rect x="${-w/2}" y="-16" width="${w/2}" height="32" rx="16" fill="#e8b3b3" opacity="0.6"/><text x="0" y="5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#fff">${label}</text></g>`;},
+  badge:(id,x,y,l1,l2,col)=>`<g id="${id}" class="fade" transform="translate(${x},${y})"><circle r="42" fill="#fff" stroke="${col||'var(--B)'}" stroke-width="2.4"/><text x="0" y="-3" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l1}</text><text x="0" y="16" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l2}</text></g>`,
+  tag:(id,x,y,text,col,w,fade)=>{w=w||72;return `<g id="${id}"${fade?' class="fade"':''}><rect class="box" x="${x-w/2}" y="${y-13}" width="${w}" height="26" rx="13" fill="#fff" stroke="${col||'var(--accent)'}" stroke-width="1.6"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${col||'var(--ink)'}">${text}</text></g>`;},
+  defsCommon:`<radialGradient id="hepg" cx="0.4" cy="0.32" r="0.85"><stop offset="0" stop-color="#f6e7c8"/><stop offset="1" stop-color="#dcc18c"/></radialGradient><radialGradient id="pillg" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#d98a8a"/><stop offset="1" stop-color="#a23b3b"/></radialGradient>`,
+  drops:(id)=>`<g id="${id}"></g>`,
+  layer:(id)=>`<g id="${id}" opacity="0"></g>`,
+  collagenAt:(cx,cy)=>[`M${cx-42},${cy} C${cx-14},${cy-15} ${cx+14},${cy-10} ${cx+46},${cy-12}`,`M${cx-44},${cy+18} C${cx-6},${cy+32} ${cx+16},${cy+22} ${cx+49},${cy+26}`,`M${cx-39},${cy+35} C${cx-11},${cy+22} ${cx+13},${cy+40} ${cx+49},${cy+34}`],
+};
+function addDrops(K,layerId,pos,grad,delay){grad=grad||"dropg7";const g=K.$(layerId);if(!g)return;pos.forEach((p,i)=>K.T(()=>{
+  const c=K.cE("circle",{cx:p[0],cy:p[1],r:1,fill:`url(#${grad})`,stroke:"#b8862f","stroke-width":"0.7"});g.appendChild(c);
+  const t0=performance.now(),target=7+Math.random()*6,dur=1300;
+  const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+},(delay||0)+i*150));}
+function shrinkChildren(K,id){const g=K.$(id);if(!g)return;[...g.children].forEach((c,i)=>K.T(()=>{
+  const from=+(c.getAttribute("r")||0),t0=performance.now(),dur=1200;
+  const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(from*(1-0.85*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+},i*60));}
+
+/* ===== №01 ヒトMASLD空間マルチオミクスatlas ===== */
+CINEMA["01"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("01")}</defs>`+GLYPH.title("肝小葉（中心静脈＝pericentral 周囲に病変が集中）")
+    +`<circle cx="585" cy="220" r="56" fill="#cfe0ee" stroke="var(--E)" stroke-width="2"/><text x="585" y="216" text-anchor="middle" font-size="11" fill="var(--E)">中心静脈</text><text x="585" y="232" text-anchor="middle" font-size="10" fill="var(--E)">(CV)</text>`
+    +GLYPH.hep(70,120,1.3,1.1,"肝細胞")+GLYPH.hep(70,250,1.3,1.0,"")
+    +GLYPH.drops("drops")
+    +`<g id="lam" class="fade"><text x="430" y="95" font-size="10" fill="var(--C)">LAM（脂質関連MΦ）</text></g>`
+    +GLYPH.tag("rspoTag",470,300,"RSPO3–LGR6","var(--B)",118,true)
+    +GLYPH.stellate("hsc",470,360,"肝星細胞")+GLYPH.layer("collagen"),
+  build(K){
+    const dp=[[150,140],[230,160],[200,250],[300,150],[340,250],[270,210],[400,180],[380,250]];
+    const lam=[[500,120],[470,150],[520,160],[490,185]];
+    return [
+      {color:"E",cap:"健常なヒト肝小葉。空間マルチオミクスで全細胞の配置を解析。",run(){}},
+      {color:"D",cap:"① 肝細胞に脂肪滴が蓄積（steatosis）。",run(){addDrops(K,"drops",dp,"lip01");}},
+      {color:"C",cap:"② 脂質関連マクロファージ（LAM）が中心静脈周囲に集積し炎症が進む。",run(){
+        K.show(["lam"]); lam.forEach((p,i)=>K.T(()=>{K.cE("circle",{cx:p[0],cy:p[1],r:7,fill:"var(--C)",opacity:"0.85"},K.$("lam"));},i*250));
+        K.flow(360,120,500,140,"var(--C)",{loop:2});
+      }},
+      {color:"B",cap:"③ 中心静脈EC–HSCのRSPO3–LGR6が線維化巣のドライバー。HSC活性化→コラーゲン沈着がpericentral優位に進行。",run(){
+        K.show(["rspoTag"]); K.flow(560,235,478,300,"var(--B)",{dur:1.2,loop:2});
+        K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},1100);
+        K.T(()=>K.draw("collagen",GLYPH.collagenAt(540,355),{len:170}),1800);
+      }},
+    ];
+  }
+};
+
+/* ===== №02 NCF1がKCフェロトーシスを制御 ===== */
+CINEMA["02"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("02")}</defs>`+GLYPH.title("NCF1→OxPL→TLR4→ヘプシジン→KC鉄沈着→フェロトーシス")
+    +GLYPH.hep(40,90,1.5,1.3,"肝細胞")+GLYPH.drops("drops")
+    +`<g id="oxpl" class="fade"><text x="250" y="80" text-anchor="middle" font-size="10" fill="var(--C)">OxPL（酸化リン脂質）</text></g>`
+    +GLYPH.kupffer("kc",420,210,"クッパー細胞")
+    +`<g id="iron" class="fade"></g>`
+    +GLYPH.stellate("hsc",600,300,"肝星細胞")+GLYPH.layer("collagen"),
+  build(K){
+    const dp=[[120,150],[180,180],[150,230],[220,150],[240,220],[190,260]];
+    const iron=[[410,205],[428,212],[418,225],[432,200],[405,222]];
+    return [
+      {color:"E",cap:"健常な肝類洞。クッパー細胞（KC）は定常状態にある。",run(){}},
+      {color:"D",cap:"① 過栄養で肝細胞に脂肪滴が蓄積し、酸化リン脂質（OxPL）が増える。",run(){addDrops(K,"drops",dp,"lip02");K.show(["oxpl"]);}},
+      {color:"C",cap:"② NCF1→OxPL→TLR4→ヘプシジンでKCに鉄が沈着し、フェロトーシス感受性が上昇して炎症が増悪（KC自体が脱落しうる）。",run(){
+        K.flow(250,95,420,200,"var(--C)",{loop:2});
+        K.T(()=>{K.show(["iron"]);iron.forEach((p,i)=>K.T(()=>{K.cE("circle",{cx:p[0],cy:p[1],r:3.5,fill:"#8a5a2a",stroke:"#5a3a18","stroke-width":"0.6"},K.$("iron"));},i*200));},900);
+        K.T(()=>{K.attr("kcBody","fill","#7a4a4a");K.attr("kc","opacity","0.45");},2400);
+      }},
+      {color:"B",cap:"③ 炎症シグナルがHSCを刺激し線維化が進む（部分的）。",run(){
+        K.flow(440,220,600,300,"var(--B)",{dur:1.2,loop:2});
+        K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},1000);
+        K.T(()=>K.draw("collagen",GLYPH.collagenAt(600,360),{len:150}),1700);
+      }},
+    ];
+  }
+};
+
+/* ===== №03 ATF4エンハンサーがHSCを活性化 ===== */
+CINEMA["03"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}</defs>`+GLYPH.title("ATF4の非定型エンハンサープログラムがHSC内部スイッチを担う")
+    +GLYPH.stellate("hsc",300,230,"肝星細胞（静止期）")
+    +GLYPH.tag("atf4",120,120,"ATF4","var(--B)",70,true)
+    +`<g id="enh" class="fade"><text x="300" y="320" text-anchor="middle" font-size="10" fill="var(--B)">非定型エンハンサープログラム ON</text></g>`
+    +GLYPH.layer("collagen")+GLYPH.pill("drug",560,110,"ATF4阻害剤",96),
+  build(K){
+    return [
+      {color:"E",cap:"静止期HSC（qHSC）が定常状態にある。",run(){}},
+      {color:"B",cap:"① ATF4の非定型エンハンサープログラムが活性化HSCの内部転写スイッチとして働き、qHSC→aHSCへ転換させる。",run(){
+        K.show(["atf4"]); K.flow(120,130,300,228,"var(--B)",{dur:1.2,loop:3});
+        K.T(()=>{K.show(["enh"]);K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化（筋線維芽細胞）");},1500);
+      }},
+      {color:"B",cap:"② aHSCがECM・コラーゲンを過剰産生し線維化が進行。",run(){K.draw("collagen",GLYPH.collagenAt(300,300),{len:170});}},
+      {color:"H",cap:"③ ATF4を標的にした低分子阻害剤がHSC活性化を抑え、線維化を抑制（線維化ネガコンに使える）。",run(){
+        K.show(["drug"]); K.T(()=>{K.strike(560,110,300,228);K.T(()=>{K.markX(300,210);K.attr("collagen","opacity","0.28");K.attr("hscShape","opacity","0.5");K.attr("atf4","opacity","0.3");},720);},700);
+      }},
+    ];
+  }
+};
+
+/* ===== №04 iPSC-MPS：脂肪組織炎症がMASLDドライバー ===== */
+CINEMA["04"]={
+  svg:GLYPH.bg("#eef1f4")+`<defs>${GLYPH.defsCommon}${GLYPH.lip("04")}${GLYPH.arrow("04","var(--C)")}</defs>`+GLYPH.title("統合MPS：脂肪組織炎症（M1＋FFA）がMASLD発症の主ドライバー")
+    +`<rect x="30" y="70" width="250" height="290" rx="14" fill="#fff" stroke="var(--D)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="45" y="92" font-size="11" fill="var(--D)">脂肪組織チャンバ</text>`
+    +`<circle cx="95" cy="160" r="26" fill="#f0d98a" stroke="#caa53a" stroke-width="1.5"/><circle cx="170" cy="200" r="30" fill="#f0d98a" stroke="#caa53a" stroke-width="1.5"/><circle cx="110" cy="250" r="24" fill="#f0d98a" stroke="#caa53a" stroke-width="1.5"/><text x="150" y="300" text-anchor="middle" font-size="10" fill="var(--ink-soft)">脂肪細胞</text>`
+    +GLYPH.kupffer("m1",215,150,"M1 MΦ")
+    +`<rect x="440" y="70" width="250" height="290" rx="14" fill="#fff" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="455" y="92" font-size="11" fill="var(--accent)">肝チャンバ</text>`
+    +GLYPH.hep(470,150,1.4,1.4,"iPSC肝細胞")+GLYPH.drops("drops")
+    +`<line x1="280" y1="215" x2="438" y2="215" stroke="var(--C)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#ar04)"/><text x="360" y="205" text-anchor="middle" font-size="9.5" fill="var(--C)">血流路</text>`,
+  dwell:3800,
+  build(K){
+    const dp=[[520,170],[560,200],[540,240],[600,180],[590,240],[560,150]];
+    return [
+      {color:"E",cap:"iPSC由来の肝・脂肪・血管などを統合したMPSの定常状態。",run(){}},
+      {color:"D",cap:"① 遊離脂肪酸（FFA）負荷で肝細胞に脂肪滴が蓄積（steatosis）。",run(){
+        K.flow(200,215,440,215,"#e8b73a",{dur:1.4,loop:2}); K.T(()=>addDrops(K,"drops",dp,"lip04"),700);
+      }},
+      {color:"C",cap:"② M1マクロファージ由来のTNFα＋FFAがMASLD発症の主ドライバー。WAT量増大だけでは不十分（※本系はHSC/LSEC欠如のため線維化は未達）。",run(){
+        K.attr("m1Body","fill","#9c4f6c"); K.flow(230,165,470,200,"var(--C)",{dur:1.5,loop:3});
+      }},
+    ];
+  }
+};
+
+/* ===== №05 SNA miR-325-3p：LSEC capillarization是正 ===== */
+CINEMA["05"]={
+  svg:GLYPH.bg("#23242c")+`<defs>${GLYPH.defsCommon}</defs>`
+    +`<text x="360" y="22" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,.6)">LSECの小孔(fenestrae)の喪失と回復で線維化を制御</text>`
+    +`<path d="M0,150 C180,130 540,170 720,148 L720,210 C540,232 180,192 0,212 Z" fill="#3a3026" opacity="0.9"/>`
+    +`<path d="M0,150 C180,130 540,170 720,148" fill="none" stroke="var(--E)" stroke-width="2.4"/>`
+    +`<g id="fen">`+[...Array(13)].map((_,i)=>`<circle id="fen${i}" cx="${40+i*52}" cy="${150+Math.sin(i)*2}" r="3.2" fill="#23242c"/>`).join("")+`</g>`
+    +`<text x="20" y="185" font-size="10" fill="rgba(255,255,255,.5)">類洞(LSEC)</text>`
+    +GLYPH.stellate("hsc",360,320,"肝星細胞")+GLYPH.layer("collagen")
+    +GLYPH.pill("sna",600,90,"SNA(miR-325-3p)",128)+GLYPH.badge("good",610,330,"線維化","軽減 ✓","var(--E)"),
+  dwell:3600,
+  build(K){
+    const N=13;
+    return [
+      {color:"E",cap:"LSECの小孔（fenestrae）が開き、HSCは静止期にある健常な類洞。",run(){}},
+      {color:"B",cap:"① 病態進行でLSECが小孔を失い（capillarization）、HSCが活性化してコラーゲンを沈着 → 線維化。",run(){
+        for(let i=0;i<N;i++)K.T(()=>{const c=K.$("fen"+i);if(c){const t0=performance.now(),from=3.2;const st=now=>{const q=Math.min(1,(now-t0)/700);c.setAttribute("r",(from*(1-q)).toFixed(2));if(q<1)K.raf(st);};K.raf(st);}},i*40);
+        K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},700);
+        K.T(()=>K.draw("collagen",GLYPH.collagenAt(360,375),{len:160}),1300);
+      }},
+      {color:"H",cap:"② miR-325-3pを球状核酸(SNA)化し、線維化LSECへ特異的に送達。",run(){K.show(["sna"]);K.flow(600,100,300,150,"var(--H)",{dur:1.2,loop:3,r:4});}},
+      {color:"E",cap:"③ LSECのfenestraeが回復しHSC活性化が抑えられ、線維化が有意に軽減。",run(){
+        for(let i=0;i<N;i++)K.T(()=>{const c=K.$("fen"+i);if(c){const t0=performance.now();const st=now=>{const q=Math.min(1,(now-t0)/700);c.setAttribute("r",(3.2*q).toFixed(2));if(q<1)K.raf(st);};K.raf(st);}},i*40);
+        K.morph("hscShape",GLYPH.QUIET);K.attr("hscShape","fill","#d6a08e");K.text("hscCap","静止期へ");
+        K.attr("collagen","opacity","0.25");K.show(["good"]);
+      }},
+    ];
+  }
+};
+
+/* ===== №06 Kappa ABM：HSC不活化ループ ===== */
+CINEMA["06"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.arrow("06","var(--F)")}${GLYPH.arrow("06b","var(--B)")}</defs>`+GLYPH.title("規則ベース多スケールモデル：不活化ループが線維化を持続させる")
+    +GLYPH.stellate("q",140,180,"qHSC（静止）")
+    +GLYPH.stellate("a",400,180,"aHSC（活性化）")
+    +GLYPH.stellate("i",400,330,"iHSC（不活化）")
+    +`<line id="e1" x1="190" y1="180" x2="356" y2="180" stroke="var(--B)" stroke-width="1.8" marker-end="url(#ar06b)"/><text x="270" y="168" text-anchor="middle" font-size="10" fill="var(--B)">TGFβ1で活性化</text>`
+    +`<line id="e2" x1="400" y1="222" x2="400" y2="290" stroke="var(--F)" stroke-width="1.8" marker-end="url(#ar06)"/><text x="470" y="262" text-anchor="middle" font-size="10" fill="var(--F)">不活化</text>`
+    +`<path id="e3" d="M360,320 C220,320 150,250 138,222" fill="none" stroke="var(--F)" stroke-width="1.8" marker-end="url(#ar06)"/>`
+    +GLYPH.layer("collagen")+GLYPH.tag("loop",540,255,"ループが回り続ける","var(--F)",150,true),
+  build(K){
+    return [
+      {color:"E",cap:"静止期HSC（qHSC）が星形の突起を保つ定常状態。",run(){}},
+      {color:"B",cap:"① 閾値以上のTGFβ1が継続するとqHSC→aHSCへ活性化し、ECM産生で線維化が進む。",run(){
+        K.flow(190,180,356,180,"var(--B)",{loop:3});
+        K.T(()=>{K.morph("aShape",GLYPH.SPINDLE);K.attr("aShape","fill","#b0432f");},900);
+        K.T(()=>K.draw("collagen",GLYPH.collagenAt(400,110),{len:140}),1500);
+      }},
+      {color:"F",cap:"② 一部はiHSCへ不活化するが容易に再活性化する。この不活化ループの存在が線維化の持続に必須——規則ベースモデルで同定。",run(){
+        K.flow(400,222,400,290,"var(--F)",{loop:2});
+        K.T(()=>{K.attr("iShape","fill","#cdbfae");},700);
+        K.T(()=>{K.flow(360,320,138,210,"var(--F)",{dur:1.3,loop:3});K.show(["loop"]);K.pulse("loop");},1400);
+      }},
+    ];
+  }
+};
+
+/* ===== №08 自家マクロファージ療法 RCT ===== */
+CINEMA["08"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.arrow("08","var(--H)")}</defs>`+GLYPH.title("代償性肝硬変への自家M2マクロファージ療法（MATCH試験）")
+    +GLYPH.kupffer("mono",95,130,"自己単球")
+    +`<g id="m2" class="fade">`+GLYPH.kupffer("m2c",95,260,"M2 MΦ(ex vivo分化)")+`</g>`
+    +`<rect x="360" y="80" width="320" height="280" rx="16" fill="#fff" stroke="var(--B)" stroke-width="1.6" stroke-dasharray="6 4"/><text x="520" y="104" text-anchor="middle" font-size="11" fill="var(--B)">線維化肝（肝硬変）</text>`
+    +GLYPH.stellate("hsc",470,180,"活性化HSC")+GLYPH.layer("collagen")
+    +GLYPH.badge("good",600,300,"肝関連死","0 ✓","var(--H)"),
+  build(K){
+    return [
+      {color:"B",cap:"代償性肝硬変（MELD 10–17）。HSCが活性化しコラーゲンが沈着した線維化肝。",run(){
+        K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");
+        K.draw("collagen",GLYPH.collagenAt(520,250),{len:170,gap:0.25});
+      }},
+      {color:"H",cap:"① 自己単球をex vivoでM2-likeマクロファージに分化させ、静脈内輸注して肝へ送達。",run(){
+        K.show(["m2"]); K.flow(120,260,470,250,"var(--H)",{dur:1.4,loop:3,r:4});
+      }},
+      {color:"C",cap:"② 抗炎症サイトカインプロファイルへ移行し線維化が退縮。治療群は肝関連死ゼロ（探索的シグナル）。",run(){
+        K.flow(470,250,470,190,"var(--C)",{loop:2});
+        K.T(()=>{K.attr("collagen","opacity","0.25");K.morph("hscShape",GLYPH.QUIET);K.attr("hscShape","fill","#d6a08e");K.text("hscCap","沈静化");K.show(["good"]);},900);
+      }},
+    ];
+  }
+};
+
+/* ===== №09 RSPO3：HSCが肝細胞zonationを制御 ===== */
+CINEMA["09"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.arrow("09","var(--E)")}</defs>`+GLYPH.title("HSC由来RSPO3→WNT/βカテニン→肝細胞zonation・再生・代謝")
+    +GLYPH.hep(380,90,1.6,1.5,"肝細胞 Zone3")
+    +GLYPH.tag("wnt",470,250,"WNT/βcat ✓","var(--E)",120,true)
+    +GLYPH.stellate("hsc",150,250,"肝星細胞")+GLYPH.layer("collagen"),
+  build(K){
+    return [
+      {color:"E",cap:"静止期HSC（qHSC）がRSPO3を十分に供給し、肝細胞のzonation・代謝が正常に保たれる。",run(){
+        K.show(["wnt"]); K.flow(180,240,400,180,"var(--E)",{dur:1.2,loop:3});
+      }},
+      {color:"B",cap:"① HSCが活性化（aHSC）するとRSPO3が低下し、WNT/βカテニンシグナルが減弱する。",run(){
+        K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");
+        K.attr("wnt","opacity","0.3"); K.cE("text",{x:470,y:285,"text-anchor":"middle","font-size":"10.5",fill:"var(--B)"},K.$("wnt")).textContent="RSPO3↓ → WNT↓";
+      }},
+      {color:"B",cap:"② Zone3のCYP450・再生能が落ち、肝代謝・解毒が破綻 → MASLD/ALDが悪化し線維化が進む。",run(){
+        K.cE("text",{x:470,y:140,"text-anchor":"middle","font-size":"10.5",fill:"var(--B)"},K.$("wnt"));
+        K.draw("collagen",GLYPH.collagenAt(180,310),{len:150});
+        K.flow(420,160,300,260,"var(--B)",{dur:1.2,loop:2});
+      }},
+    ];
+  }
+};
+
+/* 詳細を開いた時にアニメを生成＆自動再生（1回だけ） */
 function initCinema(card){
   const mount=card.querySelector(".cinema-mount");
-  if(!mount || mount.dataset.init) return;
-  const p=PAPERS.find(x=>x.id===mount.dataset.id);
-  if(!p || !p.scenes || !p.scenes.length) return;
+  if(!mount||mount.dataset.init)return;
+  const def=CINEMA[mount.dataset.id]; if(!def)return;
   mount.dataset.init="1";
-  const ctrl=LiverCinema(mount, p.scenes);
-  setTimeout(()=>ctrl.play(), 350);
+  const ctrl=mountCinema(mount,def);
+  setTimeout(()=>ctrl.play(),350);
 }
 
 function render(){
@@ -1646,7 +1837,7 @@ function render(){
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
-        ${(p.scenes&&p.scenes.length)?`<div class="sec"><h4>アニメーション（病態の流れ）</h4><div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
+        ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4><div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
         <div class="sec"><h4>Abstract（和訳要約）</h4><p>${em(p.abstract_ja||p.abstract||"")}</p></div>
         <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
         <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
