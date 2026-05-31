@@ -468,6 +468,11 @@ const PAPERS=[
   {
     id:"09",
     added:"2026-05-30",
+    scenes:[
+      {label:"健常",color:"E",cap:"静止期HSC（qHSC）がRSPO3を十分に供給し、肝細胞のzonation・代謝が正常に保たれる。",acts:[]},
+      {label:"HSC活性化",color:"B",cap:"① HSCが活性化（aHSC）するとRSPO3が低下し、WNT/βカテニンシグナルが減弱する。",acts:["hsc"]},
+      {label:"zonation障害→線維化",color:"B",cap:"② Zone3のCYP450・再生能が落ち、肝代謝・解毒が破綻 → MASLD/ALDが悪化し線維化が進む。",acts:["collagen"]}
+    ],
     title:"HSCがR-spondin 3を介して肝細胞のzonation・再生・代謝を制御",
     authors:"Sugimoto A†, Saito Y†, Wang G†, Sun Q, Lin C, Lee KH, Geng Y, Rajbhandari P, Hernandez C, Steffani M, Qie J, Savage T, Goyal DM, ..., Augustin HG, Schwabe RF",
     journal:"Nature",
@@ -521,6 +526,11 @@ const PAPERS=[
   {
     id:"08",
     added:"2026-05-30",
+    scenes:[
+      {label:"代償性肝硬変",color:"B",cap:"代償性肝硬変（MELD 10–17）。HSCが活性化しコラーゲンが沈着した線維化肝。",acts:["hsc","collagen"]},
+      {label:"自家M2マクロファージ輸注",color:"H",cap:"① 自己単球をex vivoでM2-likeマクロファージに分化させ、静脈内輸注して肝へ送達。",acts:["drug"]},
+      {label:"抗炎症・線維化退縮",color:"C",cap:"② 抗炎症サイトカインプロファイルへ移行し、線維化が退縮。治療群は肝関連死ゼロ（探索的シグナル）。",acts:["regress"]}
+    ],
     title:"自家マクロファージ療法フェーズ2 RCTが肝関連死ゼロと探索的抗炎症シグナルを示す",
     authors:"Brennan PN, MacMillan M, Manship T, Moroni F, Glover A, Troland D, MacPherson I, Graham C, Aird R, Semple SIK, Morris DM, Fraser AR, Pass C, McGowan NWA, Turner ML, Manson L, Lachlan NJ, Dillon JF, Kilpatrick AM, Campbell JDM, Fallowfield JA, Forbes SJ",
     journal:"Nature Medicine",
@@ -749,6 +759,11 @@ const PAPERS=[
   {
     id:"04",
     added:"2026-05-30",
+    scenes:[
+      {label:"統合MPS",color:"E",cap:"iPSC由来の肝・脂肪・血管などを統合したMPSの定常状態。",acts:[]},
+      {label:"脂肪化",color:"D",cap:"① 遊離脂肪酸（FFA）負荷で肝細胞に脂肪滴が蓄積（steatosis）。",acts:["lipids"]},
+      {label:"脂肪組織炎症が主ドライバー",color:"C",cap:"② M1マクロファージ由来のTNFα＋FFAがMASLD発症の主ドライバー。WAT量増大だけでは不十分。※本系はHSC/LSEC欠如のため線維化は未達。",acts:["kc","cytokine"]}
+    ],
     title:"iPSCベース統合型MPSで脂肪組織炎症がMASLD発症の主ドライバーと実証",
     authors:"Qi L, Groeger M, Sharma A, Goswami I, Chen E, Zhong F, Ram A, Healy K, Hsiao EC, Willenbring H, Stahl A",
     journal:"Nature Communications",
@@ -807,6 +822,12 @@ const PAPERS=[
   {
     id:"03",
     added:"2026-05-29",
+    scenes:[
+      {label:"静止期HSC",color:"E",cap:"静止期HSC（qHSC）が定常状態にある。",acts:[]},
+      {label:"ATF4スイッチON",color:"B",cap:"① ATF4の非定型エンハンサープログラムが活性化HSCの内部転写スイッチとして働き、qHSC→aHSCへ転換させる。",acts:["hsc"]},
+      {label:"線維化",color:"B",cap:"② aHSCがECM・コラーゲンを過剰産生し線維化が進行。",acts:["collagen"]},
+      {label:"ATF4阻害",color:"H",cap:"③ ATF4を標的にした低分子阻害剤がHSC活性化を抑え、線維化を抑制（線維化ネガコンに使える）。",acts:["drug","regress"]}
+    ],
     title:"ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動",
     authors:"Feng Y-X, et al.",
     journal:"Nature Communications",
@@ -862,6 +883,12 @@ const PAPERS=[
   {
     id:"02",
     added:"2026-05-29",
+    scenes:[
+      {label:"健常",color:"E",cap:"健常な肝類洞。クッパー細胞（KC）は定常状態にある。",acts:[]},
+      {label:"脂肪化",color:"D",cap:"① 過栄養で肝細胞に脂肪滴が蓄積し、酸化リン脂質（OxPL）が増える。",acts:["lipids"]},
+      {label:"KC鉄沈着・フェロトーシス",color:"C",cap:"② NCF1→OxPL→TLR4→ヘプシジンでKCに鉄が沈着しフェロトーシス感受性が上昇、炎症が増悪（KC自体が脱落しうる）。",acts:["lps","kc","cytokine"]},
+      {label:"線維化",color:"B",cap:"③ 炎症シグナルがHSCを刺激し線維化が進む（部分的）。",acts:["collagen"]}
+    ],
     title:"NCF1がKupffer細胞のフェロトーシス感受性を制御しMASHを悪化させる",
     authors:"Zhang J, Wang Y, … Holmdahl R, et al.",
     journal:"Cell Metabolism",
@@ -915,6 +942,12 @@ const PAPERS=[
   {
     id:"01",
     added:"2026-05-29",
+    scenes:[
+      {label:"健常",color:"E",cap:"健常なヒト肝小葉。空間マルチオミクスで全細胞の配置を解析。",acts:[]},
+      {label:"脂肪化",color:"D",cap:"① 肝細胞に脂肪滴が蓄積（steatosis）。",acts:["lipids"]},
+      {label:"LAM集積・炎症",color:"C",cap:"② 脂質関連マクロファージ（LAM）が集積し炎症が進む。",acts:["kc","cytokine"]},
+      {label:"線維化（pericentral優位）",color:"B",cap:"③ 中心静脈EC–HSCのRSPO3–LGR6が線維化巣のドライバー。HSC活性化→コラーゲン沈着がpericentral優位に進行。",acts:["hsc","collagen"]}
+    ],
     title:"ヒトMASLDの空間マルチオミクスatlas",
     authors:"Li Z, Luo G, … Bai F, Chai J.",
     journal:"Nature Genetics",
