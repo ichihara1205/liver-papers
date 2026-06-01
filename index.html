@@ -473,6 +473,64 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
+    id:"10",
+    added:"2026-06-01",
+    title:"GPNMB+マクロファージとIL32産生肝細胞がMASH進行を駆動（ヒト統合マルチオミクス）",
+    authors:"Boesch M, Anak S, El Abyad D, Ostyn T, Antoranz A, Van TM, ..., Tiniakos D, Anstee QM, van der Merwe S, Govaere O",
+    journal:"Nature Genetics",
+    year:2026,
+    vol:"(2026, online 5/18)",
+    doi:"10.1038/s41588-026-02600-3",
+    url:"https://www.nature.com/articles/s41588-026-02600-3",
+    primary:"C",
+    tags:["C","G","D"],
+    approach:"ヒト試料の統合マルチオミクス（snRNA-seq＋GeoMx/CosMx空間TX＋COMET/MILAN空間プロテオミクス）＋PCLS/THP-1 ex vivo機能解析",
+    struct:{
+      model:"ヒト組織＋ex vivo",
+      cells:["KC（常在マクロファージ）","GPNMB+ MetMac","単球","肝細胞（バルーニング）","T細胞"],
+      triggers:["脂質負荷（オレイン酸/パルミチン酸）","肝細胞由来IL32","LPS（比較条件）"],
+      steatosis:"○", inflammation:"○", fibrosis:"△",
+      readout:["GPNMB+マクロファージ割合（疾患活動性・病期で層別化）","HLA-DR（抗原提示能）","貪食/エンドリソソーム分解活性","IL1B↑・IL10↓（炎症性シフト）"],
+      ignite:"常在KC（MARCO+CD5L+）が枯渇し、GPNMB+の代謝適応型マクロファージ（MetMac; LPL/FABP5高）が門脈域・実質に蓄積。バルーニング肝細胞が分泌するIL32がGPNMB+MΦの貪食能とIL1B優位の炎症性表現型を駆動し、MASH進行（炎症・線維化巣形成）を後押しする。",
+      params:[{name:"局所脂質・IL32濃度 → KC→MetMac(GPNMB+)状態遷移確率",note:"snRNA-seqで割合がlean→MASHで5.7%→12%へ増加"},{name:"IL32刺激 → GPNMB+MΦの貪食速度・IL1B/IL10比",note:"THP-1でIL32が脂質取込・IL1B↑、IL10↓を誘導"},{name:"空間文脈（門脈域 vs 実質）→ マクロファージ表現型分岐",note:"門脈域=未成熟/抗原提示、実質SH域=代謝(LPL/FABP5/MSR1)優位"}],
+      todos:["共培養でKC→GPNMB+MetMac様への置換（MARCO↓/GPNMB・LPL・FABP5↑）が脂質負荷で起こるかをモニタ","肝細胞IL32添加でマクロファージの貪食・IL1B/IL10をリードアウトに（セカンドヒットの新候補）","ABMにKC枯渇→単球由来MΦ補充→GPNMB+状態遷移を実装し、空間（門脈 vs 中心）で表現型を分岐させる"]
+    },
+    figure:"<svg viewBox='0 0 640 300' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='ar10' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--ink-soft)'/></marker><marker id='ar10c' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--C)'/></marker><marker id='ar10d' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--D)'/></marker></defs><text x='12' y='16' font-size='11' fill='var(--ink-soft)'>KC枯渇 → GPNMB+ MetMac 蓄積、IL32+肝細胞が貪食・炎症性表現型を駆動</text><rect x='8' y='30' width='126' height='50' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='71' y='51' text-anchor='middle' font-size='12' fill='var(--C)'>常在KC</text><text x='71' y='68' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>MARCO+ CD5L+ → 枯渇↓</text><line x1='134' y1='55' x2='176' y2='55' stroke='var(--ink-soft)' marker-end='url(#ar10)'/><text x='155' y='49' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>進行</text><rect x='178' y='28' width='150' height='54' rx='7' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.8'/><text x='253' y='48' text-anchor='middle' font-size='12' fill='var(--C)'>GPNMB+ MetMac ↑</text><text x='253' y='64' text-anchor='middle' font-size='9.5' fill='var(--D)'>LPL / FABP5 / HS3ST2</text><text x='253' y='77' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>門脈域＋実質に蓄積</text><rect x='8' y='120' width='150' height='56' rx='7' fill='var(--paper)' stroke='var(--B)' stroke-width='1.5'/><text x='83' y='140' text-anchor='middle' font-size='11.5' fill='var(--B)'>バルーニング肝細胞</text><text x='83' y='156' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>AKR1B10+ / p62+</text><text x='83' y='170' text-anchor='middle' font-size='10.5' fill='var(--D)'>IL32 ↑ 分泌</text><path d='M120,120 C150,104 175,92 230,84' fill='none' stroke='var(--D)' marker-end='url(#ar10d)'/><text x='165' y='106' font-size='9.5' fill='var(--D)'>IL32</text><rect x='372' y='28' width='126' height='54' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.5'/><text x='435' y='48' text-anchor='middle' font-size='11' fill='var(--C)'>貪食 ↑ / HLA-DR ↑</text><text x='435' y='65' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>脂質クリアランス</text><text x='435' y='77' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>抗原提示能</text><line x1='328' y1='55' x2='370' y2='55' stroke='var(--C)' marker-end='url(#ar10c)'/><rect x='372' y='100' width='126' height='52' rx='7' fill='var(--paper)' stroke='var(--C)' stroke-width='1.8'/><text x='435' y='121' text-anchor='middle' font-size='11.5' fill='var(--C)'>炎症性シフト</text><text x='435' y='138' text-anchor='middle' font-size='10' fill='var(--C)'>IL1B ↑ / IL10 ↓</text><path d='M435,82 L435,98' stroke='var(--C)' marker-end='url(#ar10c)'/><rect x='524' y='62' width='108' height='62' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='2'/><text x='578' y='86' text-anchor='middle' font-size='12' fill='var(--B)'>MASH 進行</text><text x='578' y='104' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>炎症・線維化巣</text><text x='578' y='117' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>病期と相関</text><path d='M498,90 C508,90 514,90 522,90' fill='none' stroke='var(--C)' marker-end='url(#ar10c)'/><path d='M498,126 C508,135 514,118 522,108' fill='none' stroke='var(--C)' marker-end='url(#ar10c)'/><rect x='80' y='210' width='480' height='44' rx='8' fill='var(--paper)' stroke='var(--G)' stroke-width='1.5'/><text x='320' y='231' text-anchor='middle' font-size='11.5' fill='var(--G)'>マーカー（GPNMB/LPL/FABP5/HLA-DR）で疾患活動性・病期を層別化</text><text x='320' y='248' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>独立コホートで再現</text><text x='12' y='286' font-size='10.5' fill='var(--C)'>★ KCは「減って置換される」— 自系のKCも脂質負荷でGPNMB+代謝適応型へ移行しうる（生存モニタ要）</text></svg>",
+    method_figure:"<svg viewBox='0 0 640 250' xmlns='http://www.w3.org/2000/svg' font-family='inherit'><defs><marker id='m10' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker><marker id='m10c' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--C)'/></marker></defs><text x='14' y='17' font-size='11.5' fill='var(--ink-soft)'>ヒトMASLD spectrum試料 → 3層の空間マルチオミクス + ex vivo機能検証</text><rect x='8' y='30' width='150' height='58' rx='7' fill='var(--paper)' stroke='var(--ink-soft)' stroke-width='1.5'/><text x='83' y='50' text-anchor='middle' font-size='11' fill='var(--ink)'>ヒト肝生検</text><text x='83' y='66' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>lean/obese/MASL/MASH</text><text x='83' y='80' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>独立コホート複数</text><rect x='208' y='24' width='180' height='34' rx='6' fill='var(--paper-2)' stroke='var(--G)' stroke-width='1.5'/><text x='298' y='45' text-anchor='middle' font-size='10.5' fill='var(--G)'>snRNA-seq（17.6万核）</text><rect x='208' y='64' width='180' height='34' rx='6' fill='var(--paper-2)' stroke='var(--G)' stroke-width='1.5'/><text x='298' y='85' text-anchor='middle' font-size='10' fill='var(--G)'>GeoMx / CosMx 空間TX</text><rect x='208' y='104' width='180' height='34' rx='6' fill='var(--paper-2)' stroke='var(--G)' stroke-width='1.5'/><text x='298' y='125' text-anchor='middle' font-size='10' fill='var(--G)'>COMET/MILAN 空間プロテオ</text><path d='M158,52 C182,46 184,41 206,41' fill='none' stroke='var(--accent)' marker-end='url(#m10)'/><path d='M158,60 C182,72 184,81 206,81' fill='none' stroke='var(--accent)' marker-end='url(#m10)'/><path d='M158,70 C182,104 184,121 206,121' fill='none' stroke='var(--accent)' marker-end='url(#m10)'/><rect x='208' y='150' width='180' height='40' rx='6' fill='var(--paper)' stroke='var(--C)' stroke-width='1.6'/><text x='298' y='168' text-anchor='middle' font-size='10' fill='var(--C)'>ex vivo: PCLS（脂質負荷）</text><text x='298' y='183' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>+ THP-1（IL32/LPS刺激）</text><path d='M158,78 C182,140 184,168 206,170' fill='none' stroke='var(--accent)' stroke-dasharray='3 3' marker-end='url(#m10)'/><rect x='430' y='44' width='202' height='62' rx='8' fill='var(--paper)' stroke='var(--C)' stroke-width='1.8'/><text x='531' y='66' text-anchor='middle' font-size='11' fill='var(--C)'>GPNMB+ MetMac 同定</text><text x='531' y='83' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>KC枯渇 / 門脈域蓄積</text><text x='531' y='97' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>HLA-DR+ 抗原提示</text><path d='M388,80 C408,80 410,75 428,75' fill='none' stroke='var(--C)' marker-end='url(#m10c)'/><rect x='430' y='120' width='202' height='62' rx='8' fill='var(--paper)' stroke='var(--D)' stroke-width='1.6'/><text x='531' y='142' text-anchor='middle' font-size='11' fill='var(--D)'>IL32軸の機能実証</text><text x='531' y='159' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>IL32→貪食↑・IL1B↑/IL10↓</text><text x='531' y='173' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>肝細胞→MΦ クロストーク</text><path d='M388,170 C408,170 410,155 428,151' fill='none' stroke='var(--accent)' marker-end='url(#m10)'/></svg>",
+    abstract_ja:"MASLDは人口の30%超に及ぶが、steatosisからMASHへ進む過程でのマクロファージ組成の動態は不明確だった。本研究はヒト試料に単一核トランスクリプトーム（snRNA-seq）・空間マルチオミクス・空間プロテオミクスを統合し、MASLDスペクトルにわたる肝マクロファージの変遷を描いた。解析の結果、常在Kupffer細胞（MARCO+CD5L+）が進行とともに減少し、多様で表現型の異なるマクロファージ亜集団が出現することが分かった。とくにMASHへの進行は、抗原提示能と貪食能をもつGPNMB+マクロファージ（代謝適応型MetMac；LPL・FABP5高）の蓄積で特徴づけられ、これはIL32を産生する（バルーニング）肝細胞に支えられていた。GPNMB+マクロファージは空間文脈と病期に応じて代謝・炎症性の適応的表現型を示し、門脈域へも浸潤した。同定したマーカーは独立コホートで疾患活動性・病期による患者層別化を可能にした。precision-cut肝切片とTHP-1を用いたex vivo検証では、肝細胞由来IL32がGPNMB+マクロファージの貪食能を高め、PA存在下でIL1Bを増やしIL10を減らす炎症性応答を促すことが示された。",
+    background:"MASHでは常在KCが減り単球由来マクロファージに置換されることが知られるが、steatosis→MASHの連続体でマクロファージの組成・表現型・空間配置がどう変わるか、そしてそれが肝細胞などの微小環境とどう連結するかは未解明だった。LAM/TREM2系マクロファージの代謝的役割（#01）や、OxPL–KC鉄–フェロトーシスによるKC脱落（#02）は示されてきたが、ヒト組織で空間・病期解像度をもってマクロファージの異質性と肝細胞シグナルの連関を捉えた研究は乏しかった。",
+    achievements:[
+      "snRNA-seq（17.6万核）でMASLDの骨髄系8亜集団を解像し、常在KC（MARCO/CD5L）の減少とGPNMB+代謝活性型マクロファージ（MetMac; LPL/FABP5/HS3ST2）の増加を定量（GPNMB+割合 5.7%→12%）。",
+      "GeoMx空間TXで、門脈域マクロファージ（未成熟/抗原提示）と実質steatohepatitis域マクロファージ（MSR1/LPL/FABP5代謝優位）の空間依存的な表現型分岐を提示。",
+      "CosMx・COMET・MILANの空間プロテオミクスで、GPNMB+/HLA-DR+マクロファージがMASHで増加し門脈域へ浸潤することをタンパクレベルで確認。",
+      "バルーニング肝細胞（AKR1B10+）が産生するIL32が、GPNMB+マクロファージの貪食能とIL1B優位の炎症性表現型を駆動することをPCLS・THP-1で機能実証。",
+      "マクロファージマーカーセットで独立コホートの疾患活動性・病期を層別化できることを示した。"
+    ],
+    limitations:[
+      "ヒト試料の横断的・記述的解析が中心で、GPNMB+マクロファージやIL32軸の因果はex vivo（PCLS/THP-1）に依存し、in vivoでの介入実証はない。",
+      "snRNA-seqの線維化病期はF1/F2が中心で、進行線維化（F3–4）の動態は空間解析・プロテオミクスの別コホートに依存。",
+      "GPNMB+マクロファージとHSC活性化・線維化形成を直接結ぶ機構（→筋線維芽細胞化）は示されておらず、線維化点火の因果は未確立（fibrosisは相関レベル）。",
+      "THP-1は単球様細胞株でヒト初代KC/単球由来マクロファージの完全な代替ではなく、IL32の受容体・下流経路も未特定。"
+    ],
+    connection:[
+      "KCの『減って置換される』動態の最新ヒト証拠：自系にiPS-KCを入れて脂質負荷をかけると、KC（MARCO+）が減りGPNMB+代謝適応型（LPL/FABP5↑）へ移行しうる。#02（KCフェロトーシスで脱落）と合わせ、共培養でKC生存・表現型遷移をモニタする必要性を裏づける。",
+      "新しいセカンドヒット候補＝肝細胞由来IL32：本論文はIL32がマクロファージの貪食・IL1B↑/IL10↓を駆動すると示した。自系で『肝細胞IL32 → KC/MΦ炎症性極性化』を点火刺激（LPSの代替/上乗せ）として試せる。リードアウトはGPNMB・HLA-DR・IL1B/IL10比。",
+      "空間文脈で表現型が分岐する設計指針：門脈域=抗原提示/未成熟、中心静脈寄り実質=代謝優位という分岐は、酸素・脂質勾配に対応しうる。酸素透過膜で勾配を作る自系で『マクロファージ表現型のzonation』を再現できるか検証可能。",
+      "ABM実装：KCエージェントに『MARCO+常在 →(脂質・IL32)→ GPNMB+ MetMac』の状態遷移と、空間（門脈 vs 中心）依存の表現型分岐ルールを追加。出力としてIL1B/IL10比・HLA-DRを炎症スコアに、貪食速度を脂質クリアランスに割り当てる。",
+      "既収録との接続：#01（LAM–MITF–FAOで脂質処理）とは別系統のGPNMB+/IL32軸を提示し、マクロファージ代謝適応の描像を補完。#04（M1-iMAC→TNFα→MASLD発症）の上流に『肝細胞IL32→MΦ炎症化』を、#02（KC脱落）の帰結に『GPNMB+単球由来MΦの台頭』を接続でき、KC→炎症→（#03 ATF4 / #07 ACSS2）HSC活性化→線維化という縦のカスケードの免疫側を強化する。"
+    ],
+    glossary:[
+      {term:"GPNMB",full:"glycoprotein NMB (osteoactivin)",desc:"MASH進行で増える代謝適応型/LAM系マクロファージのマーカー。貪食・抗原提示能と関連"},
+      {term:"IL32",full:"interleukin-32",desc:"バルーニング肝細胞が産生するサイトカイン。GPNMB+MΦの貪食能とIL1B優位の炎症性表現型を駆動"},
+      {term:"MetMac",full:"metabolically active macrophage",desc:"GPNMB/LPL/FABP5高発現の代謝適応型マクロファージ。MASHで常在KCを置換して増加"},
+      {term:"snRNA-seq",full:"single-nucleus RNA sequencing",desc:"凍結組織の核から発現を測る単一核RNA-seq。固定/凍結ヒト肝に有利"},
+      {term:"HLA-DR",full:"human leukocyte antigen-DR (MHC class II)",desc:"MHCクラスII。GPNMB+マクロファージの抗原提示能の指標"},
+      {term:"SPP1",full:"secreted phosphoprotein 1 (osteopontin)",desc:"線維化と関連するMASHバイオマーカー。MASHのGPNMB+MΦで増加"},
+      {term:"AKR1B10",full:"aldo-keto reductase family 1 member B10",desc:"レチノール代謝酵素。バルーニング肝細胞のマーカーでIL32高発現域と共局在"},
+      {term:"PCLS",full:"precision-cut liver slices",desc:"ヒト肝組織を薄切し培養するex vivoモデル。GPNMB+MΦの機能解析に使用"}
+    ]
+  },
+  {
     id:"09",
     added:"2026-05-30",
     title:"HSCがR-spondin 3を介して肝細胞のzonation・再生・代謝を制御",
@@ -976,6 +1034,7 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "10":[{ic:"human",cap:"ヒトMASLD spectrum"},{ic:"macrophage",cap:"GPNMB+ MetMac"},{ic:"hepatocyte",cap:"IL32+肝細胞"},{ic:"omics",cap:"空間マルチオミクス"},{ic:"dish",cap:"PCLS/THP-1"}],
   "01":[{ic:"human",cap:"ヒト肝61例"},{ic:"omics",cap:"空間オミクス"},{ic:"macrophage",cap:"LAM"},{ic:"endothelial",cap:"中心静脈EC"}],
   "02":[{ic:"mouse",cap:"MASH食マウス"},{ic:"geneko",cap:"NCF1遺伝子改変"},{ic:"macrophage",cap:"KC"},{ic:"liver",cap:"鉄/フェロトーシス"}],
   "03":[{ic:"mouse",cap:"ATF4-KOマウス"},{ic:"stellate",cap:"HSC"},{ic:"drug",cap:"翻訳阻害剤"},{ic:"human",cap:"ヒト相関"}],
@@ -990,6 +1049,14 @@ const paperIcons={
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
 const CAT_ORDER=["細胞・組織","遺伝子・タンパク質","シグナル・経路","代謝・分子","プロセス・現象","手法・モデル","疾患・病態"];
 const CATINFO={
+  "gpnmb":{cat:"遺伝子・タンパク質",long:"糖タンパク質NMB（オステオアクチビン）。MASH進行で増える代謝適応型/LAM系マクロファージの代表マーカーで、貪食能・抗原提示能と関連する。"},
+  "il32":{cat:"シグナル・経路",long:"インターロイキン32。進行MASLDのバルーニング肝細胞が産生する炎症性サイトカインで、GPNMB+マクロファージの貪食能とIL1B優位の炎症性表現型を駆動する肝細胞→マクロファージのシグナル。"},
+  "metmac":{cat:"細胞・組織",long:"代謝活性型マクロファージ（metabolically active macrophage）。GPNMB・LPL・FABP5・HS3ST2を高発現し、MASHで常在Kupffer細胞を置換して増加する亜集団。"},
+  "snrna-seq":{cat:"手法・モデル",long:"単一核RNAシークエンス。細胞核から発現を測るため、凍結・固定したヒト肝組織でも単一細胞解像度のトランスクリプトームが得られる。"},
+  "hla-dr":{cat:"遺伝子・タンパク質",long:"MHCクラスII分子（HLA-DR）。抗原提示能の指標で、MASHのGPNMB+マクロファージで増加し抗原提示性の獲得を示す。"},
+  "spp1":{cat:"遺伝子・タンパク質",long:"分泌型リン酸化タンパク（オステオポンチン）。線維化と関連するMASHバイオマーカーで、MASHのGPNMB+マクロファージや胆管細胞で増加する。"},
+  "akr1b10":{cat:"代謝・分子",long:"アルド-ケト還元酵素1B10。レチノール代謝酵素でバルーニング肝細胞のマーカー。IL32高発現域と空間的に共局在する。"},
+  "pcls":{cat:"手法・モデル",long:"精密肝切片（precision-cut liver slices）。ヒト肝組織を薄切して培養するex vivoモデルで、組織構造を保ったままマクロファージ機能や脂質負荷応答を解析できる。"},
   "lam":{cat:"細胞・組織",long:"脂質関連マクロファージ。MITFを介して脂質処理能（β酸化）を高め、HGF分泌で肝保護的にも働く特殊なマクロファージ亜集団。"},
   "mitf":{cat:"遺伝子・タンパク質",long:"メラノサイトで有名な転写因子だが、LAMでは脂質処理（PGC1α–PPARγ–FAO軸）を司るマスター制御因子として機能する。"},
   "pgc1α / pparγ":{cat:"シグナル・経路",long:"ミトコンドリア生合成・脂肪酸酸化・脂質代謝・インスリン感受性を制御する転写コアクチベーター/核内受容体の軸。"},
