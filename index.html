@@ -288,7 +288,7 @@ table.board td.bnum{white-space:nowrap}
 .todoitem input{margin-top:3px;flex:none;width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
 .todoitem.done span{text-decoration:line-through;color:var(--ink-soft)}
 @media print{
-  .controls,.viewtabs,.filterbar,#sortbar,.row-actions .btn,.fav,.memo,#tip,footer .b,#filterToggle{display:none!important}
+  .controls,.viewtabs,.filterbar,#sortbar,#psortbar,.row-actions .btn,.fav,.memo,#tip,footer .b,#filterToggle{display:none!important}
   .detail{max-height:none!important;overflow:visible!important}
   .card{break-inside:avoid;box-shadow:none;border:1px solid #ccc;animation:none}
   body{background:#fff}
@@ -446,6 +446,15 @@ footer .footinner{margin-top:8px}
   <button class="sbtn" data-sort="cat">ジャンル別</button>
   <button class="sbtn" data-sort="first">初出論文順</button>
   <button class="sbtn" data-sort="count">登場論文数順</button>
+</div>
+<div class="sortbar" id="psortbar" style="display:none">
+  <span class="lbl">並び替え：</span>
+  <button class="sbtn active" data-psort="id">収録順（新しい順）</button>
+  <button class="sbtn" data-psort="year_desc">掲載年 新→古</button>
+  <button class="sbtn" data-psort="year_asc">掲載年 古→新</button>
+  <button class="sbtn" data-psort="journal">雑誌名</button>
+  <button class="sbtn" data-psort="theme">テーマ A→H</button>
+  <button class="sbtn" data-psort="cited">被引用数 多い順</button>
 </div>
 <div class="grid scrollarea" id="grid"></div>
 <div id="pager" class="pager"></div>
@@ -1334,7 +1343,7 @@ const CATINFO={
 };
 
 /* ===== 描画 ===== */
-let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set();
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id";
 const READ_LABEL={"":"未読","skim":"流し読み","deep":"精読"};
 const READ_FILTER_CYCLE=["","unread","skim","deep"];
 const READ_FILTER_LABEL={"":"📖 すべて","unread":"📖 未読のみ","skim":"📖 流し読みのみ","deep":"📖 精読のみ"};
@@ -1372,6 +1381,31 @@ function populateCitations(root){
       setCiteEl(el,n);
     }).catch(()=>{ if(c) setCiteEl(el,c.n); else el.style.display="none"; });
   });
+}
+// 論文ビューの並び替え
+const THEME_ORDER=["A","B","C","D","E","F","G","H"];
+function citeOf(p){ const c=p.doi&&citeCache[p.doi]; return c&&typeof c.n==="number"?c.n:-1; }
+function sortPapers(arr){
+  const byId=(a,b)=>Number(b.id)-Number(a.id);
+  const a=arr.slice();
+  switch(paperSort){
+    case "year_desc": return a.sort((x,y)=>((y.year||0)-(x.year||0))||byId(x,y));
+    case "year_asc":  return a.sort((x,y)=>((x.year||0)-(y.year||0))||byId(x,y));
+    case "journal":   return a.sort((x,y)=>(x.journal||"").localeCompare(y.journal||"","en")||byId(x,y));
+    case "theme":     return a.sort((x,y)=>(THEME_ORDER.indexOf(x.primary)-THEME_ORDER.indexOf(y.primary))||byId(x,y));
+    case "cited":     return a.sort((x,y)=>(citeOf(y)-citeOf(x))||byId(x,y));
+    default:          return a.sort(byId);
+  }
+}
+// 被引用ソート用：未取得のDOIをまとめて取得してキャッシュ（取得後に再描画）
+let citesEnsuring=false;
+async function ensureAllCites(){
+  if(citesEnsuring) return false; citesEnsuring=true;
+  const missing=PAPERS.filter(p=>p.doi && !(citeCache[p.doi] && (Date.now()-citeCache[p.doi].ts)<CITE_TTL));
+  if(!missing.length){ citesEnsuring=false; return false; }
+  await Promise.all(missing.map(p=>fetchCite(p.doi).then(n=>{citeCache[p.doi]={n,ts:Date.now()};}).catch(()=>{})));
+  try{localStorage.setItem(CITE_KEY,JSON.stringify(citeCache));}catch(e){}
+  citesEnsuring=false; return true;
 }
 
 // chips
@@ -1477,6 +1511,7 @@ function refresh(){
   feedview.style.display=v==="feed"?"block":"none";
   statsview.style.display=v==="stats"?"block":"none";
   document.getElementById("sortbar").style.display=v==="terms"?"flex":"none";
+  document.getElementById("psortbar").style.display=v==="papers"?"flex":"none";
   document.getElementById("filterbar").style.display=v==="papers"?"flex":"none";
   chipsBox.style.display=v==="papers"?"flex":"none";
   // テーマ絞り込みUIは論文ビューのみ
@@ -1498,6 +1533,15 @@ sortbar.addEventListener("click",e=>{
   sortMode=b.dataset.sort;
   [...sortbar.querySelectorAll(".sbtn")].forEach(x=>x.classList.toggle("active",x===b));
   renderGlossary();
+});
+const psortbar=document.getElementById("psortbar");
+psortbar.addEventListener("click",e=>{
+  const b=e.target.closest(".sbtn"); if(!b)return;
+  paperSort=b.dataset.psort;
+  [...psortbar.querySelectorAll(".sbtn")].forEach(x=>x.classList.toggle("active",x===b));
+  render();
+  // 被引用数順：未取得ぶんを取得し終えたら再ソート
+  if(paperSort==="cited") ensureAllCites().then(changed=>{ if(changed && paperSort==="cited") render(); });
 });
 
 /* ===== 用語ツールチップ ===== */
@@ -2467,11 +2511,11 @@ function initCinema(card){
 }
 
 function render(){
-  const full=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
+  const full=sortPapers(PAPERS.filter(matches));
   document.getElementById("total").textContent=PAPERS.length;
   const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
-  // フィルタが変わったら1ページ目に戻す
-  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter;
+  // フィルタ・並び替えが変わったら1ページ目に戻す
+  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort;
   if(sig!==lastSig){ paperPage=1; lastSig=sig; }
   const pages=Math.max(1,Math.ceil(full.length/PAGE_SIZE));
   if(paperPage>pages) paperPage=pages;
