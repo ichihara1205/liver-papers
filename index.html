@@ -867,7 +867,7 @@ const PAPERS=[
     title:"ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動",
     authors:"Feng Y-X, et al.",
     journal:"Nature Communications",
-    year:"2025",
+    year:2025,
     vol:"16, 524",
     doi:"10.1038/s41467-024-55738-1",
     url:"https://www.nature.com/articles/s41467-024-55738-1",
@@ -922,7 +922,7 @@ const PAPERS=[
     title:"NCF1がKupffer細胞のフェロトーシス感受性を制御しMASHを悪化させる",
     authors:"Zhang J, Wang Y, … Holmdahl R, et al.",
     journal:"Cell Metabolism",
-    year:"2024",
+    year:2024,
     vol:"36(8), 1745–1763.e6",
     doi:"10.1016/j.cmet.2024.05.008",
     url:"https://pubmed.ncbi.nlm.nih.gov/38851189/",
@@ -975,7 +975,7 @@ const PAPERS=[
     title:"ヒトMASLDの空間マルチオミクスatlas",
     authors:"Li Z, Luo G, … Bai F, Chai J.",
     journal:"Nature Genetics",
-    year:"2025",
+    year:2025,
     vol:"57, 3112–3125",
     doi:"10.1038/s41588-025-02407-8",
     url:"https://www.nature.com/articles/s41588-025-02407-8",
@@ -2119,9 +2119,10 @@ function enrich(g){
     count:g.papers.length};
 }
 function glosRowHTML(g){
-  return `<div class="glosrow">
+  const cc=(typeof CATCOLOR!=="undefined"&&CATCOLOR[g.cat])||"var(--accent)";
+  return `<div class="glosrow" style="border-left-color:${cc}">
     <span class="gterm">${g.term}</span><span class="gfull">${g.full}</span>
-    ${sortMode!=="cat"?`<span class="cattag">${g.cat}</span>`:""}
+    ${sortMode!=="cat"?`<span class="cattag" style="background:${cc};border-color:${cc};color:#fff">${g.cat}</span>`:""}
     <div class="gdesc">${g.detail}</div>
     <div class="grefs">${g.papers.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(pp=>
       `<button class="pchip${pp.mention?" mention":""}" title="${pp.mention?"本文で言及":"用語を定義"}" style="background:${THEMES[pp.primary].c}" data-id="${pp.id}">№${pp.id}</button>`).join("")}</div>
@@ -2143,7 +2144,7 @@ function renderGlossary(){
     cats.forEach(c=>{
       const rows=list.filter(g=>g.cat===c).sort(byAlpha);
       if(!rows.length)return;
-      html+=`<div class="catlabel">${c}　(${rows.length})</div><div class="glosgrid">${rows.map(glosRowHTML).join("")}</div>`;
+      html+=`<div class="catlabel" style="color:${CATCOLOR[c]||'var(--accent)'};border-left:4px solid ${CATCOLOR[c]||'var(--accent)'};padding-left:9px">${c}　(${rows.length})</div><div class="glosgrid">${rows.map(glosRowHTML).join("")}</div>`;
     });
   }else{
     if(sortMode==="first") list=list.slice().sort((a,b)=>a.minId-b.minId||byAlpha(a,b));
@@ -2301,7 +2302,7 @@ function renderStats(){
     return `<div class="bar-row"><span class="lab">${k}·${THEMES[k].name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${THEMES[k].c}"></div></div><span class="val">${n}</span></div>`;
   }).join("");
   // 年別カウント
-  const yearCnt={}; PAPERS.forEach(p=>{ const y=p.year||"?"; yearCnt[y]=(yearCnt[y]||0)+1; });
+  const yearCnt={}; PAPERS.forEach(p=>{ const y=p.year?Number(p.year):"?"; yearCnt[y]=(yearCnt[y]||0)+1; });
   const years=Object.keys(yearCnt).sort();
   const maxY=Math.max(1,...Object.values(yearCnt));
   const yearBars=years.map(y=>{
@@ -2333,7 +2334,7 @@ function renderStats(){
 }
 function buildTimeline(){
   const ths=Object.keys(THEMES); // A..H
-  const yrs=[...new Set(PAPERS.map(p=>p.year).filter(Boolean))].sort();
+  const yrs=[...new Set(PAPERS.map(p=>Number(p.year)).filter(Boolean))].sort((a,b)=>a-b);
   if(!yrs.length) return '<p class="boardnote">年情報がありません</p>';
   const padL=46, padR=16, padT=12, padB=26, rowH=26, colW=Math.max(54,(560-padL-padR)/yrs.length);
   const W=padL+padR+colW*yrs.length, H=padT+padB+rowH*ths.length;
@@ -2509,7 +2510,7 @@ function renderNetwork(){
   // ノード（用語）と共起エッジを構築
   const entries=buildGlossaryIndex(); // papers は定義＋言及を含む
   const nodeMap=new Map();
-  entries.forEach(e=>{ const k=e.term.toLowerCase(); const info=CATINFO[k]||{}; nodeMap.set(k,{term:e.term,cat:info.cat||"その他",papers:new Set(e.papers.map(pp=>pp.id))}); });
+  entries.forEach(e=>{ const k=e.term.toLowerCase(); const info=CATINFO[k]||{}; nodeMap.set(k,{term:e.term,cat:info.cat||"その他",desc:(info.long||e.desc||""),papers:new Set(e.papers.map(pp=>pp.id))}); });
   const catIdx=t=>{ const i=CAT_ORDER.indexOf(t); return i<0?CAT_ORDER.length:i; };
   const nodes=[...nodeMap.values()].sort((a,b)=>catIdx(a.cat)-catIdx(b.cat)||a.term.localeCompare(b.term));
   const idxOf=new Map(nodes.map((n,i)=>[n.term.toLowerCase(),i]));
@@ -2534,7 +2535,7 @@ function renderNetwork(){
     const r=4.5+9.5*((n.papers.size-1)/Math.max(1,maxC-1)), col=CATCOLOR[n.cat]||"var(--accent)";
     const side=Math.cos(pos[i].ang)>=0?"start":"end";
     const lx=pos[i].x+(side==="start"?r+5:-(r+5)), ly=pos[i].y+4;
-    nodeSVG+=`<g class="node n-${i}" data-i="${i}" style="cursor:pointer">`
+    nodeSVG+=`<g class="node n-${i}" data-i="${i}" data-t="${n.term.replace(/"/g,'&quot;')}" data-tip="${(n.desc||'').replace(/"/g,'&quot;')}" style="cursor:pointer">`
       +`<circle cx='${pos[i].x.toFixed(1)}' cy='${pos[i].y.toFixed(1)}' r='${r.toFixed(1)}' fill='${col}'/>`
       +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family="DM Mono,monospace">${n.term}</text>`
       +`</g>`;
@@ -2547,6 +2548,11 @@ function renderNetwork(){
     <div class="net-cap">丸の大きさ＝登場した論文数、線の濃さ＝一緒に登場した回数、色＝用語のジャンル。丸をクリックするとその用語のつながりだけ強調します（もう一度クリックで解除）。</div>`;
   // クリックで近傍ハイライト
   const svg=netview.querySelector("svg"); let sel=null;
+  svg.querySelectorAll(".node").forEach(g=>{
+    g.addEventListener("mouseenter",e=>{ if(!g.dataset.tip)return; tipEl.innerHTML=`<b>${g.dataset.t||""}</b>${g.dataset.tip||""}`; tipEl.classList.add("on"); positionTip(e); });
+    g.addEventListener("mousemove",positionTip);
+    g.addEventListener("mouseleave",()=>tipEl.classList.remove("on"));
+  });
   function clearHi(){ svg.querySelectorAll(".edge,.node").forEach(el=>el.classList.remove("hi","dim")); }
   svg.querySelectorAll(".node").forEach(g=>{
     g.addEventListener("click",()=>{
