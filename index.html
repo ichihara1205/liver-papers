@@ -2024,6 +2024,14 @@ const GLYPH={
   badge:(id,x,y,l1,l2,col)=>`<g id="${id}" class="fade" transform="translate(${x},${y})"><circle r="42" fill="#fff" stroke="${col||'var(--B)'}" stroke-width="2.4"/><text x="0" y="-3" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l1}</text><text x="0" y="16" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l2}</text></g>`,
   tag:(id,x,y,text,col,w,fade)=>{w=w||72;return `<g id="${id}"${fade?' class="fade"':''}><rect class="box" x="${x-w/2}" y="${y-13}" width="${w}" height="26" rx="13" fill="#fff" stroke="${col||'var(--accent)'}" stroke-width="1.6"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${col||'var(--ink)'}">${text}</text></g>`;},
   layer:(id)=>`<g id="${id}" opacity="0"></g>`,
+  // サイトカイン・ケモカイン（8スポーク光芒 — 分泌性シグナル分子）
+  cytokine:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><circle r="7" fill="${col||'var(--C)'}" opacity="0.9"/><line x1="0" y1="-11" x2="0" y2="-17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="-8" x2="12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="0" x2="17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="8" x2="12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="0" y1="11" x2="0" y2="17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="8" x2="-12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-11" y1="0" x2="-17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="-8" x2="-12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-24" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 代謝物・小分子（六角形 — 化学構造のモチーフ）
+  metab:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-11 9.5,-5.5 9.5,5.5 0,11 -9.5,5.5 -9.5,-5.5" fill="${col||'var(--D)'}" stroke="#fff" stroke-width="0.8" opacity="0.9"/>${label?`<text x="0" y="-16" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 転写因子・核内因子（菱形＋DNA結合を示す横棒）
+  tf:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-13 11,0 0,13 -11,0" fill="${col||'var(--B)'}" stroke="#fff" stroke-width="0.8" opacity="0.85"/><line x1="-15" y1="0" x2="-11" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/><line x1="11" y1="0" x2="15" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/>${label?`<text x="0" y="-19" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 遺伝子・mRNA（二本鎖らせん状）
+  gene:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><line x1="-9" y1="-8" x2="-9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><line x1="9" y1="-8" x2="9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><path d="M-9,-8 Q0,-12 9,-8 M-9,0 Q0,-4 9,0 M-9,8 Q0,4 9,8" fill="none" stroke="${col||'#5a8a5a'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-18" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
   collagenAt:(cx,cy)=>[`M${cx-42},${cy} C${cx-14},${cy-15} ${cx+14},${cy-10} ${cx+46},${cy-12}`,`M${cx-44},${cy+18} C${cx-6},${cy+32} ${cx+16},${cy+22} ${cx+49},${cy+26}`,`M${cx-39},${cy+35} C${cx-11},${cy+22} ${cx+13},${cy+40} ${cx+49},${cy+34}`],
 };
 function addDrops(K,layerId,pos,grad,delay){grad=grad||"lip01";const g=K.$(layerId);if(!g)return;pos.forEach((p,i)=>K.T(()=>{
@@ -2073,7 +2081,7 @@ CINEMA["02"]={
     +`<g id="kc" transform="translate(380,250)"><path id="kcBody" d="M0,-30 C24,-33 39,-12 32,9 C44,24 21,39 0,32 C-24,42 -42,21 -32,2 C-44,-18 -21,-35 0,-30 Z" fill="#5d6470" stroke="#828a96" stroke-width="1.5"/><circle cx="-4" cy="2" r="8" fill="#3a3f48"/><text x="0" y="56" text-anchor="middle" font-size="10" fill="var(--ink-soft)">常在クッパー細胞</text></g>`
     +GLYPH.receptor("tlr4",380,219,"TLR4","var(--C)")
     +GLYPH.tag("ncf1",405,265,"NCF1","var(--C)",54,true)
-    +GLYPH.mol("hepc",470,180,"ヘプシジン","var(--C)",true)
+    +GLYPH.cytokine("hepc",470,180,"ヘプシジン","var(--C)",true)
     +`<g id="iron" class="fade"></g>`
     +`<g id="momf" class="fade">`+GLYPH.mac("mo1",300,360,"単球由来MΦ(浸潤)","#9c4f6c")+`</g>`
     +GLYPH.stellate("hsc",610,310,"肝星細胞")+GLYPH.layer("collagen")
@@ -2086,7 +2094,7 @@ CINEMA["02"]={
       {color:"E",t:2400,cap:"健常な肝類洞。常在クッパー細胞（KC）の膜には受容体TLR4が存在する。",run(){}},
       {color:"D",t:3000,cap:"① 過栄養で肝細胞に脂肪滴が蓄積し、酸化リン脂質（OxPL）が生成・放出される。",run(){
         addDrops(K,"hepDrops",dp,"lip02"); K.show(["oxpl"]);
-        oxpos.forEach((p,i)=>K.T(()=>{K.$("oxpl").insertAdjacentHTML("beforeend",GLYPH.mol("ox"+i,p[0],p[1],i===1?"OxPL":"","var(--C)"));},700+i*200));
+        oxpos.forEach((p,i)=>K.T(()=>{K.$("oxpl").insertAdjacentHTML("beforeend",GLYPH.metab("ox"+i,p[0],p[1],i===1?"OxPL":"","var(--C)"));},700+i*200));
       }},
       {color:"C",t:4400,cap:"② KC内のNCF1がOxPL産生を促し、OxPLが膜のTLR4に結合→ヘプシジン誘導→KCに鉄が沈着し、フェロトーシス感受性が上昇する。",run(){
         K.show(["ncf1"]); K.pulse("ncf1");
@@ -2116,7 +2124,7 @@ CINEMA["03"]={
     +GLYPH.stellate("hsc",300,235,"")
     +GLYPH.nucleus("nuc",300,235,52,40,"核")
     +`<g id="enh" class="fade"><path d="M268,250 q8,-10 16,0 q8,10 16,0 q8,-10 16,0" fill="none" stroke="var(--B)" stroke-width="2"/><text x="300" y="278" text-anchor="middle" font-size="8.5" fill="var(--B)">非定型エンハンサー</text></g>`
-    +GLYPH.mol("atf4a",120,120,"ATF4",  "var(--B)",true)+GLYPH.mol("atf4b",150,150,"","var(--B)",true)
+    +GLYPH.tf("atf4a",120,120,"ATF4","var(--B)",true)+GLYPH.tf("atf4b",150,150,"","var(--B)",true)
     +GLYPH.layer("collagen")+GLYPH.pill("drug",580,110,"ATF4阻害剤",96),
   build(K){
     return [
@@ -2266,10 +2274,10 @@ CINEMA["09"]={
     +GLYPH.hep("hep",360,90,1.5,"肝細胞 Zone3")
     +GLYPH.receptor("wntR",430,108,"WNT受容体","var(--E)")
     +GLYPH.nucleus("nuc",470,210,40,30,"核")
-    +GLYPH.mol("bcat",470,210,"βカテニン","var(--E)")
+    +GLYPH.tf("bcat",470,210,"βカテニン","var(--E)")
     +GLYPH.tag("cyp",470,300,"CYP450/再生 ✓","var(--E)",140,true)
     +GLYPH.stellate("hsc",140,250,"肝星細胞")
-    +GLYPH.mol("rspo",230,250,"RSPO3","var(--E)",true)+GLYPH.layer("collagen"),
+    +GLYPH.cytokine("rspo",230,250,"RSPO3","var(--E)",true)+GLYPH.layer("collagen"),
   build(K){
     return [
       {color:"E",t:3000,cap:"静止期HSCがRSPO3（分泌タンパク）を出し、肝細胞のWNT受容体を増強。WNT/βカテニンが核へ入りzonation遺伝子（CYP450）が保たれる。",run(){
@@ -2298,7 +2306,7 @@ CINEMA["10"]={
     +GLYPH.tag("balloon",120,60,"バルーニング↑","var(--D)",110,true)
     +GLYPH.mac("kc",350,250,"常在KC(MARCO+CD5L+)","#5d6470")
     +`<g id="met" class="fade">`+GLYPH.mac("metc",430,250,"GPNMB+ MetMac(LPL/FABP5高)","#9c4f6c")+`</g>`
-    +GLYPH.mol("il32",200,200,"IL32","var(--C)",true)
+    +GLYPH.cytokine("il32",200,200,"IL32","var(--C)",true)
     +GLYPH.tag("shift",430,170,"IL1B↑ / IL10↓","var(--C)",118,true)
     +GLYPH.stellate("hsc",610,320,"肝星細胞")+GLYPH.layer("collagen"),
   build(K){
@@ -2325,54 +2333,112 @@ CINEMA["10"]={
   }
 };
 
-/* ===== №12 灌流肝MPS：IR培地→KC活性化→CXCL1↑→単球遊出→CD163+分化 ===== */
+/* ===== №12 灌流肝MPS：IR培地→KC活性化→CXCL1↑→単球遊出→CD163+組織MΦ分化 ===== */
 CINEMA["12"]={
   svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("12")}
     <marker id="arC12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--C)"/></marker>
-    <marker id="arE12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--E)"/></marker>
   </defs>`
-  +GLYPH.title("灌流肝MPS：IR培地→KC活性化→CXCL1↑→単球が血管外遊出→CD163+分化")
-  +`<rect x="30" y="38" width="660" height="62" rx="31" fill="#d4ecf8" opacity="0.45"/>
-   <rect x="30" y="38" width="660" height="62" rx="31" fill="none" stroke="var(--E)" stroke-width="2.2"/>
-   <text x="360" y="30" text-anchor="middle" font-size="10.5" fill="var(--E)">灌流マイクロ血管（HUVEC ／ フィブリンゲル）</text>
-   <ellipse cx="250" cy="268" rx="120" ry="95" fill="#f5ede0" stroke="#c8a87a" stroke-width="1.8"/>
-   <text x="250" y="175" text-anchor="middle" font-size="10" fill="var(--ink-soft)">肝球状体</text>
-   <line x1="250" y1="100" x2="250" y2="173" stroke="var(--E)" stroke-width="1.8" stroke-dasharray="4,3"/>
-   <g id="nvess12" class="fade"><text x="595" y="62" font-size="9.5" text-anchor="middle" fill="var(--B)">血管径↓</text><text x="595" y="76" font-size="9.5" text-anchor="middle" fill="var(--B)">透過性↑</text></g>`
-  +GLYPH.hep("hep12",215,282,0.85,"肝細胞")
-  +GLYPH.mac("kc12",340,268,"KC","#5d6470")
-  +`<g id="mn1" class="fade">`+GLYPH.monocyte("mn1i",95,69,"CD14+単球")+`</g>`
-  +`<g id="mn2" class="fade">`+GLYPH.monocyte("mn2i",530,69,"")+`</g>`
-  +`<g id="mn3" class="fade">`+GLYPH.monocyte("mn3i",250,82,"")+`</g>`
-  +GLYPH.mol("irlab",530,200,"IR培地","var(--D)",true)
-  +GLYPH.mol("insM",488,252,"insulin↑","var(--D)",true)
-  +GLYPH.mol("glcM",562,282,"glucose↑","var(--D)",true)
-  +GLYPH.mol("ffaM2",510,318,"FFA↑","var(--D)",true)
-  +GLYPH.mol("cxcl12",218,124,"CXCL1","var(--C)",true)
-  +GLYPH.mol("ccl412",274,118,"CCL4","var(--C)",true)
-  +GLYPH.badge("cd163bd",440,348,"CD163+","組織MΦ","var(--H)"),
+  +`<text x="360" y="18" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">PDMS 灌流型マイクロ流体デバイス（MIT Griffith lab — Nat Commun 2026）</text>`
+  /* ── PDMS device body ── */
+  +`<rect x="18" y="24" width="684" height="374" rx="22" fill="#e6e0d8" stroke="#9a9087" stroke-width="2.5"/>`
+  /* ── Top media channel ── */
+  +`<rect x="18" y="24" width="684" height="86" rx="20" fill="#cce8f6" opacity="0.72"/>
+   <rect x="18" y="24" width="684" height="86" rx="20" fill="none" stroke="var(--E)" stroke-width="1.8"/>
+   <circle cx="40" cy="67" r="13" fill="#fff" stroke="var(--E)" stroke-width="1.8"/>
+   <circle cx="680" cy="67" r="13" fill="#fff" stroke="var(--E)" stroke-width="1.8"/>
+   <text x="360" y="56" text-anchor="middle" font-size="9.5" fill="var(--E)" font-weight="600">培地チャネル（灌流）— 単球・サイトカイン・IR培地がここを通過</text>`
+  /* ── Central fibrin gel channel ── */
+  +`<rect x="32" y="110" width="656" height="196" rx="6" fill="#f2ebe0" stroke="#c8b898" stroke-width="1.4"/>
+   <text x="90" y="128" font-size="9" fill="var(--ink-soft)">フィブリンゲル（中央チャネル）</text>`
+  /* ── HUVEC vascular network (sinuous green paths — Fig 1B motif) ── */
+  +`<g id="vnet12" fill="none" stroke="var(--E)" stroke-width="2.8" stroke-linecap="round" opacity="0.75">
+     <path d="M34,160 C78,150 108,170 165,160 C212,151 240,169 296,161 C340,153 360,173 402,165 C442,157 480,171 530,161 C578,152 612,167 684,160"/>
+     <path d="M34,240 C78,230 112,248 165,240 C212,232 240,250 296,242 C340,234 362,252 402,244 C444,236 482,250 530,242 C578,234 614,248 684,240"/>
+     <path d="M165,160 C167,180 167,216 165,240"/>
+     <path d="M530,160 C532,180 532,216 530,240"/>
+     <path d="M342,160 C344,178 344,218 342,240"/>
+   </g>`
+  /* vessel entry junctions (top channel → gel) */
+  +`<line x1="165" y1="110" x2="165" y2="158" stroke="var(--E)" stroke-width="2.4" stroke-dasharray="3,2"/>
+   <line x1="530" y1="110" x2="530" y2="158" stroke="var(--E)" stroke-width="2.4" stroke-dasharray="3,2"/>`
+  /* ── Spheroid 1 (left) ── */
+  +`<ellipse cx="165" cy="200" rx="57" ry="44" fill="#f5e2d0" stroke="#d4a070" stroke-width="1.8"/>`
+  +GLYPH.hep("hep12",138,200,0.72,"")
+  +GLYPH.mac("kc12",194,198,"KC","#5d6470")
+  +`<text x="165" y="252" text-anchor="middle" font-size="8.5" fill="#9c7850">球状体①</text>`
+  /* ── Spheroid 2 (right) ── */
+  +`<ellipse cx="530" cy="200" rx="57" ry="44" fill="#f5e2d0" stroke="#d4a070" stroke-width="1.8"/>`
+  +GLYPH.hep("hep12b",503,200,0.72,"")
+  +GLYPH.mac("kc12b",559,198,"","#5d6470")
+  +`<text x="530" y="252" text-anchor="middle" font-size="8.5" fill="#9c7850">球状体②</text>`
+  /* ── Bottom media channel ── */
+  +`<rect x="18" y="306" width="684" height="92" rx="20" fill="#cce8f6" opacity="0.72"/>
+   <rect x="18" y="306" width="684" height="92" rx="20" fill="none" stroke="var(--E)" stroke-width="1.8"/>
+   <circle cx="40" cy="352" r="13" fill="#fff" stroke="var(--E)" stroke-width="1.8"/>
+   <circle cx="680" cy="352" r="13" fill="#fff" stroke="var(--E)" stroke-width="1.8"/>
+   <text x="360" y="354" text-anchor="middle" font-size="9.5" fill="var(--E)">培地チャネル</text>`
+  /* ── Monocytes in top channel (hidden) ── */
+  +`<g id="mn_a" class="fade">`+GLYPH.monocyte("mn_ai",90,67,"CD14+単球")+`</g>`
+  +`<g id="mn_b" class="fade">`+GLYPH.monocyte("mn_bi",600,67,"")+`</g>`
+  /* Extravasating monocyte (starts top channel, will move down into gel) */
+  +`<g id="mn_e" class="fade">`+GLYPH.monocyte("mn_ei",165,74,"")+`</g>`
+  /* ── IR metabolite indicators (right side, hidden) ── */
+  +GLYPH.tag("irTag12",632,148,"IR培地","var(--D)",68,true)
+  +GLYPH.metab("insM12",600,172,"insulin↑","var(--D)",true)
+  +GLYPH.metab("glcM12",648,194,"glucose↑","var(--D)",true)
+  +GLYPH.metab("ffaM12",612,216,"FFA↑","var(--D)",true)
+  /* ── Cytokines from KC (hidden) ── */
+  +GLYPH.cytokine("cxcl12",172,132,"CXCL1","var(--C)",true)
+  +GLYPH.cytokine("ccl412",208,122,"CCL4","var(--C)",true)
+  /* ── Vessel dysfunction indicator (hidden) ── */
+  +`<g id="nvess12" class="fade">
+     <text x="622" y="93" font-size="9.5" text-anchor="middle" fill="var(--B)">血管径↓</text>
+     <text x="622" y="107" font-size="9.5" text-anchor="middle" fill="var(--B)">透過性↑</text>
+   </g>`
+  /* ── Spread macrophage (post-differentiation, hidden) ── */
+  /* Positioned at same absolute location as extravasated mn_e: (165, 74+122=196) */
+  +`<g id="spreadMac12" class="fade" transform="translate(162,195)">
+     <path d="M-30,-11 C-16,-27 10,-23 27,-14 C39,-4 39,12 25,23 C12,34 -10,32 -25,21 C-41,11 -42,-1 -30,-11 Z" fill="#7d97b8" stroke="#5b7090" stroke-width="1.6"/>
+     <path d="M27,-14 C35,-23 40,-25 38,-17" fill="none" stroke="#7d97b8" stroke-width="5" stroke-linecap="round"/>
+     <path d="M25,23 C34,34 36,38 28,36" fill="none" stroke="#7d97b8" stroke-width="5" stroke-linecap="round"/>
+     <path d="M-30,-11 C-39,-20 -43,-17 -39,-9" fill="none" stroke="#7d97b8" stroke-width="5" stroke-linecap="round"/>
+     <path d="M-6,-3 a7,6.5 0 1,0 9,1.5" fill="none" stroke="#34465c" stroke-width="2"/>
+     <path d="M40,-2 L35,2 M37,2 L32,6 M32,6 L28,2 M32,6 L28,10" stroke="var(--H)" stroke-width="2" fill="none" stroke-linecap="round"/>
+     <text x="50" y="6" font-size="8.5" fill="var(--H)" font-weight="600">CD163</text>
+   </g>`
+  /* ── CD163+ differentiation tag (hidden) ── */
+  +GLYPH.tag("cd163tag12",300,372,"CD163+ → 組織マクロファージ分化開始","var(--H)",250,true),
   build(K){
-    const dp=[[190,262],[215,282],[198,302],[238,268],[218,315]];
+    const dp1=[[138,186],[160,204],[142,220],[178,197],[162,218]];
+    const dp2=[[503,186],[525,204],[507,220],[543,197],[527,218]];
     return [
-      {color:"E",t:2400,cap:"① 健常な灌流肝MPS。肝細胞＋KC球状体がHUVECマイクロ血管に囲まれ、血管腔をCD14+単球が流れる。",
-       run(){K.show(["mn1","mn2"]);}},
-      {color:"D",t:4000,cap:"② IR培地（高insulin・高glucose・高FFA）で慢性暴露すると肝細胞にPCK1/G6PC↑・脂肪滴蓄積が起こる。血管では径縮小・透過性亢進が現れる。",
+      {color:"E",t:2600,cap:"① 健常な灌流肝MPS（Fig 1A）。HUVEC自己組織化マイクロ血管が肝細胞+KC球状体内部に貫通し、血管腔をCD14+単球が流れる。",
+       run(){K.show(["mn_a","mn_b"]);}},
+      {color:"D",t:4200,cap:"② IR培地（高insulin・高glucose・高FFA）で慢性暴露すると肝細胞にPCK1/G6PC↑・脂肪滴蓄積が起こり（Fig 3B,C）、血管は径縮小・透過性亢進を示す（Fig 4）。",
        run(){
-         K.show(["irlab","insM","glcM","ffaM2"]);
-         K.flow(530,200,215,282,"var(--D)",{n:3,dur:1.5,loop:2});
-         K.T(()=>{ addDrops(K,"hep12Drops",dp,"lip12",0); K.show(["nvess12"]); },1400);
+         K.show(["irTag12","insM12","glcM12","ffaM12"]);
+         K.flow(632,148,140,200,"var(--D)",{n:3,dur:1.5,loop:2});
+         K.flow(632,148,505,200,"var(--D)",{n:2,dur:1.5,loop:2});
+         K.T(()=>{
+           addDrops(K,"hep12Drops",dp1,"lip12",0);
+           addDrops(K,"hep12bDrops",dp2,"lip12",300);
+           K.show(["nvess12"]); K.attr("vnet12","opacity","0.38");
+         },1800);
        }},
-      {color:"C",t:4400,cap:"③ KC活性化によりCXCL1・CCL4が分泌される。血管内単球がこれに走化し、血管壁を越えて球状体へ遊出（extravasation）。IR条件で浸潤頻度が有意に増加。",
+      {color:"C",t:4400,cap:"③ KC活性化でCXCL1・CCL4（サイトカイン）が分泌され、血管内単球を走化誘引（Fig 5）。単球は血管壁を越えて球状体へ遊出（extravasation）。IR条件で浸潤頻度が生理的条件より有意に高い。",
        run(){
          K.attr("kc12Body","fill","#9c4f2a");
-         K.T(()=>{ K.show(["cxcl12","ccl412"]); K.pulse("cxcl12"); K.pulse("ccl412"); },600);
-         K.flow(95,69,250,69,"var(--C)",{n:4,dur:1.2,loop:2});
-         K.T(()=>{ K.show(["mn3"]); K.move("mn3",0,0,0,165,1.4); },1400);
+         K.T(()=>{K.show(["cxcl12","ccl412"]); K.pulse("cxcl12"); K.pulse("ccl412");},500);
+         K.flow(90,67,165,67,"var(--C)",{n:4,dur:1.2,loop:2});
+         K.T(()=>{ K.show(["mn_e"]); K.move("mn_e",0,0,0,122,1.4); },1400);
        }},
-      {color:"H",t:3200,cap:"④ 浸潤した単球はCD163+組織マクロファージへの分化を開始し、肝MPS内に定着。IR→免疫細胞招集→KC様分化という代謝-免疫相互作用を灌流血管経由でリアルタイムに捉えた。",
+      {color:"H",t:3800,cap:"④ 遊出した単球は扁平化・偽足伸展（形態変化）を示し、CD163（ヘモグロビンスカベンジャー受容体）が細胞膜に出現（Fig 5G）。単球→CD163+組織マクロファージへの分化開始——IR→炎症→遊出→KC様定着のサイクルを灌流血管経由でリアルタイム捕捉。",
        run(){
-         K.show(["cd163bd"]);
-         K.T(()=>{ K.unpulse("cxcl12"); K.unpulse("ccl412"); },700);
+         K.hide(["mn_e"]);
+         K.T(()=>{
+           K.show(["spreadMac12","cd163tag12"]);
+           K.unpulse("cxcl12"); K.unpulse("ccl412");
+         },350);
        }},
     ];
   }
