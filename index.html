@@ -1938,6 +1938,41 @@ CINEMA["09"]={
   }
 };
 
+
+/* ===== №10 GPNMB+ MetMac と IL32産生肝細胞がMASHを駆動 ===== */
+CINEMA["10"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("10")}${GLYPH.arrow("10","var(--C)")}</defs>`+GLYPH.title("常在KC枯渇→GPNMB+ MetMac蓄積→肝細胞IL32が炎症性表現型を駆動")
+    +GLYPH.hep("hep",30,70,1.35,"肝細胞")
+    +GLYPH.tag("balloon",120,60,"バルーニング↑","var(--D)",110,true)
+    +GLYPH.mac("kc",350,250,"常在KC(MARCO+CD5L+)","#5d6470")
+    +`<g id="met" class="fade">`+GLYPH.mac("metc",430,250,"GPNMB+ MetMac(LPL/FABP5高)","#9c4f6c")+`</g>`
+    +GLYPH.mol("il32",200,200,"IL32","var(--C)",true)
+    +GLYPH.tag("shift",430,170,"IL1B↑ / IL10↓","var(--C)",118,true)
+    +GLYPH.stellate("hsc",610,320,"肝星細胞")+GLYPH.layer("collagen"),
+  build(K){
+    const dp=[[95,130],[140,150],[110,180],[150,200],[120,225]];
+    return [
+      {color:"E",t:2200,cap:"健常な肝。常在クッパー細胞（MARCO+CD5L+ KC）が定常状態にある。",run(){}},
+      {color:"D",t:3000,cap:"① 脂質負荷（オレイン酸/パルミチン酸）で肝細胞が脂肪化・バルーニングを起こし、常在KC（MARCO+CD5L+）が枯渇しはじめる。",run(){
+        addDrops(K,"hepDrops",dp,"lip10"); K.show(["balloon"]); K.attr("kc","opacity","0.5");
+      }},
+      {color:"C",t:3000,cap:"② 常在KCが脱落した場に、代謝適応型のGPNMB+マクロファージ（MetMac; LPL/FABP5高）が門脈域・実質に蓄積する。",run(){
+        K.attr("kc","opacity","0.18"); K.show(["met"]); K.pulse("metc");
+      }},
+      {color:"C",t:4200,cap:"③ バルーニング肝細胞が分泌するIL32がGPNMB+ MΦに作用し、貪食能の亢進とIL1B優位（IL10低下）の炎症性表現型へとシフトさせる。",run(){
+        K.show(["il32"]); K.flow(205,200,420,250,"var(--C)",{dur:1.3,loop:3});
+        K.T(()=>{K.show(["shift"]); radiate(K,430,250,"var(--C)");},1500);
+        K.T(()=>radiate(K,430,250,"var(--C)"),2900);
+      }},
+      {color:"B",t:3000,cap:"④ この炎症性シフトがMASH進行を後押しし、HSC活性化を介して炎症・線維化巣の形成（部分的）に至る。",run(){
+        K.flow(450,250,610,320,"var(--B)",{dur:1.2,loop:2});
+        K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},1000);
+        K.T(()=>K.draw("collagen",GLYPH.collagenAt(610,375),{len:150}),1700);
+      }},
+    ];
+  }
+};
+
 /* 詳細を開いた時にアニメを生成＆自動再生（1回だけ） */
 function initCinema(card){
   const mount=card.querySelector(".cinema-mount");
