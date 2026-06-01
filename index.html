@@ -473,6 +473,83 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
+    id:"12",
+    title:"灌流マイクロ血管ネットワーク統合型肝MPSでインスリン抵抗性・単球浸潤を捕捉",
+    authors:"Tevonian EN, Kan EL, Maniar KK, Wang AJ, Datta A, Kamm RD, Lauffenburger DA, Griffith LG",
+    journal:"Nature Communications",
+    year:2026,
+    vol:"17:950",
+    doi:"10.1038/s41467-025-68031-6",
+    url:"https://www.nature.com/articles/s41467-025-68031-6",
+    primary:"A",
+    tags:["A","C","E"],
+    approach:"in vitro（primary human cell MPS / microfluidics — MIT Griffith lab）",
+    added:"2026-06-01",
+    abstract_ja:"in vitroモデルはヒト肝疾患の一側面を再現できるが、血管・免疫細胞との動的相互作用は従来の球状体モデルでは捉えにくかった。本研究ではドナー適合の初代ヒト肝細胞・クッパー細胞（KC）・HUVECおよびNHLFからなる多細胞肝球状体を、フィブリンゲル内で自己組織化した灌流可能なマイクロ血管ネットワークと物理的に統合したMPSを開発した。高インスリン・高グルコース・高FFAからなるインスリン抵抗性（IR）培地で慢性暴露すると、肝細胞の代謝遺伝子（PCK1↑・G6PC↑）および糖産生が増大し、インスリンクリアランスが低下した。同時に血管では径縮小・透過性亢進が起こり、炎症性ケモカイン（CXCL1, CXCL2, CCL4（MIP-1β）, ICAM-1）が上昇した。さらにCD14+単球を血管腔に添加すると、IR条件では生理的条件より有意に多くの単球が血管壁を越えて肝球状体へ遊出し、4日後にはCD163+組織マクロファージへの分化開始が確認された。本MPSはヒト肝の代謝・血管・免疫の三者相互作用を灌流血管を通じてリアルタイムに捉え、代謝性肝疾患研究の新たな実験基盤を提供する。",
+    background:"MASLD・インスリン抵抗性の病態においてKupffer細胞の活性化・単球浸潤・血管機能不全が重要な役割を果たすことは知られていたが、「灌流血管を通じた単球の血管外遊出と肝組織への招集」というin vivoの生理的プロセスを再現できるin vitroモデルがなかった。既存の肝球状体・臓器チップは血管を隣接させても肝組織内部まで貫通する灌流血管の統合には至っておらず、血管・免疫の動的挙動を同時に評価する実験系が求められていた。",
+    achievements:[
+      "ドナー適合初代ヒト肝細胞・KC・HUVEC・NHLFからなる多細胞球状体をフィブリンゲル内でHUVECマイクロ血管ネットワークと物理統合した灌流型肝MPSを確立。球状体内部に灌流血管が貫通するという先行モデルにない設計を達成。",
+      "IR培地（高insulin・高glucose・高FFA）の慢性暴露でPCK1↑・G6PC↑・FASN↑・FABP1↑の代謝遺伝子変化と糖産生増大・インスリンクリアランス低下を再現。",
+      "IR条件での血管機能不全（径縮小・透過性亢進・ICAM-1↑）と炎症性ケモカイン（CXCL1, CXCL2, CCL4（MIP-1β））上昇を定量捕捉。PLS-DA多変量解析で疾患状態を有意に判別。",
+      "CD14+単球の血管腔添加→遊走・血管外滲出→肝球状体への集積をリアルタイムイメージングで可視化。IR条件で単球浸潤頻度が有意に増大（flow cytometry定量）。",
+      "浸潤単球のCD163上昇を確認し、組織マクロファージ様への分化開始を示した。GAS6が生理的条件で増加し抗炎症的な組織維持に関与する可能性を示唆。"
+    ],
+    limitations:[
+      "血管構成細胞としてHUVEC/NHLFを使用しており、肝特異的なLSECや星細胞は含まれない（LSECの有窓・類洞機能は再現していない）。",
+      "IR培地誘導の初期段階を対象としており、steatosisの蓄積や線維化（fibrosis）は再現していない。",
+      "培養期間2週間程度と短く、MASLD→MASH→fibrosisの慢性進行は扱えない。",
+      "PDMS材料による疎水性薬物吸着、一次細胞のドナー変動による再現性の課題。",
+      "KC固有の役割はHUVEC/NHLFとの複合系で測定されるため、KC単独の寄与分離が困難。"
+    ],
+    connection:[
+      "灌流血管が球状体内部を貫通する設計の参照：自系のLSEC統合設計に直接参照できる。alginate microwell球状体形成→fibrin gel embedding→自己組織化血管のプロセスも実用的。",
+      "KC+単球ダイナミクスのモニタ設計：IR条件でCD14+単球浸潤増加→CD163+分化開始のデータは、#02（常在KC脱落）・#10（GPNMB+MetMac台頭）と連結し、常在KC消耗→血管経由単球浸潤→組織MΦ分化のカスケードをin vitroで再現する実験設計の参照になる。",
+      "IR培地処方の直接参照：高insulin・高glucose・高FFAの組み合わせは自系のsteatosis/HIR誘導培地設計に使える。#04（iPSC WAT-肝MPS）との比較でも参照価値が高い。",
+      "炎症ケモカインをリードアウトに：CXCL1・CXCL2・CCL4（MIP-1β）・ICAM-1の定量はKC活性化の読み出しとして自系の培地解析プロトコルに追加できる。IL32（#10）との相互作用（肝細胞→IL32→KC→CXCL1/CCL4↑→単球浸潤）も実験的に検証可能。",
+      "差別化の軸：本系はLSEC・HSCを含まず線維化未達 → 自系が4細胞共培養でfibrosisまで達成すれば本論文を正統に発展させた論文として位置づけられる。",
+      "既収録との接続：#04（iPSC WAT-肝MPS）は脂肪組織炎症経由のMASLD発症を示したが血管灌流がない。本論文（#12）は灌流血管を追加したが脂肪組織を含まない。両者を統合した設計が自系の目標像になる。"
+    ],
+    glossary:[
+      {term:"HUVEC",full:"human umbilical vein endothelial cell",desc:"ヒト臍帯静脈内皮細胞。MPSの自己組織化マイクロ血管形成の主細胞"},
+      {term:"NHLF",full:"normal human lung fibroblast",desc:"正常ヒト肺線維芽細胞。HUVECと協調して血管モルフォゲネシスをサポート"},
+      {term:"IR",full:"insulin resistance",desc:"インスリン抵抗性。高insulin・高glucose・高FFAで誘導される代謝不全状態"},
+      {term:"G6PC",full:"glucose-6-phosphatase catalytic subunit",desc:"糖新生の最終酵素。IR条件で上昇し肝糖産生増大の指標となる"},
+      {term:"FABP1",full:"fatty acid binding protein 1 (L-FABP)",desc:"肝型脂肪酸結合タンパク。肝細胞の細胞内脂肪酸輸送に関与"},
+      {term:"CXCL1",full:"C-X-C motif chemokine ligand 1 (GROα)",desc:"単球・好中球走化性ケモカイン。IR肝MPS上清で増加し免疫細胞招集に関与"},
+      {term:"CXCL2",full:"C-X-C motif chemokine ligand 2 (GROβ)",desc:"CXCL1と同族の走化性ケモカイン。IR条件で協調して増加"},
+      {term:"CCL4 (MIP-1β)",full:"C-C motif chemokine ligand 4 (MIP-1β)",desc:"単球・T細胞走化性ケモカイン（※四塩化炭素CCl4とは別物）。IR肝MPSで増加"},
+      {term:"ICAM-1",full:"intercellular adhesion molecule 1 (CD54)",desc:"内皮炎症・白血球接着マーカー。IR条件のMPSで上昇し内皮炎症を示す"},
+      {term:"CD163",full:"CD163 (hemoglobin scavenger receptor)",desc:"組織定着マクロファージのマーカー。浸潤単球での上昇がKC様分化開始を示す"},
+      {term:"CD14",full:"CD14 (LPS co-receptor / monocyte marker)",desc:"単球/マクロファージのマーカー。CD14+で単球を選別し血管内に添加"},
+      {term:"PLS-DA",full:"partial least squares discriminant analysis",desc:"多変量解析手法。サイトカインパネルでIR vs 生理的条件を判別"},
+      {term:"fibrin",full:"fibrin hydrogel",desc:"フィブリンゲル。HUVEC血管形成の3Dスキャフォールド（フィブリノゲン重合体）"},
+      {term:"GAS6",full:"growth arrest specific protein 6",desc:"MERTK受容体リガンド。生理的MPS上清で増加し抗炎症・組織修復に関与"}
+    ],
+    struct:{
+      model:"in vitro",
+      cells:["肝細胞","KupfferCell","HUVEC","NHLF","CD14+単球"],
+      triggers:["高インスリン","高グルコース","高FFA（IR培地）"],
+      steatosis:"△",
+      inflammation:"△",
+      fibrosis:"×",
+      readout:["インスリンクリアランス","PCK1/G6PC発現","糖産生","血管径・透過性","CXCL1/CXCL2/CCL4/ICAM-1","単球浸潤頻度（flow cytometry）","CD163+分化"],
+      ignite:"IR培地→KC活性化→CXCL1/CCL4↑→CD14+単球が血管外遊出",
+      params:[
+        {name:"インスリンクリアランス率",note:"IR培地で経時的に低下；週ごとの変化量をABMの代謝パラメータに"},
+        {name:"単球遊出率（flow cytometry）",note:"IR vs 生理条件でIR側が有意に高い；KC活性化状態の関数として実装可"},
+        {name:"CXCL1/CCL4分泌量",note:"Luminexで定量；単球走化性の確率的ルールの係数に使用可"},
+        {name:"血管透過性係数",note:"IR条件で上昇；類洞内皮の機能低下代替パラメータとして活用可"}
+      ],
+      todos:[
+        "IRコンセプトを自系に導入：高insulin・高FFA培地でsteatosis後にLSECのcapillarizationが起きるか",
+        "KC有り/無し条件でCXCL1/CCL4を定量してKC依存の単球走化性ケモカイン産生を確認",
+        "CD14+単球追加実験でKCフェロトーシス速度（#02）が変わるか検証"
+      ]
+    },
+    figure:"<svg viewBox='0 0 640 300' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'><defs><marker id='ar12f' markerWidth='8' markerHeight='8' refX='6' refY='3' orient='auto'><path d='M0,0 L6,3 L0,6 Z' fill='var(--C)'/></marker><marker id='ar12fd' markerWidth='8' markerHeight='8' refX='6' refY='3' orient='auto'><path d='M0,0 L6,3 L0,6 Z' fill='var(--D)'/></marker><marker id='ar12fe' markerWidth='8' markerHeight='8' refX='6' refY='3' orient='auto'><path d='M0,0 L6,3 L0,6 Z' fill='var(--E)'/></marker><marker id='ar12fh' markerWidth='8' markerHeight='8' refX='6' refY='3' orient='auto'><path d='M0,0 L6,3 L0,6 Z' fill='var(--H)'/></marker></defs><rect width='640' height='300' fill='var(--paper)'/><rect x='18' y='10' width='602' height='65' rx='32' fill='#d4ecf8' opacity='0.5'/><rect x='18' y='10' width='602' height='65' rx='32' fill='none' stroke='var(--E)' stroke-width='2'/><text x='320' y='30' text-anchor='middle' font-size='10.5' fill='var(--E)' font-weight='600'>灌流マイクロ血管（HUVEC/フィブリンゲル）</text><text x='320' y='48' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>血管腔にCD14+単球が流れる → IR条件で径↓・透過性↑</text><text x='320' y='62' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>GAS6↑（生理的）/ CXCL1・CXCL2・CCL4・ICAM-1↑（IR）</text><ellipse cx='250' cy='185' rx='110' ry='82' fill='#f5ede0' stroke='#c8a87a' stroke-width='1.8'/><text x='250' y='112' text-anchor='middle' font-size='10' fill='var(--ink-soft)'>肝球状体</text><line x1='250' y1='75' x2='250' y2='110' stroke='var(--E)' stroke-width='1.8' stroke-dasharray='4,3'/><rect x='175' y='160' width='80' height='44' rx='8' fill='var(--paper-2)' stroke='var(--ink)' stroke-width='1.4'/><text x='215' y='178' text-anchor='middle' font-size='10' fill='var(--ink)' font-weight='600'>肝細胞</text><text x='215' y='194' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>PCK1/G6PC↑</text><text x='215' y='207' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>糖産生↑・脂肪滴</text><rect x='275' y='160' width='66' height='44' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.8'/><text x='308' y='178' text-anchor='middle' font-size='10' fill='var(--C)' font-weight='600'>KC</text><text x='308' y='194' text-anchor='middle' font-size='9' fill='var(--C)'>活性化</text><text x='308' y='207' text-anchor='middle' font-size='9' fill='var(--C)'>CXCL1↑</text><rect x='420' y='120' width='138' height='52' rx='10' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.8'/><text x='489' y='141' text-anchor='middle' font-size='10.5' fill='var(--D)' font-weight='600'>IR培地</text><text x='489' y='156' text-anchor='middle' font-size='9.5' fill='var(--D)'>高insulin・高glucose</text><text x='489' y='169' text-anchor='middle' font-size='9.5' fill='var(--D)'>高FFA↑</text><line x1='419' y1='146' x2='364' y2='180' stroke='var(--D)' stroke-width='1.5' marker-end='url(#ar12fd)'/><rect x='420' y='200' width='138' height='52' rx='10' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.8'/><text x='489' y='221' text-anchor='middle' font-size='10.5' fill='var(--C)' font-weight='600'>単球浸潤↑</text><text x='489' y='237' text-anchor='middle' font-size='9.5' fill='var(--C)'>血管外遊出</text><text x='489' y='250' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>（IR条件で有意増加）</text><line x1='342' y1='180' x2='418' y2='220' stroke='var(--C)' stroke-width='1.5' marker-end='url(#ar12f)'/><rect x='420' y='272' width='138' height='24' rx='8' fill='var(--paper-2)' stroke='var(--H)' stroke-width='1.8'/><text x='489' y='288' text-anchor='middle' font-size='10' fill='var(--H)' font-weight='600'>CD163+ 組織MΦ分化</text><line x1='489' y1='252' x2='489' y2='270' stroke='var(--H)' stroke-width='1.5' marker-end='url(#ar12fh)'/></svg>",
+    method_figure:"<svg viewBox='0 0 640 200' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'><defs><marker id='m12' markerWidth='8' markerHeight='8' refX='6' refY='3' orient='auto'><path d='M0,0 L6,3 L0,6 Z' fill='var(--ink-soft)'/></marker></defs><rect width='640' height='200' fill='var(--paper)'/><rect x='8' y='28' width='105' height='90' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/><text x='60' y='50' text-anchor='middle' font-size='10' font-weight='600' fill='var(--ink)'>球状体形成</text><text x='60' y='64' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>alginate microwell</text><text x='60' y='77' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>肝細胞+KC</text><text x='60' y='90' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>+HUVEC+NHLF</text><text x='60' y='108' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>2日間</text><line x1='113' y1='73' x2='135' y2='73' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#m12)'/><rect x='137' y='28' width='110' height='90' rx='8' fill='var(--paper-2)' stroke='var(--E)' stroke-width='1.5'/><text x='192' y='50' text-anchor='middle' font-size='10' font-weight='600' fill='var(--E)'>PDMSデバイス</text><text x='192' y='64' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>フィブリンゲル</text><text x='192' y='77' text-anchor='middle' font-size='9' fill='var(--E)'>HUVEC血管形成</text><text x='192' y='90' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>自己組織化</text><text x='192' y='108' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>7〜14日間</text><line x1='247' y1='73' x2='269' y2='73' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#m12)'/><rect x='271' y='18' width='110' height='100' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/><text x='326' y='40' text-anchor='middle' font-size='10' font-weight='600' fill='var(--D)'>IR培地暴露</text><text x='326' y='54' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>生理的 vs IR</text><text x='326' y='67' text-anchor='middle' font-size='9' fill='var(--D)'>高insulin/glc/FFA</text><text x='326' y='80' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>代謝・血管評価</text><text x='326' y='93' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>Luminex解析</text><text x='326' y='108' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>Day 1〜14</text><line x1='381' y1='73' x2='403' y2='73' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#m12)'/><rect x='405' y='18' width='110' height='100' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/><text x='460' y='40' text-anchor='middle' font-size='10' font-weight='600' fill='var(--C)'>単球添加</text><text x='460' y='54' text-anchor='middle' font-size='9' fill='var(--C)'>CD14+単球を</text><text x='460' y='67' text-anchor='middle' font-size='9' fill='var(--C)'>血管腔に灌流</text><text x='460' y='80' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>Day 8追加</text><text x='460' y='93' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>4日間共培養</text><text x='460' y='108' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>ライブイメージ</text><line x1='515' y1='73' x2='537' y2='73' stroke='var(--ink-soft)' stroke-width='1.4' marker-end='url(#m12)'/><rect x='539' y='18' width='92' height='100' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/><text x='585' y='40' text-anchor='middle' font-size='10' font-weight='600' fill='var(--B)'>評価</text><text x='585' y='54' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>FACSで浸潤率</text><text x='585' y='67' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>CD163発現</text><text x='585' y='80' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>ライブイメージ</text><text x='585' y='93' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>サイトカイン</text><text x='585' y='108' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>血管形態解析</text><text x='320' y='145' text-anchor='middle' font-size='9.5' fill='var(--ink-soft)'>Primary human cells（ドナー適合 肝細胞＋KC）× HUVECマイクロ血管 × CD14+単球 統合MPS</text><text x='320' y='160' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>Tevonian et al., Nature Communications 17:950 (2026) — MIT Griffith lab</text></svg>"
+  },
+  {
     id:"11",
     title:"MERFISHで健常・線維化ヒト肝を単一細胞解像度で空間マッピング",
     authors:"Watson BR, Paul B, Rahman RU, Amir-Zilberstein L, Segerstolpe Å, Epstein ET, Murphy S, Geistlinger L, Lee T, Shih A, Deguine J, Xavier RJ, Moffitt JR, Mullen AC",
@@ -1116,6 +1193,7 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "12":[{ic:"chip",cap:"灌流血管統合型肝MPS"},{ic:"hepatocyte",cap:"肝細胞+KC球状体"},{ic:"macrophage",cap:"CD14+単球→CD163+分化"},{ic:"endothelial",cap:"HUVECマイクロ血管"}],
   "11":[{ic:"human",cap:"ヒト健常3例・線維化3例"},{ic:"hepatocyte",cap:"Fibrotic Hep 1/2"},{ic:"macrophage",cap:"Mac1/Mac2(KC様)"},{ic:"stellate",cap:"HSC1(CD74+)/HSC2"},{ic:"omics",cap:"MERFISH+snRNA-seq"}],
   "10":[{ic:"human",cap:"ヒトMASLD spectrum"},{ic:"macrophage",cap:"GPNMB+ MetMac"},{ic:"hepatocyte",cap:"IL32+肝細胞"},{ic:"omics",cap:"空間マルチオミクス"},{ic:"dish",cap:"PCLS/THP-1"}],
   "01":[{ic:"human",cap:"ヒト肝61例"},{ic:"omics",cap:"空間オミクス"},{ic:"macrophage",cap:"LAM"},{ic:"endothelial",cap:"中心静脈EC"}],
@@ -1226,7 +1304,21 @@ const CATINFO={
   "thbs1":{cat:"遺伝子・タンパク質",long:"トロンボスポンジン1（thrombospondin 1）。HSCが産生する細胞外マトリクス関連糖タンパクで、Zone 3肝細胞が発現するCD36に作用する。MERFISH解析でHSC→Zone 3肝細胞へのシグナルペアとして同定された。"},
   "cd74":{cat:"遺伝子・タンパク質",long:"MHCクラスII不変鎖（invariant chain；別名Ii chain）。MHCクラスII分子の安定化・細胞内輸送を担うシャペロン。肝星細胞のうち門脈域に濃縮するHSC1（炎症反応性のサブセット）で高発現し、IFN-γなどの炎症シグナルで誘導される。"},
   "baysor":{cat:"手法・モデル",long:"Baysor。画像ベース空間トランスクリプトーム（MERFISH等）向けのベイズ的細胞境界推定アルゴリズム。RNA分子の近接性と事前分布から細胞境界を推定し、免疫化学染色（Cellpose）と組み合わせて使用する。"},
-  "slc7a2":{cat:"遺伝子・タンパク質",long:"溶質輸送体ファミリー7メンバー2（SLC7A2；CAT-2）。アルギニン・オルニチン・リジンを輸送するカチオン性アミノ酸トランスポーターで尿素回路にオルニチン/アルギニンを供給する。線維化関連Fibrotic Hep 2で高発現し傷害肝の尿素回路適応を示す。"}
+  "slc7a2":{cat:"遺伝子・タンパク質",long:"溶質輸送体ファミリー7メンバー2（SLC7A2；CAT-2）。アルギニン・オルニチン・リジンを輸送するカチオン性アミノ酸トランスポーターで尿素回路にオルニチン/アルギニンを供給する。線維化関連Fibrotic Hep 2で高発現し傷害肝の尿素回路適応を示す。"},
+  "huvec":{cat:"細胞・組織",long:"ヒト臍帯静脈内皮細胞（human umbilical vein endothelial cell）。NHLFとともにフィブリンゲル内で自己組織化して灌流可能なマイクロ血管ネットワークを形成する。肝MPSの血管構成に標準的に使用されるが、肝特異的なLSECへの置換が今後の課題。"},
+  "nhlf":{cat:"細胞・組織",long:"正常ヒト肺線維芽細胞（normal human lung fibroblast）。HUVECと協調してフィブリンゲル内の血管モルフォゲネシス（管腔形成・安定化）をサポートするストロマ細胞。MPSの血管ネットワーク形成に必須のサポート細胞として使用。"},
+  "ir":{cat:"疾患・病態",long:"インスリン抵抗性（insulin resistance）。インスリンへの感受性が低下し肝糖産生が抑制されない代謝不全状態。高insulin・高glucose・高FFAを組み合わせたIR培地でin vitroモデルに誘導できる。MASLDとT2Dの両病態の根幹をなす。"},
+  "g6pc":{cat:"遺伝子・タンパク質",long:"グルコース-6-ホスファターゼ触媒サブユニット（glucose-6-phosphatase catalytic subunit）。ER膜に局在し糖新生の最終反応（グルコース-6-リン酸→グルコース）を触媒する律速酵素。IR条件で上昇し、肝糖産生増大の重要な機能的指標となる。"},
+  "fabp1":{cat:"遺伝子・タンパク質",long:"肝型脂肪酸結合タンパク（fatty acid binding protein 1；L-FABP）。肝細胞の細胞質に高発現し長鎖脂肪酸の細胞内輸送・代謝に関与する。IR条件でFASNとともに発現変化がみられ、脂質処理能のリードアウトとなる。"},
+  "cxcl1":{cat:"シグナル・経路",long:"C-X-Cモチーフケモカインリガンド1（GROα；CXCL1）。好中球・単球の強力な走化性ケモカインで、CXCR2受容体を介して免疫細胞を病変部へ招集する。IR肝MPS上清で増加しKC活性化による炎症性サイトカイン環境の形成を示す。"},
+  "cxcl2":{cat:"シグナル・経路",long:"C-X-Cモチーフケモカインリガンド2（GROβ；CXCL2）。CXCL1と同族のELRモチーフCXCケモカインで、同じCXCR2受容体を介して好中球・単球を誘引する。IR条件で協調して増加し、炎症性招集の増幅を示す。"},
+  "ccl4 (mip-1β)":{cat:"シグナル・経路",long:"C-Cモチーフケモカインリガンド4（MIP-1β；CCL4）。単球・T細胞・NK細胞を走化するケモカインで、CCR1/CCR5受容体を介して作用する。IR肝MPS上清で増加し単球浸潤促進に寄与する。※化学傷害モデルで使う四塩化炭素CCl4（carbon tetrachloride）とは全く別物。"},
+  "icam-1":{cat:"遺伝子・タンパク質",long:"細胞間接着分子1（intercellular adhesion molecule 1；CD54）。内皮細胞・マクロファージ表面に発現し白血球接着・血管外遊出を促進する膜タンパク。IR条件の肝MPSで分泌が上昇し内皮炎症状態と単球招集の促進を示す指標となる。"},
+  "cd163":{cat:"遺伝子・タンパク質",long:"CD163（ヘモグロビンスカベンジャー受容体）。組織定着マクロファージ（M2様）の代表的表面マーカーで、ヘモグロビン・ハプトグロビン複合体の取込を介した抗炎症・組織修復機能と関連する。血管外遊出した単球でのCD163上昇が組織マクロファージへの分化開始を示す。"},
+  "cd14":{cat:"遺伝子・タンパク質",long:"CD14（LPS共受容体 / 単球マーカー）。LPS結合タンパク（LBP）と協調してLPSをTLR4に提示するGPI係留型受容体。単球・マクロファージの同定・選別に使うマーカーで、CD14+で末梢血単球を精製して血管腔への添加実験に使用する。"},
+  "pls-da":{cat:"手法・モデル",long:"偏最小二乗判別分析（partial least squares discriminant analysis）。多次元の測定値（サイトカイン・ケモカインパネル等）から疾患状態を判別する教師あり多変量解析手法。IR vs 生理的条件の疾患状態の有意な分離と寄与因子（CXCL1/CXCL2/CCL4/ICAM-1）の同定に使用された。"},
+  "fibrin":{cat:"手法・モデル",long:"フィブリンゲル（fibrin hydrogel）。フィブリノゲンにトロンビンを加えて重合させた天然ハイドロゲル。HUVECと線維芽細胞が自己組織化してマイクロ血管ネットワークを形成するための3D足場として機能する。細胞リモデリングに適したECM代替基材。"},
+  "gas6":{cat:"シグナル・経路",long:"増殖停止特異的タンパク質6（growth arrest specific protein 6；GAS6）。AXL/MER/TYRO3（TAM受容体）ファミリーのリガンドで、アポトーシス細胞の貪食誘導・抗炎症・組織修復を促進する。生理的条件の肝MPS上清で増加し組織恒常性維持の役割を担う可能性を示す。"}
 };
 
 /* ===== 描画 ===== */
@@ -2229,6 +2321,59 @@ CINEMA["10"]={
         K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},1000);
         K.T(()=>K.draw("collagen",GLYPH.collagenAt(610,375),{len:150}),1700);
       }},
+    ];
+  }
+};
+
+/* ===== №12 灌流肝MPS：IR培地→KC活性化→CXCL1↑→単球遊出→CD163+分化 ===== */
+CINEMA["12"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("12")}
+    <marker id="arC12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--C)"/></marker>
+    <marker id="arE12" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--E)"/></marker>
+  </defs>`
+  +GLYPH.title("灌流肝MPS：IR培地→KC活性化→CXCL1↑→単球が血管外遊出→CD163+分化")
+  +`<rect x="30" y="38" width="660" height="62" rx="31" fill="#d4ecf8" opacity="0.45"/>
+   <rect x="30" y="38" width="660" height="62" rx="31" fill="none" stroke="var(--E)" stroke-width="2.2"/>
+   <text x="360" y="30" text-anchor="middle" font-size="10.5" fill="var(--E)">灌流マイクロ血管（HUVEC ／ フィブリンゲル）</text>
+   <ellipse cx="250" cy="268" rx="120" ry="95" fill="#f5ede0" stroke="#c8a87a" stroke-width="1.8"/>
+   <text x="250" y="175" text-anchor="middle" font-size="10" fill="var(--ink-soft)">肝球状体</text>
+   <line x1="250" y1="100" x2="250" y2="173" stroke="var(--E)" stroke-width="1.8" stroke-dasharray="4,3"/>
+   <g id="nvess12" class="fade"><text x="595" y="62" font-size="9.5" text-anchor="middle" fill="var(--B)">血管径↓</text><text x="595" y="76" font-size="9.5" text-anchor="middle" fill="var(--B)">透過性↑</text></g>`
+  +GLYPH.hep("hep12",215,282,0.85,"肝細胞")
+  +GLYPH.mac("kc12",340,268,"KC","#5d6470")
+  +`<g id="mn1" class="fade">`+GLYPH.monocyte("mn1i",95,69,"CD14+単球")+`</g>`
+  +`<g id="mn2" class="fade">`+GLYPH.monocyte("mn2i",530,69,"")+`</g>`
+  +`<g id="mn3" class="fade">`+GLYPH.monocyte("mn3i",250,82,"")+`</g>`
+  +GLYPH.mol("irlab",530,200,"IR培地","var(--D)",true)
+  +GLYPH.mol("insM",488,252,"insulin↑","var(--D)",true)
+  +GLYPH.mol("glcM",562,282,"glucose↑","var(--D)",true)
+  +GLYPH.mol("ffaM2",510,318,"FFA↑","var(--D)",true)
+  +GLYPH.mol("cxcl12",218,124,"CXCL1","var(--C)",true)
+  +GLYPH.mol("ccl412",274,118,"CCL4","var(--C)",true)
+  +GLYPH.badge("cd163bd",440,348,"CD163+","組織MΦ","var(--H)"),
+  build(K){
+    const dp=[[190,262],[215,282],[198,302],[238,268],[218,315]];
+    return [
+      {color:"E",t:2400,cap:"① 健常な灌流肝MPS。肝細胞＋KC球状体がHUVECマイクロ血管に囲まれ、血管腔をCD14+単球が流れる。",
+       run(){K.show(["mn1","mn2"]);}},
+      {color:"D",t:4000,cap:"② IR培地（高insulin・高glucose・高FFA）で慢性暴露すると肝細胞にPCK1/G6PC↑・脂肪滴蓄積が起こる。血管では径縮小・透過性亢進が現れる。",
+       run(){
+         K.show(["irlab","insM","glcM","ffaM2"]);
+         K.flow(530,200,215,282,"var(--D)",{n:3,dur:1.5,loop:2});
+         K.T(()=>{ addDrops(K,"hep12Drops",dp,"lip12",0); K.show(["nvess12"]); },1400);
+       }},
+      {color:"C",t:4400,cap:"③ KC活性化によりCXCL1・CCL4が分泌される。血管内単球がこれに走化し、血管壁を越えて球状体へ遊出（extravasation）。IR条件で浸潤頻度が有意に増加。",
+       run(){
+         K.attr("kc12Body","fill","#9c4f2a");
+         K.T(()=>{ K.show(["cxcl12","ccl412"]); K.pulse("cxcl12"); K.pulse("ccl412"); },600);
+         K.flow(95,69,250,69,"var(--C)",{n:4,dur:1.2,loop:2});
+         K.T(()=>{ K.show(["mn3"]); K.move("mn3",0,0,0,165,1.4); },1400);
+       }},
+      {color:"H",t:3200,cap:"④ 浸潤した単球はCD163+組織マクロファージへの分化を開始し、肝MPS内に定着。IR→免疫細胞招集→KC様分化という代謝-免疫相互作用を灌流血管経由でリアルタイムに捉えた。",
+       run(){
+         K.show(["cd163bd"]);
+         K.T(()=>{ K.unpulse("cxcl12"); K.unpulse("ccl412"); },700);
+       }},
     ];
   }
 };
