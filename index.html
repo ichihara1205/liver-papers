@@ -328,6 +328,18 @@ table.board td.bnum{white-space:nowrap}
 .catlabel{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line-soft)}
 .catlabel:first-child{margin-top:0}
 .cattag{display:inline-block;font-family:"DM Mono",monospace;font-size:10px;padding:2px 8px;border-radius:999px;background:var(--paper-2);border:1px solid var(--line);color:var(--ink-soft);margin-left:8px;vertical-align:middle}
+/* glossary row category icon */
+.gicon{display:inline-flex;width:18px;height:18px;vertical-align:middle;margin-right:7px}
+.gicon svg{width:18px;height:18px}
+/* category toggle buttons (cat mode) */
+.catbtns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.catbtn{display:inline-flex;align-items:center;gap:6px;font-family:"DM Mono",monospace;font-size:11.5px;cursor:pointer;padding:6px 11px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;transition:all .16s}
+.catbtn svg{width:16px;height:16px;color:var(--cbc,var(--accent))}
+.catbtn em{font-style:normal;opacity:.55;font-size:10px}
+.catbtn:hover{border-color:var(--ink-soft)}
+.catbtn.active{background:var(--cbc,var(--accent));color:#fff;border-color:var(--cbc,var(--accent))}
+.catbtn.active svg{color:#fff}
+.catbtn.active em{opacity:.85}
 
 /* illustration strip */
 .illus{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px}
@@ -1322,7 +1334,7 @@ const CATINFO={
 };
 
 /* ===== 描画 ===== */
-let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="";
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set();
 const READ_LABEL={"":"未読","skim":"流し読み","deep":"精読"};
 const READ_FILTER_CYCLE=["","unread","skim","deep"];
 const READ_FILTER_LABEL={"":"📖 すべて","unread":"📖 未読のみ","skim":"📖 流し読みのみ","deep":"📖 精読のみ"};
@@ -2574,7 +2586,7 @@ function enrich(g){
 function glosRowHTML(g){
   const cc=(typeof CATCOLOR!=="undefined"&&CATCOLOR[g.cat])||"var(--accent)";
   return `<div class="glosrow" style="border-left-color:${cc}">
-    <span class="gterm">${g.term}</span><span class="gfull">${g.full}</span>
+    <span class="gicon" style="color:${cc}">${CATICON[g.cat]||CATICON["その他"]}</span><span class="gterm">${g.term}</span><span class="gfull">${g.full}</span>
     ${sortMode!=="cat"?`<span class="cattag" style="background:${cc};border-color:${cc};color:#fff">${g.cat}</span>`:""}
     <div class="gdesc">${g.detail}</div>
     <div class="grefs">${g.papers.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(pp=>
@@ -2594,11 +2606,21 @@ function renderGlossary(){
   let html="";
   if(sortMode==="cat"){
     const cats=[...CAT_ORDER,"その他"];
-    cats.forEach(c=>{
+    const counts={}; cats.forEach(c=>counts[c]=list.filter(g=>g.cat===c).length);
+    const shown=cats.filter(c=>counts[c]>0);
+    // ジャンル選択トグル（複数選択。空＝すべて表示）
+    const bar=`<div class="catbtns" id="catbtns">`+
+      `<button class="catbtn${catSel.size===0?' active':''}" data-cat="__all">すべて <em>${list.length}</em></button>`+
+      shown.map(c=>`<button class="catbtn${catSel.has(c)?' active':''}" data-cat="${c}" style="--cbc:${CATCOLOR[c]||'var(--accent)'}">${CATICON[c]||CATICON["その他"]}<span>${c}</span> <em>${counts[c]}</em></button>`).join("")+
+      `</div>`;
+    const active=catSel.size?shown.filter(c=>catSel.has(c)):shown;
+    let body="";
+    active.forEach(c=>{
       const rows=list.filter(g=>g.cat===c).sort(byAlpha);
       if(!rows.length)return;
-      html+=`<div class="catlabel" style="color:${CATCOLOR[c]||'var(--accent)'};border-left:4px solid ${CATCOLOR[c]||'var(--accent)'};padding-left:9px">${c}　(${rows.length})</div><div class="glosgrid">${rows.map(glosRowHTML).join("")}</div>`;
+      body+=`<div class="catlabel" style="color:${CATCOLOR[c]||'var(--accent)'};border-left:4px solid ${CATCOLOR[c]||'var(--accent)'};padding-left:9px">${c}　(${rows.length})</div><div class="glosgrid">${rows.map(glosRowHTML).join("")}</div>`;
     });
+    html=bar+(body||'<div class="empty">選択中のジャンルに該当する用語がありません</div>');
   }else{
     if(sortMode==="first") list=list.slice().sort((a,b)=>a.minId-b.minId||byAlpha(a,b));
     else if(sortMode==="count") list=list.slice().sort((a,b)=>b.count-a.count||byAlpha(a,b));
@@ -2606,6 +2628,14 @@ function renderGlossary(){
     html=`<div class="glosgrid">${list.map(glosRowHTML).join("")}</div>`;
   }
   glosview.innerHTML=html;
+  const cb=document.getElementById("catbtns");
+  if(cb) cb.addEventListener("click",e=>{
+    const b=e.target.closest(".catbtn"); if(!b)return;
+    const c=b.dataset.cat;
+    if(c==="__all") catSel.clear();
+    else { catSel.has(c)?catSel.delete(c):catSel.add(c); }
+    renderGlossary();
+  });
   glosview.querySelectorAll(".pchip").forEach(b=>{
     b.addEventListener("click",()=>jumpToPaper(b.dataset.id));
   });
@@ -2956,6 +2986,17 @@ async function runFeed(term){
 const CATCOLOR={
   "細胞・組織":"var(--C)","遺伝子・タンパク質":"var(--H)","シグナル・経路":"var(--F)",
   "代謝・分子":"var(--D)","プロセス・現象":"var(--B)","手法・モデル":"var(--A)","疾患・病態":"var(--E)","その他":"var(--accent)"
+};
+/* 用語ジャンル別アイコン（currentColorで描画＝カテゴリ色を継承） */
+const CATICON={
+  "細胞・組織":`<svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='currentColor' stroke-width='1.6'/><circle cx='12' cy='12' r='3.4' fill='currentColor'/></svg>`,
+  "遺伝子・タンパク質":`<svg viewBox='0 0 24 24'><path d='M8 3v18M16 3v18' stroke='currentColor' stroke-width='1.6' stroke-linecap='round'/><path d='M8 6.5q4 2.2 8 0M8 12q4 2.2 8 0M8 17.5q4 2.2 8 0' fill='none' stroke='currentColor' stroke-width='1.3'/></svg>`,
+  "シグナル・経路":`<svg viewBox='0 0 24 24'><circle cx='5' cy='12' r='2.6' fill='currentColor'/><path d='M8 12h7' stroke='currentColor' stroke-width='1.6'/><path d='M13 8.5l3.5 3.5-3.5 3.5' fill='none' stroke='currentColor' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>`,
+  "代謝・分子":`<svg viewBox='0 0 24 24'><polygon points='12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5' fill='none' stroke='currentColor' stroke-width='1.6' stroke-linejoin='round'/></svg>`,
+  "プロセス・現象":`<svg viewBox='0 0 24 24'><path d='M20 12a8 8 0 1 1-2.6-5.9' fill='none' stroke='currentColor' stroke-width='1.6' stroke-linecap='round'/><path d='M20 4v4h-4' fill='none' stroke='currentColor' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>`,
+  "手法・モデル":`<svg viewBox='0 0 24 24'><path d='M9.5 3h5M10.5 3v5.5l-5 9A1.8 1.8 0 0 0 7 20h10a1.8 1.8 0 0 0 1.5-2.5l-5-9V3' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linejoin='round'/></svg>`,
+  "疾患・病態":`<svg viewBox='0 0 24 24'><path d='M2 12h5l2.2-6 3.6 12 2.2-6H22' fill='none' stroke='currentColor' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/></svg>`,
+  "その他":`<svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='3.8' fill='currentColor'/></svg>`
 };
 function renderNetwork(){
   document.getElementById("total").textContent=PAPERS.length;
