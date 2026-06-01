@@ -127,6 +127,7 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .figbox{background:var(--paper-2);border:1px solid var(--line-soft);border-radius:4px;padding:14px;overflow-x:auto}
 .figbox svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
 .pchip.mention{opacity:.5}
+.abst-strong{font-weight:600;line-height:1.78}
 
 /* ===== アニメ再生エンジン（共通） ===== */
 .cinema{margin-top:4px}
@@ -1229,11 +1230,26 @@ sortbar.addEventListener("click",e=>{
 
 /* ===== 用語ツールチップ ===== */
 // 全論文glossaryから term(lower)->{term,desc} の索引を作る（本文中の用語に注釈を付ける用）
+const MANUAL_ALIASES={
+  "rspo3 / lgr6":["R-spondin 3","R-spondin","RSPO3","LGR6"],
+  "wnt / wnt":["WNT/βカテニン","WNT","Wnt"],
+  "β-catenin (ctnnb1)":["βカテニン","β-catenin","CTNNB1"],
+  "scara / sr-a":["SR-A","Scara"]
+};
+function aliasesOf(term){
+  if(!term) return [];
+  const out=new Set([term]);
+  (term.match(/[（(]([^）)]+)[）)]/g)||[]).forEach(seg=>out.add(seg.replace(/[（()）]/g,"").trim()));
+  term.replace(/[（(][^）)]*[）)]/g," ").split(/[\/,、・|]/).forEach(x=>{x=x.trim();if(x)out.add(x);});
+  (MANUAL_ALIASES[term.toLowerCase()]||[]).forEach(x=>out.add(x));
+  return [...out].filter(x=>x&&x.trim().length>=2);
+}
+// alias(lower) -> {surface, term(正式名), desc}
 const TOOLTIP_TERMS=(()=>{
   const m=new Map();
   PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{
-    const k=(g.term||"").toLowerCase();
-    if(k&&!m.has(k)) m.set(k,{term:g.term,desc:g.desc||""});
+    if(!g.term) return;
+    aliasesOf(g.term).forEach(a=>{ const k=a.toLowerCase(); if(k&&!m.has(k)) m.set(k,{surface:a,term:g.term,desc:g.desc||""}); });
   }));
   return m;
 })();
@@ -1242,17 +1258,17 @@ function annotate(text){
   let s=String(text), tokens=[];
   const keys=[...TOOLTIP_TERMS.keys()].sort((a,b)=>b.length-a.length);
   for(const k of keys){
-    const orig=TOOLTIP_TERMS.get(k).term;
-    const idx=s.indexOf(orig);
+    const o=TOOLTIP_TERMS.get(k), surf=o.surface;
+    const idx=s.indexOf(surf);
     if(idx>=0){
       const tk=""+tokens.length+"";
-      s=s.slice(0,idx)+tk+s.slice(idx+orig.length);
-      tokens.push(TOOLTIP_TERMS.get(k));
+      s=s.slice(0,idx)+tk+s.slice(idx+surf.length);
+      tokens.push(o);
     }
   }
   tokens.forEach((o,i)=>{
     const tip=(o.desc||o.term).replace(/"/g,"&quot;");
-    s=s.replace(""+i+"",`<span class="term" data-tip="${tip}" data-t="${o.term.replace(/"/g,'&quot;')}">${o.term}</span>`);
+    s=s.replace(""+i+"",`<span class="term" data-tip="${tip}" data-t="${o.term.replace(/"/g,'&quot;')}">${o.surface}</span>`);
   });
   return s;
 }
@@ -1900,7 +1916,7 @@ function render(){
         ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
         ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4><div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
-        <div class="sec"><h4>Abstract（和訳要約）</h4><p>${em(p.abstract_ja||p.abstract||"")}</p></div>
+        <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
         <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
         <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
         <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
@@ -1971,7 +1987,7 @@ function buildGlossaryIndex(){
   function mentions(term,blob){const t=term.toLowerCase();
     if(/^[\x00-\x7f]+$/.test(t)&&t.length<=4){try{return new RegExp("(^|[^a-z0-9])"+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"([^a-z0-9]|$)","i").test(blob);}catch(e){return blob.includes(t);}}
     return blob.includes(t);}
-  map.forEach(e=>{ blobs.forEach(({p,b})=>{ if(mentions(e.term,b)&&!e.papers.some(x=>x.id===p.id)) e.papers.push({id:p.id,primary:p.primary,mention:true}); }); });
+  map.forEach(e=>{ blobs.forEach(({p,b})=>{ if(aliasesOf(e.term).some(a=>mentions(a,b))&&!e.papers.some(x=>x.id===p.id)) e.papers.push({id:p.id,primary:p.primary,mention:true}); }); });
   return [...map.values()].sort((a,b)=>a.term.toLowerCase().localeCompare(b.term.toLowerCase()));
 }
 function enrich(g){
@@ -2371,26 +2387,17 @@ function renderNetwork(){
   document.getElementById("total").textContent=PAPERS.length;
   document.getElementById("countline").textContent="同じ論文に一緒に登場した用語どうしを線で結んでいます";
   // ノード（用語）と共起エッジを構築
-  const nodeMap=new Map(); // key->{term,cat,papers:Set}
-  PAPERS.forEach(p=>{
-    (p.glossary||[]).forEach(g=>{
-      const k=(g.term||"").toLowerCase(); if(!k)return;
-      if(!nodeMap.has(k)){ const info=CATINFO[k]||{}; nodeMap.set(k,{term:g.term,cat:info.cat||"その他",papers:new Set()}); }
-      nodeMap.get(k).papers.add(p.id);
-    });
-  });
+  const entries=buildGlossaryIndex(); // papers は定義＋言及を含む
+  const nodeMap=new Map();
+  entries.forEach(e=>{ const k=e.term.toLowerCase(); const info=CATINFO[k]||{}; nodeMap.set(k,{term:e.term,cat:info.cat||"その他",papers:new Set(e.papers.map(pp=>pp.id))}); });
   const catIdx=t=>{ const i=CAT_ORDER.indexOf(t); return i<0?CAT_ORDER.length:i; };
   const nodes=[...nodeMap.values()].sort((a,b)=>catIdx(a.cat)-catIdx(b.cat)||a.term.localeCompare(b.term));
   const idxOf=new Map(nodes.map((n,i)=>[n.term.toLowerCase(),i]));
-  // エッジ
+  // エッジ＝同じ論文に一緒に「言及」された回数
+  const paperTerms=new Map();
+  entries.forEach(e=>{ const k=e.term.toLowerCase(); e.papers.forEach(pp=>{ if(!paperTerms.has(pp.id))paperTerms.set(pp.id,new Set()); paperTerms.get(pp.id).add(k); }); });
   const eMap=new Map();
-  PAPERS.forEach(p=>{
-    const ts=[...new Set((p.glossary||[]).map(g=>(g.term||"").toLowerCase()).filter(Boolean))];
-    for(let a=0;a<ts.length;a++)for(let b=a+1;b<ts.length;b++){
-      const i=idxOf.get(ts[a]), j=idxOf.get(ts[b]); if(i==null||j==null)continue;
-      const key=i<j?i+"-"+j:j+"-"+i; eMap.set(key,(eMap.get(key)||0)+1);
-    }
-  });
+  paperTerms.forEach(set=>{ const ts=[...set]; for(let a=0;a<ts.length;a++)for(let b=a+1;b<ts.length;b++){ const i=idxOf.get(ts[a]),j=idxOf.get(ts[b]); if(i==null||j==null)continue; const key=i<j?i+"-"+j:j+"-"+i; eMap.set(key,(eMap.get(key)||0)+1);} });
   // レイアウト（円周）
   const N=nodes.length, VB=820, cx=VB/2, cy=VB/2, R=VB/2-150;
   const pos=nodes.map((n,i)=>{ const ang=-Math.PI/2+2*Math.PI*i/N; return {x:cx+R*Math.cos(ang),y:cy+R*Math.sin(ang),ang}; });
@@ -2399,12 +2406,12 @@ function renderNetwork(){
   let edgeSVG="";
   eMap.forEach((w,key)=>{
     const [i,j]=key.split("-").map(Number);
-    const op=0.18+0.55*(w/maxW), sw=1+2.4*(w/maxW);
+    const op=0.10+0.62*((w-1)/Math.max(1,maxW-1)), sw=0.8+2.8*((w-1)/Math.max(1,maxW-1));
     edgeSVG+=`<line class="edge e-${i} e-${j}" x1='${pos[i].x.toFixed(1)}' y1='${pos[i].y.toFixed(1)}' x2='${pos[j].x.toFixed(1)}' y2='${pos[j].y.toFixed(1)}' stroke='var(--line)' stroke-width='${sw.toFixed(2)}' stroke-opacity='${op.toFixed(2)}'/>`;
   });
   let nodeSVG="";
   nodes.forEach((n,i)=>{
-    const r=5+7*(n.papers.size/maxC), col=CATCOLOR[n.cat]||"var(--accent)";
+    const r=4.5+9.5*((n.papers.size-1)/Math.max(1,maxC-1)), col=CATCOLOR[n.cat]||"var(--accent)";
     const side=Math.cos(pos[i].ang)>=0?"start":"end";
     const lx=pos[i].x+(side==="start"?r+5:-(r+5)), ly=pos[i].y+4;
     nodeSVG+=`<g class="node n-${i}" data-i="${i}" style="cursor:pointer">`
