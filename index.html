@@ -527,7 +527,16 @@ const PAPERS=[
       {term:"HLA-DR",full:"human leukocyte antigen-DR (MHC class II)",desc:"MHCクラスII。GPNMB+マクロファージの抗原提示能の指標"},
       {term:"SPP1",full:"secreted phosphoprotein 1 (osteopontin)",desc:"線維化と関連するMASHバイオマーカー。MASHのGPNMB+MΦで増加"},
       {term:"AKR1B10",full:"aldo-keto reductase family 1 member B10",desc:"レチノール代謝酵素。バルーニング肝細胞のマーカーでIL32高発現域と共局在"},
-      {term:"PCLS",full:"precision-cut liver slices",desc:"ヒト肝組織を薄切し培養するex vivoモデル。GPNMB+MΦの機能解析に使用"}
+      {term:"PCLS",full:"precision-cut liver slices",desc:"ヒト肝組織を薄切し培養するex vivoモデル。GPNMB+MΦの機能解析に使用"},
+      {term:"MARCO",full:"macrophage receptor with collagenous structure",desc:"常在クッパー細胞のマーカー兼スカベンジャー受容体。MASH進行に伴い発現が低下し、KC枯渇の指標となる"},
+      {term:"CD5L",full:"CD5 molecule-like (AIM)",desc:"常在クッパー細胞のマーカー。脂質代謝・細胞生存制御に関与し、MARCOとともにKC同定に用いる"},
+      {term:"TREM2",full:"triggering receptor expressed on myeloid cells 2",desc:"脂質関連/MASH関連マクロファージ（LAM）の代表マーカー。脂質取込・組織修復に関与"},
+      {term:"LPL",full:"lipoprotein lipase",desc:"脂質分解酵素。GPNMB+ MetMacが高発現し、脂質取込・代謝適応を示すマーカー"},
+      {term:"FABP5",full:"fatty acid binding protein 5",desc:"脂肪酸結合タンパク。MetMacの脂質処理を担う代謝適応マーカー"},
+      {term:"MSR1",full:"macrophage scavenger receptor 1 (CD204)",desc:"スカベンジャー受容体。実質域の代謝型マクロファージで高発現し、脂質貪食に関与"},
+      {term:"THP-1",full:"THP-1 human monocytic cell line",desc:"ヒト単球系株化細胞。マクロファージ様へ分化させ、IL32応答（貪食・IL1B/IL10）を検証する"},
+      {term:"IL1B",full:"interleukin-1 beta",desc:"炎症性サイトカイン。GPNMB+MΦの炎症性表現型の指標で、IL32刺激により上昇"},
+      {term:"IL10",full:"interleukin-10",desc:"抗炎症性サイトカイン。IL32刺激で低下し、IL1B優位の炎症性シフトを示す"}
     ]
   },
   {
@@ -1049,6 +1058,15 @@ const paperIcons={
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
 const CAT_ORDER=["細胞・組織","遺伝子・タンパク質","シグナル・経路","代謝・分子","プロセス・現象","手法・モデル","疾患・病態"];
 const CATINFO={
+  "marco":{cat:"遺伝子・タンパク質",long:"コラーゲン様構造をもつマクロファージ受容体。常在Kupffer細胞のマーカー兼スカベンジャー受容体で、MASH進行に伴い発現が低下し常在KC枯渇の指標となる。"},
+  "cd5l":{cat:"遺伝子・タンパク質",long:"CD5分子様タンパク（AIM）。常在Kupffer細胞のマーカーで、脂質代謝や細胞生存の制御に関与し、MARCOとともにKC同定に用いられる。"},
+  "trem2":{cat:"遺伝子・タンパク質",long:"骨髄系細胞に発現するトリガー受容体2。脂質関連/MASH関連マクロファージ（LAM）の代表マーカーで、脂質取込や組織修復に関与する。"},
+  "lpl":{cat:"代謝・分子",long:"リポタンパクリパーゼ。脂質を分解する酵素で、GPNMB+ MetMacが高発現し脂質取込・代謝適応を示すマーカーとなる。"},
+  "fabp5":{cat:"遺伝子・タンパク質",long:"脂肪酸結合タンパク5。MetMacの脂質処理を担う代謝適応マーカーで、細胞内の脂肪酸輸送に関わる。"},
+  "msr1":{cat:"遺伝子・タンパク質",long:"マクロファージスカベンジャー受容体1（CD204）。実質域の代謝型マクロファージで高発現し、脂質の貪食に関与する。"},
+  "thp-1":{cat:"手法・モデル",long:"ヒト単球系の株化細胞。マクロファージ様に分化させ、IL32応答（貪食能やIL1B/IL10バランス）を評価するex vivo機能解析に用いる。"},
+  "il1b":{cat:"シグナル・経路",long:"インターロイキン1β。炎症性サイトカインで、GPNMB+マクロファージの炎症性表現型の指標となり、IL32刺激で上昇する。"},
+  "il10":{cat:"シグナル・経路",long:"インターロイキン10。抗炎症性サイトカインで、IL32刺激により低下し、IL1B優位の炎症性シフトを示す。"},
   "gpnmb":{cat:"遺伝子・タンパク質",long:"糖タンパク質NMB（オステオアクチビン）。MASH進行で増える代謝適応型/LAM系マクロファージの代表マーカーで、貪食能・抗原提示能と関連する。"},
   "il32":{cat:"シグナル・経路",long:"インターロイキン32。進行MASLDのバルーニング肝細胞が産生する炎症性サイトカインで、GPNMB+マクロファージの貪食能とIL1B優位の炎症性表現型を駆動する肝細胞→マクロファージのシグナル。"},
   "metmac":{cat:"細胞・組織",long:"代謝活性型マクロファージ（metabolically active macrophage）。GPNMB・LPL・FABP5・HS3ST2を高発現し、MASHで常在Kupffer細胞を置換して増加する亜集団。"},
