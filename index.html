@@ -14,6 +14,7 @@
   --card:#fbf8f0; --shadow:rgba(40,34,20,.12);
   --A:#3b7d72; --B:#c0632f; --C:#9c4f6c; --D:#bf942b;
   --E:#3f6fa3; --F:#6b8e3d; --G:#8a6d3b; --H:#a23b3b;
+  --I:#7a5ea8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -495,7 +496,8 @@ const THEMES={
   E:{name:"LSEC・血管・zonation",c:"var(--E)"},
   F:{name:"数理・in silico(ABM)",c:"var(--F)"},
   G:{name:"オミクス・空間解析",c:"var(--G)"},
-  H:{name:"治療・創薬標的/再生",c:"var(--H)"}
+  H:{name:"治療・創薬標的/再生",c:"var(--H)"},
+  I:{name:"共培養(肝細胞＋複数非実質細胞)",c:"var(--I)"}
 };
 
 /* ===== データ：新しい論文はこの配列の先頭（[ の直後）にオブジェクトを追加 ===== */
@@ -1087,7 +1089,7 @@ const PAPERS=[
     doi:"10.1038/s41467-025-68031-6",
     url:"https://www.nature.com/articles/s41467-025-68031-6",
     primary:"A",
-    tags:["A","C","E"],
+    tags:["A","C","E","I"],
     approach:"in vitro（primary human cell MPS / microfluidics — MIT Griffith lab）",
     added:"2026-06-01",
     abstract_ja:"in vitroモデルはヒト肝疾患の一側面を再現できるが、血管・免疫細胞との動的相互作用は従来の球状体モデルでは捉えにくかった。本研究ではドナー適合の初代ヒト肝細胞・クッパー細胞（KC）・HUVECおよびNHLFからなる多細胞肝球状体を、フィブリンゲル内で自己組織化した灌流可能なマイクロ血管ネットワークと物理的に統合したMPSを開発した。高インスリン・高グルコース・高FFAからなるインスリン抵抗性（IR）培地で慢性暴露すると、肝細胞の代謝遺伝子（PCK1↑・G6PC↑）および糖産生が増大し、インスリンクリアランスが低下した。同時に血管では径縮小・透過性亢進が起こり、炎症性ケモカイン（CXCL1, CXCL2, CCL4（MIP-1β）, ICAM-1）が上昇した。さらにCD14+単球を血管腔に添加すると、IR条件では生理的条件より有意に多くの単球が血管壁を越えて肝球状体へ遊出し、4日後にはCD163+組織マクロファージへの分化開始が確認された。本MPSはヒト肝の代謝・血管・免疫の三者相互作用を灌流血管を通じてリアルタイムに捉え、代謝性肝疾患研究の新たな実験基盤を提供する。",
@@ -1569,7 +1571,7 @@ const PAPERS=[
     doi:"10.1038/s41467-024-52258-w",
     url:"https://www.nature.com/articles/s41467-024-52258-w",
     primary:"A",
-    tags:["A","C","D","H"],
+    tags:["A","C","D","H","I"],
     approach:"iPSC-MPS（脂肪・肝・マクロファージ）",
     struct:{
       model:"in vitro", cells:["iPSC肝細胞","iPSCマクロファージ","iPSC脂肪細胞"], triggers:["M1マクロファージ炎症","TNFα＋遊離脂肪酸"],
@@ -2015,7 +2017,7 @@ function populateCitations(root){
   });
 }
 // 論文ビューの並び替え
-const THEME_ORDER=["A","B","C","D","E","F","G","H"];
+const THEME_ORDER=["A","B","C","D","E","F","G","H","I"];
 function citeOf(p){ const c=p.doi&&citeCache[p.doi]; return c&&typeof c.n==="number"?c.n:-1; }
 function sortPapers(arr){
   const byId=(a,b)=>Number(b.id)-Number(a.id);
