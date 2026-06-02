@@ -151,6 +151,14 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .cinema .sway{transform-box:fill-box;transform-origin:center;animation:csway 3s ease-in-out infinite}
 @keyframes csway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
 .cinema svg text{user-select:none}
+.model-badges{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
+.model-badges .mbadge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px 3px 7px;border-radius:14px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink)}
+.model-badges .mbadge svg{width:16px;height:16px;flex:none}
+.model-badges .mv-vivo{background:#fbeede;border-color:#e3b277;color:#9a5a16}
+.model-badges .mv-vitro{background:#e0f0f3;border-color:#7bb6c2;color:#1f6b78}
+.model-badges .mv-silico{background:#eaf0df;border-color:#9bbb6d;color:#52761f}
+.model-badges .mv-human{background:#eef0f6;border-color:#9aa6cf;color:#475196}
+.model-badges .mv-other{background:var(--paper-2);border-color:var(--line);color:var(--ink-soft)}
 
 /* View tabs */
 .viewtabs{display:flex;gap:6px;margin-bottom:14px}
@@ -1343,6 +1351,7 @@ const ICONS={
   dish:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--accent)' stroke-width='1.6'><ellipse cx='24' cy='26' rx='18' ry='9' fill='var(--paper-2)'/><ellipse cx='24' cy='24' rx='18' ry='9'/><circle cx='18' cy='24' r='1.6' fill='var(--accent)' stroke='none'/><circle cx='27' cy='27' r='1.6' fill='var(--accent)' stroke='none'/><circle cx='30' cy='22' r='1.6' fill='var(--accent)' stroke='none'/></svg>",
   omics:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--G)' stroke-width='1.6'><path d='M12 8 q12 8 0 16 q-12 8 0 16 M24 8 q-12 8 0 16 q12 8 0 16'/><path d='M14 13 h8 M14 35 h8' opacity='.6'/><rect x='32' y='30' width='3' height='12' fill='var(--G)' stroke='none'/><rect x='37' y='24' width='3' height='18' fill='var(--G)' stroke='none'/><rect x='42' y='34' width='3' height='8' fill='var(--G)' stroke='none'/></svg>",
   drug:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--A)' stroke-width='1.6'><g transform='rotate(-35 24 24)'><rect x='8' y='18' width='32' height='13' rx='6.5' fill='var(--paper-2)'/><line x1='24' y1='18' x2='24' y2='31'/><rect x='8' y='18' width='16' height='13' rx='6.5' fill='var(--A)' opacity='.2' stroke='none'/></g></svg>",
+  silico:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--F)' stroke-width='1.6'><rect x='7' y='9' width='34' height='24' rx='3' fill='var(--paper-2)'/><path d='M18 41 h12 M24 33 v8'/><path d='M13 16 h6 M13 21 h10 M13 26 h7' stroke-width='1.3'/></svg>",
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
@@ -1941,7 +1950,7 @@ function mountCinema(mount, def){
 
   playBtn.onclick=play; resetBtn.onclick=reset; track.onclick=play;
   reset();
-  return {play,reset};
+  return {play,reset,jump};
 }
 
 /* ===== 論文別ビルダー登録 ===== */
@@ -2079,8 +2088,8 @@ CINEMA["11"]={
     <text x="245" y="240" text-anchor="middle" font-size="8.5" fill="#4a8ab0">SDS</text>
     <text x="245" y="253" text-anchor="middle" font-size="8" fill="#4a8ab0">CYP2A6</text>
     <ellipse cx="360" cy="225" rx="40" ry="55" fill="#b0c48c" opacity="0.25"/>
-    <text x="360" y="225" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#6a8840">Z2</text>
-    <text x="360" y="240" text-anchor="middle" font-size="8.5" fill="#6a8840">ALDOB</text>
+    <text x="360" y="184" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#6a8840">Z2</text>
+    <text x="360" y="197" text-anchor="middle" font-size="8.5" fill="#6a8840">ALDOB</text>
     <ellipse cx="470" cy="225" rx="40" ry="55" fill="#c86c4a" opacity="0.3"/>
     <text x="470" y="225" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#a04520">Z3</text>
     <text x="470" y="240" text-anchor="middle" font-size="8.5" fill="#a04520">CYP2E1</text>
@@ -2184,6 +2193,7 @@ CINEMA["11"]={
       },
       {color:"B", cap:"④ 線維化肝（3例）では、通常のzonation保持肝細胞に加えFibrotic Hep 1（PNPLA3↑/EGFR↑/THRB↑）とFibrotic Hep 2（CPS1↑/SLC7A2↑/THRB↑）がlobule全域に散在して出現。MacはMARCO/CD5L/CD68を喪失し、HSCはCOL1A1を高発現する。",
         run(){
+          K.hide(["rlGDF","rlWNT"]);
           K.show(["fibHep1","fibHep2"]);
           K.T(()=>{
             K.show(["fibHSC"]);
@@ -2255,7 +2265,7 @@ CINEMA["13"]={
     +GLYPH.tf("yy1",70,140,"YY1","var(--B)",true)
     +`<g id="metrnLayer" class="fade">`+GLYPH.cytokine("metrn",300,150,"Meteorin","var(--B)")+`</g>`
     +GLYPH.stellate("hsc",520,300,"肝星細胞")
-    +GLYPH.receptor("ckit",520,262,"c-Kit","var(--B)")
+    +GLYPH.receptor("ckit",520,246,"c-Kit","var(--B)")
     +GLYPH.tf("stat3",520,300,"STAT3","var(--B)",true)
     +GLYPH.layer("collagen")
     +GLYPH.pill("drug",600,80,"caspase-8/Metrn阻害",150)
@@ -2274,8 +2284,8 @@ CINEMA["13"]={
         K.T(()=>{K.flow(95,140,290,150,"var(--B)",{dur:1.1,loop:2}); K.pulse("metrn");},2300);
       }},
       {color:"B",t:4200,cap:"③ 分泌MetrnがHSC膜上のc-Kit受容体に結合→STAT3経路を起動→qHSCがaHSC（筋線維芽細胞）へ活性化し、コラーゲンを過剰産生して線維化が進む。",run(){
-        K.flow(312,150,520,262,"var(--B)",{dur:1.3,loop:2});
-        K.T(()=>{K.pulse("ckit"); K.show(["stat3"]); K.flow(520,262,520,300,"var(--B)",{dur:0.8,loop:2});},1300);
+        K.flow(312,150,520,246,"var(--B)",{dur:1.3,loop:2});
+        K.T(()=>{K.pulse("ckit"); K.show(["stat3"]); K.flow(520,250,520,300,"var(--B)",{dur:0.8,loop:2});},1300);
         K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC（aHSC）");},2300);
         K.T(()=>K.draw("collagen",GLYPH.collagenAt(520,365),{len:160}),3100);
       }},
@@ -2304,7 +2314,7 @@ CINEMA["14"]={
     +`<g id="cap" class="fade"><rect x="120" y="158" width="450" height="7" rx="3" fill="var(--B)" opacity="0.55"/><text x="345" y="182" text-anchor="middle" font-size="9" fill="var(--B)">capillarization（有窓喪失・基底膜形成）</text></g>`
     +GLYPH.tag("rock2",345,139,"ROCK2↑","var(--B)",84,true)
     +`<g id="noLayer" class="fade">`+GLYPH.cytokine("no1",300,205,"NO/VEGF","var(--E)")+GLYPH.cytokine("no2",420,210,"","var(--E)")+`</g>`
-    +`<g id="angLayer" class="fade">`+GLYPH.cytokine("ang",360,205,"angiocrine（プロ線維化）","var(--B)")+`</g>`
+    +`<g id="angLayer" class="fade">`+GLYPH.cytokine("ang",360,250,"angiocrine（プロ線維化）","var(--B)")+`</g>`
     +GLYPH.receptor("hscR",360,304,"","var(--B)")
     +GLYPH.stellate("hsc",360,332,"血管周囲HSC（静止）")
     +GLYPH.layer("collagen")
@@ -2335,7 +2345,7 @@ CINEMA["14"]={
           K.T(()=>{
             K.markX(345,139);
             K.unpulse("rock2"); K.unpulse("ang"); K.unpulse("hscR");
-            K.attr("rock2","opacity","0.3"); K.attr("angLayer","opacity","0.22");
+            K.attr("rock2","opacity","0.3"); K.attr("angLayer","opacity","0");
             K.hide(["cap"]); K.show(["fen","noLayer"]);
             K.morph("hscShape",GLYPH.QUIET); K.attr("hscShape","fill","#d6a08e"); K.text("hscCap","静止化（qHSC）");
             K.attr("collagen","opacity","0.25");
@@ -2605,8 +2615,8 @@ CINEMA["10"]={
   svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("10")}${GLYPH.arrow("10","var(--C)")}</defs>`+GLYPH.title("常在KC枯渇→GPNMB+ MetMac蓄積→肝細胞IL32が炎症性表現型を駆動")
     +GLYPH.hep("hep",30,70,1.35,"肝細胞")
     +GLYPH.tag("balloon",120,60,"バルーニング↑","var(--D)",110,true)
-    +GLYPH.mac("kc",350,250,"常在KC(MARCO+CD5L+)","#5d6470")
-    +`<g id="met" class="fade">`+GLYPH.mac("metc",430,250,"GPNMB+ MetMac(LPL/FABP5高)","#9c4f6c")+`</g>`
+    +GLYPH.mac("kc",340,250,"常在KC","#5d6470")
+    +`<g id="met" class="fade">`+GLYPH.mac("metc",470,250,"GPNMB+ MetMac","#9c4f6c")+`</g>`
     +GLYPH.cytokine("il32",200,200,"IL32","var(--C)",true)
     +GLYPH.tag("shift",430,170,"IL1B↑ / IL10↓","var(--C)",118,true)
     +GLYPH.stellate("hsc",610,320,"肝星細胞")+GLYPH.layer("collagen"),
@@ -2621,9 +2631,9 @@ CINEMA["10"]={
         K.attr("kc","opacity","0.18"); K.show(["met"]); K.pulse("metc");
       }},
       {color:"C",t:4200,cap:"③ バルーニング肝細胞が分泌するIL32がGPNMB+ MΦに作用し、貪食能の亢進とIL1B優位（IL10低下）の炎症性表現型へとシフトさせる。",run(){
-        K.show(["il32"]); K.flow(205,200,420,250,"var(--C)",{dur:1.3,loop:3});
-        K.T(()=>{K.show(["shift"]); radiate(K,430,250,"var(--C)");},1500);
-        K.T(()=>radiate(K,430,250,"var(--C)"),2900);
+        K.show(["il32"]); K.flow(205,200,460,250,"var(--C)",{dur:1.3,loop:3});
+        K.T(()=>{K.show(["shift"]); radiate(K,470,250,"var(--C)");},1500);
+        K.T(()=>radiate(K,470,250,"var(--C)"),2900);
       }},
       {color:"B",t:3000,cap:"④ この炎症性シフトがMASH進行を後押しし、HSC活性化を介して炎症・線維化巣の形成（部分的）に至る。",run(){
         K.flow(450,250,610,320,"var(--B)",{dur:1.2,loop:2});
@@ -2684,10 +2694,10 @@ CINEMA["12"]={
   /* Extravasating monocyte (starts top channel, will move down into gel) */
   +`<g id="mn_e" class="fade">`+GLYPH.monocyte("mn_ei",165,74,"")+`</g>`
   /* ── IR metabolite indicators (right side, hidden) ── */
-  +GLYPH.tag("irTag12",632,148,"IR培地","var(--D)",68,true)
-  +GLYPH.metab("insM12",600,172,"insulin↑","var(--D)",true)
-  +GLYPH.metab("glcM12",648,194,"glucose↑","var(--D)",true)
-  +GLYPH.metab("ffaM12",612,216,"FFA↑","var(--D)",true)
+  +GLYPH.tag("irTag12",632,146,"IR培地","var(--D)",68,true)
+  +GLYPH.metab("insM12",596,184,"insulin↑","var(--D)",true)
+  +GLYPH.metab("glcM12",650,204,"glucose↑","var(--D)",true)
+  +GLYPH.metab("ffaM12",610,224,"FFA↑","var(--D)",true)
   /* ── Cytokines from KC (hidden) ── */
   +GLYPH.cytokine("cxcl12",172,132,"CXCL1","var(--C)",true)
   +GLYPH.cytokine("ccl412",208,122,"CCL4","var(--C)",true)
@@ -2745,6 +2755,21 @@ CINEMA["12"]={
   }
 };
 
+/* 研究モデル種別（in vivo / in vitro / in silico / ヒト・臨床）を判定してバッジ化 */
+function cineModels(p){
+  const m=[(p.struct&&p.struct.model),p.approach].filter(Boolean).join(" ").toLowerCase();
+  const out=[];
+  if(/in vivo|マウス|mouse|ミニブタ|minipig|\brat\b|げっ歯|個体/.test(m)) out.push({ic:"mouse",label:"in vivo（動物個体）",cls:"mv-vivo"});
+  if(/in vitro|\bmps\b|liver-on|on-chip|オルガノイド|organoid|共培養|培養系|初代|primary|spheroid|球状体|pcls|ex vivo|スライス|thp-?1|細胞株|microfluid|灌流/.test(m)) out.push({ic:"chip",label:"in vitro（培養系）",cls:"mv-vitro"});
+  if(/in silico|計算|\babm\b|kappa|シミュレ|simulation|数理モデル|規則ベース|rule-based/.test(m)) out.push({ic:"silico",label:"in silico（計算モデル）",cls:"mv-silico"});
+  if(/ヒト|human|clinical|臨床|\brct\b|第[12一二]相|phase\s?[12]|patient|コホート|cohort/.test(m)) out.push({ic:"human",label:"ヒト・臨床",cls:"mv-human"});
+  if(!out.length) out.push({ic:"dish",label:((p.struct&&p.struct.model)||"その他"),cls:"mv-other"});
+  return out;
+}
+function modelBadges(p){
+  return `<div class="model-badges" title="この研究のアプローチ">${cineModels(p).map(x=>`<span class="mbadge ${x.cls}">${ICONS[x.ic]||""}<span>${x.label}</span></span>`).join("")}</div>`;
+}
+
 /* 詳細を開いた時にアニメを生成＆自動再生（1回だけ） */
 function initCinema(card){
   const mount=card.querySelector(".cinema-mount");
@@ -2789,7 +2814,7 @@ function render(){
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
-        ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4><div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
+        ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4>${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
         <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
         <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
         <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
