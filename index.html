@@ -49,10 +49,10 @@ h1 .em{color:var(--accent-ink);font-style:italic;font-size:.82em}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
 .chips{display:flex;flex-wrap:wrap;gap:8px;max-height:0;overflow:hidden;transition:max-height .25s ease}
 .chips.show{max-height:60vh;overflow:auto;margin-top:8px}
-#filterToggle{display:inline-flex;width:auto;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;align-items:center;gap:6px}
-#filterToggle.open{background:var(--accent);color:var(--paper);border-color:var(--accent)}
-#filterToggle .fchev{transition:transform .2s}
-#filterToggle.open .fchev{transform:rotate(180deg)}
+#filterToggle,#methodToggle{display:inline-flex;width:auto;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;align-items:center;gap:6px}
+#filterToggle.open,#methodToggle.open{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+#filterToggle .fchev,#methodToggle .fchev{transition:transform .2s}
+#filterToggle.open .fchev,#methodToggle.open .fchev{transform:rotate(180deg)}
 .chip{
   font-family:"DM Mono",monospace;font-size:12px;letter-spacing:.04em;cursor:pointer;user-select:none;
   padding:6px 13px 6px 11px;border:1px solid var(--line);background:var(--card);border-radius:999px;
