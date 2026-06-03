@@ -355,6 +355,22 @@ table.board td.bnum{white-space:nowrap}
 .illus figure{display:flex;flex-direction:column;align-items:center;gap:4px;width:74px;text-align:center}
 .illus svg{width:46px;height:46px}
 .illus figcaption{font-size:10.5px;color:var(--ink-soft);line-height:1.3}
+/* 手法セクション（実験系 / 解析系 の2行） */
+.mth-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.mth-label{flex:none;width:46px;font-family:"DM Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper);background:var(--ink-soft);border-radius:4px;padding:3px 5px;text-align:center;margin-top:6px;line-height:1.3}
+.mth-label.exp{background:var(--A)}.mth-label.ana{background:var(--F)}
+.mth-illus{display:flex;flex-wrap:wrap;gap:10px;flex:1}
+.mth-illus figure{width:60px;gap:3px}
+.mth-illus svg{width:38px;height:38px}
+.mth-illus figcaption{font-size:9.5px}
+/* 手法フィルターチップ */
+#mchips{display:none;gap:7px 10px;flex-wrap:wrap;padding:10px 0 4px}
+#mchips.show{display:flex}
+.mchip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);font-size:11.5px;font-family:"DM Mono",monospace;cursor:pointer;transition:.15s;background:var(--card)}
+.mchip:hover{border-color:var(--ink-soft)}
+.mchip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mchip .mdot{width:7px;height:7px;border-radius:50%;flex:none}
+.mchip.active .mdot{box-shadow:0 0 0 2px var(--paper)}
 
 .empty{text-align:center;padding:60px 20px;color:var(--ink-soft);font-family:"DM Mono",monospace;font-size:14px}
 .pager{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;margin-top:22px}
@@ -439,6 +455,7 @@ footer .footinner{margin-top:8px}
   </div>
   <div class="filterbar" id="filterbar">
     <button id="filterToggle" type="button" aria-expanded="false">テーマで絞り込み<span class="fchev">▾</span></button>
+    <button id="methodToggle" type="button" aria-expanded="false">🔬 手法で絞り込み<span class="fchev">▾</span></button>
     <button class="favfilter" id="randbtn" title="ランダムで1本ひらく">🎲 ランダム</button>
     <button class="modetoggle" id="modetoggle" title="複数テーマ選択時の論理">OR</button>
     <button class="favfilter" id="favfilter">★ お気に入りのみ</button>
@@ -446,6 +463,7 @@ footer .footinner{margin-top:8px}
     <button class="favfilter" id="printbtn" title="表示中の論文をPDF/印刷（ブラウザのPDF保存が使えます）">🖨 PDF / 印刷</button>
   </div>
   <div class="chips" id="chips"></div>
+  <div id="mchips"></div>
 </div>
 
 <div class="countline" id="countline"></div>
@@ -2164,6 +2182,13 @@ const METHOD_LABELS={
   human:"ヒト検体", invitro:"オルガノイド/MPS", insilico:"数理モデル", drug:"薬剤スクリーニング",
   proteomics:"プロテオミクス", imaging:"ライブ/顕微鏡", nano:"EV/ナノ粒子", crispr:"CRISPR/KO"
 };
+/* exp=実験系（ウェット）/ ana=解析系（オミクス・計算） */
+const METHOD_CAT={
+  mouse:"exp", human:"exp", invitro:"exp", imaging:"exp",
+  nano:"exp", drug:"exp", wb:"exp", facs:"exp", crispr:"exp", qpcr:"exp",
+  scrna:"ana", spatial:"ana", rnaseq:"ana", chipseq:"ana",
+  proteomics:"ana", insilico:"ana"
+};
 const paperMethods={
   "01":["scrna","spatial","human","invitro"],
   "02":["mouse","human","qpcr","wb","facs","crispr"],
@@ -2374,7 +2399,7 @@ const CATINFO={
 };
 
 /* ===== 描画 ===== */
-let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id";
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id", activeMethods=new Set();
 const READ_LABEL={"":"未読","skim":"流し読み","deep":"精読"};
 const READ_FILTER_CYCLE=["","unread","skim","deep"];
 const READ_FILTER_LABEL={"":"📖 すべて","unread":"📖 未読のみ","skim":"📖 流し読みのみ","deep":"📖 精読のみ"};
@@ -2463,6 +2488,7 @@ filterToggle.addEventListener("click",()=>{
   const open=chipsBox.classList.toggle("show");
   filterToggle.classList.toggle("open",open);
   filterToggle.setAttribute("aria-expanded",open?"true":"false");
+  if(open){ mchipsBox.classList.remove("show"); methodToggle.classList.remove("open"); }
 });
 chipsBox.addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
@@ -2471,6 +2497,44 @@ chipsBox.addEventListener("click",e=>{
   else { if(activeThemes.has(t)) activeThemes.delete(t); else activeThemes.add(t); }
   syncChipActive();
   setFilterLabel();
+  render();
+});
+
+/* ===== 手法フィルター ===== */
+const EXP_KEYS=["mouse","human","invitro","imaging","nano","drug","wb","facs","crispr","qpcr"];
+const ANA_KEYS=["scrna","spatial","rnaseq","chipseq","proteomics","insilico"];
+const mchipsBox=document.getElementById("mchips");
+const methodToggle=document.getElementById("methodToggle");
+function buildMChips(){
+  const mkChip=(k,cat)=>{
+    const col = cat==="exp" ? "var(--A)" : "var(--F)";
+    const active = activeMethods.has(k) ? " active" : "";
+    return `<span class="mchip${active}" data-mkey="${k}"><span class="mdot" style="background:${col}"></span>${METHOD_LABELS[k]||k}</span>`;
+  };
+  const sep=(label,col)=>`<span style="font-family:'DM Mono',monospace;font-size:10px;color:${col};letter-spacing:.12em;text-transform:uppercase;padding:4px 2px;align-self:center">${label}</span>`;
+  mchipsBox.innerHTML =
+    (activeMethods.size?`<span class="mchip active" data-mkey="all"><span class="mdot" style="background:var(--ink)"></span>すべてクリア</span>`:"") +
+    sep("実験系","var(--A)") +
+    EXP_KEYS.map(k=>mkChip(k,"exp")).join("") +
+    sep("解析系","var(--F)") +
+    ANA_KEYS.map(k=>mkChip(k,"ana")).join("");
+}
+buildMChips();
+methodToggle.addEventListener("click",()=>{
+  const open=mchipsBox.classList.toggle("show");
+  methodToggle.classList.toggle("open",open);
+  methodToggle.setAttribute("aria-expanded",open?"true":"false");
+  if(open){ chipsBox.classList.remove("show"); filterToggle.classList.remove("open"); }
+});
+mchipsBox.addEventListener("click",e=>{
+  const c=e.target.closest(".mchip"); if(!c)return;
+  const k=c.dataset.mkey;
+  if(k==="all") activeMethods.clear();
+  else { if(activeMethods.has(k)) activeMethods.delete(k); else activeMethods.add(k); }
+  buildMChips();
+  methodToggle.innerHTML=(activeMethods.size ? [...activeMethods].map(k=>METHOD_LABELS[k]).join(" / ") : "🔬 手法で絞り込み")+'<span class="fchev">▾</span>';
+  methodToggle.classList.toggle("open",true);
+  mchipsBox.classList.add("show");
   render();
 });
 // AND/OR トグル
@@ -2700,6 +2764,10 @@ function matches(p){
       ? [...activeThemes].every(t=>pt.has(t))
       : [...activeThemes].some(t=>pt.has(t));
     if(!ok) return false;
+  }
+  if(activeMethods.size){
+    const pm=new Set(paperMethods[p.id]||[]);
+    if(![...activeMethods].some(m=>pm.has(m))) return false;
   }
   if(!query) return true;
   const blob=[p.title,p.authors,p.journal,p.year,p.abstract,p.abstract_ja,p.background,
@@ -4006,15 +4074,16 @@ function render(){
   document.getElementById("total").textContent=PAPERS.length;
   const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
   // フィルタ・並び替えが変わったら1ページ目に戻す
-  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort;
+  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
   if(sig!==lastSig){ paperPage=1; lastSig=sig; }
   const pages=Math.max(1,Math.ceil(full.length/PAGE_SIZE));
   if(paperPage>pages) paperPage=pages;
   const start=(paperPage-1)*PAGE_SIZE;
   const list=full.slice(start,start+PAGE_SIZE);
   const rangeNote = full.length>PAGE_SIZE ? `（${start+1}–${start+list.length}件目を表示）` : "";
+  const methodNote = activeMethods.size ? `　·　手法 ${[...activeMethods].map(k=>METHOD_LABELS[k]||k).join(" / ")}` : "";
   document.getElementById("countline").textContent=
-    `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
+    `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+methodNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
   if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';pagerEl.innerHTML="";return;}
   grid.innerHTML=list.map((p,i)=>`
     <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
@@ -4032,9 +4101,9 @@ function render(){
       <div class="detail"><div class="detail-inner">
         ${keyTakeaway(p)?`<div class="kimo"><span class="kimo-ic">💡</span><div><span class="kimo-lbl">この論文のキモ</span>${em(keyTakeaway(p))}</div></div>`:""}
         <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
-        ${(paperMethods[p.id]&&paperMethods[p.id].length)?`<div class="sec"><h4>使用手法</h4><div class="illus">${paperMethods[p.id].map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:""}
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
-        ${p.method_figure?`<div class="sec"><h4>実験系（Method）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
+        ${(()=>{const ms=paperMethods[p.id]||[];if(!ms.length)return"";const exp=ms.filter(k=>METHOD_CAT[k]==="exp");const ana=ms.filter(k=>METHOD_CAT[k]==="ana");const row=(keys,cat,label)=>keys.length?`<div class="mth-row"><span class="mth-label ${cat}">${label}</span><div class="mth-illus illus">${keys.map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:"";return`<div class="sec"><h4>使用手法</h4>${row(exp,"exp","実験系")}${row(ana,"ana","解析系")}</div>`;})()}
+        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
         ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
         ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4>${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
         <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
@@ -4178,7 +4247,7 @@ function renderGlossary(){
 }
 function jumpToPaper(id){
   // 論文ビューへ切替＆フィルタ解除して必ず表示
-  currentView="papers"; query=""; activeThemes.clear(); favOnly=false; readFilter="";
+  currentView="papers"; query=""; activeThemes.clear(); favOnly=false; readFilter=""; activeMethods.clear(); buildMChips(); methodToggle.innerHTML='🔬 手法で絞り込み<span class="fchev">▾</span>';
   document.getElementById("q").value="";
   favfilter.classList.remove("on");
   readfilter.textContent=READ_FILTER_LABEL[""]; readfilter.classList.remove("on");
