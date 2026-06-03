@@ -2174,41 +2174,44 @@ const METHOD_ICONS={
   proteomics:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><line x1='4' y1='40' x2='44' y2='40' stroke='var(--line)' stroke-width='1.5'/><line x1='4' y1='40' x2='4' y2='7' stroke='var(--line)' stroke-width='1.5'/><rect x='9' y='28' width='3' height='12' rx='1.5' fill='var(--G)' stroke='none' opacity='.6'/><rect x='15' y='12' width='3' height='28' rx='1.5' fill='var(--G)' stroke='none'/><rect x='21' y='20' width='3' height='20' rx='1.5' fill='var(--G)' stroke='none' opacity='.7'/><rect x='27' y='8' width='3' height='32' rx='1.5' fill='var(--G)' stroke='none'/><rect x='33' y='16' width='3' height='24' rx='1.5' fill='var(--G)' stroke='none' opacity='.8'/><rect x='39' y='24' width='3' height='16' rx='1.5' fill='var(--G)' stroke='none' opacity='.5'/></svg>`,
   imaging:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='22' cy='22' r='14' stroke='var(--E)' stroke-width='1.8' fill='var(--paper-2)'/><circle cx='22' cy='22' r='8' stroke='var(--E)' stroke-width='1.2' fill='none' opacity='.5'/><circle cx='22' cy='22' r='3' fill='var(--E)' stroke='none' opacity='.4'/><line x1='33' y1='33' x2='43' y2='43' stroke='var(--E)' stroke-width='3' stroke-linecap='round'/><circle cx='22' cy='17' r='2' fill='var(--D)' stroke='none' opacity='.6'/><circle cx='26' cy='25' r='1.5' fill='var(--C)' stroke='none' opacity='.6'/></svg>`,
   nano:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='24' cy='24' r='9' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.8'/><circle cx='12' cy='16' r='5.5' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.4' opacity='.7'/><circle cx='36' cy='16' r='5.5' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.4' opacity='.7'/><circle cx='14' cy='34' r='4.5' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.3' opacity='.5'/><circle cx='34' cy='34' r='4.5' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.3' opacity='.5'/><circle cx='24' cy='9' r='3' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.2' opacity='.6'/></svg>`,
-  crispr:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M14 8 q-4 16 0 32 M20 8 q4 16 0 32' stroke='var(--ink-soft)' stroke-width='1.8' stroke-linecap='round'/><path d='M14 22 q6 2 6 0' stroke='var(--ink-soft)' stroke-width='1.4'/><path d='M28 14 L40 26 M40 14 L28 26' stroke='var(--H)' stroke-width='2.4' stroke-linecap='round'/><circle cx='34' cy='20' r='5' stroke='var(--H)' stroke-width='1.4' fill='none' opacity='.4'/></svg>`
+  crispr:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M14 8 q-4 16 0 32 M20 8 q4 16 0 32' stroke='var(--ink-soft)' stroke-width='1.8' stroke-linecap='round'/><path d='M14 22 q6 2 6 0' stroke='var(--ink-soft)' stroke-width='1.4'/><path d='M28 14 L40 26 M40 14 L28 26' stroke='var(--H)' stroke-width='2.4' stroke-linecap='round'/><circle cx='34' cy='20' r='5' stroke='var(--H)' stroke-width='1.4' fill='none' opacity='.4'/></svg>`,
+  elisa:`<svg viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><!-- 96well strip × 2 rows --><rect x='5' y='10' width='38' height='12' rx='3' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.6'/><circle cx='13' cy='16' r='3.2' fill='var(--D)' stroke='none' opacity='.2'/><circle cx='22' cy='16' r='3.2' fill='var(--D)' stroke='none' opacity='.5'/><circle cx='31' cy='16' r='3.2' fill='var(--D)' stroke='none' opacity='.8'/><circle cx='40' cy='16' r='3.2' fill='var(--D)' stroke='none'/><rect x='5' y='26' width='38' height='12' rx='3' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.6'/><circle cx='13' cy='32' r='3.2' fill='var(--D)' stroke='none' opacity='.1'/><circle cx='22' cy='32' r='3.2' fill='var(--D)' stroke='none' opacity='.35'/><circle cx='31' cy='32' r='3.2' fill='var(--D)' stroke='none' opacity='.65'/><circle cx='40' cy='32' r='3.2' fill='var(--D)' stroke='none' opacity='.9'/></svg>`
 };
 const METHOD_LABELS={
   scrna:"scRNA/snRNA-seq", spatial:"空間TX", rnaseq:"Bulk RNA-seq", chipseq:"ChIP/ATAC-seq",
-  qpcr:"qPCR / PCR", wb:"WB / IHC / IF", facs:"フローサイト", mouse:"マウスin vivo",
-  human:"ヒト検体", invitro:"オルガノイド/MPS", insilico:"数理モデル", drug:"薬剤スクリーニング",
+  qpcr:"qPCR / PCR", wb:"WB / IHC / IF", facs:"フローサイト", elisa:"ELISA",
+  mouse:"マウスin vivo", human:"ヒト検体", invitro:"オルガノイド/MPS",
+  insilico:"数理モデル", drug:"薬剤スクリーニング",
   proteomics:"プロテオミクス", imaging:"ライブ/顕微鏡", nano:"EV/ナノ粒子", crispr:"CRISPR/KO"
 };
-/* exp=実験系（ウェット）/ ana=解析系（オミクス・計算） */
+/* exp=実験系（何を使うか・何に介入するか）/ ana=解析系（結果をどう読み出すか） */
 const METHOD_CAT={
-  mouse:"exp", human:"exp", invitro:"exp", imaging:"exp",
-  nano:"exp", drug:"exp", wb:"exp", facs:"exp", crispr:"exp", qpcr:"exp",
+  mouse:"exp", human:"exp", invitro:"exp",
+  nano:"exp", drug:"exp", crispr:"exp",
+  qpcr:"ana", wb:"ana", facs:"ana", elisa:"ana", imaging:"ana",
   scrna:"ana", spatial:"ana", rnaseq:"ana", chipseq:"ana",
   proteomics:"ana", insilico:"ana"
 };
 const paperMethods={
-  "01":["scrna","spatial","human","invitro"],
-  "02":["mouse","human","qpcr","wb","facs","crispr"],
-  "03":["mouse","human","scrna","chipseq","qpcr","drug"],
+  "01":["human","invitro","scrna","spatial"],
+  "02":["mouse","human","crispr","qpcr","wb","facs","elisa"],
+  "03":["mouse","human","crispr","scrna","chipseq","qpcr","wb","drug"],
   "04":["invitro","scrna","facs","drug"],
-  "05":["mouse","invitro","imaging","nano","qpcr"],
-  "06":["insilico","mouse","rnaseq"],
-  "07":["mouse","scrna","spatial","human","drug","qpcr"],
-  "08":["human","facs","qpcr"],
-  "09":["mouse","human","scrna","spatial","crispr","qpcr"],
+  "05":["mouse","invitro","nano","qpcr","wb","elisa","imaging"],
+  "06":["mouse","insilico","rnaseq"],
+  "07":["mouse","human","drug","scrna","spatial","qpcr","wb","elisa"],
+  "08":["human","facs","elisa"],
+  "09":["mouse","human","crispr","scrna","spatial","qpcr","elisa"],
   "10":["human","scrna","spatial","proteomics","invitro"],
   "11":["human","spatial","scrna"],
-  "12":["invitro","imaging","facs","proteomics"],
-  "13":["mouse","human","qpcr","wb","invitro","crispr"],
-  "14":["mouse","human","scrna","drug","imaging","qpcr","crispr"],
-  "15":["insilico","human"],
-  "16":["mouse","human","facs","wb","qpcr","invitro"],
-  "17":["mouse","human","invitro","scrna","drug","facs"],
-  "18":["invitro","scrna","facs","nano","mouse","drug"],
-  "19":["invitro","scrna","imaging","mouse"]
+  "12":["invitro","facs","proteomics","elisa","imaging"],
+  "13":["mouse","human","invitro","crispr","qpcr","wb","elisa"],
+  "14":["mouse","human","crispr","drug","scrna","qpcr","wb","elisa","imaging"],
+  "15":["human","insilico"],
+  "16":["mouse","human","invitro","facs","wb","qpcr","elisa"],
+  "17":["mouse","human","invitro","drug","scrna","facs","elisa"],
+  "18":["invitro","mouse","nano","drug","scrna","facs","elisa"],
+  "19":["invitro","mouse","scrna","imaging"]
 };
 
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
@@ -2501,8 +2504,8 @@ chipsBox.addEventListener("click",e=>{
 });
 
 /* ===== 手法フィルター ===== */
-const EXP_KEYS=["mouse","human","invitro","imaging","nano","drug","wb","facs","crispr","qpcr"];
-const ANA_KEYS=["scrna","spatial","rnaseq","chipseq","proteomics","insilico"];
+const EXP_KEYS=["mouse","human","invitro","nano","drug","crispr"];
+const ANA_KEYS=["qpcr","wb","facs","elisa","scrna","spatial","rnaseq","chipseq","proteomics","imaging","insilico"];
 const mchipsBox=document.getElementById("mchips");
 const methodToggle=document.getElementById("methodToggle");
 function buildMChips(){
