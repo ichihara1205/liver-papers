@@ -522,6 +522,22 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
+    id:"22",
+    title:"LAM様KCと募集LAMがTREM2を介した機能的冗長性で肝組織修復を保証——両者欠失でefferocytosis障害・線維化点火",
+    authors:"De Ponti FF†, Bujko A†, Liu Z, Collins PJ, Schuermans S, Maueroder C, Amstelveen S, Thoné T, Martens L, McKendrick JG, Louwe PA, Sànchez Cruz A, Saelens W, Matchett KP, Waller KJ, Zwicker C, Buglar-Lamb A, Vanneste B, Parmentier F, Remmerie A, Guilliams M, Henderson NC, Ravichandran K, Marques PE, Scott CL†（VIB-UGent Center for Inflammation Research, ベルギー）",
+    journal:"Immunity",
+    year:2025,
+    vol:"58(2):362-380.e10",
+    doi:"10.1016/j.immuni.2025.01.002",
+    url:"https://www.cell.com/immunity/fulltext/S1074-7613(25)00002-0",
+    catPrimary:"C",
+    catSub:["B","H"],
+    tags:["kc","lam","trem2","efferocytosis","lam-like kc","scrna-seq","spatial transcriptomics","proteogenomics","spatial restriction","fibrosis","hsc","monocyte","macrophage"],
+    summary:"常在KCが傷害部位でLAM様表現型（TREM2+/CD9+）に転換すること、および単球由来募集LAMとの機能的冗長性によってefferocytosisを介した組織修復が保証されることを発見。条件付きTREM2欠失で両集団同時欠失のみが死細胞蓄積・線維化を惹起することを証明。複数モデル（CCl4/MASH/BDL）＋ヒト組織で保存性確認。",
+    connection:"KC→LAM様転換のTREM2発現をオルガノイドKC健全性バイオマーカーとして活用可能。LPS刺激によるTREM2低下がefferocytosis不全KCを誘導し線維化点火を再現できる。論文16（TIM4軸）と合わせABMのKCエージェントに「efferocytosis能（TIM4×TREM2の積）→死細胞除去率」ルールを実装する根拠となる。",
+    methods:["in vivo(複数マウス肝傷害モデル＋条件付きTREM2 KO)","scRNA-seq","空間トランスクリプトーム","プロテオゲノミクス","ヒト肝組織ex vivo"]
+  },
+  {
     id:"21",
     title:"RORA依存的代謝制御がHSCの分化コミットメント・静止維持・線維化を支配——iPSCプロテオーム軌跡からの発見",
     authors:"Martínez García de la Torre RA†, Vallverdú J, Xu Z, Ariño S, Ferrer-Lorente R, Zanatto L, Mercado-Gómez M, Aguilar-Bravo B, Ruiz-Blázquez P, Fernandez-Fernandez M, …, Affo S†, Sancho-Bru P†（責任著者, IDIBAPS・Hospital Clínic Barcelona）",
@@ -2450,6 +2466,7 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "22":[{ic:"macrophage",cap:"KC→LAM様表現型（TREM2↑）"},{ic:"macrophage",cap:"募集LAM（単球由来）"},{ic:"mouse",cap:"複数傷害モデル（CCl4・MASH・BDL）"},{ic:"human",cap:"ヒト肝組織での保存性確認"},{ic:"omics",cap:"scRNA-seq＋空間TX＋プロテオゲノミクス"}],
   "21":[{ic:"stellate",cap:"iPSC→diHSC プロテオーム軌跡"},{ic:"stellate",cap:"RORA：代謝制御で静止維持"},{ic:"mouse",cap:"RORA-KOマウス線維化増悪"},{ic:"drug",cap:"RORAアゴニスト多臓器線維化軽減"},{ic:"human",cap:"ヒトMASH患者RORA逆相関"}],
   "20":[{ic:"stellate",cap:"進行期HSCの密集巣・直接接触↑"},{ic:"stellate",cap:"NTF3→NTRK3自己分泌ループ"},{ic:"omics",cap:"snRNA-seq＋組織透明化(3D線維)"},{ic:"drug",cap:"NTRK3阻害→線維化退縮"},{ic:"mouse",cap:"マウスNASH＋ヒト試料で保存性照合"}],
   "19":[{ic:"dish",cap:"Matrigel-free三細胞3D共培養"},{ic:"stellate",cap:"hiPSC-HSC（WT1+/DES+）"},{ic:"hepatocyte",cap:"hiPSC-HE（肝内胚葉）"},{ic:"endothelial",cap:"hiPSC-EC→血管ネットワーク"},{ic:"human",cap:"in vivo移植で血管化確認"}],
@@ -2550,7 +2567,9 @@ const paperMethods={
   /* 20 Wang/Friedman Sci Transl Med 2023: MASHマウスsnRNA-seq+組織透明化3D+ヒトNASH+初代HSC+NTRK3阻害薬 */
   "20":["mouse","human","invitro","drug","scrna","qpcr","wb","imaging"],
   /* 21 Martínez García de la Torre/Affo/Sancho-Bru Nat Commun 2025: iPSC→diHSCプロテオーム軌跡+RORA-KO+RORAアゴニスト+ヒト相関 */
-  "21":["invitro","mouse","human","crispr","drug","proteomics","qpcr","wb","imaging"]
+  "21":["invitro","mouse","human","crispr","drug","proteomics","qpcr","wb","imaging"],
+  /* 22 De Ponti/Bujko/Scott Immunity 2025: 複数マウス肝傷害モデル+条件付きTREM2 KO+scRNA+空間TX+プロテオゲノミクス+ヒト肝組織 */
+  "22":["mouse","human","crispr","scrna","spatial","proteomics","wb","facs","imaging"]
 };
 
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
@@ -2746,7 +2765,10 @@ const CATINFO={
   "rora":{cat:"遺伝子・タンパク質",long:"RAR-related orphan receptor alpha（核内受容体転写因子）。HSCの糖解/OXPHOSを抑制して静止表現型を維持する。発現低下がHSC活性化の代謝スイッチを引き起こし、欠損マウスで線維化増悪、アゴニスト（SR1078等）投与で多臓器線維化が軽減する。"},
   "dihsc":{cat:"細胞・組織",long:"iPSC-differentiated hepatic stellate cell（iPSC由来肝星細胞）。Sancho-Bruら（バルセロナ）の命名で#19のhiPSC-HSCと同概念。プロテオーム軌跡解析・RORA機能解析に使用された分化誘導HSC。"},
   "oxphos":{cat:"代謝・分子",long:"oxidative phosphorylation（酸化的リン酸化）。ミトコンドリア電子伝達系によるATP産生経路。RORAが抑制することでHSCを低エネルギー・静止状態に保つ。RORA低下→OXPHOS亢進がHSC活性化の代謝的引き金となる。"},
-  "sr1078":{cat:"手法・モデル",long:"SR1078（合成RORAアゴニスト）。RORα/γの選択的アゴニストでHSC活性化を抑制し線維化を軽減する薬理ツール。多臓器ペリサイト静止の検証に使用された。"}
+  "sr1078":{cat:"手法・モデル",long:"SR1078（合成RORAアゴニスト）。RORα/γの選択的アゴニストでHSC活性化を抑制し線維化を軽減する薬理ツール。多臓器ペリサイト静止の検証に使用された。"},
+  "lam-like kc":{cat:"細胞・組織",long:"傷害部位でTREM2↑/CD9↑のLAM表現型を採用した常在クッパー細胞（KC）。単球由来の募集LAMとは発生起源が異なるが、TREM2依存的efferocytosisによる組織修復能は機能的に等価。De Ponti et al., Immunity 2025 で同定。"},
+  "proteogenomics":{cat:"手法・モデル",long:"プロテオームとトランスクリプトームを同一細胞集団で統合解析する手法。本ライブラリではLAM様KCと募集LAMの分子同一性比較（Immunity 2025）に使用。"},
+  "spatial restriction":{cat:"プロセス・現象",long:"LAMとLAM様KCが傷害巣にのみ集積し健常域には少ない傷害部位特異的な分布パターン。空間トランスクリプトーム解析で可視化された。"}
 };
 
 /* ===== 描画 ===== */
@@ -3658,6 +3680,60 @@ CINEMA["18"]={
           },820);
         },800);
       }},
+    ];
+  }
+};
+
+CINEMA["22"]={
+  svg:GLYPH.bg()
+    +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("22","var(--C)")}${GLYPH.arrow("22b","var(--B)")}</defs>`
+    +GLYPH.title("TREM2+LAM様KCと募集LAMの機能的冗長性 — efferocytosisが修復を担保し両者欠失で線維化点火")
+    +GLYPH.hep("hep22",20,32,0.85,"健常肝細胞")
+    +`<g id="deadCell22" class="fade"><circle cx="360" cy="112" r="33" fill="#b8b0a0" stroke="#888" stroke-width="2"/><text x="360" y="107" text-anchor="middle" font-size="9" fill="#555">アポトーシス</text><text x="360" y="122" text-anchor="middle" font-size="9" fill="#555">肝細胞</text></g>`
+    +GLYPH.mac("kcLAM22",158,275,"LAM様KC (常在)","#4a7a9b")
+    +GLYPH.tag("trem2kc22",158,248,"TREM2","var(--C)",60,true)
+    +`<g id="mono22Wrap" class="fade">`+GLYPH.monocyte("mono22",680,415,"単球")+`</g>`
+    +`<g id="lam22Wrap" class="fade">`+GLYPH.mac("recLAM22",554,275,"募集LAM","#7a4a9b")+`</g>`
+    +GLYPH.tag("trem2lam22",554,248,"TREM2","var(--C)",60,true)
+    +GLYPH.stellate("hsc22",360,368,"肝星細胞")
+    +`<g id="injSite22" class="fade"><ellipse cx="360" cy="190" rx="202" ry="122" fill="none" stroke="var(--C)" stroke-width="1.3" stroke-dasharray="6,4" opacity="0.65"/><text x="360" y="72" text-anchor="middle" font-size="9.5" fill="var(--C)">傷害部位（空間的限局）</text></g>`
+    +GLYPH.badge("repairBadge22",554,378,"修復","✓ 成立","var(--H)")
+    +`<g id="deadAcc22" class="fade"></g>`
+    +GLYPH.layer("col22"),
+  build(K){
+    return [
+      {color:"E",t:2400,cap:"① 健常な肝類洞。常在クッパー細胞（KC）が類洞を哨戒し、肝星細胞（HSC）は静止状態にある。",run(){}},
+      {color:"C",t:4400,cap:"② 肝傷害でアポトーシス細胞が出現。傷害部位（点線）に常在KCがLAM様表現型（TREM2↑）に転換し、循環単球が浸潤してLAMへ分化——どちらも傷害巣に空間的に限局する。",
+       run(){
+         K.show(["deadCell22","injSite22","trem2kc22"]);
+         K.pulse("trem2kc22");
+         K.show(["mono22Wrap"]);
+         K.T(()=>K.move("mono22",680,415,554,285,1.3),200);
+         K.T(()=>{K.attr("mono22Wrap","opacity","0.12"); K.show(["lam22Wrap","trem2lam22"]); K.pulse("trem2lam22");},1700);
+       }},
+      {color:"C",t:4200,cap:"③ TREM2陽性の両集団が協調して死細胞を貪食（efferocytosis）。KC・LAMのいずれかにTREM2が残れば修復は成立する——相互補完的な冗長性が組織修復を保証する。",
+       run(){
+         K.unpulse("trem2kc22"); K.unpulse("trem2lam22");
+         K.flow(158,263,332,118,"var(--C)",{n:3,dur:1.1,loop:2});
+         K.flow(554,263,388,118,"var(--C)",{n:3,dur:1.1,loop:2});
+         K.T(()=>{K.attr("deadCell22","opacity","0.2"); K.show(["repairBadge22"]);},2900);
+       }},
+      {color:"B",t:4000,cap:"④ 両集団のTREM2を同時欠失 → efferocytosis障害 → 死細胞蓄積 → HSCへ過剰シグナル → 活性化・コラーゲン過剰産生で線維化が点火する。",
+       run(){
+         K.attr("repairBadge22","opacity","0");
+         K.attr("deadCell22","opacity","1");
+         K.show(["deadAcc22"]);
+         const dp=[[308,143],[416,138],[335,172],[416,162],[362,153]];
+         dp.forEach((p,i)=>K.T(()=>{
+           K.$("deadAcc22").insertAdjacentHTML("beforeend",
+             `<circle cx="${p[0]}" cy="${p[1]}" r="11" fill="#b8b0a0" stroke="#888" stroke-width="1" opacity="0.72"/>`);
+         },i*260));
+         K.T(()=>{
+           K.flow(360,215,360,338,"var(--B)",{dur:1.0,loop:2});
+           K.T(()=>{K.morph("hsc22Shape",GLYPH.SPINDLE);K.attr("hsc22Shape","fill","#b0432f");K.text("hsc22Cap","活性化HSC");},1200);
+           K.T(()=>K.draw("col22",GLYPH.collagenAt(360,390),{len:158}),2100);
+         },1500);
+       }},
     ];
   }
 };
