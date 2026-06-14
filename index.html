@@ -522,6 +522,54 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
+    id:"26",
+    title:"PLIN5 S155リン酸化がmito-LDカップリングを制御し肝脂質フラックス・steatosisを決定——新手法scPhenomics+空間プロテオミクスで単一細胞脂質代謝を解析",
+    authors:"Porat-Shliom N† et al.（Cell Biology and Imaging Section, NCI, National Cancer Institute, NIH, Bethesda, USA）",
+    journal:"Nature Metabolism",
+    year:2026,
+    vol:"8(3):587-603",
+    doi:"10.1038/s42255-026-01476-1",
+    url:"https://www.nature.com/articles/s42255-026-01476-1",
+    catPrimary:"D",
+    catSub:["G"],
+    tags:["plin5","lipid droplet","mitochondria","steatosis","phosphorylation","scphenomics","spatial proteomics","hepatocyte","masld","lipotoxicity","mito-ld contact","western diet","fasting"],
+    summary:"新手法scPhenomics（単一細胞組織イメージング）と空間プロテオミクスで絶食・西洋食（WD）マウス肝の脂質代謝状態をマッピング。絶食時はミトコンドリア-脂質滴（mito-LD）コンタクトが増加・PLIN5上昇、WD投与でコンタクトが稀になることを発見。PLIN5 S155リン酸化が制御スイッチ：非リン酸化型S155A→コンタクト増加・LD拡大、リン酸化模倣型S155E→小型LD。S155A過剰発現がWDマウスのlipotoxicityを軽減。PLIN5リン酸化状態が治療標的として浮上。",
+    connection:"4細胞MPSのsteatosisフェーズ（高FFA培地）でPLIN5-mito-LDカップリングが崩れてlipotoxicityが進行する経路をABMルールに追加できる。S155リン酸化上流キナーゼ（PKA等）が脂肪化→KC炎症活性化スイッチ候補。#24（生体ドナーatlas）の早期steatosisミトコンドリアプログラムと統合的に解釈可能。",
+    methods:["in vivo（絶食 vs 西洋食マウス）","scPhenomics（単一細胞組織イメージング）","空間プロテオミクス","PLIN5 S155変異体過剰発現（AAVベクター）"]
+  },
+  {
+    id:"25",
+    title:"ヒト多能性幹細胞から門脈周囲・中心静脈周囲ゾーン特異的肝オルガノイドを作製——EP300-TET1/HIF1α軸がzonation決定; BDLラット移植で生存改善",
+    authors:"Al Reza H†, Santangelo C†, Iwasawa K†, Al Reza A, Sekiya S, Glaser K, Bondoc A, Merola J, ..., Takebe T†（横浜市立大学・Cincinnati Children's Hospital Medical Center）",
+    journal:"Nature",
+    year:2025,
+    vol:"641(8050):1258-1267",
+    doi:"10.1038/s41586-025-08850-1",
+    url:"https://www.nature.com/articles/s41586-025-08850-1",
+    catPrimary:"H",
+    catSub:["E","A"],
+    tags:["hipsc","organoid","zonation","periportal","pericentral","ep300","tet1","hif1α","ascorbate","bilirubin","transplantation","bdl","liver regeneration","stem cell","multi-zonal","epigenome"],
+    summary:"hiPSCをアスコルビン酸富化（Zone1/門脈周囲）またはビリルビン富化（Zone3/中心静脈周囲）培地で分化させ、ゾーン特異的肝オルガノイドを作製。EP300-TET1軸（アスコルビン酸/periportal）対EP300-HIF1α軸（bilirubin/pericentral）がゾーン同一性を決定することをエピゲノム解析で解明。BDLラットへの移植で高アンモニア血症+高ビリルビン血症を改善し生存期間を延長。",
+    connection:"自系の酸素透過性膜MPSへのアスコルビン酸/ビリルビン添加によりZone1様/Zone3様肝細胞を誘導できる可能性。EP300-TET1/HIF1αのゾーンマーカーは#24（生体ドナーatlas）のzonation参照と照合可能。BDL ratモデルは胆汁酸×線維化×再生の統合出口戦略。#23（BECのFXR-YAP軸）との組み合わせで胆管損傷→BA漏出→HSC活性化の入力を提供。",
+    methods:["in vitro（hiPSC→ゾーン特異的肝オルガノイド分化）","in vivo（BDLラット移植）","scRNA-seq/空間解析","エピゲノム解析（EP300/TET1/HIF1α ChIP/ATAC）"]
+  },
+  {
+    id:"24",
+    title:"生体ドナー由来健常ヒト肝の空間アトラス——Visium HD3/MERFISH/PhenoCycler+snRNA-seqでhuman-specific zonation解明・早期steatosisのmito転写プログラムを同定",
+    authors:"Itzkovitz S† et al.（Department of Molecular Cell Biology, Weizmann Institute of Science, Rehovot, Israel）",
+    journal:"Nature",
+    year:2026,
+    vol:"653(8116):1148-1157",
+    doi:"10.1038/s41586-026-10377-y",
+    url:"https://www.nature.com/articles/s41586-026-10377-y",
+    catPrimary:"G",
+    catSub:["E","D"],
+    tags:["spatial transcriptomics","snrna-seq","visium","visium hd3","merfish","phenocycler","zonation","porto-central","hepatocyte","steatosis","mitochondria","live donor","healthy liver","atlas","human"],
+    summary:"若年生体健常ドナー8例と病変隣接正常組織8例の計16肝を、Visium/Visium HD3/MERFISH/PhenoCycler（空間プロテオミクス）＋snRNA-seqで多モーダル解析し、健常ヒト肝の基準参照アトラスを構築。ヒト肝zonation（肝細胞・非実質細胞）の主要機能はマウスより中心静脈側にシフトしていることを初めて定量化。早期steatosis肝細胞では核コード型ミトコンドリアタンパク転写産物↓・ミトコンドリアゲノムコード転写産物↑の動的適応プログラムを発見。",
+    connection:"自系MPS（酸素透過性膜による類洞様O2勾配）がヒトのpericentrally-shifted zonationを再現しているかを検証する黄金標準参照データ。MERFISHパネルのゾーンマーカーを自系のqPCRパネルに採用できる。早期steatosisのmito転写プログラムは#26（PLIN5-mito-LDカップリング）と統合してFFA誘発steatosisのバイオマーカーセットを設計できる。#25（Takebe多ゾーンオルガノイド）との循環的バリデーション戦略の軸となる。",
+    methods:["ヒト肝（生体ドナー8例＋病変隣接正常8例）","Visium/Visium HD3（空間TX）","MERFISH（multiplexed spatial imaging）","PhenoCycler（空間プロテオミクスイメージング）","snRNA-seq"]
+  },
+  {
     id:"23",
     title:"BECのFXR–YAP軸が胆汁酸バリアを維持——FXR/YAP欠失でβカテニン→EMT→BA漏出→HSC活性化・線維化進行；OCA逆効果",
     authors:"Sánchez-Sánchez P, Wang Z, Zagorac S, Domínguez M, Boskovic J, Nair A, Macías-Camero A, Villaseñor A, Schwabe RF, Djouder N†（CNIO, Madrid, Spain）",
@@ -2482,6 +2530,9 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "26":[{ic:"liver",cap:"肝細胞内の脂質滴（LD）とミトコンドリアのコンタクト"},{ic:"mouse",cap:"絶食 vs 西洋食（WD）マウス肝"},{ic:"omics",cap:"scPhenomics（単一細胞組織イメージング）"},{ic:"omics",cap:"空間プロテオミクス"},{ic:"drug",cap:"PLIN5 S155A過剰発現がlipotoxicityを軽減"}],
+  "25":[{ic:"liver",cap:"Zone1（門脈周囲）ゾーン特異的肝オルガノイド"},{ic:"liver",cap:"Zone3（中心静脈周囲）ゾーン特異的肝オルガノイド"},{ic:"mouse",cap:"BDLラット移植実験"},{ic:"omics",cap:"エピゲノム解析（EP300/TET1/HIF1α ChIP/ATAC）"},{ic:"human",cap:"hiPSC由来ゾーン特異的肝前駆細胞"}],
+  "24":[{ic:"human",cap:"生体健常ドナー8例のヒト肝サンプル"},{ic:"omics",cap:"Visium/Visium HD3 空間トランスクリプトーム"},{ic:"omics",cap:"MERFISH + PhenoCycler 空間プロテオミクス"},{ic:"omics",cap:"snRNA-seq"},{ic:"liver",cap:"早期steatosis肝細胞のmito転写プログラム"}],
   "23":[{ic:"liver",cap:"BEC（胆管上皮細胞）FXR-YAP軸が胆汁酸バリアを維持"},{ic:"stellate",cap:"HSC活性化→線維化（FXR/YAP欠失時）"},{ic:"mouse",cap:"BEC特異的FXR/YAP条件付きKOマウス"},{ic:"human",cap:"ヒト肝BECでFXR-YAP発現と線維化重症度相関"},{ic:"drug",cap:"OCA（FXRアゴニスト）がBEC-FXR KOで線維化悪化"}],
   "22":[{ic:"macrophage",cap:"KC→LAM様表現型（TREM2↑）"},{ic:"macrophage",cap:"募集LAM（単球由来）"},{ic:"mouse",cap:"複数傷害モデル（CCl4・MASH・BDL）"},{ic:"human",cap:"ヒト肝組織での保存性確認"},{ic:"omics",cap:"scRNA-seq＋空間TX＋プロテオゲノミクス"}],
   "21":[{ic:"stellate",cap:"iPSC→diHSC プロテオーム軌跡"},{ic:"stellate",cap:"RORA：代謝制御で静止維持"},{ic:"mouse",cap:"RORA-KOマウス線維化増悪"},{ic:"drug",cap:"RORAアゴニスト多臓器線維化軽減"},{ic:"human",cap:"ヒトMASH患者RORA逆相関"}],
@@ -2588,7 +2639,13 @@ const paperMethods={
   /* 22 De Ponti/Bujko/Scott Immunity 2025: 複数マウス肝傷害モデル+条件付きTREM2 KO+scRNA+空間TX+プロテオゲノミクス+ヒト肝組織 */
   "22":["mouse","human","crispr","scrna","spatial","proteomics","wb","facs","imaging"],
   /* 23 Sánchez-Sánchez/Djouder Nat Metab 2026: BEC特異的FXR/YAP cKO+胆汁酸傷害+計算解析+ヒト肝組織 */
-  "23":["mouse","human","crispr","insilico","qpcr","wb","imaging","drug"]
+  "23":["mouse","human","crispr","insilico","qpcr","wb","imaging","drug"],
+  /* 24 Itzkovitz Nature 2026: 生体ドナー肝+Visium/HD3/MERFISH/PhenoCycler+snRNA-seq */
+  "24":["human","spatial","scrna","proteomics","imaging"],
+  /* 25 Al Reza/Takebe Nature 2025: hiPSC→多ゾーンオルガノイド+BDLラット移植+エピゲノム(ChIP/ATAC) */
+  "25":["invitro","mouse","scrna","chipseq","facs","qpcr","wb","imaging"],
+  /* 26 Porat-Shliom Nat Metab 2026: 絶食/WDマウス+scPhenomics+空間プロテオミクス+AAVによるPLIN5変異体過剰発現 */
+  "26":["mouse","invitro","proteomics","imaging","drug"]
 };
 
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
@@ -2791,7 +2848,17 @@ const CATINFO={
   "bec":{cat:"細胞・組織",long:"biliary epithelial cell（胆管上皮細胞/胆管細胞）。胆管内腔を裏打ちする上皮細胞で、FXR–YAP軸により胆汁酸バリアを能動的に維持する。欠失でEMT→BA漏出→HSC活性化→線維化が生じる。"},
   "fxr":{cat:"遺伝子・タンパク質",long:"farnesoid X receptor（ファルネソイドX受容体）。核内受容体で胆汁酸を直接感知し、肝細胞では脂質・糖代謝を統合制御する。BECではYAPを転写活性化して胆管バリアを維持（Nat Metab 2026）。"},
   "yap":{cat:"遺伝子・タンパク質",long:"Yes-associated protein（YAP）。Hippoシグナル下流のトランスコアクチベーター。BECではFXRの転写標的として細胞接着プログラムを誘導し密着結合を維持する（Nat Metab 2026）。"},
-  "oca":{cat:"手法・モデル",long:"obeticholic acid（オベチコール酸）。半合成第二世代FXRアゴニスト。MASH・PBCの臨床試験中だが、BEC特異的FXR欠失マウスで線維化を悪化させた——BECのFXR状態を考慮しない全身投与は逆効果になりうる。"}
+  "oca":{cat:"手法・モデル",long:"obeticholic acid（オベチコール酸）。半合成第二世代FXRアゴニスト。MASH・PBCの臨床試験中だが、BEC特異的FXR欠失マウスで線維化を悪化させた——BECのFXR状態を考慮しない全身投与は逆効果になりうる。"},
+  "plin5":{cat:"遺伝子・タンパク質",long:"perilipin 5。脂質滴（LD）表面コートタンパクのペリリピンファミリーメンバー。ミトコンドリア-LD物理的テザリングを媒介し、S155リン酸化でカップリング強度を制御（Nat Metab 2026）。"},
+  "scphenomics":{cat:"手法・モデル",long:"single-cell phenomics（単一細胞フェノミクス）。高多重蛍光組織イメージング＋定量解析で単一細胞レベルの細胞内分子状態（LD・ミトコンドリア・タンパク分布）を多変量で捉える新技術（Nat Metab 2026）。"},
+  "mito-ld contact":{cat:"プロセス・現象",long:"mitochondria–lipid droplet contact site（ミトコンドリア-脂質滴コンタクト部位）。脂肪酸をミトコンドリアβ酸化に直接輸送するチャンネル。絶食時↑、WD投与時↓（PLIN5 S155リン酸化依存）。"},
+  "lipotoxicity":{cat:"疾患・病態",long:"細胞内LD過剰蓄積→ER stress・ミトコンドリア機能障害・アポトーシス誘導。MASLDからMASHへの進行の中心機序。mito-LDカップリング崩壊で増悪。"},
+  "visium hd3":{cat:"手法・モデル",long:"10x Genomics Visium HD 第3世代。サブミクロン解像度の空間トランスクリプトームプラットフォーム。従来Visiumより高解像度で単一細胞に近い空間分解能を実現。"},
+  "phenocycler":{cat:"手法・モデル",long:"AKOYA Biosciences PhenoCycler-Fusion。最大60タンパクを蛍光サイクル染色で同一組織上に同時測定する空間プロテオミクスイメージャー（#24 Nature 2026健常ヒト肝アトラスで使用）。"},
+  "ep300":{cat:"遺伝子・タンパク質",long:"E1A binding protein p300。ヒストンアセチルトランスフェラーゼ型コアクチベーター。TET1（Zone1/periportal）またはHIF1α（Zone3/pericentral）と複合体を形成しゾーン特異遺伝子を活性化（#25 Takebe Nature 2025）。"},
+  "tet1":{cat:"遺伝子・タンパク質",long:"ten-eleven translocation methylcytosine dioxygenase 1。DNAメチル化除去酵素。アスコルビン酸により活性化されEP300と協働してZone1（門脈周囲）プログラムを確立（#25）。"},
+  "bdl":{cat:"手法・モデル",long:"bile duct ligation（胆管結紮）。外科的に総胆管を結紮し胆汁うっ滞・高ビリルビン血症・二次的線維化を誘発するラット/マウスモデル。#25でhiPSC-オルガノイド移植の有効性検証に使用。"},
+  "porto-central axis":{cat:"細胞・組織",long:"門脈-中心静脈軸（porto-central axis）。肝小葉内の門脈域（Zone 1, 高O2）から中心静脈（Zone 3, 低O2）へ向かうzonation軸。酸素・栄養・BA濃度勾配の構造的基盤。ヒトではマウスより中心静脈側シフト（#24）。"}
 };
 
 /* ===== 描画 ===== */
@@ -3703,6 +3770,150 @@ CINEMA["18"]={
           },820);
         },800);
       }},
+    ];
+  }
+};
+
+CINEMA["26"]={
+  svg:GLYPH.bg()
+    +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("26d","var(--D)")}${GLYPH.arrow("26g","var(--G)")}</defs>`
+    +GLYPH.title("PLIN5 S155リン酸化がmito-LDカップリングを制御——脂質フラックスと脂肪毒性の鍵")
+    +GLYPH.hep("hep26",20,32,0.85,"肝細胞")
+    +`<g id="ldH26"><ellipse cx="280" cy="140" rx="38" ry="32" fill="#f5e060" fill-opacity="0.7" stroke="#d4b800" stroke-width="1.8"/><text x="280" y="135" text-anchor="middle" font-size="9" fill="#7a6000" font-weight="600">脂質滴（LD）</text><text x="280" y="148" text-anchor="middle" font-size="8" fill="#7a6000">中型</text></g>`
+    +`<ellipse id="mito26" cx="450" cy="140" rx="44" ry="26" fill="var(--D)" fill-opacity="0.18" stroke="var(--D)" stroke-width="1.6"/><text x="450" y="135" text-anchor="middle" font-size="9" fill="var(--D)" font-weight="600">ミトコンドリア</text><text x="450" y="150" text-anchor="middle" font-size="8" fill="var(--D)">β酸化</text>`
+    +GLYPH.receptor("plin5r26",365,130,"PLIN5","var(--D)")
+    +`<g id="contactLine26" class="fade"><line x1="318" y1="138" x2="406" y2="138" stroke="var(--D)" stroke-width="2.5" stroke-dasharray="5,3"/><text x="362" y="126" text-anchor="middle" font-size="8.5" fill="var(--D)">mito-LDコンタクト</text></g>`
+    +`<g id="fastLabel26" class="fade">`+GLYPH.badge("fastB26",158,108,"絶食","FA過剰→mito↑","var(--D)")+`</g>`
+    +`<g id="wdLabel26" class="fade">`+GLYPH.badge("wdB26",158,108,"WD","mito-LD↓→脂毒","var(--B)")+`</g>`
+    +`<g id="s155aWrap26" class="fade">`+GLYPH.tag("s155a26",365,100,"S155A(非リン酸化)","var(--D)",80,false)+`</g>`
+    +`<g id="s155eWrap26" class="fade">`+GLYPH.tag("s155e26",365,100,"S155E(リン酸化模倣)","var(--B)",80,false)+`</g>`
+    +`<g id="ldLarge26" class="fade"><ellipse cx="280" cy="145" rx="54" ry="44" fill="#f5e060" fill-opacity="0.5" stroke="#d4b800" stroke-width="2" stroke-dasharray="5,3"/><text x="280" y="140" text-anchor="middle" font-size="9" fill="#7a6000">LD拡大</text><text x="280" y="155" text-anchor="middle" font-size="8" fill="#7a6000">（S155A）</text></g>`
+    +`<g id="ldSmall26" class="fade"><ellipse cx="280" cy="145" rx="22" ry="18" fill="#f5e060" fill-opacity="0.9" stroke="#d4b800" stroke-width="2"/><text x="280" y="140" text-anchor="middle" font-size="8" fill="#7a6000">LD縮小</text><text x="280" y="153" text-anchor="middle" font-size="8" fill="#7a6000">（S155E）</text></g>`
+    +`<g id="scPheno26" class="fade"><rect x="105" y="320" width="510" height="42" rx="5" fill="var(--G)" fill-opacity="0.08" stroke="var(--G)" stroke-width="1"/><text x="360" y="338" text-anchor="middle" font-size="9" fill="var(--G)" font-weight="600">新手法 scPhenomics（単一細胞組織イメージング）＋ 空間プロテオミクス</text><text x="360" y="353" text-anchor="middle" font-size="8.5" fill="var(--G)">絶食/WDマウス肝の脂質代謝状態を単一細胞解像度でマッピング</text></g>`
+    +GLYPH.layer("col26"),
+  build(K){
+    return [
+      {color:"D",t:2400,cap:"① 健常肝細胞。脂質滴（LD）はミトコンドリアの近傍に存在し、通常状態でもある程度のmito-LDコンタクトを保っている。",run(){}},
+      {color:"D",t:4200,cap:"② 絶食状態。脂肪酸をミトコンドリアβ酸化に輸送するため、mito-LDコンタクトが増加。PLIN5（ペリリピン5）が誘導されてミトコンドリア-LD物理的テザリングを促進する。",
+       run(){
+         K.show(["fastLabel26","contactLine26"]);
+         K.pulse("fastB26");
+         K.flow(318,138,406,138,"var(--D)",{n:3,dur:1.0,loop:2});
+         K.T(()=>K.pulse("plin5r26"),500);
+       }},
+      {color:"B",t:4200,cap:"③ 西洋食（WD）投与。肥満誘導型食餌でmito-LDコンタクトが稀になり、LD内の脂質がミトコンドリアで燃やされずに蓄積→脂肪毒性（lipotoxicity）→ER stress・肝細胞傷害へ。",
+       run(){
+         K.unpulse("fastB26"); K.unpulse("plin5r26");
+         K.attr("fastLabel26","opacity","0");
+         K.attr("contactLine26","opacity","0.18");
+         K.show(["wdLabel26"]);
+         K.pulse("wdB26");
+       }},
+      {color:"D",t:4800,cap:"④ PLIN5 S155変異体実験。非リン酸化型S155AはコンタクトとLD拡大を促進、リン酸化模倣型S155EはLD縮小をもたらす。S155Aの過剰発現がWDマウスのlipotoxicityを軽減——S155リン酸化制御が治療標的となる。",
+       run(){
+         K.unpulse("wdB26");
+         K.show(["s155aWrap26","ldLarge26"]);
+         K.pulse("s155a26");
+         K.T(()=>{
+           K.unpulse("s155a26");
+           K.attr("s155aWrap26","opacity","0.2");
+           K.attr("ldLarge26","opacity","0.2");
+           K.show(["s155eWrap26","ldSmall26"]);
+           K.pulse("s155e26");
+         },2200);
+         K.T(()=>{K.unpulse("s155e26"); K.show(["scPheno26"]);},4400);
+       }},
+    ];
+  }
+};
+
+CINEMA["25"]={
+  svg:GLYPH.bg()
+    +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("25h","var(--H)")}${GLYPH.arrow("25e","var(--E)")}</defs>`
+    +GLYPH.title("hiPSCからZone1/Zone3ゾーン特異的肝オルガノイドを作製——EP300-TET1/HIF1α軸がzonation決定")
+    +`<rect id="zone1Box25" x="90" y="55" width="238" height="172" rx="8" fill="var(--E)" fill-opacity="0.07" stroke="var(--E)" stroke-width="1.2" stroke-dasharray="6,3"/>`
+    +`<text x="209" y="73" text-anchor="middle" font-size="9.5" fill="var(--E)" font-weight="600">Zone 1（門脈周囲）</text>`
+    +`<rect id="zone3Box25" x="392" y="55" width="238" height="172" rx="8" fill="var(--D)" fill-opacity="0.07" stroke="var(--D)" stroke-width="1.2" stroke-dasharray="6,3"/>`
+    +`<text x="511" y="73" text-anchor="middle" font-size="9.5" fill="var(--D)" font-weight="600">Zone 3（中心静脈周囲）</text>`
+    +`<g id="ascW25" class="fade">`+GLYPH.metab("asc25",160,150,"アスコルビン酸","var(--E)")+`</g>`
+    +`<g id="bilW25" class="fade">`+GLYPH.metab("bil25",460,150,"ビリルビン","var(--D)")+`</g>`
+    +`<g id="tet1W25" class="fade">`+GLYPH.tf("tet125",209,170,"TET1","var(--E)")+`</g>`
+    +`<g id="hifW25" class="fade">`+GLYPH.tf("hif25",511,170,"HIF1α","var(--D)")+`</g>`
+    +GLYPH.receptor("ep300a25",209,200,"EP300","var(--H)")
+    +GLYPH.receptor("ep300b25",511,200,"EP300","var(--H)")
+    +`<g id="org1W25" class="fade"><ellipse cx="209" cy="290" rx="58" ry="40" fill="var(--E)" fill-opacity="0.22" stroke="var(--E)" stroke-width="2"/><text x="209" y="285" text-anchor="middle" font-size="9" fill="var(--E)" font-weight="600">Zone1オルガノイド</text><text x="209" y="299" text-anchor="middle" font-size="8" fill="var(--E)">糖新生・β酸化特性</text></g>`
+    +`<g id="org3W25" class="fade"><ellipse cx="511" cy="290" rx="58" ry="40" fill="var(--D)" fill-opacity="0.22" stroke="var(--D)" stroke-width="2"/><text x="511" y="285" text-anchor="middle" font-size="9" fill="var(--D)" font-weight="600">Zone3オルガノイド</text><text x="511" y="299" text-anchor="middle" font-size="8" fill="var(--D)">解糖・脂質合成特性</text></g>`
+    +`<g id="bdlW25" class="fade"><rect x="280" y="340" width="160" height="38" rx="5" fill="var(--H)" fill-opacity="0.12" stroke="var(--H)" stroke-width="1.2"/><text x="360" y="356" text-anchor="middle" font-size="9" fill="var(--H)" font-weight="600">BDLラット移植</text><text x="360" y="370" text-anchor="middle" font-size="8.5" fill="var(--H)">高NH3/高ビリルビン血症改善・生存↑</text></g>`,
+  build(K){
+    return [
+      {color:"H",t:2400,cap:"① 従来のhiPSC-肝オルガノイドはzonationを欠く。本研究はアスコルビン酸（Zone1/門脈周囲誘導）とビリルビン（Zone3/中心静脈周囲誘導）という培養環境の違いがエピゲノムを通じてゾーン同一性を決定することを示した。",run(){}},
+      {color:"E",t:4400,cap:"② アスコルビン酸富化条件：TET1（DNA脱メチル化酵素）が活性化されEP300と複合体を形成→Zone1（門脈周囲）特異遺伝子プログラム（糖新生・β酸化）を誘導。",
+       run(){
+         K.show(["ascW25","tet1W25"]);
+         K.pulse("asc25");
+         K.T(()=>{
+           K.unpulse("asc25");
+           K.flow(160,155,209,190,"var(--E)",{n:3,dur:0.9,loop:2});
+           K.pulse("ep300a25");
+         },800);
+         K.T(()=>{K.unpulse("ep300a25"); K.show(["org1W25"]);},2800);
+       }},
+      {color:"D",t:4400,cap:"③ ビリルビン富化条件（低酸素類似環境）：HIF1αが安定化されEP300と複合体を形成→Zone3（中心静脈周囲）特異遺伝子プログラム（解糖・脂質合成・薬物代謝）を誘導。",
+       run(){
+         K.show(["bilW25","hifW25"]);
+         K.pulse("bil25");
+         K.T(()=>{
+           K.unpulse("bil25");
+           K.flow(460,155,511,190,"var(--D)",{n:3,dur:0.9,loop:2});
+           K.pulse("ep300b25");
+         },800);
+         K.T(()=>{K.unpulse("ep300b25"); K.show(["org3W25"]);},2800);
+       }},
+      {color:"H",t:3600,cap:"④ 作製したZone1/Zone3ゾーン特異的オルガノイドをBDL（胆管結紮）ラットへ移植→高アンモニア血症・高ビリルビン血症を改善し生存延長を実証。再生医療応用の出口戦略として確立。",
+       run(){
+         K.show(["bdlW25"]);
+         K.pulse("bdlW25");
+         K.T(()=>K.unpulse("bdlW25"),2500);
+       }},
+    ];
+  }
+};
+
+CINEMA["24"]={
+  svg:GLYPH.bg()
+    +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("24g","var(--G)")}${GLYPH.arrow("24e","var(--E)")}</defs>`
+    +GLYPH.title("生体ドナー由来健常ヒト肝の空間アトラス——human-specific zonation + 早期steatosisミトコンドリアプログラム")
+    +`<rect id="lobule24" x="105" y="45" width="510" height="210" rx="10" fill="var(--G)" fill-opacity="0.05" stroke="var(--G)" stroke-width="1.2"/>`
+    +`<text x="140" y="68" text-anchor="middle" font-size="9" fill="var(--E)">Zone 1</text>`
+    +`<text x="360" y="68" text-anchor="middle" font-size="9" fill="var(--G)">Zone 2</text>`
+    +`<text x="578" y="68" text-anchor="middle" font-size="9" fill="var(--D)">Zone 3</text>`
+    +`<rect id="ppZone24" x="110" y="75" width="146" height="170" rx="6" fill="var(--E)" fill-opacity="0.12" stroke="var(--E)" stroke-width="1"/>`
+    +`<rect id="cvZone24" x="464" y="75" width="146" height="170" rx="6" fill="var(--D)" fill-opacity="0.12" stroke="var(--D)" stroke-width="1"/>`
+    +`<text x="183" y="98" text-anchor="middle" font-size="8" fill="var(--E)">門脈域（PP）</text>`
+    +`<text x="537" y="98" text-anchor="middle" font-size="8" fill="var(--D)">中心静脈域（CV）</text>`
+    +`<g id="humanZone24" class="fade"><text x="360" y="148" text-anchor="middle" font-size="9" fill="var(--G)" font-weight="600">ヒトzonation：機能はマウスより中心静脈側にシフト</text><text x="360" y="163" text-anchor="middle" font-size="8" fill="var(--G)">（pericentral shift vs mouse）</text></g>`
+    +`<g id="techBox24" class="fade"><rect x="105" y="268" width="510" height="56" rx="5" fill="var(--G)" fill-opacity="0.08" stroke="var(--G)" stroke-width="1"/><text x="360" y="285" text-anchor="middle" font-size="9" fill="var(--G)" font-weight="600">Visium / Visium HD3 / MERFISH / PhenoCycler + snRNA-seq</text><text x="360" y="300" text-anchor="middle" font-size="8.5" fill="var(--G)">生体健常ドナー8例 ＋ 病変隣接正常8例 ＝ 16肝サンプル統合解析</text><text x="360" y="315" text-anchor="middle" font-size="8.5" fill="var(--G)">健常ヒト肝の空間遺伝子発現「黄金標準」参照アトラスを構築</text></g>`
+    +`<g id="mitoP24" class="fade"><rect x="148" y="105" width="70" height="44" rx="4" fill="var(--D)" fill-opacity="0.18" stroke="var(--D)" stroke-width="1.2"/><text x="183" y="120" text-anchor="middle" font-size="8" fill="var(--D)">早期steatosis</text><text x="183" y="132" text-anchor="middle" font-size="8" fill="var(--D)">核コードMito↓</text><text x="183" y="144" text-anchor="middle" font-size="8" fill="var(--D)">mito転写↑</text></g>`
+    +`<g id="zoneTx24" class="fade"><text x="360" y="190" text-anchor="middle" font-size="8.5" fill="var(--G)">非実質細胞（KC/LSEC/HSC）も</text><text x="360" y="204" text-anchor="middle" font-size="8.5" fill="var(--G)">空間ゾーン依存的な機能分担を示す</text></g>`,
+  build(K){
+    return [
+      {color:"G",t:2400,cap:"① 健常ヒト肝の基準参照アトラス構築。生体ドナーから採取した若年健常肝8例を最新の空間オミクス技術（Visium HD3/MERFISH/PhenoCycler）とsnRNA-seqで統合解析——脳死ドナー由来では避けられなかった虚血変化バイアスを排除した真のゴールドスタンダード。",run(){}},
+      {color:"G",t:4000,cap:"② 複数空間技術を組み合わせた多モーダル解析プラットフォーム。Visium/Visium HD3で転写、PhenoCyclerで空間プロテオミクス（最大60タンパク）、MERFISHでin situ RNA検出——同一組織断片上でのマルチオーミクス統合を実現。",
+       run(){
+         K.show(["techBox24"]);
+       }},
+      {color:"E",t:4400,cap:"③ ヒト肝zonation解明。肝小葉はZone1（門脈周囲/PP）→Zone3（中心静脈周囲/CV）の機能勾配で組織化されるが、ヒトでは主要機能（糖新生・脂質代謝等）がマウスより中心静脈側にシフト（pericentrally shifted）していることを定量化。非実質細胞のzonationも同定。",
+       run(){
+         K.show(["humanZone24","zoneTx24"]);
+         K.pulse("humanZone24");
+         K.T(()=>K.unpulse("humanZone24"),2800);
+       }},
+      {color:"D",t:3600,cap:"④ 早期steatosis肝細胞の適応プログラム。脂肪肝初期の肝細胞では核コード型ミトコンドリアタンパク転写産物が減少し、ミトコンドリアゲノムコード転写産物が代償的に増加する動的プログラムを発見——#26（PLIN5-mito-LD coupling）と接続するmito適応機序の転写シグネチャ。",
+       run(){
+         K.show(["mitoP24"]);
+         K.pulse("mitoP24");
+         K.T(()=>K.unpulse("mitoP24"),2200);
+       }},
     ];
   }
 };
