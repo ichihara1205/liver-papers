@@ -522,6 +522,22 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
+    id:"23",
+    title:"BECのFXR–YAP軸が胆汁酸バリアを維持——FXR/YAP欠失でβカテニン→EMT→BA漏出→HSC活性化・線維化進行；OCA逆効果",
+    authors:"Sánchez-Sánchez P, Wang Z, Zagorac S, Domínguez M, Boskovic J, Nair A, Macías-Camero A, Villaseñor A, Schwabe RF, Djouder N†（CNIO, Madrid, Spain）",
+    journal:"Nature Metabolism",
+    year:2026,
+    vol:"8(5):1189-1211",
+    doi:"10.1038/s42255-026-01521-z",
+    url:"https://www.nature.com/articles/s42255-026-01521-z",
+    catPrimary:"F",
+    catSub:["B"],
+    tags:["bec","fxr","yap","bile acid","emt","fibrosis","hsc","beta-catenin","oca","obeticholic acid","biliary","barrier","hippo","wnt"],
+    summary:"BECが細胞自律的FXR→YAP軸で胆汁酸バリアを維持することを発見。BEC特異的FXR/YAP欠失でβカテニン活性化→EMT→密着結合消失→BA漏出→HSC FXR活性化→線維化。ヒト検体でもFXR-YAP低下と線維化重症度が相関。OCA（FXRアゴニスト）がBEC-FXR欠失マウスで逆効果——BECのFXR状態を無視した全身FXR標的療法のリスクを提示。",
+    connection:"4細胞オルガノイドにはBECがないが、培地BA濃度管理の重要性を示す（高BA→HSC直接FXR活性化で線維化点火）。LPS+BAの二重セカンドヒットが免疫＋胆汁酸代謝軸の複合線維化モデルになりうる。FXRアゴニストスクリーニング時はBEC有無のコンテキスト明示が必要。",
+    methods:["in vivo(BEC特異的FXR/YAP条件付きKOマウス＋胆汁酸傷害モデル)","計算解析","ヒト肝組織ex vivo"]
+  },
+  {
     id:"22",
     title:"LAM様KCと募集LAMがTREM2を介した機能的冗長性で肝組織修復を保証——両者欠失でefferocytosis障害・線維化点火",
     authors:"De Ponti FF†, Bujko A†, Liu Z, Collins PJ, Schuermans S, Maueroder C, Amstelveen S, Thoné T, Martens L, McKendrick JG, Louwe PA, Sànchez Cruz A, Saelens W, Matchett KP, Waller KJ, Zwicker C, Buglar-Lamb A, Vanneste B, Parmentier F, Remmerie A, Guilliams M, Henderson NC, Ravichandran K, Marques PE, Scott CL†（VIB-UGent Center for Inflammation Research, ベルギー）",
@@ -2466,6 +2482,7 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "23":[{ic:"liver",cap:"BEC（胆管上皮細胞）FXR-YAP軸が胆汁酸バリアを維持"},{ic:"stellate",cap:"HSC活性化→線維化（FXR/YAP欠失時）"},{ic:"mouse",cap:"BEC特異的FXR/YAP条件付きKOマウス"},{ic:"human",cap:"ヒト肝BECでFXR-YAP発現と線維化重症度相関"},{ic:"drug",cap:"OCA（FXRアゴニスト）がBEC-FXR KOで線維化悪化"}],
   "22":[{ic:"macrophage",cap:"KC→LAM様表現型（TREM2↑）"},{ic:"macrophage",cap:"募集LAM（単球由来）"},{ic:"mouse",cap:"複数傷害モデル（CCl4・MASH・BDL）"},{ic:"human",cap:"ヒト肝組織での保存性確認"},{ic:"omics",cap:"scRNA-seq＋空間TX＋プロテオゲノミクス"}],
   "21":[{ic:"stellate",cap:"iPSC→diHSC プロテオーム軌跡"},{ic:"stellate",cap:"RORA：代謝制御で静止維持"},{ic:"mouse",cap:"RORA-KOマウス線維化増悪"},{ic:"drug",cap:"RORAアゴニスト多臓器線維化軽減"},{ic:"human",cap:"ヒトMASH患者RORA逆相関"}],
   "20":[{ic:"stellate",cap:"進行期HSCの密集巣・直接接触↑"},{ic:"stellate",cap:"NTF3→NTRK3自己分泌ループ"},{ic:"omics",cap:"snRNA-seq＋組織透明化(3D線維)"},{ic:"drug",cap:"NTRK3阻害→線維化退縮"},{ic:"mouse",cap:"マウスNASH＋ヒト試料で保存性照合"}],
@@ -2569,7 +2586,9 @@ const paperMethods={
   /* 21 Martínez García de la Torre/Affo/Sancho-Bru Nat Commun 2025: iPSC→diHSCプロテオーム軌跡+RORA-KO+RORAアゴニスト+ヒト相関 */
   "21":["invitro","mouse","human","crispr","drug","proteomics","qpcr","wb","imaging"],
   /* 22 De Ponti/Bujko/Scott Immunity 2025: 複数マウス肝傷害モデル+条件付きTREM2 KO+scRNA+空間TX+プロテオゲノミクス+ヒト肝組織 */
-  "22":["mouse","human","crispr","scrna","spatial","proteomics","wb","facs","imaging"]
+  "22":["mouse","human","crispr","scrna","spatial","proteomics","wb","facs","imaging"],
+  /* 23 Sánchez-Sánchez/Djouder Nat Metab 2026: BEC特異的FXR/YAP cKO+胆汁酸傷害+計算解析+ヒト肝組織 */
+  "23":["mouse","human","crispr","insilico","qpcr","wb","imaging","drug"]
 };
 
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
@@ -2768,7 +2787,11 @@ const CATINFO={
   "sr1078":{cat:"手法・モデル",long:"SR1078（合成RORAアゴニスト）。RORα/γの選択的アゴニストでHSC活性化を抑制し線維化を軽減する薬理ツール。多臓器ペリサイト静止の検証に使用された。"},
   "lam-like kc":{cat:"細胞・組織",long:"傷害部位でTREM2↑/CD9↑のLAM表現型を採用した常在クッパー細胞（KC）。単球由来の募集LAMとは発生起源が異なるが、TREM2依存的efferocytosisによる組織修復能は機能的に等価。De Ponti et al., Immunity 2025 で同定。"},
   "proteogenomics":{cat:"手法・モデル",long:"プロテオームとトランスクリプトームを同一細胞集団で統合解析する手法。本ライブラリではLAM様KCと募集LAMの分子同一性比較（Immunity 2025）に使用。"},
-  "spatial restriction":{cat:"プロセス・現象",long:"LAMとLAM様KCが傷害巣にのみ集積し健常域には少ない傷害部位特異的な分布パターン。空間トランスクリプトーム解析で可視化された。"}
+  "spatial restriction":{cat:"プロセス・現象",long:"LAMとLAM様KCが傷害巣にのみ集積し健常域には少ない傷害部位特異的な分布パターン。空間トランスクリプトーム解析で可視化された。"},
+  "bec":{cat:"細胞・組織",long:"biliary epithelial cell（胆管上皮細胞/胆管細胞）。胆管内腔を裏打ちする上皮細胞で、FXR–YAP軸により胆汁酸バリアを能動的に維持する。欠失でEMT→BA漏出→HSC活性化→線維化が生じる。"},
+  "fxr":{cat:"遺伝子・タンパク質",long:"farnesoid X receptor（ファルネソイドX受容体）。核内受容体で胆汁酸を直接感知し、肝細胞では脂質・糖代謝を統合制御する。BECではYAPを転写活性化して胆管バリアを維持（Nat Metab 2026）。"},
+  "yap":{cat:"遺伝子・タンパク質",long:"Yes-associated protein（YAP）。Hippoシグナル下流のトランスコアクチベーター。BECではFXRの転写標的として細胞接着プログラムを誘導し密着結合を維持する（Nat Metab 2026）。"},
+  "oca":{cat:"手法・モデル",long:"obeticholic acid（オベチコール酸）。半合成第二世代FXRアゴニスト。MASH・PBCの臨床試験中だが、BEC特異的FXR欠失マウスで線維化を悪化させた——BECのFXR状態を考慮しない全身投与は逆効果になりうる。"}
 };
 
 /* ===== 描画 ===== */
@@ -3680,6 +3703,62 @@ CINEMA["18"]={
           },820);
         },800);
       }},
+    ];
+  }
+};
+
+CINEMA["23"]={
+  svg:GLYPH.bg()
+    +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("23f","var(--F)")}${GLYPH.arrow("23b","var(--B)")}</defs>`
+    +GLYPH.title("BECのFXR–YAP軸が胆汁酸バリアを維持——FXR/YAP欠失でHSC活性化・線維化進行")
+    +`<rect id="ductLumen23" x="90" y="45" width="540" height="42" rx="8" fill="var(--F)" fill-opacity="0.12" stroke="var(--F)" stroke-width="1.2"/><text x="360" y="62" text-anchor="middle" font-size="9" fill="var(--F)">胆管内腔（胆汁酸）</text>`
+    +GLYPH.metab("ba23a",175,68,"BA","var(--F)")
+    +GLYPH.metab("ba23b",360,68,"BA","var(--F)")
+    +GLYPH.metab("ba23c",548,68,"BA","var(--F)")
+    +`<g id="becH23"><rect x="90" y="86" width="540" height="34" rx="3" fill="#d8f0d0" stroke="#4a8a3a" stroke-width="1.5"/><text x="360" y="107" text-anchor="middle" font-size="9" fill="#2a6a1a" font-weight="600">BEC（胆管上皮細胞）— FXR発現・密着結合で管腔を密封</text></g>`
+    +GLYPH.receptor("fxr23a",196,100,"FXR","var(--F)")
+    +GLYPH.receptor("fxr23b",360,100,"FXR","var(--F)")
+    +GLYPH.receptor("fxr23c",524,100,"FXR","var(--F)")
+    +`<g id="yap23W" class="fade">`+GLYPH.tf("yap23a",238,100,"YAP","var(--F)")+GLYPH.tf("yap23b",402,100,"YAP","var(--F)")+`</g>`
+    +`<g id="tjBadge23W" class="fade">`+GLYPH.badge("tjBadge23",560,105,"バリア","✓ 完全","var(--F)")+`</g>`
+    +GLYPH.hep("hep23",20,32,0.75,"肝細胞（実質）")
+    +GLYPH.stellate("hsc23",360,278,"HSC（静止）")
+    +`<g id="becE23" class="fade"><rect x="90" y="86" width="540" height="34" rx="3" fill="#f5d0c0" stroke="#c04020" stroke-width="1.5" stroke-dasharray="6,3"/><text x="360" y="107" text-anchor="middle" font-size="9" fill="#8a2010" font-weight="600">BEC → EMT（間葉様転換）・密着結合消失</text></g>`
+    +`<g id="baLeak23" class="fade"><text x="225" y="145" text-anchor="middle" font-size="9" fill="var(--B)">BA漏出↓</text><text x="490" y="145" text-anchor="middle" font-size="9" fill="var(--B)">BA漏出↓</text></g>`
+    +`<g id="bcat23W" class="fade">`+GLYPH.badge("bcat23",100,108,"β-cat","↑活性化","var(--B)")+`</g>`
+    +`<g id="oca23W" class="fade">`+GLYPH.pill("oca23",110,230,"OCA (FXRアゴニスト)","var(--B)")+`</g>`
+    +GLYPH.layer("col23"),
+  build(K){
+    return [
+      {color:"F",t:2400,cap:"① 健常肝。胆管内腔を胆汁酸（BA）が流れ、BEC（胆管上皮細胞）が密着結合で管腔を密封している。BECはFXRを発現し、肝星細胞（HSC）は静止状態にある。",run(){}},
+      {color:"F",t:4400,cap:"② BAがBECのFXRに結合→FXRがYAPを転写活性化。YAPはBECの細胞接着遺伝子群を誘導し密着結合を強固に維持→BAが肝実質側に漏出せず、FXR依存的なHSC活性化は起こらない。",
+       run(){
+         K.flow(360,68,360,88,"var(--F)",{n:4,dur:1.0,loop:2});
+         K.T(()=>{K.show(["yap23W"]);K.pulse("yap23a");K.pulse("yap23b");},1000);
+         K.T(()=>{K.unpulse("yap23a");K.unpulse("yap23b");K.show(["tjBadge23W"]);K.pulse("tjBadge23");},2500);
+       }},
+      {color:"B",t:5000,cap:"③ BEC特異的FXRまたはYAPを遺伝的欠失→β-カテニン活性化→BECが間葉様転換（EMT）→密着結合消失→BAが肝実質へ漏出。漏出BAがHSCのFXRを直接活性化し、HSCが活性化・線維化が進行する。",
+       run(){
+         K.unpulse("tjBadge23");
+         K.attr("tjBadge23W","opacity","0");
+         K.attr("yap23W","opacity","0.12");
+         K.attr("fxr23a","opacity","0.12");K.attr("fxr23b","opacity","0.12");K.attr("fxr23c","opacity","0.12");
+         K.attr("becH23","opacity","0");
+         K.show(["becE23","bcat23W","baLeak23"]);
+         K.pulse("bcat23");
+         K.T(()=>{
+           K.unpulse("bcat23");
+           K.flow(230,143,360,245,"var(--B)",{n:3,dur:1.1,loop:2});
+           K.flow(490,143,360,245,"var(--B)",{n:3,dur:1.1,loop:2});
+           K.T(()=>{K.morph("hsc23Shape",GLYPH.SPINDLE);K.attr("hsc23Shape","fill","#b0432f");K.text("hsc23Cap","活性化HSC");},2000);
+         },1200);
+       }},
+      {color:"B",t:4200,cap:"④ 活性化HSCがコラーゲン過剰産生→肝線維化・肝硬変へ進行。重要：FXRアゴニストOCA（オベチコール酸）はBEC-FXR欠失マウスで線維化をさらに悪化させた——BECのFXR状態を考慮しない全身FXR標的療法は逆効果になりうる。",
+       run(){
+         K.show(["oca23W"]);
+         K.pulse("oca23");
+         K.T(()=>{K.unpulse("oca23");K.draw("col23",GLYPH.collagenAt(360,370),{len:200});},1800);
+       }},
     ];
   }
 };
