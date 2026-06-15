@@ -522,7 +522,7 @@ const THEMES={
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
   {
-    id:"26",
+    id:"26", primary:"D",
     title:"PLIN5 S155リン酸化がmito-LDカップリングを制御し肝脂質フラックス・steatosisを決定——新手法scPhenomics+空間プロテオミクスで単一細胞脂質代謝を解析",
     authors:"Porat-Shliom N† et al.（Cell Biology and Imaging Section, NCI, National Cancer Institute, NIH, Bethesda, USA）",
     journal:"Nature Metabolism",
@@ -534,11 +534,11 @@ const PAPERS=[
     catSub:["G"],
     tags:["plin5","lipid droplet","mitochondria","steatosis","phosphorylation","scphenomics","spatial proteomics","hepatocyte","masld","lipotoxicity","mito-ld contact","western diet","fasting"],
     summary:"新手法scPhenomics（単一細胞組織イメージング）と空間プロテオミクスで絶食・西洋食（WD）マウス肝の脂質代謝状態をマッピング。絶食時はミトコンドリア-脂質滴（mito-LD）コンタクトが増加・PLIN5上昇、WD投与でコンタクトが稀になることを発見。PLIN5 S155リン酸化が制御スイッチ：非リン酸化型S155A→コンタクト増加・LD拡大、リン酸化模倣型S155E→小型LD。S155A過剰発現がWDマウスのlipotoxicityを軽減。PLIN5リン酸化状態が治療標的として浮上。",
-    connection:"4細胞MPSのsteatosisフェーズ（高FFA培地）でPLIN5-mito-LDカップリングが崩れてlipotoxicityが進行する経路をABMルールに追加できる。S155リン酸化上流キナーゼ（PKA等）が脂肪化→KC炎症活性化スイッチ候補。#24（生体ドナーatlas）の早期steatosisミトコンドリアプログラムと統合的に解釈可能。",
+    connection:["4細胞MPSのsteatosisフェーズ（高FFA培地）でPLIN5-mito-LDカップリングが崩れてlipotoxicityが進行する経路をABMルールに追加できる。S155リン酸化上流キナーゼ（PKA等）が脂肪化→KC炎症活性化スイッチ候補。#24（生体ドナーatlas）の早期steatosisミトコンドリアプログラムと統合的に解釈可能。"],
     methods:["in vivo（絶食 vs 西洋食マウス）","scPhenomics（単一細胞組織イメージング）","空間プロテオミクス","PLIN5 S155変異体過剰発現（AAVベクター）"]
   },
   {
-    id:"25",
+    id:"25", primary:"A",
     title:"ヒト多能性幹細胞から門脈周囲・中心静脈周囲ゾーン特異的肝オルガノイドを作製——EP300-TET1/HIF1α軸がzonation決定; BDLラット移植で生存改善",
     authors:"Al Reza H†, Santangelo C†, Iwasawa K†, Al Reza A, Sekiya S, Glaser K, Bondoc A, Merola J, ..., Takebe T†（横浜市立大学・Cincinnati Children's Hospital Medical Center）",
     journal:"Nature",
@@ -550,11 +550,11 @@ const PAPERS=[
     catSub:["E","A"],
     tags:["hipsc","organoid","zonation","periportal","pericentral","ep300","tet1","hif1α","ascorbate","bilirubin","transplantation","bdl","liver regeneration","stem cell","multi-zonal","epigenome"],
     summary:"hiPSCをアスコルビン酸富化（Zone1/門脈周囲）またはビリルビン富化（Zone3/中心静脈周囲）培地で分化させ、ゾーン特異的肝オルガノイドを作製。EP300-TET1軸（アスコルビン酸/periportal）対EP300-HIF1α軸（bilirubin/pericentral）がゾーン同一性を決定することをエピゲノム解析で解明。BDLラットへの移植で高アンモニア血症+高ビリルビン血症を改善し生存期間を延長。",
-    connection:"自系の酸素透過性膜MPSへのアスコルビン酸/ビリルビン添加によりZone1様/Zone3様肝細胞を誘導できる可能性。EP300-TET1/HIF1αのゾーンマーカーは#24（生体ドナーatlas）のzonation参照と照合可能。BDL ratモデルは胆汁酸×線維化×再生の統合出口戦略。#23（BECのFXR-YAP軸）との組み合わせで胆管損傷→BA漏出→HSC活性化の入力を提供。",
+    connection:["自系の酸素透過性膜MPSへのアスコルビン酸/ビリルビン添加によりZone1様/Zone3様肝細胞を誘導できる可能性。EP300-TET1/HIF1αのゾーンマーカーは#24（生体ドナーatlas）のzonation参照と照合可能。BDL ratモデルは胆汁酸×線維化×再生の統合出口戦略。#23（BECのFXR-YAP軸）との組み合わせで胆管損傷→BA漏出→HSC活性化の入力を提供。"],
     methods:["in vitro（hiPSC→ゾーン特異的肝オルガノイド分化）","in vivo（BDLラット移植）","scRNA-seq/空間解析","エピゲノム解析（EP300/TET1/HIF1α ChIP/ATAC）"]
   },
   {
-    id:"24",
+    id:"24", primary:"G",
     title:"生体ドナー由来健常ヒト肝の空間アトラス——Visium HD3/MERFISH/PhenoCycler+snRNA-seqでhuman-specific zonation解明・早期steatosisのmito転写プログラムを同定",
     authors:"Itzkovitz S† et al.（Department of Molecular Cell Biology, Weizmann Institute of Science, Rehovot, Israel）",
     journal:"Nature",
@@ -566,11 +566,11 @@ const PAPERS=[
     catSub:["E","D"],
     tags:["spatial transcriptomics","snrna-seq","visium","visium hd3","merfish","phenocycler","zonation","porto-central","hepatocyte","steatosis","mitochondria","live donor","healthy liver","atlas","human"],
     summary:"若年生体健常ドナー8例と病変隣接正常組織8例の計16肝を、Visium/Visium HD3/MERFISH/PhenoCycler（空間プロテオミクス）＋snRNA-seqで多モーダル解析し、健常ヒト肝の基準参照アトラスを構築。ヒト肝zonation（肝細胞・非実質細胞）の主要機能はマウスより中心静脈側にシフトしていることを初めて定量化。早期steatosis肝細胞では核コード型ミトコンドリアタンパク転写産物↓・ミトコンドリアゲノムコード転写産物↑の動的適応プログラムを発見。",
-    connection:"自系MPS（酸素透過性膜による類洞様O2勾配）がヒトのpericentrally-shifted zonationを再現しているかを検証する黄金標準参照データ。MERFISHパネルのゾーンマーカーを自系のqPCRパネルに採用できる。早期steatosisのmito転写プログラムは#26（PLIN5-mito-LDカップリング）と統合してFFA誘発steatosisのバイオマーカーセットを設計できる。#25（Takebe多ゾーンオルガノイド）との循環的バリデーション戦略の軸となる。",
+    connection:["自系MPS（酸素透過性膜による類洞様O2勾配）がヒトのpericentrally-shifted zonationを再現しているかを検証する黄金標準参照データ。MERFISHパネルのゾーンマーカーを自系のqPCRパネルに採用できる。早期steatosisのmito転写プログラムは#26（PLIN5-mito-LDカップリング）と統合してFFA誘発steatosisのバイオマーカーセットを設計できる。#25（Takebe多ゾーンオルガノイド）との循環的バリデーション戦略の軸となる。"],
     methods:["ヒト肝（生体ドナー8例＋病変隣接正常8例）","Visium/Visium HD3（空間TX）","MERFISH（multiplexed spatial imaging）","PhenoCycler（空間プロテオミクスイメージング）","snRNA-seq"]
   },
   {
-    id:"23",
+    id:"23", primary:"B",
     title:"BECのFXR–YAP軸が胆汁酸バリアを維持——FXR/YAP欠失でβカテニン→EMT→BA漏出→HSC活性化・線維化進行；OCA逆効果",
     authors:"Sánchez-Sánchez P, Wang Z, Zagorac S, Domínguez M, Boskovic J, Nair A, Macías-Camero A, Villaseñor A, Schwabe RF, Djouder N†（CNIO, Madrid, Spain）",
     journal:"Nature Metabolism",
@@ -582,11 +582,11 @@ const PAPERS=[
     catSub:["B"],
     tags:["bec","fxr","yap","bile acid","emt","fibrosis","hsc","beta-catenin","oca","obeticholic acid","biliary","barrier","hippo","wnt"],
     summary:"BECが細胞自律的FXR→YAP軸で胆汁酸バリアを維持することを発見。BEC特異的FXR/YAP欠失でβカテニン活性化→EMT→密着結合消失→BA漏出→HSC FXR活性化→線維化。ヒト検体でもFXR-YAP低下と線維化重症度が相関。OCA（FXRアゴニスト）がBEC-FXR欠失マウスで逆効果——BECのFXR状態を無視した全身FXR標的療法のリスクを提示。",
-    connection:"4細胞オルガノイドにはBECがないが、培地BA濃度管理の重要性を示す（高BA→HSC直接FXR活性化で線維化点火）。LPS+BAの二重セカンドヒットが免疫＋胆汁酸代謝軸の複合線維化モデルになりうる。FXRアゴニストスクリーニング時はBEC有無のコンテキスト明示が必要。",
+    connection:["4細胞オルガノイドにはBECがないが、培地BA濃度管理の重要性を示す（高BA→HSC直接FXR活性化で線維化点火）。LPS+BAの二重セカンドヒットが免疫＋胆汁酸代謝軸の複合線維化モデルになりうる。FXRアゴニストスクリーニング時はBEC有無のコンテキスト明示が必要。"],
     methods:["in vivo(BEC特異的FXR/YAP条件付きKOマウス＋胆汁酸傷害モデル)","計算解析","ヒト肝組織ex vivo"]
   },
   {
-    id:"22",
+    id:"22", primary:"C",
     title:"LAM様KCと募集LAMがTREM2を介した機能的冗長性で肝組織修復を保証——両者欠失でefferocytosis障害・線維化点火",
     authors:"De Ponti FF†, Bujko A†, Liu Z, Collins PJ, Schuermans S, Maueroder C, Amstelveen S, Thoné T, Martens L, McKendrick JG, Louwe PA, Sànchez Cruz A, Saelens W, Matchett KP, Waller KJ, Zwicker C, Buglar-Lamb A, Vanneste B, Parmentier F, Remmerie A, Guilliams M, Henderson NC, Ravichandran K, Marques PE, Scott CL†（VIB-UGent Center for Inflammation Research, ベルギー）",
     journal:"Immunity",
@@ -598,7 +598,7 @@ const PAPERS=[
     catSub:["B","H"],
     tags:["kc","lam","trem2","efferocytosis","lam-like kc","scrna-seq","spatial transcriptomics","proteogenomics","spatial restriction","fibrosis","hsc","monocyte","macrophage"],
     summary:"常在KCが傷害部位でLAM様表現型（TREM2+/CD9+）に転換すること、および単球由来募集LAMとの機能的冗長性によってefferocytosisを介した組織修復が保証されることを発見。条件付きTREM2欠失で両集団同時欠失のみが死細胞蓄積・線維化を惹起することを証明。複数モデル（CCl4/MASH/BDL）＋ヒト組織で保存性確認。",
-    connection:"KC→LAM様転換のTREM2発現をオルガノイドKC健全性バイオマーカーとして活用可能。LPS刺激によるTREM2低下がefferocytosis不全KCを誘導し線維化点火を再現できる。論文16（TIM4軸）と合わせABMのKCエージェントに「efferocytosis能（TIM4×TREM2の積）→死細胞除去率」ルールを実装する根拠となる。",
+    connection:["KC→LAM様転換のTREM2発現をオルガノイドKC健全性バイオマーカーとして活用可能。LPS刺激によるTREM2低下がefferocytosis不全KCを誘導し線維化点火を再現できる。論文16（TIM4軸）と合わせABMのKCエージェントに「efferocytosis能（TIM4×TREM2の積）→死細胞除去率」ルールを実装する根拠となる。"],
     methods:["in vivo(複数マウス肝傷害モデル＋条件付きTREM2 KO)","scRNA-seq","空間トランスクリプトーム","プロテオゲノミクス","ヒト肝組織ex vivo"]
   },
   {
@@ -3774,6 +3774,44 @@ CINEMA["18"]={
   }
 };
 
+/* ===== 共通グリフ（絵の部品。文字列を返す）— スケール統一・局在表現対応 ===== */
+const GLYPH={
+  QUIET:"M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z",
+  SPINDLE:"M-40,-8 C-14,-15 16,-15 42,-7 C52,-3 52,3 42,7 C16,15 -14,15 -40,8 C-50,3 -50,-3 -40,-8 Z",
+  bg:(c)=>`<rect x="0" y="0" width="720" height="430" fill="${c||'#eef3f6'}"/>`,
+  lip:(s)=>`<radialGradient id="lip${s}" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#d9a441"/></radialGradient>`,
+  arrow:(s,col)=>`<marker id="ar${s}" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="${col||'var(--ink-soft)'}"/></marker>`,
+  title:(t)=>`<text x="360" y="22" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${t}</text>`,
+  defsCommon:`<radialGradient id="hepg" cx="0.4" cy="0.32" r="0.85"><stop offset="0" stop-color="#f6e7c8"/><stop offset="1" stop-color="#dcc18c"/></radialGradient><radialGradient id="pillg" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#d98a8a"/><stop offset="1" stop-color="#a23b3b"/></radialGradient>`,
+  // 肝細胞ブロブ（内部に脂肪滴レイヤidつき）
+  hep:(id,x,y,sc,label)=>{sc=sc||1;return `<g id="${id}"><path transform="translate(${x},${y}) scale(${sc})" d="M0,30 C8,8 60,2 95,12 C140,4 175,22 168,60 C188,88 175,128 130,135 C85,148 18,142 6,108 C-12,84 -8,50 0,30 Z" fill="url(#hepg)" stroke="#c2a268" stroke-width="2"/><ellipse cx="${x+30*sc}" cy="${y+55*sc}" rx="${13*sc}" ry="${11*sc}" fill="#b79a64"/>${label?`<text x="${x+80*sc}" y="${y+12}" font-size="10.5" fill="#9c7b3a">${label}</text>`:''}<g id="${id}Drops"></g></g>`;},
+  // 六角形肝細胞（MPS画像風）
+  hexHep:(id,x,y,label)=>`<g id="${id}"><polygon points="${x},${y-46} ${x+40},${y-23} ${x+40},${y+23} ${x},${y+46} ${x-40},${y+23} ${x-40},${y-23}" fill="url(#hepg)" stroke="#c2a268" stroke-width="2"/><ellipse cx="${x-12}" cy="${y-4}" rx="13" ry="11" fill="#b79a64"/>${label?`<text x="${x}" y="${y+62}" text-anchor="middle" font-size="10" fill="#9c7b3a">${label}</text>`:''}<g id="${id}Drops"></g></g>`,
+  // 脂肪細胞（大きな脂肪滴＋辺縁核）
+  adipo:(x,y,r)=>{r=r||30;return `<circle cx="${x}" cy="${y}" r="${r}" fill="#f3e08e" stroke="#caa53a" stroke-width="1.8"/><circle cx="${x+r*0.55}" cy="${y-r*0.55}" r="6" fill="#b88a2a"/>`;},
+  stellate:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Shape" d="${GLYPH.QUIET}" fill="#d6a08e" stroke="var(--B)" stroke-width="1.6"/><circle cx="0" cy="0" r="7" fill="#7a3a2c"/><text id="${id}Cap" x="0" y="52" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label||'肝星細胞'}</text></g>`,
+  // マクロファージ（スケール統一・色指定可）
+  mac:(id,x,y,label,fill)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Body" d="M0,-22 C18,-24 29,-9 24,7 C33,18 16,29 0,24 C-18,31 -31,16 -24,2 C-33,-13 -16,-26 0,-22 Z" fill="${fill||'#5d6470'}" stroke="#828a96" stroke-width="1.4"/><circle cx="-3" cy="0" r="6" fill="#3a3f48"/>${label?`<text x="0" y="42" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label}</text>`:''}</g>`,
+  monocyte:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><circle r="16" fill="#7d97b8" stroke="#5b7090" stroke-width="1.4"/><path d="M-6,-4 a7,7 0 1,0 8,2" fill="none" stroke="#34465c" stroke-width="2"/>${label?`<text x="0" y="30" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">${label}</text>`:''}</g>`,
+  // 受容体（膜上に立つ。lipid A図のTLR4のイメージ）
+  receptor:(id,x,y,label,col)=>{col=col||"var(--C)";return `<g id="${id}"><path d="M${x-6},${y+11} L${x-6},${y-1} M${x+6},${y+11} L${x+6},${y-1} M${x-6},${y-1} L${x-11},${y-10} M${x-6},${y-1} L${x-1},${y-10} M${x+6},${y-1} L${x+1},${y-10} M${x+6},${y-1} L${x+11},${y-10}" stroke="${col}" stroke-width="2.4" fill="none"/>${label?`<text x="${x}" y="${y+24}" text-anchor="middle" font-size="9" font-weight="600" fill="${col}">${label}</text>`:''}</g>`;},
+  nucleus:(id,cx,cy,rx,ry,label)=>`<g id="${id}"><ellipse cx="${cx}" cy="${cy}" rx="${rx||34}" ry="${ry||26}" fill="#d5cae8" stroke="#8a78b0" stroke-width="1.6"/>${label?`<text x="${cx}" y="${cy- (ry||26)-5}" text-anchor="middle" font-size="9.5" fill="#6a5a92">${label}</text>`:''}</g>`,
+  mol:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''}><circle class="box" cx="${x}" cy="${y}" r="7" fill="${col||'#cfe0ee'}" stroke="#fff" stroke-width="1"/>${label?`<text x="${x}" y="${y-11}" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}">${label}</text>`:''}</g>`,
+  pill:(id,x,y,label,w)=>{w=w||92;return `<g id="${id}" class="fade" transform="translate(${x},${y})"><rect x="${-w/2}" y="-16" width="${w}" height="32" rx="16" fill="url(#pillg)" stroke="#7e2b2b" stroke-width="1.5"/><rect x="${-w/2}" y="-16" width="${w/2}" height="32" rx="16" fill="#e8b3b3" opacity="0.6"/><text x="0" y="5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#fff">${label}</text></g>`;},
+  badge:(id,x,y,l1,l2,col)=>`<g id="${id}" class="fade" transform="translate(${x},${y})"><circle r="42" fill="#fff" stroke="${col||'var(--B)'}" stroke-width="2.4"/><text x="0" y="-3" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l1}</text><text x="0" y="16" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l2}</text></g>`,
+  tag:(id,x,y,text,col,w,fade)=>{w=w||72;return `<g id="${id}"${fade?' class="fade"':''}><rect class="box" x="${x-w/2}" y="${y-13}" width="${w}" height="26" rx="13" fill="#fff" stroke="${col||'var(--accent)'}" stroke-width="1.6"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${col||'var(--ink)'}">${text}</text></g>`;},
+  layer:(id)=>`<g id="${id}" opacity="0"></g>`,
+  // サイトカイン・ケモカイン（8スポーク光芒 — 分泌性シグナル分子）
+  cytokine:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><circle r="7" fill="${col||'var(--C)'}" opacity="0.9"/><line x1="0" y1="-11" x2="0" y2="-17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="-8" x2="12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="0" x2="17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="8" x2="12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="0" y1="11" x2="0" y2="17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="8" x2="-12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-11" y1="0" x2="-17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="-8" x2="-12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-24" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 代謝物・小分子（六角形 — 化学構造のモチーフ）
+  metab:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-11 9.5,-5.5 9.5,5.5 0,11 -9.5,5.5 -9.5,-5.5" fill="${col||'var(--D)'}" stroke="#fff" stroke-width="0.8" opacity="0.9"/>${label?`<text x="0" y="-16" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 転写因子・核内因子（菱形＋DNA結合を示す横棒）
+  tf:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-13 11,0 0,13 -11,0" fill="${col||'var(--B)'}" stroke="#fff" stroke-width="0.8" opacity="0.85"/><line x1="-15" y1="0" x2="-11" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/><line x1="11" y1="0" x2="15" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/>${label?`<text x="0" y="-19" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  // 遺伝子・mRNA（二本鎖らせん状）
+  gene:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><line x1="-9" y1="-8" x2="-9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><line x1="9" y1="-8" x2="9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><path d="M-9,-8 Q0,-12 9,-8 M-9,0 Q0,-4 9,0 M-9,8 Q0,4 9,8" fill="none" stroke="${col||'#5a8a5a'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-18" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
+  collagenAt:(cx,cy)=>[`M${cx-42},${cy} C${cx-14},${cy-15} ${cx+14},${cy-10} ${cx+46},${cy-12}`,`M${cx-44},${cy+18} C${cx-6},${cy+32} ${cx+16},${cy+22} ${cx+49},${cy+26}`,`M${cx-39},${cy+35} C${cx-11},${cy+22} ${cx+13},${cy+40} ${cx+49},${cy+34}`],
+};
+
 CINEMA["26"]={
   svg:GLYPH.bg()
     +`<defs>${GLYPH.defsCommon}${GLYPH.arrow("26d","var(--D)")}${GLYPH.arrow("26g","var(--G)")}</defs>`
@@ -4028,43 +4066,6 @@ CINEMA["22"]={
   }
 };
 
-/* ===== 共通グリフ（絵の部品。文字列を返す）— スケール統一・局在表現対応 ===== */
-const GLYPH={
-  QUIET:"M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z",
-  SPINDLE:"M-40,-8 C-14,-15 16,-15 42,-7 C52,-3 52,3 42,7 C16,15 -14,15 -40,8 C-50,3 -50,-3 -40,-8 Z",
-  bg:(c)=>`<rect x="0" y="0" width="720" height="430" fill="${c||'#eef3f6'}"/>`,
-  lip:(s)=>`<radialGradient id="lip${s}" cx="0.35" cy="0.3" r="0.75"><stop offset="0" stop-color="#ffe9a0"/><stop offset="1" stop-color="#d9a441"/></radialGradient>`,
-  arrow:(s,col)=>`<marker id="ar${s}" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="${col||'var(--ink-soft)'}"/></marker>`,
-  title:(t)=>`<text x="360" y="22" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">${t}</text>`,
-  defsCommon:`<radialGradient id="hepg" cx="0.4" cy="0.32" r="0.85"><stop offset="0" stop-color="#f6e7c8"/><stop offset="1" stop-color="#dcc18c"/></radialGradient><radialGradient id="pillg" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#d98a8a"/><stop offset="1" stop-color="#a23b3b"/></radialGradient>`,
-  // 肝細胞ブロブ（内部に脂肪滴レイヤidつき）
-  hep:(id,x,y,sc,label)=>{sc=sc||1;return `<g id="${id}"><path transform="translate(${x},${y}) scale(${sc})" d="M0,30 C8,8 60,2 95,12 C140,4 175,22 168,60 C188,88 175,128 130,135 C85,148 18,142 6,108 C-12,84 -8,50 0,30 Z" fill="url(#hepg)" stroke="#c2a268" stroke-width="2"/><ellipse cx="${x+30*sc}" cy="${y+55*sc}" rx="${13*sc}" ry="${11*sc}" fill="#b79a64"/>${label?`<text x="${x+80*sc}" y="${y+12}" font-size="10.5" fill="#9c7b3a">${label}</text>`:''}<g id="${id}Drops"></g></g>`;},
-  // 六角形肝細胞（MPS画像風）
-  hexHep:(id,x,y,label)=>`<g id="${id}"><polygon points="${x},${y-46} ${x+40},${y-23} ${x+40},${y+23} ${x},${y+46} ${x-40},${y+23} ${x-40},${y-23}" fill="url(#hepg)" stroke="#c2a268" stroke-width="2"/><ellipse cx="${x-12}" cy="${y-4}" rx="13" ry="11" fill="#b79a64"/>${label?`<text x="${x}" y="${y+62}" text-anchor="middle" font-size="10" fill="#9c7b3a">${label}</text>`:''}<g id="${id}Drops"></g></g>`,
-  // 脂肪細胞（大きな脂肪滴＋辺縁核）
-  adipo:(x,y,r)=>{r=r||30;return `<circle cx="${x}" cy="${y}" r="${r}" fill="#f3e08e" stroke="#caa53a" stroke-width="1.8"/><circle cx="${x+r*0.55}" cy="${y-r*0.55}" r="6" fill="#b88a2a"/>`;},
-  stellate:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Shape" d="${GLYPH.QUIET}" fill="#d6a08e" stroke="var(--B)" stroke-width="1.6"/><circle cx="0" cy="0" r="7" fill="#7a3a2c"/><text id="${id}Cap" x="0" y="52" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label||'肝星細胞'}</text></g>`,
-  // マクロファージ（スケール統一・色指定可）
-  mac:(id,x,y,label,fill)=>`<g id="${id}" transform="translate(${x},${y})"><path id="${id}Body" d="M0,-22 C18,-24 29,-9 24,7 C33,18 16,29 0,24 C-18,31 -31,16 -24,2 C-33,-13 -16,-26 0,-22 Z" fill="${fill||'#5d6470'}" stroke="#828a96" stroke-width="1.4"/><circle cx="-3" cy="0" r="6" fill="#3a3f48"/>${label?`<text x="0" y="42" text-anchor="middle" font-size="10" fill="var(--ink-soft)">${label}</text>`:''}</g>`,
-  monocyte:(id,x,y,label)=>`<g id="${id}" transform="translate(${x},${y})"><circle r="16" fill="#7d97b8" stroke="#5b7090" stroke-width="1.4"/><path d="M-6,-4 a7,7 0 1,0 8,2" fill="none" stroke="#34465c" stroke-width="2"/>${label?`<text x="0" y="30" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">${label}</text>`:''}</g>`,
-  // 受容体（膜上に立つ。lipid A図のTLR4のイメージ）
-  receptor:(id,x,y,label,col)=>{col=col||"var(--C)";return `<g id="${id}"><path d="M${x-6},${y+11} L${x-6},${y-1} M${x+6},${y+11} L${x+6},${y-1} M${x-6},${y-1} L${x-11},${y-10} M${x-6},${y-1} L${x-1},${y-10} M${x+6},${y-1} L${x+1},${y-10} M${x+6},${y-1} L${x+11},${y-10}" stroke="${col}" stroke-width="2.4" fill="none"/>${label?`<text x="${x}" y="${y+24}" text-anchor="middle" font-size="9" font-weight="600" fill="${col}">${label}</text>`:''}</g>`;},
-  nucleus:(id,cx,cy,rx,ry,label)=>`<g id="${id}"><ellipse cx="${cx}" cy="${cy}" rx="${rx||34}" ry="${ry||26}" fill="#d5cae8" stroke="#8a78b0" stroke-width="1.6"/>${label?`<text x="${cx}" y="${cy- (ry||26)-5}" text-anchor="middle" font-size="9.5" fill="#6a5a92">${label}</text>`:''}</g>`,
-  mol:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''}><circle class="box" cx="${x}" cy="${y}" r="7" fill="${col||'#cfe0ee'}" stroke="#fff" stroke-width="1"/>${label?`<text x="${x}" y="${y-11}" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}">${label}</text>`:''}</g>`,
-  pill:(id,x,y,label,w)=>{w=w||92;return `<g id="${id}" class="fade" transform="translate(${x},${y})"><rect x="${-w/2}" y="-16" width="${w}" height="32" rx="16" fill="url(#pillg)" stroke="#7e2b2b" stroke-width="1.5"/><rect x="${-w/2}" y="-16" width="${w/2}" height="32" rx="16" fill="#e8b3b3" opacity="0.6"/><text x="0" y="5" text-anchor="middle" font-size="10.5" font-weight="600" fill="#fff">${label}</text></g>`;},
-  badge:(id,x,y,l1,l2,col)=>`<g id="${id}" class="fade" transform="translate(${x},${y})"><circle r="42" fill="#fff" stroke="${col||'var(--B)'}" stroke-width="2.4"/><text x="0" y="-3" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l1}</text><text x="0" y="16" text-anchor="middle" font-size="12.5" fill="${col||'var(--B)'}">${l2}</text></g>`,
-  tag:(id,x,y,text,col,w,fade)=>{w=w||72;return `<g id="${id}"${fade?' class="fade"':''}><rect class="box" x="${x-w/2}" y="${y-13}" width="${w}" height="26" rx="13" fill="#fff" stroke="${col||'var(--accent)'}" stroke-width="1.6"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="10.5" font-weight="600" fill="${col||'var(--ink)'}">${text}</text></g>`;},
-  layer:(id)=>`<g id="${id}" opacity="0"></g>`,
-  // サイトカイン・ケモカイン（8スポーク光芒 — 分泌性シグナル分子）
-  cytokine:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><circle r="7" fill="${col||'var(--C)'}" opacity="0.9"/><line x1="0" y1="-11" x2="0" y2="-17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="-8" x2="12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="0" x2="17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="8" x2="12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="0" y1="11" x2="0" y2="17" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="8" x2="-12" y2="12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-11" y1="0" x2="-17" y2="0" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/><line x1="-8" y1="-8" x2="-12" y2="-12" stroke="${col||'var(--C)'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-24" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
-  // 代謝物・小分子（六角形 — 化学構造のモチーフ）
-  metab:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-11 9.5,-5.5 9.5,5.5 0,11 -9.5,5.5 -9.5,-5.5" fill="${col||'var(--D)'}" stroke="#fff" stroke-width="0.8" opacity="0.9"/>${label?`<text x="0" y="-16" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
-  // 転写因子・核内因子（菱形＋DNA結合を示す横棒）
-  tf:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><polygon points="0,-13 11,0 0,13 -11,0" fill="${col||'var(--B)'}" stroke="#fff" stroke-width="0.8" opacity="0.85"/><line x1="-15" y1="0" x2="-11" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/><line x1="11" y1="0" x2="15" y2="0" stroke="${col||'var(--B)'}" stroke-width="2.2" stroke-linecap="round"/>${label?`<text x="0" y="-19" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
-  // 遺伝子・mRNA（二本鎖らせん状）
-  gene:(id,x,y,label,col,fade)=>`<g id="${id}"${fade?' class="fade"':''} transform="translate(${x},${y})"><line x1="-9" y1="-8" x2="-9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><line x1="9" y1="-8" x2="9" y2="8" stroke="${col||'#5a8a5a'}" stroke-width="1.6"/><path d="M-9,-8 Q0,-12 9,-8 M-9,0 Q0,-4 9,0 M-9,8 Q0,4 9,8" fill="none" stroke="${col||'#5a8a5a'}" stroke-width="1.8" stroke-linecap="round"/>${label?`<text x="0" y="-18" text-anchor="middle" font-size="9" fill="${col||'var(--ink-soft)'}" font-weight="600">${label}</text>`:''}</g>`,
-  collagenAt:(cx,cy)=>[`M${cx-42},${cy} C${cx-14},${cy-15} ${cx+14},${cy-10} ${cx+46},${cy-12}`,`M${cx-44},${cy+18} C${cx-6},${cy+32} ${cx+16},${cy+22} ${cx+49},${cy+26}`,`M${cx-39},${cy+35} C${cx-11},${cy+22} ${cx+13},${cy+40} ${cx+49},${cy+34}`],
-};
 function addDrops(K,layerId,pos,grad,delay){grad=grad||"lip01";const g=K.$(layerId);if(!g)return;pos.forEach((p,i)=>K.T(()=>{
   const c=K.cE("circle",{cx:p[0],cy:p[1],r:1,fill:`url(#${grad})`,stroke:"#b8862f","stroke-width":"0.7"});g.appendChild(c);
   const t0=performance.now(),target=5+Math.random()*5,dur=1300;
