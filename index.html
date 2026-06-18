@@ -221,6 +221,20 @@ mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1
 #netview .edge.dim{opacity:.05}
 #netview .edge.hi{stroke:var(--B)!important;stroke-opacity:.85!important}
 #netview .node.hi text{font-weight:700}
+/* network controls */
+.net-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 2px 12px}
+.net-search{font-family:inherit;font-size:12.5px;padding:5px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:180px}
+.net-search::placeholder{color:var(--ink-soft)}
+.net-cat-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 9px;border-radius:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;transition:.15s;font-family:"DM Mono",monospace}
+.net-cat-btn i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.net-cat-btn.off{opacity:.35;text-decoration:line-through}
+.net-cat-btn:hover{border-color:var(--accent)}
+.net-zoom{display:flex;gap:4px;margin-left:auto}
+.net-zoom button{font-size:15px;width:28px;height:28px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.net-zoom button:hover{border-color:var(--accent)}
+.net-svgwrap{overflow:hidden;border:1px solid var(--line-soft);border-radius:6px;background:var(--paper-2);position:relative;cursor:grab}
+.net-svgwrap:active{cursor:grabbing}
+.net-svgwrap svg{width:100%;height:auto;display:block;border:none}
 /* research board */
 #boardview{display:none}
 .boardsec{margin-bottom:34px}
@@ -6501,12 +6515,18 @@ let quizState=(()=>{ try{return JSON.parse(localStorage.getItem(QUIZ_KEY))||{bes
 let quizRun=null;
 function quizPool(){ const seen=new Set(),out=[];
   PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{ const k=(g.term||"").toLowerCase(); const desc=g.desc||g.full;
-    if(!k||!desc||seen.has(k))return; seen.add(k); out.push({term:g.term,full:g.full||"",desc:desc,pid:p.id}); }));
+    if(!k||!desc||seen.has(k))return; seen.add(k);
+    const cat=(CATINFO[k]||{}).cat||"その他";
+    out.push({term:g.term,full:g.full||"",desc:desc,pid:p.id,cat}); }));
   return out;
 }
 function newQuizQ(){ const pool=quizPool(); if(pool.length<4)return null;
   const sh=pool.slice().sort(()=>Math.random()-0.5); const ans=sh[0];
-  const opts=[ans,...sh.slice(1,4)].sort(()=>Math.random()-0.5);
+  /* 同カテゴリから不正解を選ぶ（足りなければ他カテゴリで補充） */
+  const sameCat=sh.filter(o=>o!==ans&&o.cat===ans.cat).sort(()=>Math.random()-0.5);
+  const diffCat=sh.filter(o=>o!==ans&&o.cat!==ans.cat).sort(()=>Math.random()-0.5);
+  const distractors=[...sameCat,...diffCat].slice(0,3);
+  const opts=[ans,...distractors].sort(()=>Math.random()-0.5);
   return {ans,opts};
 }
 function renderQuiz(){
@@ -6609,67 +6629,147 @@ const CATICON={
 function renderNetwork(){
   document.getElementById("total").textContent=PAPERS.length;
   document.getElementById("countline").textContent="同じ論文に一緒に登場した用語どうしを線で結んでいます";
-  // ノード（用語）と共起エッジを構築
-  const entries=buildGlossaryIndex(); // papers は定義＋言及を含む
+  const entries=buildGlossaryIndex();
   const nodeMap=new Map();
   entries.forEach(e=>{ const k=e.term.toLowerCase(); const info=CATINFO[k]||{}; nodeMap.set(k,{term:e.term,cat:info.cat||"その他",desc:(info.long||e.desc||""),papers:new Set(e.papers.map(pp=>pp.id))}); });
   const catIdx=t=>{ const i=CAT_ORDER.indexOf(t); return i<0?CAT_ORDER.length:i; };
-  const nodes=[...nodeMap.values()].sort((a,b)=>catIdx(a.cat)-catIdx(b.cat)||a.term.localeCompare(b.term));
-  const idxOf=new Map(nodes.map((n,i)=>[n.term.toLowerCase(),i]));
-  // エッジ＝同じ論文に一緒に「言及」された回数
-  const paperTerms=new Map();
-  entries.forEach(e=>{ const k=e.term.toLowerCase(); e.papers.forEach(pp=>{ if(!paperTerms.has(pp.id))paperTerms.set(pp.id,new Set()); paperTerms.get(pp.id).add(k); }); });
-  const eMap=new Map();
-  paperTerms.forEach(set=>{ const ts=[...set]; for(let a=0;a<ts.length;a++)for(let b=a+1;b<ts.length;b++){ const i=idxOf.get(ts[a]),j=idxOf.get(ts[b]); if(i==null||j==null)continue; const key=i<j?i+"-"+j:j+"-"+i; eMap.set(key,(eMap.get(key)||0)+1);} });
-  // レイアウト（円周）
-  const N=nodes.length, VB=820, cx=VB/2, cy=VB/2, R=VB/2-150;
-  const pos=nodes.map((n,i)=>{ const ang=-Math.PI/2+2*Math.PI*i/N; return {x:cx+R*Math.cos(ang),y:cy+R*Math.sin(ang),ang}; });
-  const maxC=Math.max(1,...nodes.map(n=>n.papers.size));
-  const maxW=Math.max(1,...eMap.values());
-  let edgeSVG="";
-  eMap.forEach((w,key)=>{
-    const [i,j]=key.split("-").map(Number);
-    const op=0.10+0.62*((w-1)/Math.max(1,maxW-1)), sw=0.8+2.8*((w-1)/Math.max(1,maxW-1));
-    edgeSVG+=`<line class="edge e-${i} e-${j}" x1='${pos[i].x.toFixed(1)}' y1='${pos[i].y.toFixed(1)}' x2='${pos[j].x.toFixed(1)}' y2='${pos[j].y.toFixed(1)}' stroke='var(--line)' stroke-width='${sw.toFixed(2)}' stroke-opacity='${op.toFixed(2)}'/>`;
-  });
-  let nodeSVG="";
-  nodes.forEach((n,i)=>{
-    const r=4.5+9.5*((n.papers.size-1)/Math.max(1,maxC-1)), col=CATCOLOR[n.cat]||"var(--accent)";
-    const side=Math.cos(pos[i].ang)>=0?"start":"end";
-    const lx=pos[i].x+(side==="start"?r+5:-(r+5)), ly=pos[i].y+4;
-    nodeSVG+=`<g class="node n-${i}" data-i="${i}" data-t="${n.term.replace(/"/g,'&quot;')}" data-tip="${(n.desc||'').replace(/"/g,'&quot;')}" style="cursor:pointer">`
-      +`<circle cx='${pos[i].x.toFixed(1)}' cy='${pos[i].y.toFixed(1)}' r='${r.toFixed(1)}' fill='${col}'/>`
-      +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family="DM Mono,monospace">${n.term}</text>`
-      +`</g>`;
-  });
-  const legend=[...CAT_ORDER,"その他"].filter(c=>nodes.some(n=>n.cat===c))
-    .map(c=>`<span><i style="background:${CATCOLOR[c]}"></i>${c}</span>`).join("");
-  netview.innerHTML=`
-    <div class="net-legend">${legend}</div>
-    <svg viewBox="0 0 ${VB} ${VB}" xmlns="http://www.w3.org/2000/svg">${edgeSVG}${nodeSVG}</svg>
-    <div class="net-cap">丸の大きさ＝登場した論文数、線の濃さ＝一緒に登場した回数、色＝用語のジャンル。丸をクリックするとその用語のつながりだけ強調します（もう一度クリックで解除）。</div>`;
-  // クリックで近傍ハイライト
-  const svg=netview.querySelector("svg"); let sel=null;
-  svg.querySelectorAll(".node").forEach(g=>{
-    g.addEventListener("mouseenter",e=>{ if(!g.dataset.tip)return; tipEl.innerHTML=`<b>${g.dataset.t||""}</b>${g.dataset.tip||""}`; tipEl.classList.add("on"); positionTip(e); });
-    g.addEventListener("mousemove",positionTip);
-    g.addEventListener("mouseleave",()=>tipEl.classList.remove("on"));
-  });
-  function clearHi(){ svg.querySelectorAll(".edge,.node").forEach(el=>el.classList.remove("hi","dim")); }
-  svg.querySelectorAll(".node").forEach(g=>{
-    g.addEventListener("click",()=>{
-      const i=g.dataset.i;
-      if(sel===i){ sel=null; clearHi(); return; }
-      sel=i; clearHi();
-      svg.querySelectorAll(".node,.edge").forEach(el=>el.classList.add("dim"));
-      svg.querySelectorAll(".e-"+i).forEach(e=>{ e.classList.remove("dim"); e.classList.add("hi"); });
-      // つながっている相手ノードも復帰
-      svg.querySelectorAll(".e-"+i).forEach(e=>{
-        e.classList.forEach(cl=>{ if(/^e-\d+$/.test(cl)){ const j=cl.slice(2); svg.querySelector(".n-"+j)?.classList.remove("dim"); } });
+  const allCats=[...CAT_ORDER,"その他"].filter(c=>[...nodeMap.values()].some(n=>n.cat===c));
+  const hiddenCats=new Set();
+  let searchTerm="";
+
+  function rebuild(){
+    const visNodes=[...nodeMap.values()].filter(n=>!hiddenCats.has(n.cat))
+      .filter(n=>!searchTerm||n.term.toLowerCase().includes(searchTerm))
+      .sort((a,b)=>catIdx(a.cat)-catIdx(b.cat)||a.term.localeCompare(b.term));
+    const idxOf=new Map(visNodes.map((n,i)=>[n.term.toLowerCase(),i]));
+    // エッジ
+    const paperTerms=new Map();
+    entries.forEach(e=>{ const k=e.term.toLowerCase(); if(!idxOf.has(k))return;
+      e.papers.forEach(pp=>{ if(!paperTerms.has(pp.id))paperTerms.set(pp.id,new Set()); paperTerms.get(pp.id).add(k); }); });
+    const eMap=new Map();
+    paperTerms.forEach(set=>{ const ts=[...set]; for(let a=0;a<ts.length;a++)for(let b=a+1;b<ts.length;b++){ const i=idxOf.get(ts[a]),j=idxOf.get(ts[b]); if(i==null||j==null)continue; const key=i<j?i+"-"+j:j+"-"+i; eMap.set(key,(eMap.get(key)||0)+1);} });
+    // カテゴリごとにクラスタリングした円周配置
+    const N=visNodes.length, VB=820, cx=VB/2, cy=VB/2;
+    const catGroups=new Map();
+    visNodes.forEach((n,i)=>{ if(!catGroups.has(n.cat))catGroups.set(n.cat,[]); catGroups.get(n.cat).push(i); });
+    const groups=[...catGroups.entries()].sort((a,b)=>catIdx(a[0])-catIdx(b[0]));
+    const totalWithGaps=N+groups.length*2;
+    const pos=new Array(N);
+    let cursor=0;
+    groups.forEach(([cat,idxs])=>{
+      cursor+=1.5; // gap before group
+      idxs.forEach((ni,j)=>{
+        const ang=-Math.PI/2+2*Math.PI*(cursor)/totalWithGaps;
+        const R=VB/2-150;
+        pos[ni]={x:cx+R*Math.cos(ang),y:cy+R*Math.sin(ang),ang};
+        cursor++;
       });
-      g.classList.remove("dim"); g.classList.add("hi");
+      cursor+=1.5; // gap after group
+    });
+    const maxC=Math.max(1,...visNodes.map(n=>n.papers.size));
+    const maxW=Math.max(1,...eMap.values());
+    let edgeSVG="";
+    eMap.forEach((w,key)=>{
+      const [i,j]=key.split("-").map(Number);
+      const op=0.10+0.62*((w-1)/Math.max(1,maxW-1)), sw=0.8+2.8*((w-1)/Math.max(1,maxW-1));
+      edgeSVG+=`<line class="edge e-${i} e-${j}" x1='${pos[i].x.toFixed(1)}' y1='${pos[i].y.toFixed(1)}' x2='${pos[j].x.toFixed(1)}' y2='${pos[j].y.toFixed(1)}' stroke='var(--line)' stroke-width='${sw.toFixed(2)}' stroke-opacity='${op.toFixed(2)}'/>`;
+    });
+    let nodeSVG="";
+    visNodes.forEach((n,i)=>{
+      const r=4.5+9.5*((n.papers.size-1)/Math.max(1,maxC-1)), col=CATCOLOR[n.cat]||"var(--accent)";
+      const side=Math.cos(pos[i].ang)>=0?"start":"end";
+      const lx=pos[i].x+(side==="start"?r+5:-(r+5)), ly=pos[i].y+4;
+      const isMatch=searchTerm&&n.term.toLowerCase().includes(searchTerm);
+      nodeSVG+=`<g class="node n-${i}${isMatch?" search-hit":""}" data-i="${i}" data-t="${n.term.replace(/"/g,'&quot;')}" data-tip="${(n.desc||'').replace(/"/g,'&quot;')}" style="cursor:pointer">`
+        +`<circle cx='${pos[i].x.toFixed(1)}' cy='${pos[i].y.toFixed(1)}' r='${r.toFixed(1)}' fill='${col}'${isMatch?" stroke='var(--B)' stroke-width='2.5'":""}/>`
+        +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family="DM Mono,monospace"${isMatch?" font-weight='700'":""}>${n.term}</text>`
+        +`</g>`;
+    });
+    const wrap=netview.querySelector(".net-svgwrap");
+    wrap.innerHTML=`<svg viewBox="0 0 ${VB} ${VB}" xmlns="http://www.w3.org/2000/svg">${edgeSVG}${nodeSVG}</svg>`;
+    const countEl=netview.querySelector(".net-count");
+    if(countEl) countEl.textContent=`${visNodes.length}語 / ${nodeMap.size}語`;
+    // zoom/pan
+    const svg=wrap.querySelector("svg");
+    let scale=1, tx=0, ty=0;
+    function applyTx(){ svg.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`; svg.style.transformOrigin="0 0"; }
+    wrap.addEventListener("wheel",e=>{
+      e.preventDefault();
+      const d=e.deltaY>0?0.9:1.1;
+      const rect=wrap.getBoundingClientRect();
+      const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+      const ns=Math.max(0.3,Math.min(5,scale*d));
+      tx=mx-(mx-tx)*(ns/scale); ty=my-(my-ty)*(ns/scale);
+      scale=ns; applyTx();
+    },{passive:false});
+    let drag=false, lx=0, ly=0;
+    wrap.addEventListener("mousedown",e=>{ drag=true; lx=e.clientX; ly=e.clientY; });
+    window.addEventListener("mousemove",e=>{ if(!drag)return; tx+=e.clientX-lx; ty+=e.clientY-ly; lx=e.clientX; ly=e.clientY; applyTx(); });
+    window.addEventListener("mouseup",()=>drag=false);
+    // touch pan/pinch
+    let touches0=null, dist0=0, scale0=1, tx0=0, ty0=0;
+    wrap.addEventListener("touchstart",e=>{
+      if(e.touches.length===1){ drag=true; lx=e.touches[0].clientX; ly=e.touches[0].clientY; }
+      if(e.touches.length===2){ drag=false; touches0=e.touches; dist0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY); scale0=scale; tx0=tx; ty0=ty; }
+    },{passive:true});
+    wrap.addEventListener("touchmove",e=>{
+      if(e.touches.length===1&&drag){ const cx=e.touches[0].clientX,cy=e.touches[0].clientY; tx+=cx-lx; ty+=cy-ly; lx=cx; ly=cy; applyTx(); e.preventDefault(); }
+      if(e.touches.length===2&&touches0){ const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY); scale=Math.max(0.3,Math.min(5,scale0*(d/dist0))); applyTx(); e.preventDefault(); }
+    },{passive:false});
+    wrap.addEventListener("touchend",()=>{ drag=false; touches0=null; });
+    // zoom buttons
+    netview.querySelector(".nz-in").onclick=()=>{ scale=Math.min(5,scale*1.3); applyTx(); };
+    netview.querySelector(".nz-out").onclick=()=>{ scale=Math.max(0.3,scale/1.3); applyTx(); };
+    netview.querySelector(".nz-fit").onclick=()=>{ scale=1; tx=0; ty=0; applyTx(); };
+    // ノードインタラクション
+    let sel=null;
+    svg.querySelectorAll(".node").forEach(g=>{
+      g.addEventListener("mouseenter",e=>{ if(!g.dataset.tip)return; tipEl.innerHTML=`<b>${g.dataset.t||""}</b>${g.dataset.tip||""}`; tipEl.classList.add("on"); positionTip(e); });
+      g.addEventListener("mousemove",positionTip);
+      g.addEventListener("mouseleave",()=>tipEl.classList.remove("on"));
+    });
+    function clearHi(){ svg.querySelectorAll(".edge,.node").forEach(el=>el.classList.remove("hi","dim")); }
+    svg.querySelectorAll(".node").forEach(g=>{
+      g.addEventListener("click",()=>{
+        const i=g.dataset.i;
+        if(sel===i){ sel=null; clearHi(); return; }
+        sel=i; clearHi();
+        svg.querySelectorAll(".node,.edge").forEach(el=>el.classList.add("dim"));
+        svg.querySelectorAll(".e-"+i).forEach(e=>{ e.classList.remove("dim"); e.classList.add("hi"); });
+        svg.querySelectorAll(".e-"+i).forEach(e=>{
+          e.classList.forEach(cl=>{ if(/^e-\d+$/.test(cl)){ const j=cl.slice(2); svg.querySelector(".n-"+j)?.classList.remove("dim"); } });
+        });
+        g.classList.remove("dim"); g.classList.add("hi");
+      });
+    });
+  }
+
+  // 初回UI組み立て
+  const catBtns=allCats.map(c=>`<button class="net-cat-btn" data-cat="${c}"><i style="background:${CATCOLOR[c]||"var(--accent)"}"></i>${c}</button>`).join("");
+  netview.innerHTML=`
+    <div class="net-ctrl">
+      <input class="net-search" type="text" placeholder="用語を検索…">
+      ${catBtns}
+      <span class="net-count" style="font-size:11px;color:var(--ink-soft);margin-left:6px"></span>
+      <div class="net-zoom"><button class="nz-in" title="拡大">＋</button><button class="nz-out" title="縮小">−</button><button class="nz-fit" title="リセット">⊡</button></div>
+    </div>
+    <div class="net-svgwrap" style="max-height:70vh"></div>
+    <div class="net-cap">丸の大きさ＝登場した論文数、線の濃さ＝一緒に登場した回数、色＝用語のジャンル。カテゴリボタンで表示切替、スクロールでズーム、ドラッグで移動。丸クリックでつながりを強調。</div>`;
+  // カテゴリトグル
+  netview.querySelectorAll(".net-cat-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const c=btn.dataset.cat;
+      if(hiddenCats.has(c)){ hiddenCats.delete(c); btn.classList.remove("off"); } else { hiddenCats.add(c); btn.classList.add("off"); }
+      rebuild();
     });
   });
+  // 検索
+  let searchTimer=null;
+  netview.querySelector(".net-search").addEventListener("input",e=>{
+    clearTimeout(searchTimer);
+    searchTimer=setTimeout(()=>{ searchTerm=e.target.value.trim().toLowerCase(); rebuild(); },200);
+  });
+  rebuild();
 }
 
 // updated date = newest entry year-ish placeholder → use today on open
