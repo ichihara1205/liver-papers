@@ -535,6 +535,139 @@ const THEMES={
 /* ===== データ：新しい論文はこの配列の先頭（[ の直後）にオブジェクトを追加 ===== */
 const PAPERS=[
   /* ===INSERT_NEW_ENTRIES_HERE（新しいものを上に）=== */
+/* ===== 追加 6 件（No.43–48）：INSERT_NEW_ENTRIES_HERE の直後に貼る ===== */
+  {
+    id:"48", primary:"A",
+    title:"LEADS——iPSC由来4細胞の肝チップでMASH表現型を出したが、薬剤では戻せなかった",
+    authors:"Balachander GM, Ng IC, Pai RR, ..., Tasnim F, Ng HH, Yu H",
+    journal:"Lab Chip",
+    year:2025,
+    vol:"25(14):3444-3466",
+    doi:"10.1039/d5lc00221d",
+    url:"https://doi.org/10.1039/d5lc00221d",
+    tags:["A","B","D","H","I"],
+    "approach": "in vitro（hiPSC由来の肝細胞・HSC・LSEC・KCを側流路つきマイクロ流体チップに階層配置）＋ FFA・フルクトース・LPS・フェニル酢酸による多段階の病態誘導 ＋ resmetirom等の薬剤応答評価",
+    "added": "2026-09-20",
+    "abstract_ja": "ヒトiPSCから分化させた肝細胞・肝星細胞・類洞内皮細胞・クッパー細胞の4種を、側流路を備えたマイクロ流体デバイス上に階層的に配置したLEADSは、脂肪化から炎症・線維化までを一つの系で扱うことを狙ったMASHモデルである。遊離脂肪酸とフルクトースを基礎の負荷とし、そこへLPSとフェニル酢酸（PAA）を第2ヒットとして重ねる処方により、脂質蓄積・炎症性サイトカイン・コラーゲン沈着といった指標が得られた。さらにresmetiromをはじめとする薬剤を投与して応答を評価しているが、線維化の可逆性は限定的で、著者ら自身はその理由をiHSCが強く活性化した状態にあることに帰している。実際、分化プロトコルの最終段階はレチノールとパルミチン酸の添加であり、得られたiHSCはαSMAとGFAPの陽性として特徴づけられている。したがってこの系が捉えているのは静止期HSCが点火する過程というより、すでに活性化した細胞がコラーゲンを増産する過程だと読むのが妥当である。",
+    "background": "ヒト細胞だけで構成されたMASHモデルで線維化まで到達した報告は乏しく、とりわけ非実質細胞を揃えた系では、脂肪化は出るが線維化が点火しないという壁が共通していた。一方で薬剤評価に使うには、病態が出るだけでなく薬剤で戻ることまで示す必要があり、誘導の強さと可逆性のあいだにどのような関係があるのかは明らかでなかった。iPSC由来の各細胞種の分化プロトコルが整ってきたことで、4細胞を同一デバイス上に配置して病態経過を追う試みが現実的になっていた。",
+    "achievements": ["hiPSC由来の肝細胞・HSC・LSEC・KCを側流路つきチップに配置した**LEADS**を構築し、脂肪化・炎症・線維化の指標を同一系で取得した。", "FFAとフルクトースに加えて**LPSとPAAを第2ヒット**として与える処方で、MASH様の表現型を誘導した。", "resmetiromを含む薬剤応答を評価し、**線維化の可逆性が限定的である**ことを報告した。", "誘導の強さと薬剤評価のダイナミックレンジがトレードオフになりうることを、実データとして提示した。"],
+    "limitations": ["iHSCは2Dプラスチックの側流路上に置かれ、分化の最終段階がレチノール＋パルミチン酸で、αSMA/GFAP陽性として確認されている。つまり**出発点ですでに活性化**しており、静止期HSCが点火する過程を見ているわけではない。著者自身も薬剤で戻りにくい理由をiHSCの強い活性化に帰している。", "溶媒のエタノールが合計で**約2.4% v/v（≈410 mM）**に達する（PAAだけで2.0%）。アルコール性脂肪肝の誘導に使われる25–100 mMを大きく超えるが、論文中に％表示はない。", "「FFA＋フルクトース単独では脂肪化しないがLPS＋PAAで出る」という結果は、エタノール濃度が0.4%から2.4%へ跳ね上がる地点とちょうど一致しており、溶媒の寄与を切り分けられない。", "resmetiromの健常群にvehicle対照が置かれておらず、エタノールの効果が見えるはずの唯一の比較が提示されていない。"],
+    "connection": ["目的も細胞構成も最も近い競合であり、iKCの由来（Tasnim 2019）も共通している。著者にTasnimとHanry Yuが入る。", "刺激強度はPA 300 µM（自分の系は67 µMで4.5倍）、総FFA 600 µM（対200 µM）、フルクトース100 mM（対5.5–22 mM）。ただしフルクトース100 mMは根拠の示されない固定値で、浸透圧が3割ほど増えるためそのまま真似する理由はない。", "「線維化を出したが薬剤で戻せなかった」は、点火強度と薬剤評価のダイナミックレンジがトレードオフであることの実例である。設計目標は最大限に点火する条件ではなく、**薬剤効果が見える窓が残る条件**に置くべきだという示唆になる。", "自分の系でも第6回で**Veh単独がAOA200より傷害が高く、脂肪化もわずかに増えていた**。溶媒の問題は他人事ではない。"],
+    "glossary": [{"term": "LEADS", "full": "liver evaluation and disease system", "desc": "hiPSC由来4細胞を側流路つきチップに配置したMASHモデルの名称"}, {"term": "iHSC", "full": "iPSC-derived hepatic stellate cell", "desc": "iPSCから分化させた肝星細胞。分化終盤のレチノール＋パルミチン酸で活性化しやすい"}, {"term": "iKC", "full": "iPSC-derived Kupffer cell", "desc": "iPSCから分化させたクッパー細胞様細胞。Tasnim 2019のプロトコルに由来する"}, {"term": "resmetirom", "full": "resmetirom", "desc": "肝選択的な甲状腺ホルモン受容体βアゴニスト。MASHの承認薬"}, {"term": "vehicle", "full": "vehicle control", "desc": "薬剤や脂質を溶かす溶媒のみを与える対照。溶媒自体の効果を切り分けるために置く"}, {"term": "MPS", "full": "microphysiological system", "desc": "微小生理システム。臓器の機能単位をマイクロデバイス上に再構成した培養系"}],
+    "struct": {"model": "in vitro", "cells": ["iPSC由来肝細胞", "iHSC", "iLSEC", "iKC"], "triggers": ["FFA（PA 300 µM / 総600 µM）", "フルクトース100 mM", "LPS", "PAA 10 mM"], "steatosis": "○", "inflammation": "○", "fibrosis": "○", "readout": ["脂質染色", "炎症性サイトカイン", "コラーゲン/αSMA", "薬剤応答（resmetirom等）"], "ignite": "LPS＋PAAの第2ヒット。ただしiHSCが既に活性化しており、点火というより増産", "params": [{"name": "PA 300 µM / 総FFA 600 µM", "note": "自分の系の4.5倍/3倍。用量反応の上端を与える"}, {"name": "フルクトース100 mM", "note": "浸透圧が約3割増える。根拠の示されない固定値"}, {"name": "エタノール総量 ≈2.4% v/v", "note": "交絡因子。溶媒を変えるか濃度を下げるという設計制約になる"}], "todos": ["自分の系のVeh単独条件を、エタノール濃度を段階的に振って再評価する", "PAAを使う場合はDMSOなど別溶媒か、エタノールを0.5%以下に抑える処方を組む", "ESI Table S2と透明査読記録をGakuNin経由で確認する"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f48' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>点火は強いが戻らない——誘導強度と可逆性のトレードオフ</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>4細胞チップ</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>hiPSC由来 肝細胞/HSC</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>LSEC/KC 側流路配置</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f48)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>第1ヒット</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>FFA 600 µM</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>フルクトース100 mM</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f48)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>第2ヒット</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>LPS＋PAA 10 mM</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>エタノール≈2.4% v/v</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f48)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>帰結</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>線維化は出る</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>薬剤では戻らない</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m48' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：4細胞チップに多段階の負荷をかける</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① 分化</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>hiPSC→肝4細胞</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>iHSCはαSMA/GFAP陽性</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m48)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>② 配置</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>側流路つきチップ</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>階層的に共培養</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m48)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>③ 誘導</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>FFA・フルクトース</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>→ LPS・PAA</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m48)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>④ 評価</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>脂質・炎症・線維化</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>resmetirom応答</text>\n</svg>"
+  },
+  {
+    id:"47", primary:"E",
+    title:"肝遺伝子の約半分はゾーン依存で、中間層にピークを持つ非単調プロファイルも多い",
+    authors:"Halpern KB, Shenhav R, Matcovitch-Natan O, Toth B, Lemze D, Golan M, Massasa EE, Baydatch S, Landen S, Moor AE, Brandis A, Giladi A, Stokar-Avihail A, David E, Amit I, Itzkovitz S",
+    journal:"Nature",
+    year:2017,
+    vol:"542(7641):352-356",
+    doi:"10.1038/nature21065",
+    url:"https://doi.org/10.1038/nature21065",
+    tags:["E","G","D"],
+    "approach": "マウス肝の単一細胞トランスクリプトーム（数千細胞）＋ smFISHで特徴づけたランドマーク遺伝子パネルによる小葉座標の推定 ＋ 全遺伝子のゾーン依存プロファイル再構成",
+    "added": "2026-09-20",
+    "abstract_ja": "哺乳類の肝臓は六角形の小葉からなり、血流とモルフォゲンによって門脈側から中心静脈側へ放射状に極性づけられている。主要な肝遺伝子がこの軸に沿って発現を変えること——zonation——自体は知られていたが、全ゲノムにわたって空間的な分業を詳細に再構成した例はなかった。本研究は数千個のマウス肝細胞のトランスクリプトームを測定し、単分子蛍光in situハイブリダイゼーション（smFISH）で性質を確かめたランドマーク遺伝子のパネルに基づいて各細胞の小葉座標を推定することで、全遺伝子のゾーン依存プロファイルを高い空間分解能で得た。その結果、肝遺伝子のおよそ50%が有意にゾーン依存であり、しかも門脈↔中心静脈の単調な勾配だけでなく、小葉の中間層でピークを迎える非単調なプロファイルが数多く存在することが明らかになった。こうした非単調性には胆汁酸生合成酵素群が含まれ、その空間的な並び順が酵素カスケードにおける反応の順序と一致していた。この手法は他の哺乳類臓器についても同様の空間ゲノム地図を描く道を開く。",
+    "background": "肝小葉では酸素・栄養・ホルモンが門脈から中心静脈へ向かって連続的に変化し、それに応じて糖新生・解糖・アンモニア処理・薬物代謝などの機能が場所ごとに分業されている。しかしこの分業の記述は、古典的には少数のマーカー遺伝子の免疫染色に依存しており、全遺伝子を対象に空間分解能をもって測る手段がなかった。単一細胞RNA-seqは細胞を解離させるため位置情報が失われるという根本的な制約があり、転写プロファイルから元の位置を復元する枠組みが必要だった。",
+    "achievements": ["smFISHで検証したランドマーク遺伝子パネルから各肝細胞の**小葉座標を推定する枠組み**を確立し、解離で失われる位置情報を転写プロファイルから復元した。", "全遺伝子のゾーン依存プロファイルを高い空間分解能で取得し、**肝遺伝子の約50%が有意にzonate**していることを示した。", "単調な勾配だけでなく、**中間層にピークを持つ非単調プロファイル**が数多く存在することを発見した。", "胆汁酸生合成酵素群の空間的な並び順が、酵素カスケードにおける反応の順序と一致することを示した。"],
+    "limitations": ["マウスの肝であり、ヒト肝ではzonationパターンが一致しない遺伝子がある。", "小葉座標はランドマーク遺伝子からの推定であって、物理的な位置を直接測定したものではない。", "食餌や概日リズムといった時間軸との交絡は限定的にしか扱われていない。", "対象は肝細胞に限られ、LSEC・HSC・KCといった非実質細胞のzonationは扱っていない。"],
+    "connection": ["「zonationを再現する」を目標に据えると、門脈側/中心静脈側の2条件では近似にならない——非単調プロファイルが多いからで、目標の立て方そのものを変える根拠になる。", "自分の系で狙うべきはzonationの再現ではなく、**酸素とWntの寄与を分離すること**である。生体では中心静脈が低酸素端であると同時にWnt源でもあるため、この分離はin vivoでは原理的にできない。", "酸素 × RSPO1 の2×2をInnoCellで組めば、記述されている勾配のうちどこまでが酸素由来かを問える。これは誰も答えていない問いで、しかも自分の系の構成上の強みと一致する。", "非単調マーカーを一つ選び、2条件では再現できないことを積極的に示せば、DiProspero 2021の先を行く枠組みになる。"],
+    "glossary": [{"term": "zonation", "full": "liver zonation", "desc": "肝小葉の門脈-中心静脈軸に沿って機能と遺伝子発現が分業される現象"}, {"term": "smFISH", "full": "single-molecule fluorescence in situ hybridization", "desc": "個々のmRNA分子を組織切片上で数える手法。位置情報を保ったまま定量できる"}, {"term": "periportal", "full": "periportal (zone 1)", "desc": "門脈周囲。酸素が高く糖新生やアンモニア処理が優位"}, {"term": "pericentral", "full": "pericentral (zone 3)", "desc": "中心静脈周囲。酸素が低く解糖や薬物代謝が優位でWnt源でもある"}, {"term": "landmark gene", "full": "landmark gene", "desc": "ゾーン依存性が既知で、細胞の小葉座標を推定する基準になる遺伝子"}, {"term": "lobule", "full": "hepatic lobule", "desc": "肝の構造単位。六角形で、頂点に門脈域、中心に中心静脈を持つ"}],
+    "struct": {"model": "in vivo", "cells": ["肝細胞"], "triggers": ["—（生理的zonation）"], "steatosis": "—", "inflammation": "—", "fibrosis": "—", "readout": ["scRNA-seq", "smFISH", "小葉座標推定", "ゾーン依存プロファイル"], "ignite": "—（線維化は対象外。zonationをどの分解能で語るべきかの基準を与える）", "params": [{"name": "zonate遺伝子の割合", "note": "約50%。ABMの空間依存パラメータをどこまで細かく持つべきかの目安"}, {"name": "非単調プロファイル", "note": "中間層にピーク。2ゾーン近似の限界を定量的に与える"}], "todos": ["酸素×RSPO1の2×2でGLUL/CYP2E1（中心静脈側）とCPS1/ASS1（門脈側）を読む", "非単調マーカーを1つ選び、2条件では再現できないことを積極的に示す"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f47' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>2ゾーン近似では足りない——非単調プロファイルの発見</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>解離</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>数千肝細胞のscRNA-seq</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>位置情報は失われる</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f47)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>復元</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>smFISHランドマーク</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>小葉座標を推定</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f47)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--E)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--E)' font-weight='600'>結果</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>約50%がzonate</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--E)'>全遺伝子プロファイル</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f47)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>非単調</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>中間層にピーク</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>胆汁酸酵素の順序と一致</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m47' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：転写プロファイルから元の位置を復元する</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① マウス肝</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>小葉構造</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>門脈→中心静脈軸</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m47)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>② scRNA-seq</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>数千細胞</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>解離で位置が消える</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m47)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>③ smFISH</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>ランドマーク遺伝子</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>位置の基準を作る</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m47)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--E)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--E)' font-weight='600'>④ 再構成</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>小葉座標を推定</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--E)'>全遺伝子の空間地図</text>\n</svg>"
+  },
+  {
+    id:"46", primary:"B",
+    title:"肝細胞のTAZ/WWTR1がIndian hedgehogを介してHSCを活性化する——脂肪化を動かさず線維化だけを動かすスイッチ",
+    authors:"Wang X, Zheng Z, Caviglia JM, Corey KE, Herfel TM, Cai B, Masia R, Chung RT, Lefkowitch JH, Schwabe RF, Tabas I",
+    journal:"Cell Metab",
+    year:2016,
+    vol:"24(6):848-862",
+    doi:"10.1016/j.cmet.2016.09.016",
+    url:"https://doi.org/10.1016/j.cmet.2016.09.016",
+    tags:["B","D"],
+    "approach": "ヒトおよびマウスNASH肝の発現解析 ＋ 肝細胞特異的TAZノックダウン/過剰発現マウス ＋ 肝細胞-HSC共培養によるパラクリン因子の同定",
+    "added": "2026-09-20",
+    "abstract_ja": "単純な脂肪化がなぜ一部の個体でのみ脂肪肝炎へ進むのかという分岐点の分子的な実体は長く不明で、そのことが治療標的の同定を妨げてきた。本研究は転写共役因子TAZ（WWTR1）が、正常肝や単純性脂肪肝と比べてヒト・マウスいずれのNASH肝でも肝細胞において著しく高いことを見いだした。重要なのはその介入実験で、NASHモデルマウスで肝細胞のTAZを抑えると肝の炎症・肝細胞死・線維化が予防あるいは反転する一方、**脂肪化だけは変わらなかった**。逆に脂肪化しか起きないモデルで肝細胞にTAZを発現させると、線維化を含むNASHの形質が現れた。機序を追うと、TAZはTEADと組んで分泌因子Indian hedgehog（Ihh）を誘導し、分泌されたIhhが肝星細胞（HSC）の線維化関連遺伝子を動かすという経路が浮かび上がった。TAZは、脂肪化からNASHへという決定的な移行を担う、それまで認識されていなかった因子である。",
+    "background": "MASLDの自然史では、脂肪化そのものより炎症と線維化を伴う段階への移行が予後を左右するにもかかわらず、その移行を担う分子は十分に特定されていなかった。脂肪化の量と炎症・線維化の強さは必ずしも相関しないことが臨床的に知られており、両者を別々に制御する因子が存在するはずだと考えられていたが、脂肪化を変えずに線維化だけを動かせる分子を実証した例はなかった。",
+    "achievements": ["ヒト・マウスのNASH肝で、肝細胞の**TAZ（WWTR1）が正常肝や単純性脂肪肝より顕著に高い**ことを示した。", "肝細胞TAZのサイレンシングで炎症・肝細胞死・線維化が予防または反転する一方、**脂肪化は変化しなかった**。", "脂肪化モデルで肝細胞特異的にTAZを発現させると、線維化を含むNASHの形質が出現した。", "機序として**TAZ/TEADによるIndian hedgehog（Ihh）の誘導**を同定し、分泌されたIhhがHSCの線維化遺伝子を動かす経路を示した。"],
+    "limitations": ["主要な因果はマウスで確立されており、ヒトでは発現の相関にとどまる。", "何が肝細胞のTAZを上げるのか——上流の入力——は本論文では解かれていない。", "Ihh以外の分泌因子が寄与する可能性は完全には排除されていない。", "HSC側の受け手（Hedgehog受容体経路）の状態依存性は詳しく検討されていない。"],
+    "connection": ["「脂肪化は出るが線維化が出ない」という自分の系の状況に、分子としてそのまま対応する。**WWTR1とIHHをqPCRパネルに入れれば、スイッチが入っていないのか、入っているのに下流が動かないのかを切り分けられる**。", "TAZはYAP/TAZ系として機械刺激の受け手でもあるため、コラーゲンゲルの剛性が約100 Paと低いことと接続しうる。剛性を上げる実験の読み出しにもなる。", "No.43と合わせると、2:1の良性脂肪化ではTAZが上がらないという検証可能な仮説が立つ。TGF-β強制刺激と並べれば、上流（TAZ）と下流（SMAD）のどちらが欠けているかを二分できる。"],
+    "glossary": [{"term": "TAZ", "full": "transcriptional coactivator with PDZ-binding motif (WWTR1)", "desc": "Hippo経路の転写共役因子。NASH肝細胞で上昇し線維化を駆動する"}, {"term": "WWTR1", "full": "WW domain containing transcription regulator 1", "desc": "TAZをコードする遺伝子名。発現測定ではこちらを用いる"}, {"term": "TEAD", "full": "TEA domain transcription factor", "desc": "TAZ/YAPと複合体を作りDNAに結合する転写因子"}, {"term": "IHH", "full": "Indian hedgehog", "desc": "TAZ/TEADが誘導する分泌因子。肝細胞からHSCへ線維化シグナルを渡す"}, {"term": "YAP", "full": "Yes-associated protein", "desc": "TAZと対をなすHippo経路のエフェクター。機械刺激の受け手でもある"}],
+    "struct": {"model": "mixed", "cells": ["肝細胞", "肝星細胞(HSC)"], "triggers": ["NASH誘導食", "肝細胞特異的TAZ過剰発現"], "steatosis": "○", "inflammation": "○", "fibrosis": "○", "readout": ["肝線維化（コラーゲン染色）", "ALT", "HSC活性化遺伝子", "Ihh発現"], "ignite": "肝細胞のTAZ→Ihh。脂肪化と線維化を分離できる数少ない分子スイッチ", "params": [{"name": "TAZ発現量", "note": "脂肪化とは独立に炎症・細胞死・線維化を動かす。ABMでは肝細胞の状態変数"}, {"name": "Ihh分泌", "note": "肝細胞→HSCのパラクリン結合強度を与えるパラメータ"}], "todos": ["AOA200条件でWWTR1/IHHが上がるかをqPCRで確認する", "TGF-β強制刺激と並べ、上流（TAZ）と下流（SMAD）のどちらが欠けているかを二分する", "ゲル剛性を上げた条件でWWTR1が動くかを見る"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f46' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>脂肪化は据え置き、線維化だけが動く——TAZ→Ihh→HSC</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>肝細胞</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>TAZ(WWTR1)上昇</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>NASH肝で顕著</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f46)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>核内</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>TAZ/TEAD複合体</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>Ihhを転写誘導</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f46)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>分泌</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>Indian hedgehog</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>肝細胞→HSCへ</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f46)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>HSC</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>線維化遺伝子ON</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>脂肪化は不変</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m46' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：脂肪化と線維化を切り離す介入</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① 発現</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>ヒト・マウスNASH肝</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>肝細胞TAZを定量</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m46)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>② 抑制</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>肝細胞TAZノックダウン</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>炎症・細胞死・線維化↓</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m46)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>③ 付与</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>脂肪化モデルでTAZ発現</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>NASH形質が出現</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m46)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>④ 機序</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>TAZ/TEAD→Ihh</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>HSC活性化を再現</text>\n</svg>"
+  },
+  {
+    id:"45", primary:"D",
+    title:"腸内細菌代謝物フェニル酢酸が脂肪化を引き起こす——肥満女性のメタゲノム×フェノミクス",
+    authors:"Hoyles L, Fernández-Real JM, Federici M, Serino M, Abbott J, Charpentier J, et al., Postic C, Burcelin R, Dumas ME",
+    journal:"Nat Med",
+    year:2018,
+    vol:"24(7):1070-1080",
+    doi:"10.1038/s41591-018-0061-3",
+    url:"https://doi.org/10.1038/s41591-018-0061-3",
+    tags:["D","A","C"],
+    "approach": "ヒトコホート（FLORINASH：高度肥満の非糖尿病女性2集団）＋ 便ショットガンメタゲノム ＋ 肝トランスクリプトーム ＋ 血漿/尿メタボローム ＋ マウス糞便移植・PAA慢性投与による因果検証",
+    "added": "2026-09-20",
+    "abstract_ja": "肝の脂肪化は多因子性で、肥満患者にしばしば見られ非アルコール性脂肪性肝疾患の入口となるが、腸内細菌叢が宿主のどの分子ネットワークを介してそこに関わるのかは明確でなかった。本研究は高度肥満の非糖尿病女性を対象とした二つのコホートで、便のショットガンメタゲノムと、肝トランスクリプトーム・血漿および尿のメタボロームという宿主側のフェノームを同時に取得し、両者を結ぶ分子ネットワークを描き出した。脂肪化を有する患者では微生物の遺伝子richnessが低く、食事脂質の処理とエンドトキシン生合成——とりわけProteobacteria由来——の遺伝的ポテンシャルが高まっており、宿主側では肝の炎症と、芳香族アミノ酸および分岐鎖アミノ酸（BCAA）代謝の脱制御が並行して認められた。さらに糞便移植と、芳香族アミノ酸の微生物代謝産物であるフェニル酢酸（PAA）の慢性投与が、いずれも脂肪化とBCAA代謝の変化を引き起こすことを示し、相関の記述から因果の検証へ踏み込んだ。得られた分子フェノームのシグネチャは判別能が高く（AUC 87%）、脂肪化のかなりの部分が腸内細菌叢によって説明されうること、したがって微生物叢を標的とする介入が原理的に可能であることを示唆する。",
+    "background": "肥満に伴う肝脂肪化では腸内細菌叢の関与が繰り返し指摘されてきたが、報告の多くは菌叢組成と表現型の相関にとどまり、どの微生物代謝物が宿主のどの経路に作用して脂肪化を押すのかという機序の鎖がつながっていなかった。菌叢・肝の転写・循環代謝物を同一個体で揃えて測った研究が乏しく、さらに相関から因果へ進むための介入実験も不足していたため、候補分子を一つ取り出して単独で脂肪化を誘導できるかを確かめる段階に至っていなかった。",
+    "achievements": ["便メタゲノム・肝トランスクリプトーム・血漿/尿メタボロームを同一コホートで統合し、腸内細菌叢と脂肪化フェノームを結ぶ分子ネットワークを提示した。", "脂肪化群では微生物**遺伝子richnessが低下**し、食事脂質処理と**エンドトキシン生合成**（Proteobacteria優位）の遺伝的ポテンシャルが高いことを示した。", "宿主側では肝の炎症と、**芳香族アミノ酸・BCAA代謝の脱制御**が並行して起きていた。", "糞便移植と**フェニル酢酸（PAA）の慢性投与**が脂肪化とBCAA代謝変化を誘導することを示し、単一の微生物代謝物で因果を検証した。"],
+    "limitations": ["コホートは高度肥満の非糖尿病女性に限られ、男性や非肥満、糖尿病合併例へそのまま一般化できない。", "PAAの因果検証はマウスとヒト初代肝細胞で行われており、投与濃度はヒト血漿の生理的濃度より高い設定を含む。", "ヒトにおける介入試験ではないため、PAAを下げれば脂肪化が改善するかは示されていない。", "横断的なオミクス統合であり、菌叢変化と脂肪化の時間的な前後関係は確定していない。"],
+    "connection": ["LEADS（No.48）がPAAを第2ヒットに使う根拠がここにあり、自分の系にPAAを足すという案の一次出典でもある。", "ただし日本ではフェニル酢酸は**覚醒剤取締法の覚醒剤原料**にあたる。フェニルアセトンを経てメタンフェタミン/アンフェタミンに至るためで、塩も同様に扱われる。覚醒剤原料研究者の指定と保管要件が必要で、通常の試薬のようには発注できないため、購入検討の前に薬品管理責任者に確認する。", "PAAは抱合にグルタミンを消費し、窒素を尿素回路から逸らす。尿素を肝機能の読み出しに使っている限りこれは交絡になるので、使うならALB分泌やCYP活性へ指標を移す。", "エンドトキシン生合成ポテンシャルの上昇という所見は、KCを入れてLPSを第2ヒットにするという設計に、腸由来という文脈を与える。"],
+    "glossary": [{"term": "PAA", "full": "phenylacetic acid", "desc": "芳香族アミノ酸に由来する微生物代謝物。慢性投与で脂肪化を誘導する"}, {"term": "BCAA", "full": "branched-chain amino acid", "desc": "分岐鎖アミノ酸（ロイシン・イソロイシン・バリン）。脂肪化で代謝が脱制御される"}, {"term": "metagenomics", "full": "shotgun metagenomics", "desc": "便中の全微生物ゲノムを網羅的に配列決定し機能ポテンシャルを推定する手法"}, {"term": "gene richness", "full": "microbial gene richness", "desc": "腸内細菌叢が持つ遺伝子の多様度。低下が代謝性疾患と結びつく"}, {"term": "FMT", "full": "fecal microbiota transplantation", "desc": "糞便微生物叢移植。菌叢の因果的寄与を検証する介入"}, {"term": "Proteobacteria", "full": "Proteobacteria", "desc": "LPSを産生するグラム陰性菌を多く含む門。脂肪化群で優位になる"}],
+    "struct": {"model": "mixed", "cells": ["ヒト肝組織", "マウス肝", "ヒト初代肝細胞"], "triggers": ["腸内細菌叢（糞便移植）", "フェニル酢酸(PAA)慢性投与"], "steatosis": "○", "inflammation": "△", "fibrosis": "—", "readout": ["肝トリグリセリド", "肝トランスクリプトーム", "血漿/尿メタボローム", "微生物遺伝子richness"], "ignite": "PAAは脂肪化までは押すが、線維化を点火したことを示した研究ではない", "params": [{"name": "PAA", "note": "慢性投与で脂肪化とBCAA代謝変化を誘導。ABMでは外部代謝物入力として扱える"}, {"name": "エンドトキシン生合成ポテンシャル", "note": "Proteobacteria由来LPS供給の背景値を与える"}], "todos": ["PAA添加の可否を薬品管理責任者に確認する（覚醒剤原料に該当）", "PAAを使う場合は尿素以外の肝機能指標（ALB分泌・CYP活性）へ切り替える", "LPS単回パルスとPAAのどちらが自分の系で第2ヒットとして現実的かを比較する"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f45' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>腸内細菌→PAA→肝の脂肪化とBCAA代謝の脱制御</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>腸内細菌叢</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>遺伝子richness低下</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>Proteobacteria優位</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f45)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>微生物代謝物</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>芳香族アミノ酸代謝</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>フェニル酢酸(PAA)</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f45)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>肝</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>脂肪蓄積・炎症</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>BCAA代謝の脱制御</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f45)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>因果検証</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>FMT・PAA慢性投与</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>脂肪化を再現</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m45' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：オミクス統合から単一代謝物の投与試験へ</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① コホート</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>高度肥満の非糖尿病女性</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>2集団</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m45)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>② 測定</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>便メタゲノム</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>肝転写・血漿/尿代謝物</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m45)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>③ 統合</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>分子ネットワーク</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>判別 AUC 87%</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m45)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>④ 介入</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>マウスFMT</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>PAA慢性投与</text>\n</svg>"
+  },
+  {
+    id:"44", primary:"D",
+    title:"ヒト肝ミトコンドリアは脂肪肝では適応して呼吸を上げ、NASHでその適応を失う",
+    authors:"Koliaki C, Szendroedi J, Kaul K, Jelenik T, Nowotny P, Jankowiak F, Herder C, Carstensen M, Krausch M, Knoefel WT, Schlensak M, Roden M",
+    journal:"Cell Metab",
+    year:2015,
+    vol:"21(5):739-746",
+    doi:"10.1016/j.cmet.2015.04.004",
+    url:"https://doi.org/10.1016/j.cmet.2015.04.004",
+    tags:["D","A"],
+    "approach": "ヒト肝生検（痩せ12例・肥満非脂肪肝18例・NAFL 16例・NASH 7例）＋ 単離ミトコンドリアの高分解能呼吸測定 ＋ 酸化ストレス・抗酸化能・炎症マーカーの併測",
+    "added": "2026-09-20",
+    "abstract_ja": "肝のミトコンドリア機能がインスリン抵抗性や脂肪肝・脂肪肝炎とどう結びつくのかは長らく判然としなかったが、本研究は肝生検から単離したミトコンドリアの呼吸を高分解能呼吸測定で直接定量することでこれに答えた。痩せた対照群と比べ、肥満者はミトコンドリア量が同程度であるにもかかわらず最大呼吸速度が4.3〜5.0倍に達しており、しかもこの上昇は脂肪肝の有無を問わず見られた。ところがNASHの段階になるとミトコンドリア量はむしろ増えているのに最大呼吸は31〜40%低く、この低下は肝インスリン抵抗性の強さ、脱共役とリークの増大と並行していた。さらにNASH肝では過酸化水素や脂質過酸化物といった酸化ストレスと8-OHdGに代表される酸化的DNA損傷が亢進する一方、抗酸化能は低下し炎症応答は強まっていた。以上から、肥満に伴うインスリン抵抗性の初期には肝が呼吸能を押し上げる適応——肝ミトコンドリア柔軟性——を示し、それがNASHで失われるという段階依存の像が描かれる。",
+    "background": "脂肪肝からNASHへ進む過程でミトコンドリアが機能亢進するのか機能不全に陥るのかについては、動物モデルや間接的な指標を用いた研究が互いに食い違う結論を出していた。酸素消費を実際に測った報告でも、対象が単一の病期に限られていたり、ミトコンドリアの「量」と「質」が分離されていなかったりして、進行段階に沿った比較になっていなかった。そのため、病期の異なるヒト肝を同一の手法で横並びに測り、量あたりの呼吸能がどう変わるのかを直接確かめる必要があった。",
+    "achievements": ["肥満群は脂肪肝の有無を問わず、痩せ群に対して単離ミトコンドリアの**最大呼吸が4.3〜5.0倍**に達し、しかもミトコンドリア量は同等だった。", "NASHでは**ミトコンドリア量が多いのに最大呼吸は31〜40%低下**し、脱共役とリークが増えており、量と質が逆方向に動くことを示した。", "呼吸低下は肝インスリン抵抗性の強さ、酸化ストレス（H2O2・脂質過酸化）、酸化的DNA損傷（8-OHdG）、抗酸化能の低下、炎症応答の亢進と並行していた。", "「肝ミトコンドリア柔軟性」という適応が早期に存在し、NASHで失われるという段階依存の枠組みを提示した。"],
+    "limitations": ["NASH群が7例と小さく、サブグループ解析の統計的な力は限られる。", "横断研究であり、適応の獲得と喪失が同一個体のなかで時間的に連続して起きることは示されていない。", "単離ミトコンドリアの最大呼吸は基質を飽和させた条件下の能力であり、生体内で実際に回っている酸素消費とは異なる。", "検体は肥満外科手術時の生検であり、対象集団に偏りがある。"],
+    "connection": ["「脂肪肝 > 通常 > MASH」という非単調な並びの数値的な出どころがここで、単純な細胞毒性ではこの形は説明できない。だからこそ自分の系で基礎呼吸を測る動機になる。", "ただしこの適応をin vitroで再現するには酸素が律速でないことが前提になるため、酸素透過膜（PMP）の意義を直接検証できる数少ない読み出しでもある。", "阻害剤カスケード（Mito Stress Test）まで踏み込まなくても、まずオープンオルガノイドと従来オルガノイドの**基礎呼吸だけ**を通常条件と病態誘導条件で比較すれば、非単調性が出るかどうかは判定できる。", "No.43の2:1（良性）と0:3（傷害）を使い分ければ、適応相と破綻相を意図的に作り分けられる。"],
+    "glossary": [{"term": "high-resolution respirometry", "full": "high-resolution respirometry", "desc": "酸素電極で単離ミトコンドリアの酸素消費を高感度に測る手法"}, {"term": "maximal respiration", "full": "maximal respiration", "desc": "基質と脱共役剤を飽和させたときに到達できる最大の酸素消費速度"}, {"term": "uncoupling", "full": "mitochondrial uncoupling", "desc": "電子伝達と ATP 合成の共役が外れ、熱として散逸する状態"}, {"term": "8-OHdG", "full": "8-hydroxy-2'-deoxyguanosine", "desc": "酸化的DNA損傷の代表的なマーカー"}, {"term": "NAFL", "full": "non-alcoholic fatty liver", "desc": "炎症や線維化を伴わない単純性脂肪肝の段階"}, {"term": "hepatic mitochondrial flexibility", "full": "hepatic mitochondrial flexibility", "desc": "過栄養の初期に肝が呼吸能を押し上げる適応。NASHで失われる"}],
+    "struct": {"model": "ヒト組織", "cells": ["肝（生検組織・単離ミトコンドリア）"], "triggers": ["肥満・インスリン抵抗性", "NAFL/NASHへの進行"], "steatosis": "○", "inflammation": "○", "fibrosis": "△", "readout": ["最大呼吸速度", "ミトコンドリア量", "H2O2・脂質過酸化", "8-OHdG", "肝インスリン抵抗性"], "ignite": "線維化の点火そのものではなく、点火の前後でミトコンドリアが上がってから落ちる段階性を定義する", "params": [{"name": "最大呼吸の倍率", "note": "肥満/NAFLで対照比4.3–5.0倍。ABMにおける代謝能パラメータの上限を与える"}, {"name": "NASHでの低下率", "note": "31–40%低下、かつミト量は増加。量と質を別変数として持つ根拠"}], "todos": ["オープンオルガノイドと従来オルガノイドの基礎呼吸を、通常条件とAOA200条件で比較する", "既存の凍結サンプルでmtDNAコピー数を測り、ミトコンドリアの量と質を分離する"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f44' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>呼吸は上がってから落ちる——段階依存の非単調性</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>痩せ対照</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>基準の最大呼吸</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>ミト量 基準</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f44)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>肥満・NAFL</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>最大呼吸 4.3–5.0倍</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>ミト量は同等</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f44)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>NASH</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>最大呼吸 31–40%低下</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>ミト量はむしろ増</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f44)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>並行所見</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>脱共役・リーク増</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>酸化ストレス・炎症亢進</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m44' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：病期の異なるヒト肝を同一手法で横並びに測る</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① 被験者</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>4群 計53例</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>肥満外科手術時に生検</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m44)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>② 単離</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>肝ミトコンドリア</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>量と質を分離</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m44)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>③ 測定</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>高分解能呼吸測定</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>最大呼吸・リーク</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m44)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--C)' font-weight='600'>④ 併測</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>酸化ストレス・炎症</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--C)'>肝インスリン抵抗性</text>\n</svg>"
+  },
+  {
+    id:"43", primary:"D",
+    title:"OA:PA=2:1は「毒性が最小」として定義された比——良性慢性脂肪肝のin vitroモデル",
+    authors:"Gómez-Lechón MJ, Donato MT, Martínez-Romero A, Jiménez N, Castell JV, O'Connor JE",
+    journal:"Chem Biol Interact",
+    year:2007,
+    vol:"165(2):106-116",
+    doi:"10.1016/j.cbi.2006.11.004",
+    url:"https://doi.org/10.1016/j.cbi.2006.11.004",
+    tags:["D","A"],
+    "approach": "in vitro（ヒト初代肝細胞・HepG2）＋ オレイン酸/パルミチン酸の混合比を系統的に変えたFFA曝露 ＋ 脂肪蓄積・細胞毒性・アポトーシスの同時定量",
+    "added": "2026-09-20",
+    "abstract_ja": "肝細胞に脂肪を溜めるin vitro条件では、脂肪が蓄積すること自体と脂肪酸が細胞を傷害することが同じ処理で同時に起きてしまうため、観察された変化がどちらに由来するのかを判別できないという困りごとがあった。本研究はその二つを切り分けられる曝露条件を実験的に定義することを目的に、ヒト肝トリグリセリドで最も豊富な飽和脂肪酸であるパルミチン酸（C16:0）と一価不飽和脂肪酸であるオレイン酸（C18:1）を比率を変えて混合し、ヒト初代肝細胞とHepG2に与えて、細胞内脂質の蓄積量・生存率・アポトーシスを並行して測定した。その結果、脂肪酸ごとに固有の毒性ポテンシャルがあり、オレイン酸をパルミチン酸の2倍含む2:1の混合では、ヒト脂肪肝組織と同程度の脂質蓄積を達成しながら毒性とアポトーシスは軽微にとどまった。一方でパルミチン酸のみを与えた0:3では、同じ蓄積に急性の細胞傷害が伴った。したがって2:1は「良性の慢性脂肪肝」を、0:3は「飽和脂肪酸が急性の傷害を引き起こす脂肪肝」を模す条件として使い分けることができ、脂肪過剰そのものの影響を他の因子から切り離して調べる土台となる。",
+    "background": "脂肪肝のin vitroモデルでは培地に遊離脂肪酸（FFA）を加えて脂肪滴を蓄積させるのが定石だが、FFAは同時にリポトキシシティを引き起こすため、下流で見えた変化が脂肪の蓄積によるものなのか脂肪酸そのものの毒性によるものかを分離できなかった。しかも毒性の強さは脂肪酸種によって大きく異なり、飽和脂肪酸と一価不飽和脂肪酸では作用がむしろ逆を向くことが知られていた。そのため、ヒト肝に実際に蓄積する脂肪酸組成を反映しながら、傷害を伴わずに脂質だけを溜める条件がどこにあるのかを、比率の関数として定義する必要があった。",
+    "achievements": ["ヒト初代肝細胞とHepG2のいずれでも、**オレイン酸:パルミチン酸 = 2:1** の混合がヒト脂肪肝と同等の細胞内脂質蓄積を与えつつ、細胞毒性とアポトーシスを最小に抑えることを示した。", "**パルミチン酸単独（0:3）** では同じ蓄積が急性の細胞傷害を伴い、飽和/不飽和の比こそが毒性を決める主因であることを、蓄積量とは独立に分離して示した。", "脂肪蓄積と細胞死を別々に操作できる条件セットを提示し、以後のMASLD in vitroモデルが用いるFFA処方の原型を与えた。"],
+    "limitations": ["評価は脂肪蓄積・生存率・アポトーシスまでで、線維化や免疫応答といった下流の病態は対象外である。", "HepG2は肝癌由来株で脂質代謝が初代肝細胞と異なり、初代肝細胞側も単独培養のため非実質細胞との相互作用を含まない。", "曝露は短期であり、慢性経過のなかで適応が起きるのか破綻するのかは検証されていない。", "FFAはBSA複合体として与えられるが、FFA:BSAモル比が結果に与える影響は系統的に検討されていない。"],
+    "connection": ["AOA200（OA:PA = 2:1、総量200 µM）の比はここが出典であり、**この比はもともと「毒性とアポトーシスが最小になる条件」として選ばれたもの**である。したがって自分の系で線維化が点火しないのは系の欠陥ではなく、傷害を出さないように設計された刺激に対する期待どおりの応答という読み方ができる。", "点火を狙うなら、同じ論文が定義したもう一方の極（パルミチン酸優位・0:3側）へ組成を振るのが最短で、しかも根拠が一報のなかで完結している。第6回でAOA200を選んだ判断（低傷害・高蓄積）は、この論文が2:1に与えた性格をそのままなぞっている。", "No.44（Koliaki 2015）と組み合わせると、良性脂肪肝の段階では呼吸が上がり傷害を伴う段階で落ちるという非単調性を、in vitroで作り分ける設計になる。"],
+    "glossary": [{"term": "FFA", "full": "free fatty acid", "desc": "遊離脂肪酸。培地に加えて肝細胞に脂肪滴を蓄積させる入力"}, {"term": "OA", "full": "oleic acid (C18:1)", "desc": "一価不飽和脂肪酸。脂肪滴に取り込まれやすく毒性が低い"}, {"term": "PA", "full": "palmitic acid (C16:0)", "desc": "飽和脂肪酸。小胞体ストレスとアポトーシスを誘導しやすい"}, {"term": "lipotoxicity", "full": "lipotoxicity", "desc": "脂肪酸そのものが細胞を傷害する作用。脂肪の蓄積とは別の現象"}, {"term": "benign chronic steatosis", "full": "benign chronic steatosis", "desc": "傷害を伴わない慢性的な脂肪蓄積。2:1条件が模す病態段階"}],
+    "struct": {"model": "in vitro", "cells": ["ヒト初代肝細胞", "HepG2"], "triggers": ["オレイン酸/パルミチン酸混合（比率可変）"], "steatosis": "○", "inflammation": "—", "fibrosis": "—", "readout": ["細胞内脂質蓄積量", "細胞生存率(neutral red)", "アポトーシス"], "ignite": "点火しない条件を定義した論文——2:1が毒性最小、0:3が急性傷害側", "params": [{"name": "OA:PA比", "note": "2:1で毒性最小、0:3で急性傷害。ABMでは脂肪酸組成→細胞死率の写像パラメータになる"}, {"name": "総FFA濃度", "note": "ヒト脂肪肝と同等の蓄積に必要な曝露量の目安"}], "todos": ["AOA200の比を2:1から1:1・1:2へ振り、蓄積量を保ったまま細胞死だけを上げられるか確認する", "PA優位条件でM30（caspase-cleaved CK18）が上がるかを見る"]},
+    "figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='f43' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>OA:PA比が脂肪蓄積と細胞死を切り離す</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>FFA混合曝露</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>OA:PA比を可変</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>総量は一定</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f43)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>2:1（OA優位）</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>ヒト脂肪肝相当の蓄積</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>毒性・アポトーシス軽微</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f43)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>0:3（PA単独）</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>同等の蓄積</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>急性の細胞傷害</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#f43)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>使い分け</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>良性慢性 vs 急性傷害</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>下流の解釈が変わる</text>\n</svg>",
+    "method_figure": "<svg viewBox='0 0 640 232' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>\n  <defs><marker id='m43' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>\n  <rect x='0' y='0' width='640' height='232' fill='var(--paper)'/>\n  <text x='320' y='22' text-anchor='middle' font-size='11.5' fill='var(--ink)' font-weight='600'>実験デザイン：比率を振って蓄積と毒性を同時に測る</text>\n  <rect x='14' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>\n  <text x='84.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--accent)' font-weight='600'>① 細胞</text>\n  <text x='84.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>ヒト初代肝細胞</text>\n  <text x='84.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--accent)'>HepG2</text>\n  <path d='M157,96 L168,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m43)'/>\n  <rect x='171' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--D)' stroke-width='1.5'/>\n  <text x='241.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--D)' font-weight='600'>② 曝露</text>\n  <text x='241.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>OA/PA混合</text>\n  <text x='241.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--D)'>比率 2:1〜0:3</text>\n  <path d='M314,96 L325,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m43)'/>\n  <rect x='328' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--A)' stroke-width='1.5'/>\n  <text x='398.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--A)' font-weight='600'>③ 読み出し</text>\n  <text x='398.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>脂質蓄積量</text>\n  <text x='398.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--A)'>生存率・アポトーシス</text>\n  <path d='M471,96 L482,96' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m43)'/>\n  <rect x='485' y='44' width='141' height='104' rx='8' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.5'/>\n  <text x='555.5' y='64' text-anchor='middle' font-size='9.3' fill='var(--B)' font-weight='600'>④ 結論</text>\n  <text x='555.5' y='82' text-anchor='middle' font-size='8.3' fill='var(--ink-soft)'>毒性最小比の同定</text>\n  <text x='555.5' y='95.5' text-anchor='middle' font-size='8.3' fill='var(--B)'>2:1＝良性慢性脂肪肝</text>\n</svg>"
+  },
   {
     id:"42", primary:"C",
     title:"グルコルチコイドが単球を赤芽球島マクロファージ様のCD163+CD206+M2様マクロファージに分化誘導する",
@@ -2995,6 +3128,12 @@ const ICONS={
   geneko:"<svg viewBox='0 0 48 48' fill='none' stroke='var(--ink-soft)' stroke-width='1.6'><path d='M16 8 q-4 16 0 32 M22 8 q4 16 0 32'/><path d='M14 22 q8 2 10 0'/><path d='M30 14 l12 12 M42 14 l-12 12' stroke='var(--H)' stroke-width='2.2'/></svg>"
 };
 const paperIcons={
+  "48":[{ic:"human",cap:"hiPSC由来の肝4細胞"}, {ic:"chip",cap:"側流路つきマイクロ流体チップ LEADS"}, {ic:"liver",cap:"FFA＋フルクトース＋LPS＋PAAでMASH様表現型"}, {ic:"drug",cap:"resmetirom等の薬剤応答を評価"}],
+  "47":[{ic:"mouse",cap:"マウス肝 数千個の肝細胞"}, {ic:"omics",cap:"scRNA-seq＋smFISHランドマーク遺伝子"}, {ic:"liver",cap:"小葉座標を推定しzonationプロファイルを再構成"}, {ic:"omics",cap:"約50%がzonate・非単調プロファイルも多数"}],
+  "46":[{ic:"human",cap:"ヒトNASH肝で肝細胞TAZが高発現"}, {ic:"mouse",cap:"肝細胞TAZのノックダウンと過剰発現"}, {ic:"hepatocyte",cap:"TAZ/TEAD→Indian hedgehogを分泌"}, {ic:"stellate",cap:"HSCの線維化遺伝子が動く"}],
+  "45":[{ic:"human",cap:"肥満女性コホート FLORINASH 2集団"}, {ic:"omics",cap:"便メタゲノム＋肝トランスクリプトーム＋メタボローム"}, {ic:"mouse",cap:"糞便移植とPAA慢性投与で因果を検証"}, {ic:"hepatocyte",cap:"ヒト初代肝細胞でPAAが脂質蓄積を押す"}],
+  "44":[{ic:"human",cap:"ヒト肝生検 痩せ12・肥満18・NAFL16・NASH7例"}, {ic:"liver",cap:"単離ミトコンドリアの高分解能呼吸測定"}, {ic:"omics",cap:"酸化ストレス・抗酸化能・炎症マーカーの併測"}, {ic:"liver",cap:"NASHでは量が増えるのに最大呼吸は31–40%低下"}],
+  "43":[{ic:"dish",cap:"ヒト初代肝細胞・HepG2の単層培養"}, {ic:"hepatocyte",cap:"OA:PA比を変えたFFA混合で脂肪滴を蓄積"}, {ic:"liver",cap:"ヒト脂肪肝と同等の細胞内脂質量に到達"}, {ic:"hepatocyte",cap:"PA優位(0:3)では急性の細胞傷害とアポトーシス"}],
   "26":[{ic:"liver",cap:"肝細胞内の脂質滴（LD）とミトコンドリアのコンタクト"},{ic:"mouse",cap:"絶食 vs 西洋食（WD）マウス肝"},{ic:"omics",cap:"scPhenomics（単一細胞組織イメージング）"},{ic:"omics",cap:"空間プロテオミクス"},{ic:"drug",cap:"PLIN5 S155A過剰発現がlipotoxicityを軽減"}],
   "25":[{ic:"liver",cap:"Zone1（門脈周囲）ゾーン特異的肝オルガノイド"},{ic:"liver",cap:"Zone3（中心静脈周囲）ゾーン特異的肝オルガノイド"},{ic:"mouse",cap:"BDLラット移植実験"},{ic:"omics",cap:"エピゲノム解析（EP300/TET1/HIF1α ChIP/ATAC）"},{ic:"human",cap:"hiPSC由来ゾーン特異的肝前駆細胞"}],
   "24":[{ic:"human",cap:"生体健常ドナー8例のヒト肝サンプル"},{ic:"omics",cap:"Visium/Visium HD3 空間トランスクリプトーム"},{ic:"omics",cap:"MERFISH + PhenoCycler 空間プロテオミクス"},{ic:"omics",cap:"snRNA-seq"},{ic:"liver",cap:"早期steatosis肝細胞のmito転写プログラム"}],
@@ -3148,6 +3287,34 @@ const paperMethods={
 /* ===== 用語カテゴリ＆やや詳しい解説（用語ビュー用。tooltipは各論文glossaryの簡潔descを使用） ===== */
 const CAT_ORDER=["細胞・組織","遺伝子・タンパク質","シグナル・経路","代謝・分子","プロセス・現象","手法・モデル","疾患・病態"];
 const CATINFO={
+  "leads":{cat:"手法・モデル",long:"hiPSC由来の肝細胞・HSC・LSEC・KCを側流路つきマイクロ流体チップに配置したMASHモデル。Yu Hanryグループによる。"},
+  "resmetirom":{cat:"代謝・分子",long:"肝選択的な甲状腺ホルモン受容体βアゴニストで、MASHに対して承認された薬剤。モデルの薬剤応答評価に用いられる。"},
+  "vehicle":{cat:"手法・モデル",long:"薬剤や脂質を溶かす溶媒だけを与える対照。溶媒自体の効果を切り分けるために必須で、これを欠くと交絡が見えなくなる。"},
+  "smfish":{cat:"手法・モデル",long:"single-molecule fluorescence in situ hybridization。個々のmRNA分子を組織切片上で数える手法で、位置情報を保ったまま定量できる。"},
+  "periportal":{cat:"細胞・組織",long:"門脈周囲（zone 1）。酸素が高く、糖新生やアンモニア処理が優位な領域。"},
+  "pericentral":{cat:"細胞・組織",long:"中心静脈周囲（zone 3）。酸素が低く解糖や薬物代謝が優位で、同時にWntのソースでもあるため酸素とWntが交絡する。"},
+  "landmark gene":{cat:"手法・モデル",long:"ゾーン依存性が既知で、単一細胞の小葉座標を推定する基準として使われる遺伝子。"},
+  "lobule":{cat:"細胞・組織",long:"肝小葉。肝の構造単位で、六角形の頂点に門脈域、中心に中心静脈を持つ。"},
+  "taz":{cat:"遺伝子・タンパク質",long:"transcriptional coactivator with PDZ-binding motif。Hippo経路のエフェクターで、NASH肝細胞で上昇しTEADと組んでIhhを誘導し線維化を駆動する。"},
+  "wwtr1":{cat:"遺伝子・タンパク質",long:"WW domain containing transcription regulator 1。TAZをコードする遺伝子名で、発現量を測る際はこちらの名称を用いる。"},
+  "tead":{cat:"遺伝子・タンパク質",long:"TEA domain transcription factor。TAZやYAPと複合体を形成してDNAに結合し、標的遺伝子の転写を起動する。"},
+  "ihh":{cat:"遺伝子・タンパク質",long:"Indian hedgehog。TAZ/TEADが誘導する分泌因子で、肝細胞から肝星細胞へ線維化シグナルを渡すパラクリンの担い手。"},
+  "paa":{cat:"代謝・分子",long:"phenylacetic acid（フェニル酢酸）。芳香族アミノ酸の微生物代謝産物で、慢性投与により脂肪化とBCAA代謝の変化を誘導する。日本では覚醒剤原料に該当し取扱いに指定が要る。"},
+  "bcaa":{cat:"代謝・分子",long:"branched-chain amino acid（分岐鎖アミノ酸）。ロイシン・イソロイシン・バリンを指し、脂肪化に伴って血中濃度が上昇し代謝が脱制御される。"},
+  "metagenomics":{cat:"手法・モデル",long:"便などの試料に含まれる全微生物ゲノムを網羅的に配列決定し、菌叢の構成と機能ポテンシャルを推定する手法。"},
+  "gene richness":{cat:"プロセス・現象",long:"腸内細菌叢が保有する遺伝子の多様度。低richnessは肥満・インスリン抵抗性・脂肪化と結びつく。"},
+  "fmt":{cat:"手法・モデル",long:"fecal microbiota transplantation（糞便微生物叢移植）。菌叢の因果的寄与を検証するための介入手段。"},
+  "proteobacteria":{cat:"細胞・組織",long:"LPSを産生するグラム陰性菌を多く含む細菌門。脂肪化を伴う患者の腸内で優位になりエンドトキシン供給源となる。"},
+  "high-resolution respirometry":{cat:"手法・モデル",long:"酸素電極を用いて単離ミトコンドリアや透過処理組織の酸素消費を高感度に測定する手法。基質と阻害剤を順に加えて呼吸の各成分を分解できる。"},
+  "maximal respiration":{cat:"プロセス・現象",long:"基質を飽和させ脱共役剤を加えたときに到達する最大の酸素消費速度。ミトコンドリアの「質」を量と切り離して評価する指標になる。"},
+  "uncoupling":{cat:"プロセス・現象",long:"電子伝達とATP合成の共役が外れ、プロトン勾配が熱として散逸する状態。NASH肝ではリークとともに増加し正味の呼吸効率を下げる。"},
+  "8-ohdg":{cat:"代謝・分子",long:"8-hydroxy-2'-deoxyguanosine。酸化的DNA損傷の代表的マーカーで、NASH肝では抗酸化能の低下と並行して増加する。"},
+  "nafl":{cat:"疾患・病態",long:"non-alcoholic fatty liver。炎症や線維化を伴わない単純性脂肪肝の段階で、この段階ではミトコンドリア呼吸がむしろ亢進している。"},
+  "hepatic mitochondrial flexibility":{cat:"プロセス・現象",long:"過栄養とインスリン抵抗性の初期に肝が呼吸能を押し上げる適応。NASHで失われるため、呼吸速度が非単調に変化する原因となる。"},
+  "ffa":{cat:"代謝・分子",long:"free fatty acid（遊離脂肪酸）。培地に加えて肝細胞に脂肪滴を蓄積させる基本入力で、飽和/不飽和の比によって毒性が大きく変わる。"},
+  "oa":{cat:"代謝・分子",long:"oleic acid（オレイン酸、C18:1）。一価不飽和脂肪酸で脂肪滴に取り込まれやすく、単独では毒性が低いためパルミチン酸の傷害を緩和する。"},
+  "pa":{cat:"代謝・分子",long:"palmitic acid（パルミチン酸、C16:0）。飽和脂肪酸で小胞体ストレスとアポトーシスを誘導しやすく、脂肪肝モデルにおける傷害側の主因となる。"},
+  "benign chronic steatosis":{cat:"疾患・病態",long:"傷害や炎症を伴わない慢性的な脂肪蓄積の段階。OA:PA=2:1条件が模す病態で、線維化が点火しないのはこの段階の性質による。"},
   "ntf3":{cat:"遺伝子・タンパク質",long:"neurotrophin-3。神経栄養因子ファミリーの分泌リガンド。進行期NASHで活性化HSCが分泌し、自己の受容体NTRK3(TrkC)に自己分泌的に結合してHSC活性化を維持する。"},
   "ntrk3":{cat:"遺伝子・タンパク質",long:"neurotrophic receptor tyrosine kinase 3。TrkCをコードする受容体型チロシンキナーゼで、NTF3の受容体。進行期HSCで自己分泌回路の中核となり、薬理学的阻害でマウスNASH線維化が退縮した治療標的。"},
   "trkc":{cat:"遺伝子・タンパク質",long:"tropomyosin receptor kinase C（NTRK3がコード）。HSC膜上でNTF3を受け取り活性化シグナルを伝える受容体タンパク。NTRK2(TrkB)と同じTrk受容体ファミリー。"},
@@ -6057,6 +6224,282 @@ CINEMA["12"]={
            K.unpulse("cxcl12"); K.unpulse("ccl412");
          },350);
        }},
+    ];
+  }
+};
+
+
+/* ===== 追加 6 件（No.43–48）のアニメ登録：既存 CINEMA[...] 群の末尾に貼る ===== */
+
+/* ===== №43 OA:PA比が脂肪蓄積と細胞死を切り離す ===== */
+CINEMA["43"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("43")}${GLYPH.arrow("43d","var(--D)")}</defs>`
+    +GLYPH.title("同じ総量のFFAでも、飽和/不飽和の比が細胞の運命を決める")
+    +GLYPH.tag("armL43",135,72,"OA:PA = 2:1","var(--A)",118)
+    +GLYPH.tag("armR43",585,72,"PA単独 (0:3)","var(--B)",118)
+    +GLYPH.hep("hepL",60,120,0.85,"")
+    +GLYPH.hep("hepR",510,120,0.85,"")
+    +`<g id="ffaL43" class="fade">`+GLYPH.metab("oaL1",100,105,"OA","var(--A)")+GLYPH.metab("oaL2",135,105,"","var(--A)")+GLYPH.metab("paL1",170,105,"PA","var(--B)")+`</g>`
+    +`<g id="ffaR43" class="fade">`+GLYPH.metab("paR1",550,105,"PA","var(--B)")+GLYPH.metab("paR2",585,105,"","var(--B)")+GLYPH.metab("paR3",620,105,"","var(--B)")+`</g>`
+    +GLYPH.badge("ok43",120,320,"良性慢性脂肪肝","毒性は軽微","var(--A)")
+    +GLYPH.badge("bad43",600,320,"急性の傷害","アポトーシス","var(--B)")
+    +GLYPH.stellate("hsc43",360,352,"肝星細胞（静止）")
+    +GLYPH.layer("col43")
+    +GLYPH.tag("noig43",360,412,"点火しない","var(--ink-soft)",104,true),
+  build(K){
+    const dL=[[108,176],[146,200],[122,218],[168,192],[138,240]];
+    const dR=[[558,176],[596,200],[572,218],[618,192],[588,240]];
+    return [
+      {color:"E",t:2200,cap:"ヒト初代肝細胞を2群に分ける。与える脂肪酸の総量は同じで、飽和と不飽和の比だけが違う。",run(){}},
+      {color:"D",t:3600,cap:"① OA:PA = 2:1。オレイン酸が多い側では脂肪滴が溜まり、ヒト脂肪肝と同程度の蓄積まで達する。",run(){
+        K.show(["ffaL43"]);
+        [100,135,170].forEach((x,i)=>K.T(()=>K.flow(x,118,130,185,i===2?"var(--B)":"var(--A)",{n:2,dur:1.0,loop:1}),i*220));
+        K.T(()=>addDrops(K,"hepLDrops",dL,"lip43"),900);
+      }},
+      {color:"D",t:3600,cap:"② PA単独（0:3）。蓄積量そのものは、ほぼ同じところまで行く。",run(){
+        K.show(["ffaR43"]);
+        [550,585,620].forEach((x,i)=>K.T(()=>K.flow(x,118,580,185,"var(--B)",{n:2,dur:1.0,loop:1}),i*220));
+        K.T(()=>addDrops(K,"hepRDrops",dR,"lip43"),900);
+      }},
+      {color:"B",t:4200,cap:"③ 違いは細胞の側に出る。2:1では毒性もアポトーシスも軽微だが、0:3では膜が壊れて急性の傷害が起きる。",run(){
+        K.T(()=>K.show(["ok43"]),500);
+        K.T(()=>{radiate(K,580,190,"var(--B)",8);},1400);
+        K.T(()=>{K.attr("hepR","opacity","0.4");shrinkChildren(K,"hepRDrops");K.markX(580,190,"var(--B)");},2400);
+        K.T(()=>K.show(["bad43"]),3100);
+      }},
+      {color:"F",t:3400,cap:"④ AOA200が採っているのは左側——毒性が最小になるよう定義された比。だから下流のHSCは静止のままで、線維化が点火しないのは設計どおりの応答になる。",run(){
+        K.flow(160,250,352,330,"var(--A)",{n:2,dur:1.3,loop:1,r:2.6});
+        K.T(()=>{K.pulse("hsc43");},1200);
+        K.T(()=>{K.unpulse("hsc43");K.show(["noig43"]);},2200);
+      }},
+    ];
+  }
+};
+
+/* ===== №44 呼吸は上がってから落ちる（肝ミトコンドリア柔軟性の喪失） ===== */
+CINEMA["44"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.arrow("44d","var(--D)")}</defs>`
+    +GLYPH.title("痩せ → 肥満/NAFL → NASH：ミトコンドリアの量と質は別々に動く")
+    +GLYPH.hep("hepA",40,100,0.62,"")+GLYPH.hep("hepB",270,100,0.62,"")+GLYPH.hep("hepC",500,100,0.62,"")
+    +`<g id="mitoA"><ellipse cx="95" cy="160" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/><ellipse cx="120" cy="180" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/></g>`
+    +`<g id="mitoB"><ellipse cx="325" cy="160" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/><ellipse cx="350" cy="180" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/></g>`
+    +`<g id="mitoC"><ellipse cx="555" cy="160" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/><ellipse cx="580" cy="180" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/></g>`
+    +`<g id="mitoCx" class="fade"><ellipse cx="530" cy="196" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/><ellipse cx="596" cy="152" rx="11" ry="6.5" fill="#b06a4a" stroke="#7d4630" stroke-width="1"/></g>`
+    +GLYPH.tag("labA",98,250,"痩せ対照","var(--accent)",96)
+    +GLYPH.tag("labB",328,250,"肥満・NAFL","var(--D)",108)
+    +GLYPH.tag("labC",558,250,"NASH","var(--B)",84)
+    +GLYPH.tag("valA",98,284,"呼吸 基準","var(--ink-soft)",104,true)
+    +GLYPH.tag("valB",328,284,"最大呼吸 4.3–5.0倍","var(--D)",150,true)
+    +GLYPH.tag("valC",558,284,"最大呼吸 31–40%低下","var(--B)",162,true)
+    +GLYPH.layer("curve44")
+    +GLYPH.tag("axis44",360,412,"呼吸速度は非単調に変わる","var(--ink-soft)",180,true),
+  build(K){
+    return [
+      {color:"E",t:2400,cap:"痩せた対照の肝。ミトコンドリアの数も、そこを通る酸素の流れも基準値。",run(){
+        K.flow(95,200,95,165,"var(--E)",{n:2,dur:1.1,loop:2});K.T(()=>K.show(["valA"]),900);
+      }},
+      {color:"D",t:3800,cap:"① 肥満とNAFLでは、ミトコンドリアの数は変わらないのに最大呼吸が4.3〜5.0倍に上がる。肝が呼吸能そのものを押し上げる適応が起きている。",run(){
+        K.flow(325,205,325,162,"var(--D)",{n:5,dur:0.8,loop:3});
+        K.flow(350,205,350,182,"var(--D)",{n:5,dur:0.8,loop:3});
+        K.T(()=>{K.show(["valB"]);K.pulse("labB");},1300);
+        K.T(()=>K.unpulse("labB"),3000);
+      }},
+      {color:"B",t:4400,cap:"② NASHではミトコンドリアはむしろ増えているのに、最大呼吸は31〜40%低い。脱共役とリークが増え、プロトン勾配が熱として逃げていく。",run(){
+        K.show(["mitoCx"]);
+        K.T(()=>{K.flow(555,205,555,163,"var(--B)",{n:1,dur:1.4,loop:1});},600);
+        K.T(()=>{K.flow(555,160,505,120,"var(--H)",{n:3,dur:1.0,loop:2,r:2.6});
+                 K.flow(580,180,630,140,"var(--H)",{n:3,dur:1.0,loop:2,r:2.6});},1500);
+        K.T(()=>{K.show(["valC"]);},2900);
+      }},
+      {color:"C",t:3600,cap:"③ 同時に過酸化水素と脂質過酸化、8-OHdGが増える一方で抗酸化能は落ち、炎症応答が強まる。",run(){
+        radiate(K,558,175,"var(--C)",8);
+        K.T(()=>{K.attr("hepC","opacity","0.55");},1600);
+      }},
+      {color:"F",t:3400,cap:"④ 呼吸は上がってから落ちる。この非単調性は単純な細胞毒性では説明がつかないので、自分の系で基礎呼吸を測る意味が出てくる。",run(){
+        K.draw("curve44",["M90,392 C200,392 240,330 328,330 C430,330 470,372 560,376"],{len:560,dur:1.8,color:"var(--F)",w:3});
+        K.T(()=>K.show(["axis44"]),1900);
+      }},
+    ];
+  }
+};
+
+/* ===== №45 腸内細菌→フェニル酢酸→肝の脂肪化 ===== */
+CINEMA["45"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("45")}${GLYPH.arrow("45c","var(--C)")}</defs>`
+    +GLYPH.title("腸内細菌叢の変化 → 芳香族アミノ酸代謝 → PAA → 肝の脂肪化とBCAA脱制御")
+    +`<rect x="34" y="92" width="132" height="250" rx="34" fill="#e7d9cb" stroke="#b79a7c" stroke-width="2"/>`
+    +`<text x="100" y="364" text-anchor="middle" font-size="10" fill="var(--ink-soft)">腸管</text>`
+    +`<g id="flora45"><circle cx="72" cy="130" r="6" fill="#6f9a6f"/><circle cx="118" cy="152" r="6" fill="#6f9a6f"/><circle cx="84" cy="188" r="6" fill="#6f9a6f"/><circle cx="128" cy="216" r="6" fill="#6f9a6f"/><circle cx="70" cy="248" r="6" fill="#6f9a6f"/><circle cx="116" cy="288" r="6" fill="#6f9a6f"/><circle cx="80" cy="318" r="6" fill="#6f9a6f"/></g>`
+    +GLYPH.tag("rich45",100,72,"遺伝子richness","var(--accent)",128)
+    +GLYPH.metab("aaa45",214,140,"芳香族AA","var(--ink-soft)",true)
+    +GLYPH.metab("paa45",214,232,"PAA","var(--D)",true)
+    +GLYPH.cytokine("lps45",214,314,"LPS","var(--C)",true)
+    +GLYPH.hep("hep45",300,120,1.0,"肝細胞")
+    +`<g id="bcaa45" class="fade">`+GLYPH.metab("bc1",520,120,"BCAA","var(--D)")+GLYPH.metab("bc2",556,120,"","var(--D)")+`</g>`
+    +GLYPH.stellate("hsc45",620,300,"肝星細胞（静止）")
+    +GLYPH.tag("fmt45",360,392,"FMT／PAA単独投与でも脂肪化が再現","var(--F)",290,true)
+    +GLYPH.badge("noFib45",620,150,"線維化は","示していない","var(--ink-soft)"),
+  build(K){
+    const dp=[[352,180],[398,208],[364,232],[412,192],[380,258]];
+    return [
+      {color:"E",t:2400,cap:"健常な腸内細菌叢と肝。菌叢は多様で、肝には脂肪が溜まっていない。",run(){}},
+      {color:"C",t:3800,cap:"① 脂肪化を持つ患者では微生物の遺伝子richnessが下がり、Proteobacteriaが優位になってエンドトキシン生合成のポテンシャルが上がる。",run(){
+        K.T(()=>{const g=K.$("flora45");[...g.children].forEach((c,i)=>K.T(()=>{if(i%2===0)c.setAttribute("fill","#a4543f");else c.setAttribute("opacity","0.25");},i*140));},400);
+        K.T(()=>{K.show(["lps45"]);K.pulse("rich45");},2100);
+        K.T(()=>K.unpulse("rich45"),3200);
+      }},
+      {color:"D",t:4400,cap:"② 菌が芳香族アミノ酸からフェニル酢酸（PAA）を作る。PAAは血流に乗って肝に届き、肝細胞にトリグリセリドが溜まってBCAA代謝が脱制御される。",run(){
+        K.show(["aaa45"]);
+        K.T(()=>{K.flow(214,150,214,222,"var(--D)",{n:3,dur:1.0,loop:1});K.show(["paa45"]);},800);
+        K.T(()=>K.flow(228,232,340,205,"var(--D)",{n:4,dur:1.2,loop:2}),1800);
+        K.T(()=>addDrops(K,"hep45Drops",dp,"lip45"),2500);
+        K.T(()=>K.show(["bcaa45"]),3400);
+      }},
+      {color:"F",t:3600,cap:"③ 糞便移植でも、PAAを単独で慢性投与しても脂肪化が再現される。相関の記述から因果の検証へ踏み込んだところがこの論文の要。",run(){
+        K.show(["fmt45"]);K.pulse("paa45");
+        K.T(()=>K.unpulse("paa45"),2400);
+      }},
+      {color:"B",t:3200,cap:"④ ただしここまでは脂肪化の話。HSCは静止のままで、PAAが線維化を点火したことを示した研究ではない。",run(){
+        K.flow(430,260,614,292,"var(--ink-soft)",{n:2,dur:1.3,loop:1,r:2.4});
+        K.T(()=>K.show(["noFib45"]),1500);
+      }},
+    ];
+  }
+};
+
+/* ===== №46 肝細胞TAZ→Ihh→HSC（脂肪化は動かさない） ===== */
+CINEMA["46"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("46")}${GLYPH.arrow("46b","var(--B)")}</defs>`
+    +GLYPH.title("肝細胞のTAZが核へ移行 → TEADとIhhを誘導 → HSCが活性化（脂肪化は不変）")
+    +GLYPH.hep("hep46",40,100,1.3,"")
+    +GLYPH.nucleus("nuc46",90,172,42,32,"核")
+    +`<g id="tazMove" class="fade">`+GLYPH.tf("taz46",210,250,"TAZ (WWTR1)","var(--B)")+`</g>`
+    +GLYPH.tf("tead46",96,176,"TEAD","var(--B)",true)
+    +GLYPH.cytokine("ihh46",320,206,"Ihh","var(--C)",true)
+    +GLYPH.stellate("hsc46",560,230,"肝星細胞")
+    +GLYPH.layer("col46")
+    +GLYPH.badge("nofat46",150,368,"脂肪滴の量は","変わらない","var(--D)")
+    +GLYPH.pill("kd46",470,64,"肝細胞TAZノックダウン",180),
+  build(K){
+    const dp=[[128,182],[176,214],[142,246],[196,196],[162,272]];
+    return [
+      {color:"E",t:2400,cap:"脂肪滴を抱えた肝細胞と、まだ静止している肝星細胞。脂肪化だけがある段階。",run(){
+        addDrops(K,"hep46Drops",dp,"lip46");
+      }},
+      {color:"D",t:3600,cap:"① NASH肝では肝細胞のTAZ（WWTR1）が上がる。TAZは細胞質にとどまらず核へ移行する。",run(){
+        K.show(["tazMove"]);
+        K.T(()=>K.move("tazMove",0,0,-108,-70,1.5),700);
+        K.T(()=>K.pulse("nuc46"),2300);
+      }},
+      {color:"B",t:4200,cap:"② 核のなかでTAZはTEADと複合体を作り、分泌因子であるIndian hedgehog（Ihh）を転写誘導する。",run(){
+        K.unpulse("nuc46");K.show(["tead46"]);
+        K.T(()=>{K.pulse("tead46");},600);
+        K.T(()=>{K.unpulse("tead46");K.show(["ihh46"]);K.flow(96,190,312,206,"var(--C)",{n:3,dur:1.3,loop:1,r:3});},1900);
+      }},
+      {color:"B",t:4200,cap:"③ 分泌されたIhhが細胞間を渡ってHSCに届き、線維化遺伝子が動く。このあいだ、肝細胞の脂肪滴の量は変わらない。",run(){
+        K.flow(336,210,548,228,"var(--C)",{n:4,dur:1.3,loop:2});
+        K.T(()=>{K.morph("hsc46Shape",GLYPH.SPINDLE);K.attr("hsc46Shape","fill","#b0432f");K.text("hsc46Cap","活性化HSC");},1500);
+        K.T(()=>K.draw("col46",GLYPH.collagenAt(560,300),{len:150}),2300);
+        K.T(()=>K.show(["nofat46"]),3300);
+      }},
+      {color:"H",t:3600,cap:"④ 肝細胞のTAZを落とすと炎症・細胞死・線維化は戻るが、脂肪化だけは戻らない。脂肪化と線維化を切り離せるスイッチになっている。",run(){
+        K.show(["kd46"]);
+        K.T(()=>{K.strike(470,80,110,180);},700);
+        K.T(()=>{K.markX(110,180,"var(--H)");K.attr("col46","opacity","0.2");K.attr("ihh46","opacity","0.2");},1500);
+        K.T(()=>K.pulse("nofat46"),2400);
+      }},
+    ];
+  }
+};
+
+/* ===== №47 zonation：解離で失った位置を復元し、非単調プロファイルを見つける ===== */
+CINEMA["47"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.arrow("47e","var(--E)")}</defs>`
+    +GLYPH.title("門脈→中心静脈の軸：肝遺伝子の約50%がzonate、中間層ピークも多い")
+    +`<circle cx="66" cy="196" r="22" fill="#cfd9e6" stroke="#7d92ad" stroke-width="2"/><text x="66" y="238" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">門脈域</text>`
+    +`<circle cx="662" cy="196" r="22" fill="#d9c7cf" stroke="#a5788a" stroke-width="2"/><text x="662" y="238" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">中心静脈</text>`
+    +GLYPH.hexHep("z1",160,196,"")+GLYPH.hexHep("z2",258,196,"")+GLYPH.hexHep("z3",356,196,"")
+    +GLYPH.hexHep("z4",454,196,"")+GLYPH.hexHep("z5",552,196,"")
+    +GLYPH.tag("o2hi",160,92,"O2 高","var(--E)",78)
+    +GLYPH.tag("o2lo",552,92,"O2 低 / Wnt源","var(--B)",128)
+    +GLYPH.layer("mono47")+GLYPH.layer("nonmono47")
+    +GLYPH.tag("half47",360,300,"約50%の遺伝子がzonate","var(--E)",176,true)
+    +GLYPH.tag("peak47",360,404,"中間層にピーク＝2ゾーン近似では届かない","var(--B)",300,true),
+  build(K){
+    const ids=["z1","z2","z3","z4","z5"];
+    const off=[[-52,92],[64,118],[-24,-64],[88,-52],[-96,74]];
+    return [
+      {color:"E",t:2400,cap:"肝小葉は門脈域から中心静脈へ放射状に極性づけられ、酸素もモルフォゲンも連続的に変わっていく。",run(){}},
+      {color:"F",t:3400,cap:"① 単一細胞RNA-seqのために細胞を解離すると、この位置情報がまるごと失われる。転写プロファイルだけが手元に残る。",run(){
+        ids.forEach((id,i)=>K.T(()=>K.move(id,0,0,off[i][0],off[i][1],1.2),i*120));
+      }},
+      {color:"A",t:4000,cap:"② smFISHで性質を確かめたランドマーク遺伝子のパネルを基準にすると、各細胞の小葉座標を推定して位置を復元できる。",run(){
+        ids.forEach((id,i)=>K.T(()=>K.move(id,off[i][0],off[i][1],0,0,1.2),i*120));
+        ids.forEach((id,i)=>K.T(()=>{K.pulse(id);K.T(()=>K.unpulse(id),700);},900+i*120));
+      }},
+      {color:"E",t:4200,cap:"③ こうして全遺伝子のゾーン依存プロファイルが高い分解能で取れる。肝遺伝子のおよそ50%が有意にzonateしていた。",run(){
+        K.draw("mono47",["M120,352 C240,352 300,318 380,306 C470,292 540,286 600,284"],{len:520,dur:1.6,color:"var(--E)",w:3});
+        K.T(()=>K.show(["half47"]),1700);
+      }},
+      {color:"B",t:3800,cap:"④ しかも単調な勾配だけではない。中間層でピークを迎える非単調プロファイルが数多くあり、門脈側と中心静脈側の2条件では近似にならない。",run(){
+        K.draw("nonmono47",["M120,370 C220,370 280,316 360,316 C440,316 500,368 600,368"],{len:520,dur:1.6,color:"var(--B)",w:3});
+        K.T(()=>K.show(["peak47"]),1700);
+      }},
+    ];
+  }
+};
+
+/* ===== №48 LEADS：点火は強いが戻らない／溶媒エタノールの交絡 ===== */
+CINEMA["48"]={
+  svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("48")}${GLYPH.arrow("48c","var(--C)")}</defs>`
+    +GLYPH.title("LEADS：hiPSC由来4細胞チップ。第2ヒットでエタノールが0.4%→2.4%へ跳ねる")
+    +`<rect x="46" y="86" width="512" height="236" rx="14" fill="none" stroke="var(--accent)" stroke-width="2"/>`
+    +`<text x="60" y="106" font-size="9.5" fill="var(--accent)">LEADS チップ</text>`
+    +`<path d="M78,238 L530,238" stroke="#7fa8b8" stroke-width="7" opacity="0.55" stroke-linecap="round"/><text x="96" y="256" font-size="9" fill="#5b8496">iLSEC</text>`
+    +GLYPH.hep("hep48",86,124,0.72,"")
+    +GLYPH.mac("ikc48",320,168,"iKC","#5d6470")
+    +`<rect x="418" y="150" width="120" height="82" rx="8" fill="#f2ece4" stroke="#c0a98c" stroke-width="1.4"/><text x="478" y="146" text-anchor="middle" font-size="9" fill="var(--ink-soft)">側流路（2D）</text>`
+    +GLYPH.stellate("ihsc48",478,190,"iHSC")
+    +GLYPH.layer("col48")
+    +GLYPH.pill("ffa48",130,44,"FFA 600 µM",122)
+    +GLYPH.pill("fru48",286,44,"フルクトース 100 mM",158)
+    +GLYPH.pill("lps48",436,44,"LPS",68)
+    +GLYPH.pill("paa48",556,44,"PAA 10 mM",112)
+    +`<rect x="612" y="96" width="42" height="216" rx="8" fill="#efe6e6" stroke="#a2807f" stroke-width="1.6"/>`
+    +`<rect id="etohFill" x="616" y="294" width="34" height="14" fill="var(--H)" opacity="0.85"/>`
+    +`<text x="633" y="330" text-anchor="middle" font-size="9" fill="var(--ink-soft)">EtOH</text>`
+    +GLYPH.tag("etohVal",633,82,"0.4%","var(--H)",64,true)
+    +GLYPH.pill("res48",200,384,"resmetirom",132)
+    +GLYPH.badge("stuck48",560,380,"線維化は","戻らない","var(--B)")
+    +GLYPH.tag("conf48",360,352,"脂肪化が出た地点＝溶媒が跳ねた地点","var(--F)",268,true),
+  build(K){
+    const dp=[[122,168],[158,188],[134,206],[174,176]];
+    return [
+      {color:"E",t:2600,cap:"hiPSC由来の肝細胞・HSC・LSEC・KCをチップに置く。ただしiHSCは分化の最終段階でレチノールとパルミチン酸を受けており、置いた時点ですでにαSMA陽性——静止期ではない。",run(){
+        K.T(()=>{K.morph("ihsc48Shape",GLYPH.SPINDLE);K.attr("ihsc48Shape","fill","#b0432f");K.text("ihsc48Cap","活性化iHSC");},900);
+      }},
+      {color:"D",t:3600,cap:"① 第1ヒット。FFA 600 µMとフルクトース100 mMで脂肪滴が溜まる。このとき溶媒のエタノールは0.4%。",run(){
+        K.show(["ffa48","fru48","etohVal"]);
+        K.T(()=>K.flow(180,60,150,170,"var(--D)",{n:4,dur:1.1,loop:2}),700);
+        K.T(()=>addDrops(K,"hep48Drops",dp,"lip48"),1300);
+      }},
+      {color:"C",t:4400,cap:"② 第2ヒット。LPSとPAA 10 mMでiKCが活性化し、コラーゲンが増える。同時に溶媒のエタノールが2.4%（およそ410 mM）へ跳ね上がる。",run(){
+        K.show(["lps48","paa48"]);
+        K.T(()=>{K.flow(436,60,326,152,"var(--C)",{n:3,dur:1.0,loop:2});radiate(K,320,168,"var(--C)",8);},800);
+        K.T(()=>{K.attr("etohFill","y","110");K.attr("etohFill","height","198");K.text("etohVal","2.4%");K.pulse("etohVal");},1700);
+        K.T(()=>{K.flow(348,176,462,190,"var(--C)",{n:3,dur:1.1,loop:2});},2400);
+        K.T(()=>K.draw("col48",GLYPH.collagenAt(478,258),{len:150}),3100);
+      }},
+      {color:"H",t:4000,cap:"③ resmetiromを入れても線維化はほとんど戻らない。著者自身、戻りにくさの理由をiHSCが強く活性化していることに帰している。",run(){
+        K.unpulse("etohVal");K.show(["res48"]);
+        K.T(()=>K.strike(200,368,466,206),700);
+        K.T(()=>{K.markX(466,206,"var(--H)");K.show(["stuck48"]);},1600);
+      }},
+      {color:"F",t:3800,cap:"④ 脂肪化が出た地点と、エタノールが跳ね上がった地点が一致している。しかも健常群にvehicle対照が置かれておらず、溶媒の寄与を切り分ける比較が提示されていない。",run(){
+        K.show(["conf48"]);K.pulse("etohVal");
+        K.T(()=>{K.flow(612,200,560,120,"var(--F)",{n:3,dur:1.1,loop:2,r:2.6});},900);
+        K.T(()=>K.unpulse("etohVal"),2800);
+      }},
     ];
   }
 };
