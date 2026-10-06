@@ -1,0 +1,21 @@
+name: check papers
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 論文データの検証（scripts/check.mjs）
+        run: node scripts/check.mjs
+      - name: スクリプトの文法チェック
+        run: for f in js/*.js papers/*.js; do node --check "$f" || exit 1; done

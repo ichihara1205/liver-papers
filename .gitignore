@@ -2,4 +2,6 @@
 .DS_Store
 SKILL.md
 *.md
+!README.md
+!ADDING.md
 論文ライブラリ_ダッシュボード.html
