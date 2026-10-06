@@ -433,14 +433,15 @@ function modelBadges(p){
   return `<div class="model-badges" title="この研究のアプローチ">${cineModels(p).map(x=>`<span class="mbadge ${x.cls}">${ICONS[x.ic]||""}<span>${x.label}</span></span>`).join("")}</div>`;
 }
 
-/* 詳細を開いた時にアニメを生成＆自動再生（1回だけ） */
+/* 詳細を開いた時にアニメを生成し、自動再生する（1回だけ）。
+   自動再生オフ・OS の「視差効果を減らす」が有効な時は再生しない */
 function initCinema(card){
   const mount=card.querySelector(".cinema-mount");
   if(!mount||mount.dataset.init)return;
   const def=CINEMA[mount.dataset.id]; if(!def)return;
   mount.dataset.init="1";
   const ctrl=mountCinema(mount,def);
-  setTimeout(()=>ctrl.play(),350);
+  if(cinemaAutoplayAllowed()) setTimeout(()=>{ if(card.classList.contains("open")) ctrl.play(); },350);
 }
 
 function render(){
@@ -479,8 +480,8 @@ function render(){
         <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${(()=>{const ms=paperMethods[p.id]||[];if(!ms.length)return"";const exp=ms.filter(k=>METHOD_CAT[k]==="exp");const ana=ms.filter(k=>METHOD_CAT[k]==="ana");const row=(keys,cat,label)=>keys.length?`<div class="mth-row"><span class="mth-label ${cat}">${label}</span><div class="mth-illus illus">${keys.map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:"";return`<div class="sec"><h4>使用手法</h4>${row(exp,"exp","実験系")}${row(ana,"ana","解析系")}</div>`;})()}
-        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox">${p.method_figure}</div></div>`:""}
-        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox">${p.figure}</div></div>`:""}
+        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">⤢ 拡大</span>${p.method_figure}</div></div>`:""}
+        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">⤢ 拡大</span>${p.figure}</div></div>`:""}
         ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4>${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
         <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
         <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
@@ -541,6 +542,7 @@ function setCardOpen(card,open){
   card.classList.toggle("open",open);
   card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
   if(open) initCinema(card);
+  else{ const m=card.querySelector(".cinema-mount"); if(m&&m._cinema){ m._cinema.pause(); m._cinema.exitFull(); } }
 }
 /* ===== 用語ビュー ===== */
 function buildGlossaryIndex(){
@@ -576,7 +578,7 @@ function glosRowHTML(g){
   const cc=(typeof CATCOLOR!=="undefined"&&CATCOLOR[g.cat])||"var(--accent)";
   return `<div class="glosrow" style="border-left-color:${cc}">
     <span class="gicon" style="color:${cc}">${CATICON[g.cat]||CATICON["その他"]}</span><span class="gterm">${g.term}</span><span class="gfull">${g.full}</span>
-    ${sortMode!=="cat"?`<span class="cattag" style="background:${cc};border-color:${cc};color:#fff">${g.cat}</span>`:""}
+    ${sortMode!=="cat"?`<span class="cattag" style="background:${cc};border-color:${cc};color:var(--on-c)">${g.cat}</span>`:""}
     <div class="gdesc">${g.detail}</div>
     <div class="grefs">${g.papers.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(pp=>
       `<button class="pchip${pp.mention?" mention":""}" title="${pp.mention?"本文で言及":"用語を定義"}" style="background:${THEMES[pp.primary].c}" data-id="${pp.id}">№${pp.id}</button>`).join("")}</div>
@@ -1359,6 +1361,122 @@ udFile.addEventListener("change",()=>{ if(udFile.files[0]) importUserDataFile(ud
   const c=document.querySelector(".controls"); if(!c) return;
   const set=()=>document.documentElement.style.setProperty("--sticky-h",c.offsetHeight+"px");
   set(); if(window.ResizeObserver) new ResizeObserver(set).observe(c); else addEventListener("resize",set);
+})();
+
+/* ============================================================
+   図の拡大表示（ライトボックス）
+   .figbox（概念図・Method図）をタップ／クリックで全画面に。SVG の viewBox を動かして
+   拡大・移動するので、どの倍率でも線と文字がぼやけない。
+   操作：ピンチ／ホイール＝拡大縮小、ドラッグ＝移動、ダブルタップ＝2倍⇔全体、
+         キーボード＝ + − 0 矢印 Esc
+   ============================================================ */
+const lightbox=(()=>{
+  const box=document.getElementById("lightbox"), stage=document.getElementById("lbStage"),
+        canvas=document.getElementById("lbCanvas"), titleEl=document.getElementById("lbTitle"),
+        zoomEl=document.getElementById("lbZoom"), hint=document.getElementById("lbHint");
+  let svg=null, base=null, vb=null, lastFocus=null, hintT=0;
+  const ptrs=new Map(); let pinch=null, lastTap=0;
+  const MAXZ=8, MINZ=1;
+  function setVB(){
+    svg.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+    zoomEl.textContent=Math.round(base.w/vb.w*100)+"%";
+  }
+  function clampPan(){
+    // 図が画面外へ逃げないよう、表示範囲の中心が図の内側に残るようにする
+    const cx=Math.min(Math.max(vb.x+vb.w/2,base.x),base.x+base.w), cy=Math.min(Math.max(vb.y+vb.h/2,base.y),base.y+base.h);
+    vb.x=cx-vb.w/2; vb.y=cy-vb.h/2;
+  }
+  function toSvg(cx,cy){ // 画面座標 → SVG 座標
+    const m=svg.getScreenCTM(); if(!m) return {x:vb.x+vb.w/2,y:vb.y+vb.h/2};
+    const p=new DOMPoint(cx,cy).matrixTransform(m.inverse()); return {x:p.x,y:p.y};
+  }
+  function zoomAt(f,cx,cy){
+    const z=base.w/vb.w, nz=Math.min(MAXZ,Math.max(MINZ,z*f)); f=nz/z; if(f===1) return;
+    const p=cx==null?{x:vb.x+vb.w/2,y:vb.y+vb.h/2}:toSvg(cx,cy);
+    vb.x=p.x-(p.x-vb.x)/f; vb.y=p.y-(p.y-vb.y)/f; vb.w/=f; vb.h/=f;
+    if(nz===MINZ) vb={...base}; else clampPan();
+    setVB();
+  }
+  function panBy(dx,dy){ // 画面のピクセル量で移動
+    const m=svg.getScreenCTM(); if(!m) return;
+    vb.x-=dx/m.a; vb.y-=dy/m.d; clampPan(); setVB();
+  }
+  function fit(){ vb={...base}; setVB(); }
+  function open(srcSvg,title){
+    lastFocus=document.activeElement;
+    canvas.innerHTML=""; svg=srcSvg.cloneNode(true);
+    svg.removeAttribute("width"); svg.removeAttribute("height");
+    svg.setAttribute("preserveAspectRatio","xMidYMid meet");
+    const v=(svg.getAttribute("viewBox")||"0 0 640 232").trim().split(/[\s,]+/).map(Number);
+    base={x:v[0],y:v[1],w:v[2],h:v[3]};
+    canvas.appendChild(svg); fit();
+    titleEl.textContent=title||"";
+    box.hidden=false; document.documentElement.classList.add("noscroll");
+    hint.textContent=(innerHeight>innerWidth&&innerWidth<700)
+      ? "ピンチで拡大・ドラッグで移動（横向きにすると大きく表示できます）"
+      : "ピンチ／ホイールで拡大・ドラッグで移動・ダブルタップで2倍";
+    hint.style.opacity="1"; clearTimeout(hintT); hintT=setTimeout(()=>hint.style.opacity="0",3200);
+    box.querySelector('[data-lb="close"]').focus();
+  }
+  function close(){
+    if(box.hidden) return;
+    box.hidden=true; canvas.innerHTML=""; svg=null; ptrs.clear(); pinch=null;
+    document.documentElement.classList.remove("noscroll");
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  }
+  box.addEventListener("click",e=>{
+    const b=e.target.closest("[data-lb]"); if(!b) return;
+    const a=b.dataset.lb;
+    if(a==="close") close(); else if(a==="fit") fit(); else zoomAt(a==="in"?1.5:1/1.5);
+  });
+  stage.addEventListener("wheel",e=>{ if(!svg) return; e.preventDefault(); zoomAt(Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0018)),e.clientX,e.clientY); },{passive:false});
+  stage.addEventListener("pointerdown",e=>{
+    if(!svg) return;
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    stage.classList.add("drag");
+    if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),mx:(a.x+b.x)/2,my:(a.y+b.y)/2}; }
+    // ダブルタップ（タッチ）／ダブルクリック：2倍⇔全体
+    const now=performance.now();
+    if(ptrs.size===1&&now-lastTap<300){ if(base.w/vb.w>1.05) fit(); else zoomAt(2,e.clientX,e.clientY); lastTap=0; }
+    else lastTap=now;
+  });
+  stage.addEventListener("pointermove",e=>{
+    const prev=ptrs.get(e.pointerId); if(!prev||!svg) return;
+    const cur={x:e.clientX,y:e.clientY}; ptrs.set(e.pointerId,cur);
+    if(ptrs.size===1) panBy(cur.x-prev.x,cur.y-prev.y);
+    else if(ptrs.size===2&&pinch){
+      const [a,b]=[...ptrs.values()], d=Math.hypot(a.x-b.x,a.y-b.y), mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      panBy(mx-pinch.mx,my-pinch.my); if(pinch.d>0) zoomAt(d/pinch.d,mx,my);
+      pinch={d,mx,my};
+    }
+  });
+  const up=e=>{ ptrs.delete(e.pointerId); if(ptrs.size<2) pinch=null; if(!ptrs.size) stage.classList.remove("drag"); };
+  stage.addEventListener("pointerup",up); stage.addEventListener("pointercancel",up);
+  document.addEventListener("keydown",e=>{
+    if(box.hidden) return;
+    const k=e.key, step=40;
+    if(k==="Escape") close();
+    else if(k==="+"||k==="=") zoomAt(1.4);
+    else if(k==="-"||k==="_") zoomAt(1/1.4);
+    else if(k==="0") fit();
+    else if(k==="ArrowLeft") panBy(step,0); else if(k==="ArrowRight") panBy(-step,0);
+    else if(k==="ArrowUp") panBy(0,step); else if(k==="ArrowDown") panBy(0,-step);
+    else if(k==="Tab"){ // フォーカスをダイアログ内に閉じ込める
+      const f=[...box.querySelectorAll("button")]; const i=f.indexOf(document.activeElement);
+      e.preventDefault(); f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus();
+    } else return;
+    e.preventDefault();
+  });
+  // 一覧側：.figbox をクリック／Enter で開く（イベント委譲）
+  const openFrom=fb=>{
+    const s=fb.querySelector("svg"); if(!s) return;
+    const card=fb.closest(".card"), h=fb.closest(".sec")&&fb.closest(".sec").querySelector("h4");
+    open(s,(card?"№"+card.dataset.id+" ":"")+(h?h.textContent:""));
+  };
+  document.addEventListener("click",e=>{ const fb=e.target.closest(".figbox"); if(fb) openFrom(fb); });
+  document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("figbox")){ e.preventDefault(); openFrom(e.target); } });
+  return {open,close};
 })();
 
 // updated date = newest entry year-ish placeholder → use today on open

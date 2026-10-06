@@ -8,21 +8,58 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
+/* ===== 配色 =====
+   ライト（既定）。図（figure / method_figure / CINEMA / 拡大表示）はライト配色で描かれているため、
+   ダークモードでも「図面サーフェス」（.figbox など）の中ではライト系の変数に戻して文字と線の対比を保つ。 */
+:root,.figbox,.cinema .cstage,.lb-canvas{
   --paper:#f4f0e6; --paper-2:#efe9db; --ink:#23211c; --ink-soft:#564f42;
   --line:#cabfa6; --line-soft:#ddd3bd; --accent:#2f5d44; --accent-ink:#1d3a2b;
   --card:#fbf8f0; --shadow:rgba(40,34,20,.12);
   --A:#3b7d72; --B:#c0632f; --C:#9c4f6c; --D:#bf942b;
   --E:#3f6fa3; --F:#6b8e3d; --G:#8a6d3b; --H:#a23b3b;
   --I:#7a5ea8;
+  --on-c:#fff;          /* テーマ色・アクセント色の上に載せる文字色 */
+  --mark:rgba(214,158,46,.32);
+  --body-glow1:rgba(47,93,68,.05); --body-glow2:rgba(162,59,59,.04);
+  color-scheme:light;
 }
+/* ダーク：テーマ（自動／ダーク）は html[data-theme] で切り替える。自動のときは OS の設定に従う */
+:root[data-theme="dark"]{
+  --paper:#1b1a17; --paper-2:#25231f; --ink:#ebe5d6; --ink-soft:#b3ab99;
+  --line:#4d483d; --line-soft:#36332c; --accent:#7fbf98; --accent-ink:#a8d8b8;
+  --card:#22201c; --shadow:rgba(0,0,0,.55);
+  --A:#5fb3a4; --B:#e48a55; --C:#d384a3; --D:#dcb24e;
+  --E:#79a6dc; --F:#9cc46b; --G:#c49e66; --H:#e07373;
+  --I:#ab90dc;
+  --on-c:#17150f;
+  --mark:rgba(220,178,78,.38);
+  --body-glow1:rgba(127,191,152,.05); --body-glow2:rgba(224,115,115,.04);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1a17; --paper-2:#25231f; --ink:#ebe5d6; --ink-soft:#b3ab99;
+    --line:#4d483d; --line-soft:#36332c; --accent:#7fbf98; --accent-ink:#a8d8b8;
+    --card:#22201c; --shadow:rgba(0,0,0,.55);
+    --A:#5fb3a4; --B:#e48a55; --C:#d384a3; --D:#dcb24e;
+    --E:#79a6dc; --F:#9cc46b; --G:#c49e66; --H:#e07373;
+    --I:#ab90dc;
+    --on-c:#17150f;
+    --mark:rgba(220,178,78,.38);
+    --body-glow1:rgba(127,191,152,.05); --body-glow2:rgba(224,115,115,.04);
+    color-scheme:dark;
+  }
+}
+/* 図面サーフェス（ライト／ダーク共通）：図の中では文字にも使われる黄土色・緑を、
+   紙（#f4f0e6）に対して 3.7:1 以上になるよう少し濃くする（元は --D 2.3:1、--F 3.1:1） */
+.figbox,.cinema .cstage,.lb-canvas{--D:#94701a; --F:#5f7f35}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   font-family:"Zen Kaku Gothic New",-apple-system,"Hiragino Kaku Gothic ProN",sans-serif;
   background:var(--paper); color:var(--ink); line-height:1.7;
-  background-image:radial-gradient(circle at 12% 8%,rgba(47,93,68,.05),transparent 40%),
-                   radial-gradient(circle at 88% 92%,rgba(162,59,59,.04),transparent 45%);
+  background-image:radial-gradient(circle at 12% 8%,var(--body-glow1),transparent 40%),
+                   radial-gradient(circle at 88% 92%,var(--body-glow2),transparent 45%);
   min-height:100vh;
 }
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px}
@@ -46,7 +83,7 @@ h1 .em{color:var(--accent-ink);font-style:italic;font-size:.82em}
   background:var(--card);border:1px solid var(--line);border-radius:6px;outline:none;transition:border-color .2s,box-shadow .2s;
 }
 .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,93,68,.12)}
-.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.5}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.6;color:var(--ink-soft)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;max-height:0;overflow:hidden;transition:max-height .25s ease}
 .chips.show{max-height:60vh;overflow:auto;margin-top:8px}
 #filterToggle,#methodToggle{display:inline-flex;width:auto;font-family:"DM Mono",monospace;font-size:12px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;cursor:pointer;align-items:center;gap:6px}
@@ -72,14 +109,14 @@ h1 .em{color:var(--accent-ink);font-style:italic;font-size:.82em}
 .card{
   background:var(--card);border:1px solid var(--line-soft);border-left:5px solid var(--c,var(--accent));
   border-radius:3px;padding:24px 26px;box-shadow:0 1px 0 var(--shadow);position:relative;
-  transition:box-shadow .25s,transform .25s;animation:rise .5s both;
+  transition:box-shadow .25s,transform .25s;animation:rise .5s backwards;
 }
 .card:hover{box-shadow:0 10px 30px -16px var(--shadow)}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .card-top{display:flex;align-items:flex-start;gap:16px;justify-content:space-between}
 .num{font-family:"DM Mono",monospace;font-size:13px;color:var(--ink-soft);letter-spacing:.1em;padding-top:4px;flex:none}
 .tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:55%}
-.tag{font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border-radius:999px;color:#fff;white-space:nowrap}
+.tag{font-family:"DM Mono",monospace;font-size:10.5px;letter-spacing:.05em;padding:3px 9px;border-radius:999px;color:var(--on-c);white-space:nowrap}
 .tag.sec{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
 .title{font-family:"Shippori Mincho",serif;font-weight:600;font-size:20px;line-height:1.4;margin:14px 0 8px;letter-spacing:.01em}
 .cite{font-size:13.5px;color:var(--ink-soft)}
@@ -125,8 +162,22 @@ table.gloss{width:100%;border-collapse:collapse;font-size:13px}
 table.gloss td{padding:5px 8px;border-bottom:1px solid var(--line-soft);vertical-align:top}
 table.gloss td:first-child{white-space:nowrap;color:var(--accent);font-family:"DM Mono",monospace}
 table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
-.figbox{background:var(--paper-2);border:1px solid var(--line-soft);border-radius:4px;padding:14px;overflow-x:auto}
+.figbox{background:var(--paper-2);border:1px solid var(--line-soft);border-radius:4px;padding:14px;overflow-x:auto;position:relative;cursor:zoom-in}
 .figbox svg{display:block;width:100%;height:auto;max-width:640px;margin:0 auto}
+.figbox .figzoom{position:absolute;top:6px;right:6px;font:500 10.5px "DM Mono",monospace;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 9px;pointer-events:none;opacity:.9}
+.figbox:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lb{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;background:rgba(18,17,14,.94);color:#f1ece0}
+.lb[hidden]{display:none}
+.lb-stage{flex:1;position:relative;overflow:hidden;touch-action:none;cursor:grab;margin:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left))}
+.lb-stage.drag{cursor:grabbing}
+.lb-canvas{position:absolute;inset:0;background:var(--paper);border-radius:6px}
+.lb-canvas svg{display:block;width:100%;height:100%}
+.lb-bar{background:#121110;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.lb-title{flex:1 1 160px;font-size:12.5px;opacity:.85;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-bar button{font:inherit;font-size:13px;min-width:40px;padding:7px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:inherit;cursor:pointer}
+.lb-bar button:hover{background:rgba(255,255,255,.16)}
+.lb-zoom{font-family:"DM Mono",monospace;font-size:12px;min-width:48px;text-align:center;opacity:.85}
+.lb-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-size:11.5px;background:rgba(0,0,0,.55);color:#fff;padding:4px 10px;border-radius:999px;pointer-events:none;transition:opacity .6s;max-width:calc(100% - 20px);text-align:center}
 .pchip.mention{opacity:.5}
 .abst-strong{font-weight:600;line-height:1.78}
 
@@ -136,15 +187,25 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .cinema svg{display:block;width:100%;height:auto;max-width:680px;margin:0 auto}
 .cinema .slabel{position:absolute;top:9px;left:11px;font-size:10px;letter-spacing:.04em;color:rgba(255,255,255,.62);background:rgba(0,0,0,.28);padding:3px 8px;border-radius:13px}
 .cinema .ccap{min-height:40px;margin:9px 2px 2px;font-size:12.5px;line-height:1.5;color:var(--ink);border-left:3px solid var(--accent);padding-left:10px;transition:border-color .35s}
-.cinema .cctl{display:flex;gap:7px;align-items:center;margin-top:8px}
+.cinema .cctl{display:flex;gap:7px;align-items:center;margin-top:8px;flex-wrap:wrap}
 .cinema button{font:inherit;font-size:12px;padding:6px 13px;border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
-.cinema button.cprimary{background:var(--B);color:#fff;border-color:var(--B)}
+.cinema button.cprimary{background:var(--B);color:var(--on-c);border-color:var(--B)}
 .cinema button:active{transform:translateY(1px)}
-.cinema .ctrack{flex:1;height:4px;background:var(--line-soft);border-radius:2px;cursor:pointer}
+.cinema button:disabled{opacity:.4;cursor:default;transform:none}
+.cinema .cctl button:not(.cprimary){padding:6px 10px;min-width:36px}
+.cinema .cctl button.cprimary{min-width:92px}
+.cinema .cfullbtn{order:1}
+.cinema .ctrack{order:2;flex:1 1 140px;height:4px;background:var(--line-soft);border-radius:2px;cursor:pointer;background-clip:content-box;padding:8px 0;box-sizing:content-box}
+.cinema.paused *{animation-play-state:paused!important}
+.cinema svg.instant .fade{transition:none!important}
+/* 大きく表示 */
+html.noscroll{overflow:hidden}
+.cinema.cfull{position:fixed;inset:0;z-index:1000;background:var(--paper);margin:0;padding:12px max(14px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));overflow:auto;display:flex;flex-direction:column;justify-content:center}
+.cinema.cfull svg{max-width:min(100%,calc((100dvh - 190px) * 1.674))}
 .cinema .cfill{height:100%;width:0;background:var(--B);border-radius:2px}
 .cinema .cchips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-.cinema .cchip{font-size:10px;padding:2px 8px;border-radius:13px;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer}
-.cinema .cchip.on{color:#fff;border-color:var(--B);background:var(--B)}
+.cinema .cchip{font-size:10px;padding:2px 8px;border-radius:13px;border:1px solid var(--line);color:var(--ink-soft);background:transparent;cursor:pointer}
+.cinema .cchip.on{color:var(--on-c);border-color:var(--B);background:var(--B)}
 .cinema .pulse{transform-box:fill-box;transform-origin:center;animation:cpulse 1.5s ease-in-out infinite}
 @keyframes cpulse{0%,100%{opacity:1}50%{opacity:.5}}
 .cinema .fade{opacity:0;transition:opacity .55s ease}
@@ -173,8 +234,8 @@ table.gloss td:nth-child(2){color:var(--ink);opacity:.75;font-size:12px}
 .tabmore{display:contents}
 
 /* Phase1: highlight / fav / memo / filters / stats */
-mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1px}
-.fav{flex:none;background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:var(--line);padding:2px 4px;transition:transform .15s,color .15s}
+mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
+.fav{flex:none;background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:color-mix(in srgb,var(--ink-soft) 75%,transparent);padding:2px 4px;transition:transform .15s,color .15s}
 .fav:hover{transform:scale(1.2)}
 .fav.on{color:var(--D)}
 .card-top .left{display:flex;align-items:center;gap:8px}
@@ -189,9 +250,9 @@ mark{background:rgba(214,158,46,.32);color:inherit;border-radius:2px;padding:0 1
 .memo .saved.show{opacity:1}
 .filterbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
 .modetoggle{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 12px}
-.modetoggle.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.modetoggle.on{background:var(--accent);color:var(--on-c);border-color:var(--accent)}
 .favfilter{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 12px}
-.favfilter.on{background:var(--D);color:#fff;border-color:var(--D)}
+.favfilter.on{background:var(--D);color:var(--on-c);border-color:var(--D)}
 .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 /* stats view */
 #statsview{display:none}
@@ -250,11 +311,11 @@ table.board td{padding:9px 10px;border-bottom:1px solid var(--line-soft);vertica
 table.board td.ctr{text-align:center}
 table.board td.ig{color:var(--ink-soft);font-size:12px;min-width:200px}
 table.board td.bnum{white-space:nowrap}
-.relchip.mini{display:inline-block;padding:3px 8px;font-family:"DM Mono",monospace;font-size:11px;color:#fff;background:var(--accent);border:none;border-radius:999px;cursor:pointer;border-left:none}
+.relchip.mini{display:inline-block;padding:3px 8px;font-family:"DM Mono",monospace;font-size:11px;color:var(--on-c);background:var(--accent);border:none;border-radius:999px;cursor:pointer;border-left:none}
 .relchip.mini:hover{opacity:.85}
 .flag{display:inline-block;min-width:22px;text-align:center;font-weight:700;border-radius:4px;padding:1px 6px;font-size:12px}
 .flag.f-yes{background:rgba(47,93,68,.16);color:var(--accent)}
-.flag.f-mid{background:rgba(214,158,46,.2);color:#9a6a06}
+.flag.f-mid{background:rgba(214,158,46,.2);color:color-mix(in srgb,var(--D) 70%,var(--ink))}
 .flag.f-no{background:rgba(150,60,60,.14);color:var(--B)}
 .flag.f-na{background:var(--paper-2);color:var(--ink-soft)}
 .board-legend{margin-top:10px;font-size:11.5px;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:12px;align-items:center}
@@ -323,12 +384,12 @@ table.board td.bnum{white-space:nowrap}
 
 /* Glossary view */
 .glosgrid{display:grid;gap:12px}
-.glosrow{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--accent);border-radius:3px;padding:14px 18px;animation:rise .4s both}
+.glosrow{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--accent);border-radius:3px;padding:14px 18px;animation:rise .4s backwards}
 .glosrow .gterm{font-family:"DM Mono",monospace;font-size:15px;font-weight:500;color:var(--accent-ink)}
 .glosrow .gfull{font-size:12.5px;color:var(--ink-soft);margin-left:10px}
 .glosrow .gdesc{font-size:13.5px;color:var(--ink);margin-top:5px}
 .glosrow .grefs{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.pchip{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;padding:3px 10px;border-radius:999px;color:#fff;border:none;transition:opacity .18s}
+.pchip{font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;padding:3px 10px;border-radius:999px;color:var(--on-c);border:none;transition:opacity .18s}
 .pchip:hover{opacity:.8}
 
 /* inline term tooltip */
@@ -336,7 +397,7 @@ table.board td.bnum{white-space:nowrap}
 #tip{position:fixed;z-index:999;max-width:300px;background:var(--ink);color:var(--paper);font-size:12.5px;line-height:1.5;
   padding:8px 11px;border-radius:5px;box-shadow:0 6px 22px -6px rgba(0,0,0,.5);pointer-events:none;opacity:0;transition:opacity .12s;transform:translateY(-4px)}
 #tip.on{opacity:1}
-#tip b{font-family:"DM Mono",monospace;color:#fff;display:block;margin-bottom:2px;font-size:12px}
+#tip b{font-family:"DM Mono",monospace;color:var(--paper);display:block;margin-bottom:2px;font-size:12px}
 #tip .tf{color:var(--line);font-size:11px;font-style:italic}
 
 /* scroll areas for long lists */
@@ -364,8 +425,8 @@ table.board td.bnum{white-space:nowrap}
 .catbtn svg{width:16px;height:16px;color:var(--cbc,var(--accent))}
 .catbtn em{font-style:normal;opacity:.55;font-size:10px}
 .catbtn:hover{border-color:var(--ink-soft)}
-.catbtn.active{background:var(--cbc,var(--accent));color:#fff;border-color:var(--cbc,var(--accent))}
-.catbtn.active svg{color:#fff}
+.catbtn.active{background:var(--cbc,var(--accent));color:var(--on-c);border-color:var(--cbc,var(--accent))}
+.catbtn.active svg{color:var(--on-c)}
 .catbtn.active em{opacity:.85}
 
 /* illustration strip */
@@ -467,7 +528,7 @@ footer .footinner{margin-top:8px}
       </span>
     </div>
     <div class="search">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#564f42" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
       <input id="q" type="text" placeholder="検索…" autocomplete="off">
     </div>
   </div>
@@ -511,6 +572,18 @@ footer .footinner{margin-top:8px}
 <div id="feedview"></div>
 <div id="statsview"></div>
 <div id="tip"></div>
+<!-- 図の拡大表示（ピンチ／ホイールで拡大・ドラッグで移動） -->
+<div id="lightbox" class="lb" hidden role="dialog" aria-modal="true" aria-label="図の拡大表示">
+  <div class="lb-stage" id="lbStage"><div class="lb-canvas" id="lbCanvas"></div><div class="lb-hint" id="lbHint">ピンチ／ホイールで拡大・ドラッグで移動・ダブルタップで2倍</div></div>
+  <div class="lb-bar">
+    <span class="lb-title" id="lbTitle"></span>
+    <button type="button" data-lb="out" aria-label="縮小">−</button>
+    <span class="lb-zoom" id="lbZoom">100%</span>
+    <button type="button" data-lb="in" aria-label="拡大">＋</button>
+    <button type="button" data-lb="fit" aria-label="全体を表示">全体</button>
+    <button type="button" data-lb="close" aria-label="閉じる">✕ 閉じる</button>
+  </div>
+</div>
 
 <footer>
   <div class="datarow">

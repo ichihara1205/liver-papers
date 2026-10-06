@@ -12,37 +12,87 @@
    K：$(id)取得 / cE生成 / T(遅延) / raf / show・hide(フェード) /
       pulse・unpulse / morph・attr / flow(粒子) / strike(阻害弾) /
       markX(⊣) / grow(拡大) / draw(線を描く)
+   操作：再生／一時停止・前の場面・コマ送り・最初に戻す・場面チップ・進行バー・大きく表示。
+   K.T と粒子などの時間はすべてエンジン側のタイマーを通るので、一時停止と速度変更が効く。
    ============================================================ */
 const SVGNS="http://www.w3.org/2000/svg";
 function cE(t,a,parent){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(parent)parent.appendChild(e);return e;}
 
+/* 再生設定：表示設定パネル（app.js）が書き換える。
+   speed    ：時間の倍率（1=通常、1.6=遅め）
+   autoplay ：false なら詳細を開いても自動再生しない（OS の「視差効果を減らす」が有効な時も同様） */
+const CINEMA_PREFS={speed:1, autoplay:true};
+const REDUCED_MOTION=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+function cinemaAutoplayAllowed(){ return CINEMA_PREFS.autoplay && !REDUCED_MOTION.matches; }
+
 function mountCinema(mount, def){
   mount.classList.add("cinema"); mount.innerHTML="";
   const vb=def.vb||"0 0 720 430";
-  const stage=document.createElement("div"); stage.className="cstage";
-  const slabel=document.createElement("div"); slabel.className="slabel"; stage.appendChild(slabel);
-  const svg=cE("svg",{viewBox:vb}); stage.appendChild(svg);
-  const cap=document.createElement("div"); cap.className="ccap";
-  const ctl=document.createElement("div"); ctl.className="cctl";
-  const playBtn=document.createElement("button"); playBtn.className="cprimary"; playBtn.textContent="▶ 再生";
-  const resetBtn=document.createElement("button"); resetBtn.textContent="↺";
-  const track=document.createElement("div"); track.className="ctrack";
-  const fill=document.createElement("div"); fill.className="cfill"; track.appendChild(fill);
-  ctl.append(playBtn,resetBtn,track);
-  const chips=document.createElement("div"); chips.className="cchips";
+  const el=(cls,tag)=>{const e=document.createElement(tag||"div"); if(cls)e.className=cls; return e;};
+  const stage=el("cstage");
+  const slabel=el("slabel"); stage.appendChild(slabel);
+  const svg=cE("svg",{viewBox:vb,role:"img","aria-label":"病態の流れのアニメーション"}); stage.appendChild(svg);
+  const cap=el("ccap"); cap.setAttribute("aria-live","polite");
+  const ctl=el("cctl");
+  const mkBtn=(txt,label,cls)=>{const b=el(cls||"","button"); b.type="button"; b.textContent=txt; b.title=label; b.setAttribute("aria-label",label); return b;};
+  const prevBtn=mkBtn("⏮","前の場面へ戻る");
+  const playBtn=mkBtn("▶ 再生","再生","cprimary");
+  const nextBtn=mkBtn("⏭","次の場面へ（コマ送り）");
+  const resetBtn=mkBtn("↺","最初に戻す");
+  const fullBtn=mkBtn("⛶","大きく表示","cfullbtn");
+  const track=el("ctrack"); const fill=el("cfill"); track.appendChild(fill);
+  track.title="クリックした位置の場面へ移動";
+  ctl.append(prevBtn,playBtn,nextBtn,resetBtn,track,fullBtn);
+  const chips=el("cchips");
   mount.append(stage,cap,ctl,chips);
 
-  let timers=[], rafs=[];
-  const clr=()=>{timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];};
+  /* ---- 一時停止できるタイマー ----
+     K.T の遅延・粒子の寿命などはすべてここを通す。一時停止中は残り時間を保持して止める。
+     早送り（前の場面へ戻る／場面を飛ばす）中は仮想時計のキューに積み、即座に順番どおり実行する。 */
+  const SP=()=>CINEMA_PREFS.speed||1;
+  let timers=[], rafs=new Set(), frozen=false, fast=null;
+  function later(fn,ms){
+    if(fast){ fast.q.push({t:fast.now+ms,fn,seq:fast.seq++}); return null; }
+    if(timers.length>300) timers=timers.filter(t=>!t.done);
+    const t={fn,done:false,left:ms,due:performance.now()+ms,id:null};
+    const fire=()=>{ t.done=true; fn(); };
+    t.fire=fire;
+    if(!frozen) t.id=setTimeout(fire,ms);
+    timers.push(t); return t;
+  }
+  function freeze(){
+    if(frozen) return; frozen=true;
+    const now=performance.now();
+    timers.forEach(t=>{ if(!t.done&&t.id!=null){ clearTimeout(t.id); t.id=null; t.left=Math.max(0,t.due-now); } });
+    try{ svg.pauseAnimations(); }catch(e){}
+    mount.classList.add("paused");
+  }
+  function thaw(){
+    if(!frozen) return; frozen=false;
+    const now=performance.now();
+    timers.forEach(t=>{ if(!t.done&&t.id==null){ t.due=now+t.left; t.id=setTimeout(t.fire,t.left); } });
+    try{ svg.unpauseAnimations(); }catch(e){}
+    mount.classList.remove("paused");
+  }
+  function clr(){ timers.forEach(t=>clearTimeout(t.id)); timers=[]; rafs.forEach(cancelAnimationFrame); rafs.clear(); }
+  function raf(fn){
+    if(fast){ fn(performance.now()+1e7); return 0; }   // 早送り中は最終状態まで一気に進める
+    const id=requestAnimationFrame(function step(ts){
+      rafs.delete(id2);
+      if(frozen){ id2=requestAnimationFrame(step); rafs.add(id2); return; }
+      fn(ts);
+    });
+    let id2=id; rafs.add(id); return id;
+  }
   const fluxLayer=()=>svg.querySelector('[data-layer="flux"]');
 
   const K={
     $:id=>svg.querySelector('#'+id),
     cE:(t,a)=>cE(t,a),
     add:(t,a)=>cE(t,a,svg),
-    move(id,x0,y0,x1,y1,dur){const e=svg.querySelector('#'+id);if(!e)return;const a=cE("animateTransform",{attributeName:"transform",type:"translate",from:x0+" "+y0,to:x1+" "+y1,dur:(dur||1.2)+"s",fill:"freeze"},e);a.beginElement();},
-    T:(fn,ms)=>{const id=setTimeout(fn,ms);timers.push(id);return id;},
-    raf:fn=>{const id=requestAnimationFrame(fn);rafs.push(id);return id;},
+    move(id,x0,y0,x1,y1,dur){const e=svg.querySelector('#'+id);if(!e)return;const a=cE("animateTransform",{attributeName:"transform",type:"translate",from:x0+" "+y0,to:x1+" "+y1,dur:((dur||1.2)*SP())+"s",fill:"freeze"},e);a.beginElement();},
+    T:(fn,ms)=>later(fn,(ms||0)*SP()),
+    raf:fn=>raf(fn),
     show(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.add("on");});},
     hide(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.remove("on");});},
     pulse(id){const e=svg.querySelector('#'+id);if(e)(e.querySelector('.box')||e).classList.add("pulse");},
@@ -50,58 +100,141 @@ function mountCinema(mount, def){
     morph(id,d){const e=svg.querySelector('#'+id);if(e)e.setAttribute("d",d);},
     attr(id,k,v){const e=svg.querySelector('#'+id);if(e)e.setAttribute(k,v);},
     text(id,s){const e=svg.querySelector('#'+id);if(e)e.textContent=s;},
-    flow(x0,y0,x1,y1,color,o){o=o||{};const fl=fluxLayer(),n=o.n||4,dur=o.dur||1.1,gap=o.gap||0.25,loop=o.loop||1,r=o.r||3.4;
-      for(let L=0;L<loop;L++)for(let i=0;i<n;i++){K.T(()=>{
+    flow(x0,y0,x1,y1,color,o){o=o||{};const fl=fluxLayer(),n=o.n||4,dur=(o.dur||1.1)*SP(),gap=(o.gap||0.25)*SP(),loop=o.loop||1,r=o.r||3.4;
+      for(let L=0;L<loop;L++)for(let i=0;i<n;i++){later(()=>{
         const c=cE("circle",{r:r,fill:color},fl);
         const mk=(at,vv)=>cE("animate",{attributeName:at,values:vv,dur:dur+"s",fill:"freeze"},c);
         mk("cx",x0+";"+x1).beginElement();mk("cy",y0+";"+y1).beginElement();mk("opacity","0.95;0.95;0").beginElement();
-        K.T(()=>c.remove(),(dur+0.3)*1000);
+        later(()=>c.remove(),(dur+0.3)*1000);
       },(L*n+i)*gap*1000);}
     },
-    strike(x0,y0,x1,y1,o){o=o||{};const fl=fluxLayer(),dur=o.dur||0.7,r=o.r||5.5,color=o.color||"var(--H)";
+    strike(x0,y0,x1,y1,o){o=o||{};const fl=fluxLayer(),dur=(o.dur||0.7)*SP(),r=o.r||5.5,color=o.color||"var(--H)";
       const c=cE("circle",{r:r,fill:color},fl);
       const mk=(at,vv)=>cE("animate",{attributeName:at,values:vv,dur:dur+"s",fill:"freeze"},c);
       mk("cx",x0+";"+x1).beginElement();mk("cy",y0+";"+y1).beginElement();
-      K.T(()=>c.remove(),(dur+0.05)*1000);
+      later(()=>c.remove(),(dur+0.05)*1000);
     },
     markX(x,y,color){const fl=fluxLayer();const t=cE("text",{x:x,y:y+5,"text-anchor":"middle","font-size":"17","font-weight":"700",fill:color||"var(--H)"},fl);t.textContent="⊣";
-      cE("animate",{attributeName:"opacity",values:"0;1",dur:"0.3s",fill:"freeze"},t).beginElement();},
-    grow(id,to,dur,from){const e=svg.querySelector('#'+id),c=(e&&(e.querySelector('.box')||e));if(!c)return;const f=(from!=null?from:+(c.getAttribute("r")||3)),t0=performance.now();
-      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(f+(to-f)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);},
-    draw(parentId,paths,o){o=o||{};const dur=o.dur||1.3,gap=o.gap||0.4,w=o.w||2.6,color=o.color||"var(--B)",len=o.len||180;
+      cE("animate",{attributeName:"opacity",values:"0;1",dur:(0.3*SP())+"s",fill:"freeze"},t).beginElement();},
+    grow(id,to,dur,from){const e=svg.querySelector('#'+id),c=(e&&(e.querySelector('.box')||e));if(!c)return;const f=(from!=null?from:+(c.getAttribute("r")||3)),t0=performance.now(),D=dur*SP();
+      const st=now=>{const q=Math.min(1,(now-t0)/D);c.setAttribute("r",(f+(to-f)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);},
+    draw(parentId,paths,o){o=o||{};const dur=(o.dur||1.3)*SP(),gap=(o.gap||0.4)*SP(),w=o.w||2.6,color=o.color||"var(--B)",len=o.len||180;
       const g=svg.querySelector('#'+parentId); if(!g)return; g.setAttribute("opacity","1");
-      paths.forEach((d,i)=>K.T(()=>{const p=cE("path",{d:d,fill:"none",stroke:color,"stroke-width":w,"stroke-dasharray":len,"stroke-dashoffset":len},g);
+      paths.forEach((d,i)=>later(()=>{const p=cE("path",{d:d,fill:"none",stroke:color,"stroke-width":w,"stroke-dasharray":len,"stroke-dashoffset":len},g);
         cE("animate",{attributeName:"stroke-dashoffset",values:len+";0",dur:dur+"s",fill:"freeze"},p).beginElement();
       },i*gap*1000));},
   };
 
   const scenes=def.build(K)||[];
+  const N=scenes.length;
   const DEF=def.dwell||3000;
   const durs=scenes.map(s=>s.t||DEF);
   const offs=[]; let _acc=0; durs.forEach(d=>{offs.push(_acc);_acc+=d;});
   const TOTAL=Math.max(1,_acc);
   function colC(c){return /^[A-H]$/.test(c)?("var(--"+c+")"):(c||"var(--accent)");}
 
-  function reset(){ clr(); svg.innerHTML=def.svg+'<g data-layer="flux"></g>';
-    slabel.textContent=scenes.length?("SCENE 1 / "+scenes.length):"";
-    cap.textContent="▶ 再生を押すと、絵が字幕に沿って動きます。"; cap.style.borderColor="var(--accent)";
-    fill.style.width="0"; setChip(-1);
-  }
-  function play(){ reset(); const start=performance.now();
-    scenes.forEach((s,i)=>K.T(()=>{ slabel.textContent="SCENE "+(i+1)+" / "+scenes.length;
-      cap.textContent=s.cap||""; cap.style.borderColor=colC(s.color); s.run&&s.run(); setChip(i);
-    }, offs[i]));
-    const tick=now=>{const q=Math.min(1,(now-start)/TOTAL);fill.style.width=(q*100)+"%";if(q<1)K.raf(tick);};K.raf(tick);
-  }
-  function jump(idx){ reset(); for(let k=0;k<=idx;k++){ slabel.textContent="SCENE "+(k+1)+" / "+scenes.length;
-    cap.textContent=scenes[k].cap||""; cap.style.borderColor=colC(scenes[k].color); scenes[k].run&&scenes[k].run(); }
-    setChip(idx); fill.style.width=((offs[idx]||0)/TOTAL*100)+"%"; }
-  const chipEls=scenes.map((s,i)=>{const c=document.createElement("div");c.className="cchip";c.textContent="S"+(i+1);c.title=s.label||"";c.onclick=()=>jump(i);chips.appendChild(c);return c;});
+  /* ---- 場面の進行 ----
+     playing=true  ：場面の長さが過ぎたら次の場面へ自動で進む
+     playing=false ：今の場面で止まる（一時停止中、またはコマ送り中） */
+  let cur=-1, playing=false, ended=false, advT=null, sceneLen=0, progRaf=0;
+  const chipEls=scenes.map((s,i)=>{const c=el("cchip","button");c.type="button";c.textContent="S"+(i+1);c.title=s.label||s.cap||"";c.setAttribute("aria-label","場面"+(i+1)+"へ");c.onclick=()=>go(i,playing);chips.appendChild(c);return c;});
   function setChip(idx){chipEls.forEach((c,i)=>c.classList.toggle("on",i===idx));}
+  function caption(i){
+    slabel.textContent="SCENE "+(i+1)+" / "+N;
+    cap.textContent=scenes[i].cap||""; cap.style.borderColor=colC(scenes[i].color); setChip(i);
+  }
+  function rebuild(){
+    clr(); frozen=false; mount.classList.remove("paused");
+    svg.innerHTML=def.svg+'<g data-layer="flux"></g>';
+    try{ svg.unpauseAnimations(); svg.setCurrentTime(0); }catch(e){}
+  }
+  function reset(){
+    rebuild(); cur=-1; playing=false; ended=false; advT=null;
+    slabel.textContent=N?("SCENE 1 / "+N):"";
+    cap.textContent=cinemaAutoplayAllowed()
+      ? "▶ 再生を押すと、絵が字幕に沿って動きます。"
+      : "▶ 再生で動かすか、⏭ で1場面ずつ進めます（自動再生はオフ）。";
+    cap.style.borderColor="var(--accent)";
+    setChip(-1); sync();
+  }
+  function runScene(i,auto){
+    cur=i; ended=false; caption(i);
+    try{ scenes[i].run&&scenes[i].run(); }catch(e){ console.error(e); }
+    sceneLen=durs[i]*SP();
+    advT = auto ? later(()=>{ advT=null; if(i+1<N) runScene(i+1,true); else finish(); }, sceneLen) : null;
+    sync();
+  }
+  function finish(){ playing=false; ended=true; advT=null; sync(); }
+  // 場面 i の直前までを早送りで再現してから、場面 i を通常どおり再生する
+  function go(i,keepPlaying){
+    if(!N) return;
+    i=Math.max(0,Math.min(N-1,i));
+    rebuild();
+    svg.classList.add("instant");
+    fast={q:[],now:0,seq:0};
+    for(let k=0;k<i;k++){ const s=scenes[k]; fast.q.push({t:offs[k],seq:fast.seq++,fn:()=>{ try{s.run&&s.run();}catch(e){console.error(e);} }}); }
+    let guard=0; const pending=[];
+    while(fast.q.length&&guard++<20000){
+      fast.q.sort((a,b)=>a.t-b.t||a.seq-b.seq);
+      const it=fast.q.shift();
+      if(it.t>=offs[i]){ pending.push(it); continue; }
+      fast.now=it.t; it.fn();
+    }
+    fast=null;
+    try{ svg.setCurrentTime(svg.getCurrentTime()+600); }catch(e){}
+    // 場面 i の開始時点でまだ途中だった予定は、そこからの残り時間で実時間に戻す
+    pending.forEach(it=>later(it.fn,(it.t-offs[i])*SP()));
+    requestAnimationFrame(()=>requestAnimationFrame(()=>svg.classList.remove("instant")));
+    playing=!!keepPlaying;
+    runScene(i,playing);
+  }
+  function play(){
+    if(!N) return;
+    if(playing) return;
+    if(cur<0||ended){ reset(); playing=true; runScene(0,true); return; }
+    playing=true;
+    if(frozen){ thaw(); if(!advT) advT=later(()=>{ advT=null; if(cur+1<N) runScene(cur+1,true); else finish(); },400); sync(); return; }
+    // コマ送りで止まっていた場面から続きを再生
+    if(cur+1<N) runScene(cur+1,true); else { reset(); playing=true; runScene(0,true); }
+  }
+  function pause(){ if(cur<0||ended) return; playing=false; freeze(); sync(); }
+  function sync(){
+    playBtn.textContent = playing ? "⏸ 一時停止" : (cur<0 ? "▶ 再生" : (ended||(cur>=N-1&&!frozen)) ? "▶ もう一度" : "▶ 続き");
+    playBtn.setAttribute("aria-label",playing?"一時停止":"再生");
+    prevBtn.disabled = cur<=0;
+    nextBtn.disabled = cur>=N-1;
+    cancelAnimationFrame(progRaf);
+    const upd=()=>{
+      let el=0;
+      if(cur>=0){
+        if(advT&&!advT.done) el=sceneLen-(frozen?advT.left:Math.max(0,advT.due-performance.now()));
+        else el=sceneLen;
+      }
+      const q=cur<0?0:Math.min(1,(offs[cur]*SP()+el)/(TOTAL*SP()));
+      fill.style.width=(q*100)+"%";
+      if(playing&&!frozen) progRaf=requestAnimationFrame(upd);
+    };
+    upd();
+  }
 
-  playBtn.onclick=play; resetBtn.onclick=reset; track.onclick=play;
+  playBtn.onclick=()=>{ playing?pause():play(); };
+  prevBtn.onclick=()=>go(cur<0?0:cur-1,playing);
+  nextBtn.onclick=()=>go(cur<0?0:cur+1,playing);
+  resetBtn.onclick=reset;
+  track.onclick=e=>{ const r=track.getBoundingClientRect(); const t=(e.clientX-r.left)/r.width*TOTAL; let i=0; while(i+1<N&&offs[i+1]<=t) i++; go(i,playing); };
+  // 大きく表示（画面いっぱい）
+  const setFull=on=>{
+    mount.classList.toggle("cfull",on);
+    document.documentElement.classList.toggle("noscroll",on);
+    fullBtn.textContent=on?"✕":"⛶"; fullBtn.title=on?"元の大きさに戻す":"大きく表示"; fullBtn.setAttribute("aria-label",fullBtn.title);
+  };
+  fullBtn.onclick=()=>setFull(!mount.classList.contains("cfull"));
+  mount.addEventListener("keydown",e=>{ if(e.key==="Escape"&&mount.classList.contains("cfull")){ setFull(false); fullBtn.focus(); } });
   reset();
-  return {play,reset,jump};
+  const api={play,pause,reset,jump:i=>go(i,false),next:()=>nextBtn.onclick(),prev:()=>prevBtn.onclick(),
+    exitFull:()=>setFull(false),get state(){return {cur,playing,ended,frozen,N};}};
+  mount._cinema=api;
+  return api;
 }
 
 /* ===== 共通グリフ（絵の部品。文字列を返す）— スケール統一・局在表現対応 ===== */
