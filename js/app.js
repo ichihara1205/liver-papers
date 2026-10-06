@@ -90,7 +90,7 @@ async function ensureAllCites(){
 
 // chips
 chipsBox.innerHTML='<span class="chip active" data-theme="all"><span class="dot"></span>すべて</span>'+
-  Object.entries(THEMES).map(([k,v])=>`<span class="chip" data-theme="${k}"><span class="dot" style="background:${v.c}"></span>${k}·${v.name}</span>`).join("");
+  Object.entries(THEMES).map(([k,v])=>`<span class="chip" data-theme="${k}"><span class="dot" style="background:${v.c}"></span>${k}：${v.name}</span>`).join("");
 const filterToggle=document.getElementById("filterToggle");
 const fLabel="テーマで絞り込み";
 function syncChipActive(){
@@ -104,9 +104,9 @@ function syncChipActive(){
 function setFilterLabel(){
   let txt;
   if(activeThemes.size===0) txt=fLabel;
-  else if(activeThemes.size===1){ const t=[...activeThemes][0]; txt=t+"·"+(THEMES[t]?THEMES[t].name:""); }
+  else if(activeThemes.size===1){ const t=[...activeThemes][0]; txt=t+"："+(THEMES[t]?THEMES[t].name:""); }
   else txt=[...activeThemes].sort().join(themeMode==="AND"?" & ":" / ");
-  filterToggle.innerHTML=txt+'<span class="fchev">▾</span>';
+  filterToggle.innerHTML=txt+'<span class="fchev">▼</span>';
 }
 filterToggle.addEventListener("click",()=>{
   const open=chipsBox.classList.toggle("show");
@@ -135,7 +135,7 @@ function buildMChips(){
     const active = activeMethods.has(k) ? " active" : "";
     return `<span class="mchip${active}" data-mkey="${k}"><span class="mdot" style="background:${col}"></span>${METHOD_LABELS[k]||k}</span>`;
   };
-  const sep=(label,col)=>`<span style="font-family:'DM Mono',monospace;font-size:calc(10px*var(--fs));color:${col};letter-spacing:.12em;text-transform:uppercase;padding:4px 2px;align-self:center">${label}</span>`;
+  const sep=(label,col)=>`<span style="font-family:var(--font-sans);font-weight:700;font-size:calc(11.5px*var(--fs));color:${col};padding:4px 2px;align-self:center">${label}</span>`;
   mchipsBox.innerHTML =
     (activeMethods.size?`<span class="mchip active" data-mkey="all"><span class="mdot" style="background:var(--ink)"></span>すべてクリア</span>`:"") +
     sep("実験系","var(--A)") +
@@ -162,7 +162,7 @@ mchipsBox.addEventListener("click",e=>{
   render(); commitState();
 });
 function setMethodLabel(){
-  methodToggle.innerHTML=(activeMethods.size ? [...activeMethods].map(k=>METHOD_LABELS[k]).join(" / ") : "🔬 手法で絞り込み")+'<span class="fchev">▾</span>';
+  methodToggle.innerHTML=(activeMethods.size ? [...activeMethods].map(k=>METHOD_LABELS[k]).join(" / ") : "🔬 手法で絞り込み")+'<span class="fchev">▼</span>';
 }
 // AND/OR トグル
 const modetoggle=document.getElementById("modetoggle");
@@ -366,8 +366,8 @@ document.addEventListener("click",e=>{
 },true);
 
 function tagHTML(p){
-  const prim=`<span class="tag" style="background:${THEMES[p.primary].c}">${p.primary}·${THEMES[p.primary].name}</span>`;
-  const sec=(p.tags||[]).map(t=>`<span class="tag sec">${t}</span>`).join("");
+  const prim=`<span class="tag" style="background:${THEMES[p.primary].c}">${p.primary}：${THEMES[p.primary].name}</span>`;
+  const sec=(p.tags||[]).map(t=>`<span class="tag sub">${t}</span>`).join("");
   return prim+sec;
 }
 function paperThemes(p){ const s=new Set(p.tags||[]); s.add(p.primary); return s; }
@@ -447,7 +447,7 @@ function initCinema(card){
 function render(){
   const full=sortPapers(PAPERS.filter(matches));
   document.getElementById("total").textContent=PAPERS.length;
-  const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
+  const themeNote = activeThemes.size ? `　｜　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
   // フィルタ・並び替えが変わったら1ページ目に戻す
   const sig=filterSig();
   if(sig!==lastSig){ paperPage=1; lastSig=sig; }
@@ -456,32 +456,32 @@ function render(){
   const start=(paperPage-1)*PAGE_SIZE;
   const list=full.slice(start,start+PAGE_SIZE);
   const rangeNote = full.length>PAGE_SIZE ? `（${start+1}–${start+list.length}件目を表示）` : "";
-  const methodNote = activeMethods.size ? `　·　手法 ${[...activeMethods].map(k=>METHOD_LABELS[k]||k).join(" / ")}` : "";
+  const methodNote = activeMethods.size ? `　｜　手法 ${[...activeMethods].map(k=>METHOD_LABELS[k]||k).join(" / ")}` : "";
   document.getElementById("countline").textContent=
-    `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+methodNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
+    `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+methodNote+(favOnly?"　｜　★のみ":"")+(query?`　｜　"${query}"`:"");
   if(openPaper && !list.some(p=>p.id===openPaper)) openPaper="";
   if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません'+(queryTerms.length>1?'<br><small>（スペース区切りの語は「すべて含む」で絞り込みます）</small>':'')+'</div>';pagerEl.innerHTML="";return;}
   grid.innerHTML=list.map((p,i)=>`
     <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
       <div class="card-top">
-        <div class="left"><span class="num">№ ${p.id}</span><button class="fav${isFav(p.id)?" on":""}" title="お気に入り" aria-label="お気に入り">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${ud(p.id).read||"none"}" title="読了ステータス（端末内保存）"><option value=""${(ud(p.id).read||"")===""?" selected":""}>未読</option><option value="skim"${ud(p.id).read==="skim"?" selected":""}>流し読み</option><option value="deep"${ud(p.id).read==="deep"?" selected":""}>精読</option></select></div>
+        <div class="left"><span class="num">No.${p.id}</span><button class="fav${isFav(p.id)?" on":""}" title="お気に入り" aria-label="お気に入り">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${ud(p.id).read||"none"}" title="読了ステータス（端末内保存）"><option value=""${(ud(p.id).read||"")===""?" selected":""}>未読</option><option value="skim"${ud(p.id).read==="skim"?" selected":""}>流し読み</option><option value="deep"${ud(p.id).read==="deep"?" selected":""}>精読</option></select></div>
         <div class="tags">${tagHTML(p)}</div>
       </div>
       <h2 class="title">${hl(p.title)}</h2>
-      <div class="cite"><span class="j">${hl(p.journal)}</span> ${p.vol||""} (${p.year}) · ${hl(p.authors)} · <span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
+      <div class="cite"><span class="j">${hl(p.journal)}</span> ${p.vol||""} (${p.year})　${hl(p.authors)}　<span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
       <span class="approach">${hl(p.approach||"")}</span>
       ${queryTerms.length?`<div class="matchhint">🔎 一致：${matchedFields(p).join("・")}</div>`:""}
       <div class="row-actions">
-        <button class="btn toggle"><span class="arr">▸</span> 詳細を${"開く"}</button>
-        <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文 · DOI: ${p.doi}</a>
+        <button class="btn toggle"><span class="arr">▶</span> 詳細を${"開く"}</button>
+        <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文を開く（DOI: ${p.doi}）</a>
       </div>
       <div class="detail"><div class="detail-inner">
         ${keyTakeaway(p)?`<div class="kimo"><span class="kimo-ic">💡</span><div><span class="kimo-lbl">この論文のキモ</span>${em(keyTakeaway(p))}</div></div>`:""}
         <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
         ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
         ${(()=>{const ms=paperMethods[p.id]||[];if(!ms.length)return"";const exp=ms.filter(k=>METHOD_CAT[k]==="exp");const ana=ms.filter(k=>METHOD_CAT[k]==="ana");const row=(keys,cat,label)=>keys.length?`<div class="mth-row"><span class="mth-label ${cat}">${label}</span><div class="mth-illus illus">${keys.map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:"";return`<div class="sec"><h4>使用手法</h4>${row(exp,"exp","実験系")}${row(ana,"ana","解析系")}</div>`;})()}
-        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">⤢ 拡大</span>${p.method_figure}</div></div>`:""}
-        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">⤢ 拡大</span>${p.figure}</div></div>`:""}
+        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">＋ 拡大</span>${p.method_figure}</div></div>`:""}
+        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">＋ 拡大</span>${p.figure}</div></div>`:""}
         ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4>${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
         <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
         <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
@@ -489,8 +489,8 @@ function render(){
         <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
         <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
         ${(p.glossary&&p.glossary.length)?`<div class="sec"><h4>用語メモ</h4><table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table></div>`:""}
-        ${(()=>{ const rel=relatedPapers(p); return rel.length?`<div class="sec"><h4>関連論文</h4><div class="related">${rel.map(o=>`<button class="relchip" data-id="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">№${o.q.id}</span> ${o.q.title}</button>`).join("")}</div></div>`:""; })()}
-        <div class="sec closebar"><button class="btn toggle-bottom"><span class="arr">▴</span> 詳細を閉じる</button></div>
+        ${(()=>{ const rel=relatedPapers(p); return rel.length?`<div class="sec"><h4>関連論文</h4><div class="related">${rel.map(o=>`<button class="relchip" data-id="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">No.${o.q.id}</span> ${o.q.title}</button>`).join("")}</div></div>`:""; })()}
+        <div class="sec closebar"><button class="btn toggle-bottom"><span class="arr">▲</span> 詳細を閉じる</button></div>
       </div></div>
     </article>`).join("");
   grid.querySelectorAll(".card").forEach(card=>{
@@ -539,8 +539,15 @@ function render(){
   if(openPaper){ const c=grid.querySelector(`.card[data-id="${openPaper}"]`); if(c) setCardOpen(c,true); }
 }
 function setCardOpen(card,open){
+  // 詳細欄は中身の高さまで開き、開き終わったら高さ制限を外す（長い論文でも下が切れない）
+  const d=card.querySelector(".detail");
+  if(d&&open!==card.classList.contains("open")){
+    clearTimeout(d._t);
+    if(open){ d.style.maxHeight=d.scrollHeight+"px"; d._t=setTimeout(()=>{ if(card.classList.contains("open")) d.style.maxHeight="none"; },550); }
+    else{ d.style.maxHeight=d.scrollHeight+"px"; void d.offsetHeight; d.style.maxHeight="0px"; }
+  }
   card.classList.toggle("open",open);
-  card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
+  card.querySelector(".toggle").innerHTML=`<span class="arr">▶</span> 詳細を${open?"閉じる":"開く"}`;
   if(open) initCinema(card);
   else{ const m=card.querySelector(".cinema-mount"); if(m&&m._cinema){ m._cinema.pause(); m._cinema.exitFull(); } }
 }
@@ -581,7 +588,7 @@ function glosRowHTML(g){
     ${sortMode!=="cat"?`<span class="cattag" style="background:${cc};border-color:${cc};color:var(--on-c)">${g.cat}</span>`:""}
     <div class="gdesc">${g.detail}</div>
     <div class="grefs">${g.papers.slice().sort((a,b)=>Number(a.id)-Number(b.id)).map(pp=>
-      `<button class="pchip${pp.mention?" mention":""}" title="${pp.mention?"本文で言及":"用語を定義"}" style="background:${THEMES[pp.primary].c}" data-id="${pp.id}">№${pp.id}</button>`).join("")}</div>
+      `<button class="pchip${pp.mention?" mention":""}" title="${pp.mention?"本文で言及":"用語を定義"}" style="background:${THEMES[pp.primary].c}" data-id="${pp.id}">No.${pp.id}</button>`).join("")}</div>
   </div>`;
 }
 function renderGlossary(){
@@ -592,7 +599,7 @@ function renderGlossary(){
   const byAlpha=(a,b)=>a.term.toLowerCase().localeCompare(b.term.toLowerCase());
   document.getElementById("total").textContent=PAPERS.length;
   document.getElementById("countline").textContent=
-    `用語 ${list.length} / ${all.length} 件`+(query?`　·　"${query}"`:"");
+    `用語 ${list.length} / ${all.length} 件`+(query?`　｜　"${query}"`:"");
   if(!list.length){glosview.innerHTML='<div class="empty">該当する用語がありません</div>';return;}
   let html="";
   if(sortMode==="cat"){
@@ -663,7 +670,7 @@ function renderBoard(){
   const rows=ps.map(p=>{
     const s=p.struct;
     return `<tr>
-      <td class="bnum"><button class="relchip mini" data-id="${p.id}">№${p.id}</button></td>
+      <td class="bnum"><button class="relchip mini" data-id="${p.id}">No.${p.id}</button></td>
       <td>${s.model||"—"}</td>
       <td>${(s.cells||[]).join("・")}</td>
       <td>${(s.triggers||[]).join("、")}</td>
@@ -682,7 +689,7 @@ function renderBoard(){
   // 2) ABMパラメータ台帳
   let pr="";
   ps.forEach(p=>(p.struct.params||[]).forEach(pa=>{
-    pr+=`<tr><td>${pa.name}</td><td class="bnum"><button class="relchip mini" data-id="${p.id}">№${p.id}</button></td><td>${pa.note||""}</td></tr>`;
+    pr+=`<tr><td>${pa.name}</td><td class="bnum"><button class="relchip mini" data-id="${p.id}">No.${p.id}</button></td><td>${pa.note||""}</td></tr>`;
   }));
   const ledger=`<div class="boardsec"><h3>② ABMパラメータ台帳</h3>
     <div class="tblwrap"><table class="board"><thead><tr><th>ルール／パラメータ</th><th>出典</th><th>補足</th></tr></thead><tbody>${pr}</tbody></table></div></div>`;
@@ -691,7 +698,7 @@ function renderBoard(){
   ps.forEach(p=>{
     const ts=p.struct.todos||[]; if(!ts.length)return;
     const done=(ud(p.id).todos)||{};
-    todo+=`<div class="todogrp"><div class="todohd"><button class="relchip mini" data-id="${p.id}">№${p.id}</button> <span>${p.title}</span></div>`+
+    todo+=`<div class="todogrp"><div class="todohd"><button class="relchip mini" data-id="${p.id}">No.${p.id}</button> <span>${p.title}</span></div>`+
       ts.map((t,i)=>`<label class="todoitem${done[i]?" done":""}"><input type="checkbox" data-id="${p.id}" data-i="${i}"${done[i]?" checked":""}> <span>${t}</span></label>`).join("")+`</div>`;
   });
   const todoSec=`<div class="boardsec"><h3>③ 自系で試す実験ToDo</h3>${todo}</div>`;
@@ -703,7 +710,7 @@ function renderBoard(){
   const gapState=gapDone();
   const gapChips=[...gapMap.entries()].sort((a,b)=>b[1].length-a[1].length).map(([t,ids])=>{
     const tried=!!gapState[t];
-    return `<button class="gapchip${tried?" tried":""}" data-trig="${t.replace(/"/g,'&quot;')}" title="${ids.map(i=>'№'+i).join(' ')}　クリックで試した/未試験を切替">
+    return `<button class="gapchip${tried?" tried":""}" data-trig="${t.replace(/"/g,'&quot;')}" title="${ids.map(i=>'No.'+i).join(' ')}　クリックで試した/未試験を切替">
       <span class="gx">${tried?"✓ 試した":"未試験"}</span> ${t} <span class="gn">×${ids.length}</span></button>`;
   }).join("");
   const gapSec=`<div class="boardsec"><h3>④ 線維化点火の空白マップ</h3>
@@ -729,7 +736,7 @@ function renderBoard(){
   }));
   // 仮説ジェネレータ
   const hb=document.getElementById("hypobox");
-  function drawHypos(){ hb.innerHTML=genHypotheses(ps).map(h=>`<div class="hypo"><span class="hicon">💡</span><div><p>${h.text}</p><div class="hsrc">${h.src.map(i=>`<button class="relchip mini" data-id="${i}">№${i}</button>`).join("")}</div></div></div>`).join("");
+  function drawHypos(){ hb.innerHTML=genHypotheses(ps).map(h=>`<div class="hypo"><span class="hicon">💡</span><div><p>${h.text}</p><div class="hsrc">${h.src.map(i=>`<button class="relchip mini" data-id="${i}">No.${i}</button>`).join("")}</div></div></div>`).join("");
     hb.querySelectorAll(".relchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id))); }
   document.getElementById("hypogen").addEventListener("click",drawHypos);
   drawHypos();
@@ -748,7 +755,7 @@ function genHypotheses(ps){
       out.push({text:`<b>${a.struct.ignite}</b> を自系の<b>KC共培養＋LPSセカンドヒット</b>条件に組み込み、<b>${trigA}</b>でHSC活性化を点火 → <b>${readA}</b>で線維化を読み出す。`,src:[a.id]});
     }else{
       const igB=b.struct.ignite;
-      out.push({text:`論文№${a.id}の「<b>${a.struct.ignite}</b>」と論文№${b.id}の「<b>${igB}</b>」を<b>掛け合わせ</b>、自系（4細胞・酸素透過膜）で<b>${trigA}</b>を二段階刺激として与え、<b>${readA}</b>＋${(b.struct.readout||[])[0]||"線維化指標"}で評価する。`,src:[a.id,b.id]});
+      out.push({text:`論文No.${a.id}の「<b>${a.struct.ignite}</b>」と論文No.${b.id}の「<b>${igB}</b>」を<b>掛け合わせ</b>、自系（4細胞・酸素透過膜）で<b>${trigA}</b>を二段階刺激として与え、<b>${readA}</b>＋${(b.struct.readout||[])[0]||"線維化指標"}で評価する。`,src:[a.id,b.id]});
     }
     if(out.length>=3)break;
   }
@@ -765,7 +772,7 @@ function renderStats(){
   const maxT=Math.max(1,...Object.values(themeCnt));
   const themeBars=Object.keys(THEMES).map(k=>{
     const n=themeCnt[k], w=Math.round(n/maxT*100);
-    return `<div class="bar-row"><span class="lab">${k}·${THEMES[k].name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${THEMES[k].c}"></div></div><span class="val">${n}</span></div>`;
+    return `<div class="bar-row"><span class="lab">${k}：${THEMES[k].name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${THEMES[k].c}"></div></div><span class="val">${n}</span></div>`;
   }).join("");
   // 年別カウント
   const yearCnt={}; PAPERS.forEach(p=>{ const y=p.year?Number(p.year):"?"; yearCnt[y]=(yearCnt[y]||0)+1; });
@@ -819,7 +826,7 @@ function buildTimeline(){
     if(!p.year||!THEMES[p.primary])return;
     const key=p.year+"_"+p.primary; const idx=(cell[key]=(cell[key]||0)+1)-1;
     const cx=xOf(p.year)+(idx-0)*11-0, cy=yOf(p.primary);
-    g+=`<g class="tldot" data-id="${p.id}" style="cursor:pointer"><circle cx='${cx}' cy='${cy}' r='8' fill='${THEMES[p.primary].c}'/><text x='${cx}' y='${cy+3}' text-anchor='middle' font-size='9' fill='#fff' font-weight='700'>${p.id}</text><title>№${p.id} ${p.title}</title></g>`;
+    g+=`<g class="tldot" data-id="${p.id}" style="cursor:pointer"><circle cx='${cx}' cy='${cy}' r='8' fill='${THEMES[p.primary].c}'/><text x='${cx}' y='${cy+3}' text-anchor='middle' font-size='9' fill='#fff' font-weight='700'>${p.id}</text><title>No.${p.id} ${p.title}</title></g>`;
   });
   return `<div class="tlwrap"><svg viewBox='0 0 ${W} ${H}' width='100%' preserveAspectRatio='xMidYMid meet'>${g}</svg></div>`;
 }
@@ -846,7 +853,7 @@ function renderZonation(){
     if(pp&&pc) buckets.both.push(p); else if(pp&&pp>=pc) buckets.pp.push(p);
     else if(pc) buckets.pc.push(p); else buckets.none.push(p);
   });
-  const chip=p=>`<button class="zchip" data-id="${p.id}" style="--c:${THEMES[p.primary].c}" title="${p.title}"><span class="zn">№${p.id}</span> ${p.title.length>26?p.title.slice(0,25)+"…":p.title}</button>`;
+  const chip=p=>`<button class="zchip" data-id="${p.id}" style="--c:${THEMES[p.primary].c}" title="${p.title}"><span class="zn">No.${p.id}</span> ${p.title.length>26?p.title.slice(0,25)+"…":p.title}</button>`;
   const col=(ttl,sub,arr,cls)=>`<div class="zcol ${cls}"><div class="zhd">${ttl}<span>${sub}</span></div>${arr.length?arr.map(chip).join(""):'<span class="zempty">該当なし</span>'}</div>`;
   // 模式図
   const svg=`<div class="zfig"><svg viewBox='0 0 640 130' width='100%'>
@@ -866,7 +873,7 @@ function renderZonation(){
       ${col("両域にまたがる","勾配全体",buckets.both,"both")}
       ${col("中心静脈域 Zone3","低O2・脂肪化/線維化",buckets.pc,"pc")}
     </div>
-    <div class="zonenote">※ 各論文の本文・トリガー・用語からゾーン手がかり語を自動判定（厳密な実験的局在ではなく目安）。ゾーン非特異：${buckets.none.map(p=>"№"+p.id).join(" ")||"なし"}</div></div>`;
+    <div class="zonenote">※ 各論文の本文・トリガー・用語からゾーン手がかり語を自動判定（厳密な実験的局在ではなく目安）。ゾーン非特異：${buckets.none.map(p=>"No."+p.id).join(" ")||"なし"}</div></div>`;
   zoneview.querySelectorAll(".zchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
 }
 
@@ -916,8 +923,8 @@ function drawQuiz(){
     quizview.querySelectorAll(".qopt").forEach((bb,j)=>{ bb.disabled=true;
       if(q.opts[j]===q.ans) bb.classList.add("correct"); else if(j===i) bb.classList.add("wrong"); });
     document.getElementById("qfb").innerHTML = ok
-      ? `<span class="ok">正解！</span> 出典 <button class="relchip mini" data-id="${q.ans.pid}">№${q.ans.pid}</button>`
-      : `<span class="ng">不正解</span> 正しくは：${q.ans.desc} ／ 出典 <button class="relchip mini" data-id="${q.ans.pid}">№${q.ans.pid}</button>${r.score===0?"（連続正解リセット）":""}`;
+      ? `<span class="ok">正解！</span> 出典 <button class="relchip mini" data-id="${q.ans.pid}">No.${q.ans.pid}</button>`
+      : `<span class="ng">不正解</span> 正しくは：${q.ans.desc} ／ 出典 <button class="relchip mini" data-id="${q.ans.pid}">No.${q.ans.pid}</button>${r.score===0?"（連続正解リセット）":""}`;
     const nx=document.getElementById("qnext"); nx.style.visibility="visible";
     document.getElementById("qfb").querySelectorAll(".relchip").forEach(x=>x.addEventListener("click",()=>jumpToPaper(x.dataset.id)));
   }));
@@ -965,7 +972,7 @@ async function runFeed(term){
       const yr=(a.pubdate||"").slice(0,4);
       return `<div class="feeditem${have?" have":""}">
         <a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener" class="ftitle">${a.title||"(no title)"}</a>
-        <div class="fmeta">${a.fulljournalname||a.source||""} · ${yr}${have?' <span class="fhave">✓ 既収録</span>':""}</div></div>`;
+        <div class="fmeta">${a.fulljournalname||a.source||""}（${yr}）${have?' <span class="fhave">✓ 既収録</span>':""}</div></div>`;
     }).join("");
     box.innerHTML=`<div class="feedlist">${rows}</div>`;
   }catch(e){ box.innerHTML='<p class="boardnote">取得に失敗しました（ネットワーク制限の可能性）。時間をおいて再実行するか、PubMedで直接検索してください。</p>'; }
@@ -1043,7 +1050,7 @@ function renderNetwork(){
       const isMatch=searchTerm&&n.term.toLowerCase().includes(searchTerm);
       nodeSVG+=`<g class="node n-${i}${isMatch?" search-hit":""}" data-i="${i}" data-t="${n.term.replace(/"/g,'&quot;')}" data-tip="${(n.desc||'').replace(/"/g,'&quot;')}" style="cursor:pointer">`
         +`<circle cx='${pos[i].x.toFixed(1)}' cy='${pos[i].y.toFixed(1)}' r='${r.toFixed(1)}' fill='${col}'${isMatch?" stroke='var(--B)' stroke-width='2.5'":""}/>`
-        +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family="DM Mono,monospace"${isMatch?" font-weight='700'":""}>${n.term}</text>`
+        +`<text x='${lx.toFixed(1)}' y='${ly.toFixed(1)}' text-anchor='${side}' font-size='10' fill='var(--ink)' font-family=",monospace"${isMatch?" font-weight='700'":""}>${n.term}</text>`
         +`</g>`;
     });
     const wrap=netview.querySelector(".net-svgwrap");
@@ -1152,7 +1159,7 @@ function flatText(v){
 }
 const SEARCH_FIELDS=[
   ["書誌",         p=>[p.title,p.authors,p.journal,p.year,p.vol,p.doi]],
-  ["テーマ",       p=>[...paperThemes(p)].map(t=>"テーマ"+t+" "+t+"·"+(THEMES[t]?THEMES[t].name:""))],
+  ["テーマ",       p=>[...paperThemes(p)].map(t=>"テーマ"+t+" "+t+"："+(THEMES[t]?THEMES[t].name:""))],
   ["手法",         p=>[p.approach,p.methods,(paperMethods[p.id]||[]).map(k=>METHOD_LABELS[k]||k)]],
   ["本文",         p=>[p.abstract_ja,p.abstract,p.background,p.achievements,p.limitations]],
   ["研究との接続", p=>[p.connection]],
@@ -1472,7 +1479,7 @@ const lightbox=(()=>{
   const openFrom=fb=>{
     const s=fb.querySelector("svg"); if(!s) return;
     const card=fb.closest(".card"), h=fb.closest(".sec")&&fb.closest(".sec").querySelector("h4");
-    open(s,(card?"№"+card.dataset.id+" ":"")+(h?h.textContent:""));
+    open(s,(card?"No."+card.dataset.id+" ":"")+(h?h.textContent:""));
   };
   document.addEventListener("click",e=>{ const fb=e.target.closest(".figbox"); if(fb) openFrom(fb); });
   document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("figbox")){ e.preventDefault(); openFrom(e.target); } });
