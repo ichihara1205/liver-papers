@@ -19,6 +19,7 @@ const STRICT = process.argv.includes("--strict");
 
 const errors = [];   // {file, msg}
 const warnings = [];
+const papers = [];   // {file, p, icons, methods, cinema}
 const err = (file, msg) => errors.push({ file, msg });
 const warn = (file, msg) => warnings.push({ file, msg });
 
@@ -83,7 +84,6 @@ for (const c of calls) {
   byFile.get(c.file)[c.kind].push(c.args);
 }
 const KIND_LABEL = { paper: "LP.paper（本文データ）", icons: "LP.icons（登場要素イラスト）", methods: "LP.methods（使用手法）", cinema: "LP.cinema（アニメーション）" };
-const papers = []; // {file, p, icons, methods, cinema}
 for (const f of listed.filter(s => PAPER_FILE.test(s) && fs.existsSync(path.join(ROOT, s)))) {
   const fid = f.match(PAPER_FILE)[1];
   const c = byFile.get(f) || { paper: [], icons: [], methods: [], cinema: [] };

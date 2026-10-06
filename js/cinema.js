@@ -22,7 +22,7 @@ function cE(t,a,parent){const e=document.createElementNS(SVGNS,t);for(const k in
    speed    ：時間の倍率（1=通常、1.6=遅め）
    autoplay ：false なら詳細を開いても自動再生しない（OS の「視差効果を減らす」が有効な時も同様） */
 const CINEMA_PREFS={speed:1, autoplay:true};
-const REDUCED_MOTION=window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+const REDUCED_MOTION=(typeof window!=="undefined"&&window.matchMedia)?window.matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
 function cinemaAutoplayAllowed(){ return CINEMA_PREFS.autoplay && !REDUCED_MOTION.matches; }
 
 function mountCinema(mount, def){
