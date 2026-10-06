@@ -135,7 +135,7 @@ function buildMChips(){
     const active = activeMethods.has(k) ? " active" : "";
     return `<span class="mchip${active}" data-mkey="${k}"><span class="mdot" style="background:${col}"></span>${METHOD_LABELS[k]||k}</span>`;
   };
-  const sep=(label,col)=>`<span style="font-family:'DM Mono',monospace;font-size:10px;color:${col};letter-spacing:.12em;text-transform:uppercase;padding:4px 2px;align-self:center">${label}</span>`;
+  const sep=(label,col)=>`<span style="font-family:'DM Mono',monospace;font-size:calc(10px*var(--fs));color:${col};letter-spacing:.12em;text-transform:uppercase;padding:4px 2px;align-self:center">${label}</span>`;
   mchipsBox.innerHTML =
     (activeMethods.size?`<span class="mchip active" data-mkey="all"><span class="mdot" style="background:var(--ink)"></span>すべてクリア</span>`:"") +
     sep("実験系","var(--A)") +
@@ -1478,6 +1478,66 @@ const lightbox=(()=>{
   document.addEventListener("keydown",e=>{ if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("figbox")){ e.preventDefault(); openFrom(e.target); } });
   return {open,close};
 })();
+
+/* ============================================================
+   表示設定パネル（歯車）
+   文字サイズ・図の倍率・行間/余白・テーマ・アニメーションを CSS 変数と html の属性で一括して
+   切り替え、localStorage（DISPLAY_KEY）に保存する。値の対応表と反映処理は index.html の <head>。
+   ============================================================ */
+const displaySettings=(()=>{
+  const panel=document.getElementById("settings"), back=document.getElementById("setBack"),
+        gear=document.getElementById("gearBtn");
+  let cur=loadDisplay(), lastFocus=null;
+  function syncCinema(){
+    CINEMA_PREFS.speed = cur.motion==="slow" ? DISPLAY_PRESETS.motion.slow : 1;
+    CINEMA_PREFS.autoplay = cur.motion!=="off";
+  }
+  function syncForm(){
+    panel.querySelectorAll(".seg").forEach(seg=>{
+      const k=seg.dataset.key;
+      seg.querySelectorAll("input").forEach(i=>{ i.checked=(i.value===cur[k]); });
+    });
+  }
+  function save(){ try{ localStorage.setItem(DISPLAY_KEY,JSON.stringify(cur)); }catch(e){} }
+  function set(k,v){
+    cur[k]=v; applyDisplay(cur); syncCinema(); save();
+    if(k==="fs"||k==="density") document.dispatchEvent(new Event("displaychange"));
+  }
+  panel.addEventListener("change",e=>{
+    const i=e.target; if(!i.matches('input[type="radio"]')) return;
+    set(i.closest(".seg").dataset.key,i.value);
+  });
+  document.getElementById("setReset").addEventListener("click",()=>{
+    cur=Object.assign({},DISPLAY_DEFAULTS); applyDisplay(cur); syncCinema(); syncForm();
+    try{ localStorage.removeItem(DISPLAY_KEY); }catch(e){}
+  });
+  function open(){
+    lastFocus=document.activeElement; syncForm();
+    panel.hidden=false; back.hidden=false; gear.setAttribute("aria-expanded","true");
+    (panel.querySelector("input:checked")||panel.querySelector("button")).focus();
+  }
+  function close(){
+    if(panel.hidden) return;
+    panel.hidden=true; back.hidden=true; gear.setAttribute("aria-expanded","false");
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  }
+  gear.addEventListener("click",()=>panel.hidden?open():close());
+  back.addEventListener("click",close);
+  document.getElementById("setClose").addEventListener("click",close);
+  panel.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){ e.preventDefault(); close(); }
+    else if(e.key==="Tab"){ // フォーカスをパネル内に閉じ込める（ラジオは各グループの選択中のものだけが Tab 対象）
+      const f=[...panel.querySelectorAll("button,input:checked")];
+      const i=f.indexOf(document.activeElement);
+      if(e.shiftKey&&i<=0){ e.preventDefault(); f[f.length-1].focus(); }
+      else if(!e.shiftKey&&i===f.length-1){ e.preventDefault(); f[0].focus(); }
+    }
+  });
+  syncCinema(); syncForm();
+  return {open,close,get:()=>Object.assign({},cur)};
+})();
+// 文字サイズ・余白を変えたら固定バーの高さを測り直す
+document.addEventListener("displaychange",()=>{ const c=document.querySelector(".controls"); if(c) document.documentElement.style.setProperty("--sticky-h",c.offsetHeight+"px"); });
 
 // updated date = newest entry year-ish placeholder → use today on open
 document.getElementById("updated").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit"});
