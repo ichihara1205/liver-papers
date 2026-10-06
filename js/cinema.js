@@ -35,11 +35,11 @@ function mountCinema(mount, def){
   const cap=el("ccap"); cap.setAttribute("aria-live","polite");
   const ctl=el("cctl");
   const mkBtn=(txt,label,cls)=>{const b=el(cls||"","button"); b.type="button"; b.textContent=txt; b.title=label; b.setAttribute("aria-label",label); return b;};
-  const prevBtn=mkBtn("⏮","前の場面へ戻る");
+  const prevBtn=mkBtn("◀ 前","前の場面へ戻る");
   const playBtn=mkBtn("▶ 再生","再生","cprimary");
-  const nextBtn=mkBtn("⏭","次の場面へ（コマ送り）");
-  const resetBtn=mkBtn("↺","最初に戻す");
-  const fullBtn=mkBtn("⛶","大きく表示","cfullbtn");
+  const nextBtn=mkBtn("次 ▶","次の場面へ（コマ送り）");
+  const resetBtn=mkBtn("最初から","最初に戻す");
+  const fullBtn=mkBtn("拡大","大きく表示","cfullbtn");
   const track=el("ctrack"); const fill=el("cfill"); track.appendChild(fill);
   track.title="クリックした位置の場面へ移動";
   ctl.append(prevBtn,playBtn,nextBtn,resetBtn,track,fullBtn);
@@ -153,7 +153,7 @@ function mountCinema(mount, def){
     slabel.textContent=N?("SCENE 1 / "+N):"";
     cap.textContent=cinemaAutoplayAllowed()
       ? "▶ 再生を押すと、絵が字幕に沿って動きます。"
-      : "▶ 再生で動かすか、⏭ で1場面ずつ進めます（自動再生はオフ）。";
+      : "「▶ 再生」で動かすか、「次 ▶」で1場面ずつ進めます（自動再生はオフ）。";
     cap.style.borderColor="var(--accent)";
     setChip(-1); sync();
   }
@@ -199,7 +199,7 @@ function mountCinema(mount, def){
   }
   function pause(){ if(cur<0||ended) return; playing=false; freeze(); sync(); }
   function sync(){
-    playBtn.textContent = playing ? "⏸ 一時停止" : (cur<0 ? "▶ 再生" : (ended||(cur>=N-1&&!frozen)) ? "▶ もう一度" : "▶ 続き");
+    playBtn.textContent = playing ? "一時停止" : (cur<0 ? "▶ 再生" : (ended||(cur>=N-1&&!frozen)) ? "▶ もう一度" : "▶ 続き");
     playBtn.setAttribute("aria-label",playing?"一時停止":"再生");
     prevBtn.disabled = cur<=0;
     nextBtn.disabled = cur>=N-1;
@@ -226,7 +226,7 @@ function mountCinema(mount, def){
   const setFull=on=>{
     mount.classList.toggle("cfull",on);
     document.documentElement.classList.toggle("noscroll",on);
-    fullBtn.textContent=on?"✕":"⛶"; fullBtn.title=on?"元の大きさに戻す":"大きく表示"; fullBtn.setAttribute("aria-label",fullBtn.title);
+    fullBtn.textContent=on?"元に戻す":"拡大"; fullBtn.title=on?"元の大きさに戻す":"大きく表示"; fullBtn.setAttribute("aria-label",fullBtn.title);
   };
   fullBtn.onclick=()=>setFull(!mount.classList.contains("cfull"));
   mount.addEventListener("keydown",e=>{ if(e.key==="Escape"&&mount.classList.contains("cfull")){ setFull(false); fullBtn.focus(); } });
