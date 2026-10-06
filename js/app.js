@@ -301,13 +301,26 @@ const TOOLTIP_TERMS=(()=>{
   }));
   return m;
 })();
+/* 英数字だけの略語が別の語の一部に当たらないようにする
+   （LGR6 の GR、NASH の NAS、NOTCH1 の NO など）。
+   前後が英数字でない最初の出現位置を返す。日本語など非ASCIIの語は従来どおり素の部分一致 */
+function findSurface(s,surf){
+  let i=s.indexOf(surf);
+  if(!/^[A-Za-z0-9+\-]+$/.test(surf)) return i;
+  while(i>=0){
+    const pre=s[i-1]||"", post=s[i+surf.length]||"";
+    if(!/[A-Za-z0-9]/.test(pre)&&!/[A-Za-z0-9]/.test(post)) return i;
+    i=s.indexOf(surf,i+1);
+  }
+  return -1;
+}
 function annotate(text){
   if(!text) return text||"";
   let s=String(text), tokens=[];
   const keys=[...TOOLTIP_TERMS.keys()].sort((a,b)=>b.length-a.length);
   for(const k of keys){
     const o=TOOLTIP_TERMS.get(k), surf=o.surface;
-    const idx=s.indexOf(surf);
+    const idx=findSurface(s,surf);
     if(idx>=0){
       const tk=""+tokens.length+"";
       s=s.slice(0,idx)+tk+s.slice(idx+surf.length);
@@ -1011,21 +1024,31 @@ function qGlossMap(){ const m=new Map();
 function qConnRefs(p){ const s=(p.connection||[]).join(" "), set=new Set(), re=/#(\d{1,3})/g; let mm;
   while((mm=re.exec(s))){ const id=mm[1].padStart(2,"0"); if(id!==p.id&&PAPERS.some(q=>q.id===id)) set.add(id); }
   return [...set]; }
+/* 誤答が「実は正解」にならないようにする補助：
+   - qMentions: その論文が本文中でその用語に触れているか（触れていれば誤答にしない）
+   - qBackRefs: その論文を引用している側の論文（相互に関連なので誤答にしない） */
+function qTextBlob(p){ return [p.title,p.abstract_ja,p.background,(p.achievements||[]).join(" "),(p.limitations||[]).join(" "),(p.connection||[]).join(" "),p.approach,(p.glossary||[]).map(g=>g.term+" "+(g.full||"")+" "+(g.desc||"")).join(" "),JSON.stringify(p.struct||{})].join(" "); }
+function qMentions(p,term){ const e=String(term).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  try{ return new RegExp("(^|[^A-Za-z0-9])"+e+"($|[^A-Za-z0-9])","i").test(qTextBlob(p)); }catch(err){ return true; } }
+function qBackRefs(id){ return PAPERS.filter(q=>q.id!==id&&qConnRefs(q).includes(id)).map(q=>q.id); }
 function newConnQ(){
   for(const ty of qShuffle(["related","term"])){
     if(ty==="related"){
       for(const p of qShuffle(PAPERS.filter(x=>qConnRefs(x).length))){
-        const refs=qConnRefs(p), others=PAPERS.filter(q=>q.id!==p.id&&!refs.includes(q.id));
+        const refs=qConnRefs(p), back=qBackRefs(p.id), rel=relatedPapers(p).map(o=>o.q.id);
+        /* 自分が挙げた論文・自分を挙げている論文・自動算出の関連論文は誤答にしない */
+        const others=PAPERS.filter(q=>q.id!==p.id&&!refs.includes(q.id)&&!back.includes(q.id)&&!rel.includes(q.id));
         if(others.length<3) continue;
         const ansId=qShuffle(refs)[0], ansP=PAPERS.find(q=>q.id===ansId);
         const opts=qShuffle([ansP,...qShuffle(others).slice(0,3)]).map(q=>({html:`<b>No.${q.id}</b> ${qShort(q)}`,correct:q.id===ansId,pid:q.id}));
         return {stem:`<span class="qpaper">No.${p.id}『${qShort(p)}』</span><br>と内容的につながりが深い（共有テーマ・相互に言及する）論文は？`,opts};
       }
     }else{
-      const uniq=qShuffle([...qGlossMap().values()].filter(e=>e.pids.size===1));
+      const uniq=qShuffle([...qGlossMap().values()].filter(e=>e.pids.size===1&&e.term.length>=3));
       for(const pick of uniq){
         const ansId=[...pick.pids][0], ansP=PAPERS.find(q=>q.id===ansId);
-        const others=PAPERS.filter(q=>!pick.pids.has(q.id));
+        /* その用語に一度も触れていない論文だけを誤答にする */
+        const others=PAPERS.filter(q=>!pick.pids.has(q.id)&&!qMentions(q,pick.term));
         if(others.length<3) continue;
         const opts=qShuffle([ansP,...qShuffle(others).slice(0,3)]).map(q=>({html:`<b>No.${q.id}</b> ${qShort(q)}`,correct:q.id===ansId,pid:q.id}));
         return {stem:`『<b>${pick.term}</b>${pick.full?`（${pick.full}）`:""}』を扱う論文は？`,opts};

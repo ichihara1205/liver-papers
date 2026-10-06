@@ -22,23 +22,23 @@ LP.paper(
     tags:["D","C","B"],
     approach:"肝細胞特異的ACSS2ノックアウトマウス（HKO）＋ HFFD/MCD/CCl4モデル ＋ AAV8によるACSS2・AIF1過剰発現 ＋ 老化細胞除去薬Navitoclax ＋ RNA-seq・LC-MS相互作用解析・ChIP-qPCR ＋ ヒトMASH肝のACSS2/AIF1発現 ＋ ACSS2阻害薬",
     added:"2026-10-06",
-    abstract_ja:"炎症はMASLDからMASHへの移行の中心的なドライバーだが、その炎症の引き金と持続の分子機構はよく分かっていなかった。本研究は、短鎖脂肪酸からアセチルCoAを作る酵素ACSS2が、脂質合成という本来の役割とは独立に、エピジェネティックな制御因子としてMASHを悪化させることを示した。肝細胞特異的にACSS2を欠損させると、HFFD・MCD・CCl4のいずれのモデルでも脂肪化・炎症・線維化が軽くなり、逆にAAV8でACSS2を過剰発現させると悪化した。機序としては、ACSS2がリジンアセチル基転移酵素KAT5と複合体を作り、炎症因子AIF1のプロモーターでヒストンのクロトニル化（H3K18cr・H3K27cr）を高めてAIF1の転写を上げ、それが肝の炎症と肝細胞老化を誘導、老化細胞のSASPがさらに炎症を増幅するという悪循環を回す。ACSS2阻害薬や、老化細胞を除く薬Navitoclaxで、この悪循環とMASHの病態が抑えられた。興味深いことに、ACSS2は脂質合成を担うACLYとは機能的に切り離されており、ACSS2の欠損だけでMASHの進行をブロックできた。以上から、ACSS2/KAT5-AIF1軸がMASLDからMASHへの移行の重要なドライバーであり、治療標的になりうることが示された。",
+    abstract_ja:"炎症はMASLDからMASHへの移行の中心的なドライバーだが、その炎症の引き金と持続の分子機構はよく分かっていなかった。本研究は、短鎖脂肪酸からアセチルCoAを作る酵素ACSS2が、脂質合成という本来の役割とは独立に、エピジェネティックな制御因子としてMASHを悪化させることを示した。肝細胞特異的にACSS2を欠損させると、HFFDとMCDのモデルでは脂肪化・炎症・線維化が軽くなり、CCl4モデルでも炎症細胞の浸潤と肝障害が軽減し、逆にAAV8でACSS2を過剰発現させると悪化した。機序としては、ACSS2がリジンアセチル基転移酵素KAT5と複合体を作り、炎症因子AIF1のプロモーターでヒストンのクロトニル化（H3K18cr・H3K27cr）を高めてAIF1の転写を上げ、それが肝の炎症と肝細胞老化を誘導、老化細胞のSASPがさらに炎症を増幅するという悪循環を回す。ACSS2阻害薬や、老化細胞を除く薬Navitoclaxで、この悪循環とMASHの病態が抑えられた。興味深いことに、ACSS2は脂質合成を担うACLYとは機能的に切り離されており、ACSS2の欠損だけでMASHの進行をブロックできた。以上から、ACSS2/KAT5-AIF1軸がMASLDからMASHへの移行の重要なドライバーであり、治療標的になりうることが示された。",
     background:"MASLDの自然史では単純な脂肪化からMASHへの移行、すなわち炎症を伴う段階への進行が予後を左右する。この移行には酸化ストレス・ERストレス・インスリン抵抗性など多様な引き金が関わるが、炎症カスケードを起動・持続させる分子機構は不明だった。ACSS2は酢酸→アセチルCoAを作る代謝酵素で、脂質合成だけでなくヒストンやタンパク質のアシル化を介した転写制御にも関わる多機能因子として注目されていたが、MASHでの役割は定まっていなかった。",
     achievements:[
-      "**肝細胞特異的ACSS2欠損**がHFFD・MCD・CCl4の3モデルで脂肪化・炎症・線維化を軽減し、**AAV8によるACSS2過剰発現が悪化**（約15%が肝硬変へ）させることを示した。",
+      "**肝細胞特異的ACSS2欠損**がHFFD・MCDモデルで脂肪化・炎症・線維化を、CCl4モデルでも炎症細胞浸潤と肝障害を軽減し、**AAV8によるACSS2過剰発現が悪化**（約15%が肝硬変へ）させることを示した。",
       "機序を同定：**ACSS2がKAT5と複合体**を作り、炎症因子**AIF1のプロモーターでヒストンのクロトニル化（H3K18cr/H3K27cr）を高めてAIF1転写を上げる**（アセチル化ではなくクロトニル化が特異的）。",
       "AIF1が**肝の炎症と肝細胞老化**を誘導し、老化細胞のSASPが炎症を増幅する**悪循環**を駆動。**AIF1過剰発現でACSS2欠損の保護効果が消失**（AIF1が主要な下流エフェクター）。",
-      "**ACSS2阻害薬でMASHを抑制**。老化細胞除去薬**Navitoclaxがacss2過剰発現による病態を反転**。ACSS2は脂質合成酵素ACLYとは機能的に独立で、ACSS2欠損単独でMASH進行をブロックできた。"
+      "**ACSS2阻害薬でMASHを抑制**。老化細胞除去薬**NavitoclaxがMCD食下でのACSS2過剰発現による病態を反転**。ACSS2は脂質合成酵素ACLYとは機能的に独立で、ACSS2欠損単独でMASH進行をブロックできた。"
     ],
     limitations:[
       "主にマウスモデル依存で、ヒトは**ACSS2/AIF1の発現相関**が中心。",
       "ACSS2は**複数のアシル化（アセチル化・ラクチル化・ブチリル化）**に関わり、MASHでクロトニル化が最も変化したが、特定PTMの個別寄与の切り分けはなお課題。",
       "ACSS2は**文脈依存**で、以前はアルコール性肝障害に保護的（iron恒常性）とも報告されており、局在（核/細胞質）で機能が変わる点が複雑。",
-      "**AIF1を上流で上げる入力**（何がACSS2の核移行＝EGFR-ERKによるSer267リン酸化を促すか）の生理的トリガーはさらなる検討が必要。"
+      "**AIF1を上流で上げる入力**（何がERKを介したSer267リン酸化によるACSS2の核移行を促すか）の生理的トリガーはさらなる検討が必要。"
     ],
     connection:[
       "**『脂肪化は出るが炎症・線維化が出ない』への分子的手がかり**。本論文は脂質合成（ACLY）と炎症（ACSS2→AIF1）を切り離せると示す。自系でACSS2・AIF1・KAT5をqPCRパネルに入れれば、脂肪化は出ているのに炎症スイッチ（ACSS2核移行→AIF1）が入っていないのかを切り分けられる。",
-      "**セカンドヒットの候補**：酢酸/クロトン酸の添加でヒストンクロトニル化→AIF1を上げられる可能性。LPSに加え『代謝→エピジェネティクス』軸のヒットとして設計できる。",
+      "**セカンドヒットの候補**：クロトン酸の添加でヒストンクロトニル化→AIF1を上げられる可能性（本論文では酢酸の添加ではAIF1は有意に変化せず、クロトン酸で顕著に増加）。LPSに加え『代謝→エピジェネティクス』軸のヒットとして設計できる。",
       "**肝細胞老化という読み出し**：p16/p21/γH2AX・SA-β-gal・SASPを炎症の読み出しに追加できる。Navitoclaxは老化細胞除去のネガコンに。",
       "**既収録との接続**：#07（ACLY/ACSS2二重阻害EVT0185）はACSS2の代謝（HSCコレステロール合成）面、本論文は同じACSS2のエピジェネティクス（肝細胞AIF1）面で、ACSS2が代謝と転写の二面でMASHを駆動する像が揃う。#17（老化肝細胞・セノリティクス）とは肝細胞老化とSASPで直結。"
     ],
@@ -50,12 +50,12 @@ LP.paper(
       {term:"SASP",full:"senescence-associated secretory phenotype",desc:"老化細胞が出す炎症性分泌。肝の炎症を増幅する悪循環の核"},
       {term:"ACLY",full:"ATP citrate lyase",desc:"クエン酸→アセチルCoAの脂質合成酵素。本論文ではACSS2と機能的に独立"},
       {term:"Navitoclax",full:"navitoclax (ABT-263)",desc:"老化細胞を選択的に除くセノリティック。ACSS2過剰発現の病態を反転"},
-      {term:"HFFD",full:"high-fat/high-fructose diet",desc:"高脂肪＋高フルクトース食。MASH誘導モデルに用いる"}
+      {term:"HFFD",full:"high-fat/high-fructose diet",desc:"高脂肪食（60 kcal%脂肪、D12492）に飲水30%フルクトースを併用し16週給餌。MASH誘導モデルに用いる"}
     ],
     struct:{
       model:"mixed",
       cells:["肝細胞","(下流)マクロファージ","(下流)HSC"],
-      triggers:["HFFD/MCD/CCl4","酢酸/クロトン酸","ACSS2核移行(EGFR-ERK)"],
+      triggers:["HFFD/MCD/CCl4","クロトン酸","ACSS2核移行(ERK)"],
       steatosis:"○", inflammation:"○", fibrosis:"○",
       readout:["AIF1/炎症サイトカイン","p16/p21/γH2AX・SA-β-gal","H3K18cr/H3K27cr","Sirius red"],
       ignite:"肝細胞のACSS2核移行→KAT5→AIF1クロトニル化→炎症＋肝細胞老化→SASPで増幅。脂質合成(ACLY)とは独立の炎症スイッチ。",
@@ -65,7 +65,7 @@ LP.paper(
       ],
       todos:[
         "qPCR：ACSS2/AIF1/KAT5を追加し脂肪化と炎症スイッチを切り分け",
-        "酢酸/クロトン酸添加を『代謝→エピジェネティクス』セカンドヒットに",
+        "クロトン酸添加を『代謝→エピジェネティクス』セカンドヒットに",
         "読み出しにp16/p21/SA-β-gal/SASPを追加（Navitoclaxをネガコンに）"
       ]
     },
@@ -78,8 +78,8 @@ LP.paper(
 LP.icons("52", [{ic:"mouse",cap:"肝細胞特異的ACSS2 KO × HFFD/MCD/CCl4"}, {ic:"hepatocyte",cap:"肝細胞のACSS2が核でKAT5と複合体"}, {ic:"omics",cap:"AIF1プロモーターのヒストンクロトニル化↑"}, {ic:"macrophage",cap:"炎症と肝細胞老化（SASP）の悪循環"}, {ic:"drug",cap:"ACSS2阻害薬・Navitoclaxで遮断"}, {ic:"human",cap:"ヒトMASH肝でACSS2/AIF1高発現"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 52 Wen/Hu Nat Commun 2026: 肝細胞特異的ACSS2 KO+AAV8過剰発現+RNA-seq+co-IP/ChIP+Navitoclax+ヒト肝+IHC/WB */
-LP.methods("52", ["mouse","human","invitro","crispr","drug","rnaseq","chipseq","qpcr","wb","imaging"]);
+/* 52 Wen/Hu Nat Commun 2026: 肝細胞特異的ACSS2 KO+AAV8過剰発現+RNA-seq+co-IP/ChIP-qPCR+FLAGプルダウンLC-MS/MS+ELISA+フロー+Navitoclax+ヒト肝+IHC/WB（chipseqはChIP-qPCRのみのため外しqpcrで代表） */
+LP.methods("52", ["mouse","human","invitro","crispr","drug","rnaseq","proteomics","qpcr","wb","elisa","facs","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №52 ACSS2核移行→KAT5→AIF1クロトニル化→炎症＋老化→MASH、阻害で遮断 ===== */

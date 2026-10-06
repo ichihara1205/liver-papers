@@ -94,11 +94,12 @@ function mountCinema(mount, def){
     T:(fn,ms)=>later(fn,(ms||0)*SP()),
     raf:fn=>raf(fn),
     show(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.add("on");});},
-    hide(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e)e.classList.remove("on");});},
+    hide(ids){ids.forEach(i=>{const e=svg.querySelector('#'+i);if(e){e.style.opacity="";e.classList.remove("on");}});},
     pulse(id){const e=svg.querySelector('#'+id);if(e)(e.querySelector('.box')||e).classList.add("pulse");},
     unpulse(id){const e=svg.querySelector('#'+id);if(e)(e.querySelector('.box')||e).classList.remove("pulse");},
     morph(id,d){const e=svg.querySelector('#'+id);if(e)e.setAttribute("d",d);},
-    attr(id,k,v){const e=svg.querySelector('#'+id);if(e)e.setAttribute(k,v);},
+    // opacity は .fade.on{opacity:1} の CSS に負けるため style でも指定（表示済み要素も薄くできる）
+    attr(id,k,v){const e=svg.querySelector('#'+id);if(!e)return;e.setAttribute(k,v);if(k==="opacity")e.style.opacity=v;},
     text(id,s){const e=svg.querySelector('#'+id);if(e)e.textContent=s;},
     flow(x0,y0,x1,y1,color,o){o=o||{};const fl=fluxLayer(),n=o.n||4,dur=(o.dur||1.1)*SP(),gap=(o.gap||0.25)*SP(),loop=o.loop||1,r=o.r||3.4;
       for(let L=0;L<loop;L++)for(let i=0;i<n;i++){later(()=>{
