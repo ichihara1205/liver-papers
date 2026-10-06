@@ -574,7 +574,7 @@ function renderPaperPage(id){
         <div class="tags">${tagHTML(p)}</div>
         <h1 class="ptitle">${p.title}</h1>
         <div class="cite"><span class="j">${p.journal}</span> ${p.vol||""} (${p.year})　${p.authors}　<span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
-        <div class="pact">${paperMetaHTML(p)}<a class="doi" href="${p.url}" target="_blank" rel="noopener">原文を開く（DOI: ${p.doi}）</a><button type="button" class="favfilter" data-print>🖨 この論文を印刷 / PDF</button></div>
+        <div class="pact">${paperMetaHTML(p)}<a class="doi" href="${p.url}" target="_blank" rel="noopener">原文を開く（DOI: ${p.doi}）</a><button type="button" class="favfilter" data-print>🖨 この論文を印刷 / PDF</button><button type="button" class="favfilter" data-quizpaper="${p.id}">🧠 この論文で理解度チェック</button></div>
         <p class="approach">${p.approach||""}</p>
       </div>
       <div class="pbody">
@@ -953,59 +953,140 @@ function renderZonation(){
   zoneview.querySelectorAll(".zchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
 }
 
-/* ===== 用語クイズ（glossaryから4択自動生成） ===== */
+/* ===== クイズ（用語の意味 / 論文の理解度 / 論文のつながり） ===== */
 const QUIZ_KEY="liverPapers_quiz_v1";
-let quizState=(()=>{ try{return JSON.parse(localStorage.getItem(QUIZ_KEY))||{best:0};}catch(e){return {best:0};} })();
-let quizRun=null;
-function quizPool(){ const seen=new Set(),out=[];
+let quizState=(()=>{ try{ const s=JSON.parse(localStorage.getItem(QUIZ_KEY))||{};
+    if(!s.bestByMode) s.bestByMode={};
+    if(typeof s.best==="number"&&!("term" in s.bestByMode)) s.bestByMode.term=s.best; // 旧データ移行
+    return s;
+  }catch(e){ return {bestByMode:{}}; } })();
+let quizMode="term", quizFocus=null, quizRun=null;
+const QMODES=[["term","用語の意味"],["comp","論文の理解度"],["conn","論文のつながり"]];
+const qBest=m=>quizState.bestByMode[m]||0;
+const qSetBest=(m,v)=>{ quizState.bestByMode[m]=v; try{localStorage.setItem(QUIZ_KEY,JSON.stringify(quizState));}catch(e){} };
+const qShuffle=a=>a.slice().sort(()=>Math.random()-0.5);
+function qPlain(s){ return String(s||"").replace(/\*\*([^*]+?)\*\*/g,"$1"); }
+function qShort(p){ const t=p.title||""; const i=t.search(/[—：]/); return (i>0?t.slice(0,i):t).slice(0,24); }
+
+/* --- モード1：用語の意味（glossaryから4択） --- */
+function qTermPool(){ const seen=new Set(),out=[];
   PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{ const k=(g.term||"").toLowerCase(); const desc=g.desc||g.full;
     if(!k||!desc||seen.has(k))return; seen.add(k);
-    const cat=(CATINFO[k]||{}).cat||"その他";
-    out.push({term:g.term,full:g.full||"",desc:desc,pid:p.id,cat}); }));
-  return out;
+    out.push({term:g.term,full:g.full||"",desc,pid:p.id,cat:(CATINFO[k]||{}).cat||"その他"}); }));
+  return out; }
+function newTermQ(){ const pool=qTermPool(); if(pool.length<4)return null;
+  const sh=qShuffle(pool), ans=sh[0];
+  const same=sh.filter(o=>o!==ans&&o.cat===ans.cat), diff=sh.filter(o=>o!==ans&&o.cat!==ans.cat);
+  const ds=[...same,...diff].slice(0,3);
+  const opts=qShuffle([ans,...ds]).map(o=>({html:o.desc,correct:o===ans,pid:o.pid}));
+  return {stem:`この用語の説明として正しいのは？<br><b class="qterm">${ans.term}</b>${ans.full?` <span class="qfull">（${ans.full}）</span>`:""}`,opts}; }
+
+/* --- モード2：論文の理解度（各論文の要点・達成・限界を4択） --- */
+const COMP_TYPES=[
+  {k:"ignite",label:"この論文のキモ（要点・病態の点火機構）として正しいのは？",get:p=>{const s=p.struct&&p.struct.ignite; return (s&&s.replace(/[—-]/g,"").trim().length>6)?s:null;}},
+  {k:"achv", label:"この論文で達成されたこととして正しいのは？",get:p=>(p.achievements||[]).length?qPlain(p.achievements[0]):null},
+  {k:"limit",label:"この論文のLimitation（限界）として正しいのは？",get:p=>(p.limitations||[]).length?qPlain(p.limitations[0]):null},
+];
+function newCompQ(focusPid){
+  focusPid=focusPid?String(focusPid):null;
+  for(const ty of qShuffle(COMP_TYPES)){
+    let items=PAPERS.map(p=>({pid:p.id,p,text:ty.get(p)})).filter(o=>o.text);
+    const seen=new Set(); items=items.filter(o=>{const key=o.text.slice(0,40); if(seen.has(key))return false; seen.add(key); return true;});
+    if(items.length<4) continue;
+    let ans;
+    if(focusPid){ ans=items.find(o=>o.pid===focusPid); if(!ans) continue; } // focusがこのtypeを持つ場合のみ採用
+    else ans=qShuffle(items)[0];
+    const ds=qShuffle(items.filter(o=>o!==ans)).slice(0,3);
+    const opts=qShuffle([ans,...ds]).map(o=>({html:o.text,correct:o===ans,pid:o.pid}));
+    return {stem:`<span class="qpaper">No.${ans.pid}『${qShort(ans.p)}』</span><br>${ty.label}`,opts};
+  }
+  return focusPid?newCompQ(null):null; // focusがどのtypeも持たなければ通常出題
 }
-function newQuizQ(){ const pool=quizPool(); if(pool.length<4)return null;
-  const sh=pool.slice().sort(()=>Math.random()-0.5); const ans=sh[0];
-  /* 同カテゴリから不正解を選ぶ（足りなければ他カテゴリで補充） */
-  const sameCat=sh.filter(o=>o!==ans&&o.cat===ans.cat).sort(()=>Math.random()-0.5);
-  const diffCat=sh.filter(o=>o!==ans&&o.cat!==ans.cat).sort(()=>Math.random()-0.5);
-  const distractors=[...sameCat,...diffCat].slice(0,3);
-  const opts=[ans,...distractors].sort(()=>Math.random()-0.5);
-  return {ans,opts};
+
+/* --- モード3：論文のつながり（共有用語・相互言及から関連を4択） --- */
+function qGlossMap(){ const m=new Map();
+  PAPERS.forEach(p=>(p.glossary||[]).forEach(g=>{ const k=(g.term||"").toLowerCase(); if(!k)return;
+    if(!m.has(k)) m.set(k,{term:g.term,full:g.full||"",pids:new Set()}); m.get(k).pids.add(p.id); }));
+  return m; }
+function qConnRefs(p){ const s=(p.connection||[]).join(" "), set=new Set(), re=/#(\d{1,3})/g; let mm;
+  while((mm=re.exec(s))){ const id=mm[1].padStart(2,"0"); if(id!==p.id&&PAPERS.some(q=>q.id===id)) set.add(id); }
+  return [...set]; }
+function newConnQ(){
+  for(const ty of qShuffle(["related","term"])){
+    if(ty==="related"){
+      for(const p of qShuffle(PAPERS.filter(x=>qConnRefs(x).length))){
+        const refs=qConnRefs(p), others=PAPERS.filter(q=>q.id!==p.id&&!refs.includes(q.id));
+        if(others.length<3) continue;
+        const ansId=qShuffle(refs)[0], ansP=PAPERS.find(q=>q.id===ansId);
+        const opts=qShuffle([ansP,...qShuffle(others).slice(0,3)]).map(q=>({html:`<b>No.${q.id}</b> ${qShort(q)}`,correct:q.id===ansId,pid:q.id}));
+        return {stem:`<span class="qpaper">No.${p.id}『${qShort(p)}』</span><br>と内容的につながりが深い（共有テーマ・相互に言及する）論文は？`,opts};
+      }
+    }else{
+      const uniq=qShuffle([...qGlossMap().values()].filter(e=>e.pids.size===1));
+      for(const pick of uniq){
+        const ansId=[...pick.pids][0], ansP=PAPERS.find(q=>q.id===ansId);
+        const others=PAPERS.filter(q=>!pick.pids.has(q.id));
+        if(others.length<3) continue;
+        const opts=qShuffle([ansP,...qShuffle(others).slice(0,3)]).map(q=>({html:`<b>No.${q.id}</b> ${qShort(q)}`,correct:q.id===ansId,pid:q.id}));
+        return {stem:`『<b>${pick.term}</b>${pick.full?`（${pick.full}）`:""}』を扱う論文は？`,opts};
+      }
+    }
+  }
+  return null;
 }
+
+/* --- 共通描画 --- */
+function quizDesc(){ return quizMode==="comp"?"各論文の要点・達成・限界を4択で。論文名を見て正しい記述を選びます（スコアは端末内保存）。"
+  :quizMode==="conn"?"論文どうしのつながりを4択で。共有する用語や相互の言及から関連を当てます（スコアは端末内保存）。"
+  :"ライブラリの用語から4択。正式名/説明を当てます（スコアは端末内保存）。"; }
+function makeQ(){ return quizMode==="comp"?newCompQ(quizFocus):quizMode==="conn"?newConnQ():newTermQ(); }
+function modeTabsHTML(){ return `<div class="quizmodes">${QMODES.map(([k,l])=>`<button class="sbtn${k===quizMode?" active":""}" data-qm="${k}">${l}</button>`).join("")}</div>`; }
+function bindModeTabs(){ quizview.querySelectorAll("[data-qm]").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.qm===quizMode)return; quizMode=b.dataset.qm; quizFocus=null; quizRun=null; renderQuiz(); })); }
 function renderQuiz(){
   document.getElementById("total").textContent=PAPERS.length;
-  document.getElementById("countline").textContent="ライブラリの用語から4択クイズ。正式名/説明を当てます（スコアは端末内保存）。";
-  const pool=quizPool();
-  if(pool.length<4){ quizview.innerHTML='<p class="boardnote">用語が4件未満のためクイズを作成できません。</p>'; return; }
-  if(!quizRun) quizRun={q:newQuizQ(),score:0,n:0,answered:false};
+  document.getElementById("countline").textContent=quizDesc();
+  if(!quizRun||quizRun.mode!==quizMode){ quizRun={mode:quizMode,q:makeQ(),score:0,n:0,answered:false}; }
+  quizFocus=null; // 初回のフォーカスのみ消費
   drawQuiz();
 }
 function drawQuiz(){
   const r=quizRun, q=r.q;
-  const opts=q.opts.map((o,i)=>`<button class="qopt" data-i="${i}" ${r.answered?"disabled":""}>${o.desc}</button>`).join("");
+  if(!q){ quizview.innerHTML=`<div class="quizwrap">${modeTabsHTML()}<p class="boardnote">このモードの問題を作れる論文がまだ足りません。</p></div>`; bindModeTabs(); return; }
+  const opts=q.opts.map((o,i)=>`<button class="qopt" data-i="${i}" ${r.answered?"disabled":""}>${o.html}</button>`).join("");
   quizview.innerHTML=`<div class="quizwrap">
-    <div class="quizbar"><span>スコア ${r.score} / ${r.n}</span><span>最高 ${quizState.best}</span></div>
+    ${modeTabsHTML()}
+    <div class="quizbar"><span>連続正解 ${r.score}（${r.n}問）</span><span>最高 ${qBest(quizMode)}</span></div>
     <div class="quizcard">
-      <div class="qstem">この用語の説明は？<br><b class="qterm">${q.ans.term}</b>${q.ans.full?` <span class="qfull">（${q.ans.full}）</span>`:""}</div>
+      <div class="qstem">${q.stem}</div>
       <div class="qopts">${opts}</div>
       <div class="qfb" id="qfb"></div>
       <div class="qact"><button class="genbtn" id="qnext" ${r.answered?"":"style=visibility:hidden"}>次の問題 →</button></div>
     </div></div>`;
+  bindModeTabs();
   quizview.querySelectorAll(".qopt").forEach(b=>b.addEventListener("click",()=>{
-    if(r.answered)return; r.answered=true; const i=+b.dataset.i, ok=q.opts[i]===q.ans; r.n++;
-    if(ok){ r.score++; if(r.score>quizState.best){quizState.best=r.score; try{localStorage.setItem(QUIZ_KEY,JSON.stringify(quizState));}catch(e){}} }
-    else { r.score=0; }
+    if(r.answered)return; r.answered=true; const i=+b.dataset.i, ok=q.opts[i].correct; r.n++;
+    if(ok){ r.score++; if(r.score>qBest(quizMode)) qSetBest(quizMode,r.score); } else { r.score=0; }
+    const correct=q.opts.find(o=>o.correct);
     quizview.querySelectorAll(".qopt").forEach((bb,j)=>{ bb.disabled=true;
-      if(q.opts[j]===q.ans) bb.classList.add("correct"); else if(j===i) bb.classList.add("wrong"); });
+      if(q.opts[j].correct) bb.classList.add("correct"); else if(j===i) bb.classList.add("wrong"); });
     document.getElementById("qfb").innerHTML = ok
-      ? `<span class="ok">正解！</span> 出典 <button class="relchip mini" data-id="${q.ans.pid}">No.${q.ans.pid}</button>`
-      : `<span class="ng">不正解</span> 正しくは：${q.ans.desc} ／ 出典 <button class="relchip mini" data-id="${q.ans.pid}">No.${q.ans.pid}</button>${r.score===0?"（連続正解リセット）":""}`;
-    const nx=document.getElementById("qnext"); nx.style.visibility="visible";
+      ? `<span class="ok">正解！</span> 出典 <button class="relchip mini" data-id="${correct.pid}">No.${correct.pid}</button>`
+      : `<span class="ng">不正解</span> 正しくは：${correct.html} ／ 出典 <button class="relchip mini" data-id="${correct.pid}">No.${correct.pid}</button>${r.score===0?"（連続正解リセット）":""}`;
+    document.getElementById("qnext").style.visibility="visible";
     document.getElementById("qfb").querySelectorAll(".relchip").forEach(x=>x.addEventListener("click",()=>jumpToPaper(x.dataset.id)));
   }));
-  const nb=document.getElementById("qnext"); if(nb) nb.addEventListener("click",()=>{ quizRun.q=newQuizQ(); quizRun.answered=false; drawQuiz(); });
+  const nb=document.getElementById("qnext"); if(nb) nb.addEventListener("click",()=>{ quizRun.q=makeQ(); quizRun.answered=false; drawQuiz(); });
 }
+/* 論文ページの「この論文で理解度チェック」から理解度モードへ（その論文を初回の答えに） */
+function goQuiz(mode,focusPid){
+  quizMode=mode||"term"; quizFocus=focusPid?String(focusPid):null; quizRun=null;
+  if(currentView==="papers"&&openPaper==="") listScrollY=scrollY;
+  currentView="quiz"; openPaper="";
+  syncViewTabs(); refresh(); commitState();
+  scrollTo({top:0,behavior:"instant"});
+}
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-quizpaper]"); if(b){ e.preventDefault(); goQuiz("comp",b.dataset.quizpaper); } });
 
 /* ===== 新着検索（PubMed E-utilities, ブラウザ側） ===== */
 const FEED_PRESETS=[
