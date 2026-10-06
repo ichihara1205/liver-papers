@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("39", [{ic:"stellate",cap:"HSC三亜型（静止期・始動期・筋線維芽細胞）"}, {ic:"omics",cap:"scRNA-seq・エピゲノム知見の統合"}, {ic:"liver",cap:"TCA→解糖への代謝シフト"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 39 Kisseleva & Brenner 2025 Gastroenterology: MASH HSC表現型・代謝総説 */
 LP.methods("39", []);

@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("30", [{ic:"macrophage",cap:"類洞内KC"}, {ic:"macrophage",cap:"被膜下・中心静脈周囲・胆管周囲マクロファージ"}, {ic:"liver",cap:"空間配置と機能の専門化"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 30 Nusse & Kubes 2025 Cell Mol Immunol: 4種肝マクロファージ総説 */
 LP.methods("30", []);

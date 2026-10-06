@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("41", [{ic:"drug",cap:"グルココルチコイド（dexamethasone）"}, {ic:"macrophage",cap:"GR経由でCD163/CD206を誘導"}, {ic:"liver",cap:"M2/恒常性極性・efferocytosis"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 41 Desgeorges 2019 Front Immunol: GC→CD163/CD206 M2総説 */
 LP.methods("41", []);

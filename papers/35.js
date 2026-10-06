@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("35", [{ic:"endothelial",cap:"LSECのgatekeeper機能とEndMT"}, {ic:"stellate",cap:"HSCとともにECMを産生"}, {ic:"liver",cap:"capillarization後の線維化"}, {ic:"drug",cap:"治療標的としてのEndMT"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 35 Qu 2024 Clin Mol Hepatol: LSEC/EndMT/ECM総説 */
 LP.methods("35", []);

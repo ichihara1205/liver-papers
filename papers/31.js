@@ -38,9 +38,14 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("31", [{ic:"human",cap:"ヒトiPSC"}, {ic:"macrophage",cap:"iKC（iPSC由来クッパー細胞様細胞）"}, {ic:"hepatocyte",cap:"肝細胞との直接接触共培養"}, {ic:"dish",cap:"VSIG4/CD163/TIMD4で成熟を評価"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 31 Tasnim 2019 Biomaterials: iPSC→iKC分化誘導 */
-LP.methods("31", ["invitro","ipsc","facs","qpcr","imaging"]);
+/* 2026-10修正：未定義キー（invivo/ipsc）を除去。27/32は条件付きKO・BMP9 KOに対応して crispr を追加 */
+LP.methods("31", ["invitro","facs","qpcr","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №31 肝細胞接触がiPSC由来iKCをKC様に成熟させる ===== */

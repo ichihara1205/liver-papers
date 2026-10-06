@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("38", [{ic:"stellate",cap:"HSC（TGF-β/PDGFで活性化）"}, {ic:"macrophage",cap:"マクロファージ/KC（TLR4-NF-κB）"}, {ic:"liver",cap:"炎症と線維化の自己増幅ループ"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 38 Am J Pathol 2025: HSC-macrophage crosstalk MASH総説 */
 LP.methods("38", []);

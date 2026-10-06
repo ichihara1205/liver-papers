@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("33", [{ic:"endothelial",cap:"LSEC：免疫抑制・物質輸送"}, {ic:"drug",cap:"薬物代謝の場（bioreactivity）"}, {ic:"stellate",cap:"疾患時：TGF-β→HSC活性化"}, {ic:"liver",cap:"capillarizationとECM蓄積"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 33 Abdulmajeed & Sergi 2025 IJMS: LSEC免疫・capillarization総説 */
 LP.methods("33", []);

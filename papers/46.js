@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("46", [{ic:"human",cap:"ヒトNASH肝で肝細胞TAZが高発現"}, {ic:"mouse",cap:"肝細胞TAZのノックダウンと過剰発現"}, {ic:"hepatocyte",cap:"TAZ/TEAD→Indian hedgehogを分泌"}, {ic:"stellate",cap:"HSCの線維化遺伝子が動く"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 46 Wang/Tabas Cell Metab 2016: ヒト/マウスNASH肝+肝細胞TAZノックダウン/過剰発現+in vitro機序（2026-10補完：crispr=遺伝子ノックダウンの分類、qpcr/wbは推測） */
+LP.methods("46", ["mouse","human","invitro","crispr","qpcr","wb"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №46 肝細胞TAZ→Ihh→HSC（脂肪化は動かさない） ===== */
 LP.cinema("46", {

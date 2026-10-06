@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("34", [{ic:"human",cap:"ヒトMASLD肝組織"}, {ic:"mouse",cap:"ラット高脂肪食モデル"}, {ic:"endothelial",cap:"LSEC capillarization（電子顕微鏡・LYVE-1/Stab2）"}, {ic:"drug",cap:"lanifibranor（パンPPARアゴニスト）"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 34 Rautou 2025 JHEP Reports: ヒトMASLD LSEC + lanifibranor */
 LP.methods("34", ["human","mouse","imaging","drug","wb"]);

@@ -38,9 +38,14 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("32", [{ic:"endothelial",cap:"LSECのfenestrae維持"}, {ic:"mouse",cap:"BMP9 KOマウス"}, {ic:"stellate",cap:"BMP9↓→HSC活性化"}, {ic:"liver",cap:"capillarization→線維化"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 32 He 2024 Cell Commun Signal: BMP9/LSEC gatekeeper総説+in vivo */
-LP.methods("32", ["mouse","invivo","imaging","wb"]);
+/* 2026-10修正：未定義キー（invivo/ipsc）を除去。27/32は条件付きKO・BMP9 KOに対応して crispr を追加 */
+LP.methods("32", ["mouse","crispr","imaging","wb"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №32 BMP9はfenestraeの門番／低下でcapillarization→線維化 ===== */

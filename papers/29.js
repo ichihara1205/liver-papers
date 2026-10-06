@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("29", [{ic:"macrophage",cap:"KC＝代謝のgatekeeper"}, {ic:"hepatocyte",cap:"胆汁酸・脂肪酸の処理"}, {ic:"endothelial",cap:"類洞内の空間配置"}, {ic:"liver",cap:"MASLDでの役割変化"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 29 David & Iannacone 2026 Nat Rev Immunol: KC homeostasis→代謝gatekeeper総説 */
 LP.methods("29", []);

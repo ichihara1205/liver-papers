@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("42", [{ic:"human",cap:"ヒト末梢血単球"}, {ic:"dish",cap:"SCF/EPO/脂質の分化培養系"}, {ic:"drug",cap:"dexamethasone（GR依存・RU486で阻害）"}, {ic:"macrophage",cap:"CD163+CD206+のM2様マクロファージ"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 42 Haematologica 2018: GC処理でCD163+ M2様Mφ分化 */
 LP.methods("42", ["invitro","human","facs","qpcr","drug"]);

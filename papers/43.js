@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("43", [{ic:"dish",cap:"ヒト初代肝細胞・HepG2の単層培養"}, {ic:"hepatocyte",cap:"OA:PA比を変えたFFA混合で脂肪滴を蓄積"}, {ic:"liver",cap:"ヒト脂肪肝と同等の細胞内脂質量に到達"}, {ic:"hepatocyte",cap:"PA優位(0:3)では急性の細胞傷害とアポトーシス"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 43 Gómez-Lechón Chem Biol Interact 2007: ヒト初代肝細胞/HepG2+OA:PA混合比+脂質蓄積・neutral red生存率・アポトーシス（2026-10補完：facsは推測） */
+LP.methods("43", ["invitro","facs"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №43 OA:PA比が脂肪蓄積と細胞死を切り離す ===== */
 LP.cinema("43", {

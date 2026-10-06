@@ -38,9 +38,14 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("27", [{ic:"macrophage",cap:"流入単球→KCへ転換"}, {ic:"hepatocyte",cap:"肝細胞がID3を誘導"}, {ic:"endothelial",cap:"LSEC：DLL4/Notch"}, {ic:"stellate",cap:"HSC：BMP→LXRα"}, {ic:"mouse",cap:"KC枯渇マウス＋骨髄移植・DLL4 KO"}, {ic:"omics",cap:"scRNA-seq・空間イメージング"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 27 Bonnardel 2019 Immunity: KCニッチ定義 - 単球枯渇+BMT+scRNA-seq+FACS+条件付きKO */
-LP.methods("27", ["mouse","human","scrna","facs","imaging","invivo"]);
+/* 2026-10修正：未定義キー（invivo/ipsc）を除去。27/32は条件付きKO・BMP9 KOに対応して crispr を追加 */
+LP.methods("27", ["mouse","human","crispr","scrna","facs","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №27 KCニッチ：3細胞の協調シグナルが単球をKCへ転換 ===== */

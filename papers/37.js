@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("37", [{ic:"stellate",cap:"HSC：ビタミンA貯蔵とRSPO3/Wnt"}, {ic:"hepatocyte",cap:"肝細胞zonationの支持"}, {ic:"endothelial",cap:"LSECとのangiocrineニッチ"}, {ic:"liver",cap:"MASLDで生理から線維化へ"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 37 Schwabe 2025 Nat Rev GH: HSC homeostasis/RSPO3総説 */
 LP.methods("37", []);

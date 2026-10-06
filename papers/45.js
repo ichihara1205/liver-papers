@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("45", [{ic:"human",cap:"肥満女性コホート FLORINASH 2集団"}, {ic:"omics",cap:"便メタゲノム＋肝トランスクリプトーム＋メタボローム"}, {ic:"mouse",cap:"糞便移植とPAA慢性投与で因果を検証"}, {ic:"hepatocyte",cap:"ヒト初代肝細胞でPAAが脂質蓄積を押す"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 45 Hoyles Nat Med 2018: FLORINASHコホート+便メタゲノム+肝トランスクリプトーム+メタボローム+糞便移植/PAA投与マウス+ヒト初代肝細胞（2026-10補完：rnaseqは肝トランスクリプトームの分類） */
+LP.methods("45", ["human","mouse","invitro","rnaseq"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №45 腸内細菌→フェニル酢酸→肝の脂肪化 ===== */
 LP.cinema("45", {

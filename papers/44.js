@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("44", [{ic:"human",cap:"ヒト肝生検 痩せ12・肥満18・NAFL16・NASH7例"}, {ic:"liver",cap:"単離ミトコンドリアの高分解能呼吸測定"}, {ic:"omics",cap:"酸化ストレス・抗酸化能・炎症マーカーの併測"}, {ic:"liver",cap:"NASHでは量が増えるのに最大呼吸は31–40%低下"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 44 Koliaki/Roden Cell Metab 2015: ヒト肝生検+単離ミトコンドリアの高分解能呼吸測定+酸化ストレス・炎症マーカー（2026-10補完：elisaは推測） */
+LP.methods("44", ["human","elisa"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №44 呼吸は上がってから落ちる（肝ミトコンドリア柔軟性の喪失） ===== */
 LP.cinema("44", {

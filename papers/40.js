@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("40", [{ic:"macrophage",cap:"KC/マクロファージのVSIG4（CRIg）"}, {ic:"mouse",cap:"Vsig4−/−マウス＋高脂肪食/MHV-3"}, {ic:"dish",cap:"マクロファージ＋LPS刺激"}, {ic:"liver",cap:"PI3K/Akt→PDK2の代謝調整で炎症を抑制"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 40 Li 2017 Nat Commun: VSIG4→PDK2→代謝的炎症抑制 */
 LP.methods("40", ["mouse","invitro","facs","wb","drug"]);

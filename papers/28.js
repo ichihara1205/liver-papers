@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("28", [{ic:"macrophage",cap:"resKC/moMφ/LAM（TREM2+）"}, {ic:"omics",cap:"scRNA-seq知見の統合"}, {ic:"stellate",cap:"線維化への寄与"}, {ic:"liver",cap:"MASLD進行とニッチの改変"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 28 De Ponti 2024 JHEP Reports: MASLDマクロファージ全体像総説 */
 LP.methods("28", []);

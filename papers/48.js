@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("48", [{ic:"human",cap:"hiPSC由来の肝4細胞"}, {ic:"chip",cap:"側流路つきマイクロ流体チップ LEADS"}, {ic:"liver",cap:"FFA＋フルクトース＋LPS＋PAAでMASH様表現型"}, {ic:"drug",cap:"resmetirom等の薬剤応答を評価"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 48 Balachander/Yu Lab Chip 2025: haLSC由来オルガノイド＋iKC＋iHSCの肝チップ+FFA/フルクトース/LPS/PAA+薬剤5種の応答+顕微鏡評価・セクレトーム（2026-10補完：elisaはセクレトーム解析からの推測） */
+LP.methods("48", ["invitro","drug","elisa","imaging"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №48 LEADS：点火は強いが戻らない／溶媒エタノールの交絡 ===== */
 LP.cinema("48", {

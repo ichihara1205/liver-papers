@@ -38,6 +38,10 @@ LP.paper(
   }
 );
 
+/* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
+/* 2026-10補完：approach・abstract_ja・struct から下書き（要確認） */
+LP.icons("36", [{ic:"stellate",cap:"静止期HSC→筋線維芽細胞"}, {ic:"macrophage",cap:"KC（上流のシグナル源）"}, {ic:"liver",cap:"6経路が駆動する線維化"}]);
+
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 36 Zhang 2024 Front Med: HSC活性化6経路総説 */
 LP.methods("36", []);

@@ -37,6 +37,10 @@ LP.paper(
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
 LP.icons("47", [{ic:"mouse",cap:"マウス肝 数千個の肝細胞"}, {ic:"omics",cap:"scRNA-seq＋smFISHランドマーク遺伝子"}, {ic:"liver",cap:"小葉座標を推定しzonationプロファイルを再構成"}, {ic:"omics",cap:"約50%がzonate・非単調プロファイルも多数"}]);
 
+/* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
+/* 47 Halpern/Itzkovitz Nature 2017: マウス肝scRNA-seq+smFISHランドマーク遺伝子で小葉座標を推定（2026-10補完：spatialは空間再構成を空間TXとみなした分類） */
+LP.methods("47", ["mouse","scrna","spatial","imaging"]);
+
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №47 zonation：解離で失った位置を復元し、非単調プロファイルを見つける ===== */
 LP.cinema("47", {
