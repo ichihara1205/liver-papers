@@ -13,7 +13,7 @@ LP.paper(
   {
     id:"20",
     title:"肝星細胞の自己分泌シグナル回路（NTF3→NTRK3）が進行期NASH線維化を駆動する",
-    authors:"Wang S, Li K, Pickholz E, Dobie R, Matchett KP, Henderson NC, Carrico C, Llewellyn J, Marchildon F, Liu X, Wells RG, Friedman SL（責任著者, Icahn School of Medicine at Mount Sinai）",
+    authors:"Wang S, Li K, Pickholz E, Dobie R, Matchett KP, Henderson NC, Carrico C, Driver I, Borch Jensen M, Chen L, Petitjean M, Bhattacharya D, Fiel MI, Liu X, Kisseleva T, Alon U, Adler M, Medzhitov R, Friedman SL（責任著者, Icahn School of Medicine at Mount Sinai）",
     journal:"Science Translational Medicine",
     year:2023,
     vol:"15(677):eadd3949",
@@ -21,22 +21,22 @@ LP.paper(
     url:"https://www.science.org/doi/10.1126/scitranslmed.add3949",
     primary:"B",
     tags:["B","H","G"],
-    approach:"in vivo（堅牢なマウスNASHモデルでの単一核RNA-seq＋組織透明化による線維3D可視化）＋ヒトNASH試料との受容体-リガンドペア保存性照合＋初代ヒトHSC培養での薬理学的検証",
+    approach:"in vivo（堅牢なマウスNASHモデルでの単一核RNA-seq＋組織透明化による線維3D可視化）＋ヒトNASH試料との受容体-リガンドペア保存性照合＋ヒトHSC株LX-2培養でのNTRK3ノックダウン・薬理学的検証",
     added:"2026-06-04",
     abstract_ja:"肝線維化は肝星細胞（HSC）が静止状態から筋線維芽細胞へ形質転換することで進行するが、進行期（advanced fibrosis）に特異的な活性化の駆動機構は不明であった。本研究は堅牢なマウスNASHモデルを用い、単一核RNA-seqと組織透明化を組み合わせてHSC活性化の経時的な転写・形態応答を統合的に解析した。その結果、進行期の線維化局所ではHSC同士の直接的な細胞間接触が顕著に増加し、それに伴ってマウスとヒトのNASHで保存された68組の受容体-リガンド相互作用からなるHSC自己分泌シグナル回路が出現することを見いだした。なかでも神経栄養因子ニューロトロフィン-3（NTF3）とその受容体NTRK3（TrkC）のペアに着目し、薬理学的にNTRK3を阻害すると、培養ヒトHSCの活性化が抑えられるだけでなく、進行期マウスNASH線維化が退縮した。すなわち進行期にはHSCが自らの分泌因子で自らを刺激する自己駆動ループが線維化を維持しており、この回路を断つことが既に確立した線維化を巻き戻す治療標的になりうることを示した。",
     background:"MASLD/MASHにおける線維化はHSCの活性化と細胞外基質（ECM）の過剰沈着によって進行し、進行期の線維化は肝関連死の最大の予測因子である。しかし従来の研究は損傷初期にHSCを動かすパラクリン因子（肝細胞・KC・LSEC由来のTGFβ等）に集中しており、いったん広範な線維化が成立した段階でHSCの活性化が何によって維持されるのかは十分に解明されていなかった。臨床的には既存の線維化を退縮させる薬剤が強く求められるため、進行期に固有の駆動機構を細胞解像度かつ空間的に同定することが課題であった。",
     achievements:[
-      "堅牢なマウスNASHモデルで**単一核RNA-seq（snRNA-seq）**と**組織透明化**を統合し、HSC活性化の転写プロファイルと3D線維構造を経時的に対応づけた。",
+      "堅牢なマウスNASHモデルで**単一核RNA-seq（snRNA-seq）**と**組織透明化**を統合し、HSC活性化の転写プロファイルと3D形態（突起・細胞間接触）を経時的に対応づけた。",
       "進行期では**HSC同士の直接的な細胞間接触が顕著に増加**し、空間的に密集した活性化HSCの巣が形成されることを可視化した。",
       "この密集に伴って、マウスとヒトのNASHで**保存された68組の受容体-リガンド相互作用**からなる**HSC自己分泌（autocrine）シグナル回路**が進行期特異的に出現することを同定した。",
-      "回路の代表として**ニューロトロフィン-3（NTF3）→受容体NTRK3（TrkC）**の自己分泌ペアを実証し、HSCが自らの分泌因子で自らを刺激する正のフィードバックを示した。",
+      "回路の代表として**ニューロトロフィン-3（NTF3）→受容体NTRK3（TrkC）**の自己分泌ペアを取り上げ、NTRK3蛋白がNASHのHSC突起に局在することを示した（HSCが自らの分泌因子で自らを刺激する自己駆動ループの代表例）。",
       "**NTRK3の薬理学的阻害**により培養ヒトHSCの活性化が抑制され、かつ**進行期マウスNASH線維化が退縮**した（概念実証として既存線維化の可逆性を提示）。"
     ],
     limitations:[
       "代表として検証したのは68ペアのうち**NTF3→NTRK3の1経路のみ**で、回路全体の冗長性・主従関係は未解明。",
       "**HSC-HSC直接接触の増加が原因か結果か**（密集が回路を生むのか、回路が密集を促すのか）の因果は完全には切り分けられていない。",
       "用いたNTRK3阻害は汎Trk系に作用しうる低分子であり、**HSC特異性・全身性の神経系副作用**は今後の最適化課題。",
-      "マウスモデル主体で、ヒトでは受容体-リガンドペアの保存性と培養HSCでの薬理応答の確認にとどまり、**ヒト生体での退縮効果は未検証**。"
+      "マウスモデル主体で、ヒトでは受容体-リガンドペアの保存性とヒトHSC株LX-2での応答の確認にとどまり、**ヒト生体での退縮効果は未検証**。"
     ],
     connection:[
       "私の系（酸素透過膜上の4細胞共培養）でsteatosisは堅牢だがfibrosisの点火が課題である中、本論文は「**進行期はHSC自己分泌＋HSC間接触が線維化を自己維持する**」という点火後の維持機構を与える。初期点火（KC/LPS等のパラクリン二次ヒット）と、本論文の自己駆動ループを段階として接続できる。",
@@ -58,7 +58,7 @@ LP.paper(
       steatosis:"○",
       inflammation:"△",
       fibrosis:"○",
-      readout:["線維化ステージ／コラーゲン","組織透明化による3D線維構造","HSC間接触頻度","68受容体-リガンドペア","NTRK3/NTF3発現","αSMA"],
+      readout:["線維化ステージ／コラーゲン","組織透明化による3D HSC形態","HSC間接触頻度","68受容体-リガンドペア","NTRK3/NTF3発現","αSMA"],
       ignite:"進行期に出現するHSC自己分泌回路（NTF3→NTRK3）とHSC間直接接触が活性化を自己維持（点火後の維持機構）",
       params:[
         {name:"接触依存の自己分泌スイッチ",note:"近傍HSC密度が閾値超で自己分泌正フィードバックがオン→活性化が不可逆化するルール"},
@@ -143,7 +143,7 @@ LP.paper(
   <text x='386' y='168' text-anchor='middle' font-size='8' fill='var(--ink-soft)'>マウス↔ヒト共通ペア抽出</text>
   <path d='M300,156 L150,156 L150,196' stroke='var(--ink-soft)' stroke-width='1.3' marker-end='url(#m20)'/>
   <rect x='80' y='198' width='150' height='46' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.4'/>
-  <text x='155' y='218' text-anchor='middle' font-size='9' fill='var(--B)' font-weight='600'>初代ヒトHSC培養</text>
+  <text x='155' y='218' text-anchor='middle' font-size='9' fill='var(--B)' font-weight='600'>ヒトHSC株LX-2培養</text>
   <text x='155' y='233' text-anchor='middle' font-size='8' fill='var(--ink-soft)'>NTRK3阻害→活性化↓</text>
   <path d='M230,221 L300,221' stroke='var(--H)' stroke-width='1.5' marker-end='url(#m20h)'/>
   <rect x='302' y='198' width='170' height='46' rx='8' fill='var(--paper)' stroke='var(--H)' stroke-width='1.5'/>
@@ -160,11 +160,11 @@ LP.paper(
 );
 
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
-LP.icons("20", [{ic:"stellate",cap:"進行期HSCの密集巣・直接接触↑"},{ic:"stellate",cap:"NTF3→NTRK3自己分泌ループ"},{ic:"omics",cap:"snRNA-seq＋組織透明化(3D線維)"},{ic:"drug",cap:"NTRK3阻害→線維化退縮"},{ic:"mouse",cap:"マウスNASH＋ヒト試料で保存性照合"}]);
+LP.icons("20", [{ic:"stellate",cap:"進行期HSCの密集巣・直接接触↑"},{ic:"stellate",cap:"NTF3→NTRK3自己分泌ループ"},{ic:"omics",cap:"snRNA-seq＋組織透明化(HSC 3D形態)"},{ic:"drug",cap:"NTRK3阻害→線維化退縮"},{ic:"mouse",cap:"マウスNASH＋ヒト試料で保存性照合"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 20 Wang/Friedman Sci Transl Med 2023: MASHマウスsnRNA-seq+組織透明化3D+ヒトNASH+初代HSC+NTRK3阻害薬 */
-LP.methods("20", ["mouse","human","invitro","drug","scrna","qpcr","wb","imaging"]);
+/* 20 Wang/Friedman Sci Transl Med 2023: MASHマウスsnRNA-seq+組織透明化3D+ヒトNASH+LX-2+NTRK3 CRISPR/siRNA+NTRK3阻害薬 */
+LP.methods("20", ["mouse","human","invitro","crispr","drug","scrna","rnaseq","wb","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №20 HSC自己分泌回路（NTF3→NTRK3）が進行期NASH線維化を駆動 ===== */

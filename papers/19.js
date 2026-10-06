@@ -16,7 +16,7 @@ LP.paper(
     authors:"Yang X, Nie YZ, Lu C, Li Y, Hayashi Y, Plummer R, Luo N, Li Q, Kasai T, Okumura T, Isobe Y, Yamaguchi K, Furukawa Y, Li Y, Taniguchi H（責任著者, The University of Tokyo）",
     journal:"Developmental Cell",
     year:2025,
-    vol:"2025/09/29 online",
+    vol:"61(1):208–223.e8",
     doi:"10.1016/j.devcel.2025.09.002",
     url:"https://www.cell.com/developmental-cell/fulltext/S1534-5807(25)00540-4",
     primary:"A",

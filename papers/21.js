@@ -21,20 +21,20 @@ LP.paper(
     url:"https://www.nature.com/articles/s41467-025-56024-4",
     primary:"B",
     tags:["B","D","H"],
-    approach:"in vitro（iPSC→diHSC 7タイムポイントMS-basedプロテオーム軌跡）＋ RORA欠損iPSC（RORA-KO）＋ in vivo（RORA欠損マウス線維化増悪・RORAアゴニスト多臓器線維化軽減）＋ ヒトMASH患者コホートでRORA発現相関",
+    approach:"in vitro（iPSC→diHSC 7タイムポイントMS-basedプロテオーム軌跡）＋ ヘテロ接合RORA-KO iPSC・dox誘導KO ＋ in vivo（staggerer・HSC特異的Rora欠失マウスで線維化増悪、RORAアゴニストSR1078で肝・心・腎の線維化軽減）＋ ヒト慢性肝疾患検体・コホートでRORA発現と線維化の相関",
     added:"2026-06-05",
-    abstract_ja:"細胞分化の軌跡を時系列で追うことは細胞同一性と疾患機序の理解に不可欠だが、ヒト細胞では技術的に困難であった。本研究はヒトiPSCを機能的な肝星細胞（diHSC）へ誘導する系を用い、分化の7タイムポイントにわたる質量分析ベースのプロテオーム軌跡（3,064タンパク）を構築し、核内受容体転写因子RORAがHSCの分化コミットメント・同一性・静止維持に不可欠であることを発見した。RORAはHSCの高エネルギー代謝状態（糖解・ミトコンドリア酸化的リン酸化）を抑えることで静止表現型を保っており、RORA欠損iPSC由来diHSCでは分化障害と活性化促進が生じ、RORA欠損マウスでは線維化が増悪した。一方でRORAアゴニストは肝のみならず複数臓器の線維化を軽減し、ヒトMASH患者でもRORA発現は線維化マーカーと逆相関した。RORAが中胚葉分化・ペリサイト静止・線維化に共通する代謝制御のハブとして機能することを示した成果であり、多臓器の抗線維化標的として期待される。",
+    abstract_ja:"細胞分化の軌跡を時系列で追うことは細胞同一性と疾患機序の理解に不可欠だが、ヒト細胞では技術的に困難であった。本研究はヒトiPSCを機能的な肝星細胞（diHSC）へ誘導する系を用い、分化の7タイムポイントにわたる質量分析ベースのプロテオーム軌跡（3,064タンパク）を構築し、核内受容体転写因子RORAがHSCの分化コミットメント・同一性・静止維持に不可欠であることを発見した。RORAはHSCの高エネルギー代謝状態（糖解・ミトコンドリア酸化的リン酸化）を抑えることで静止表現型を保っており、RORA欠損iPSC由来diHSCでは分化障害と活性化促進が生じ、RORA欠損マウスでは線維化が増悪した。一方でRORAアゴニストは肝のみならず複数臓器の線維化を軽減し、ヒト慢性肝疾患患者でもRORA発現は肝線維化・HSC活性化マーカーと逆相関した。RORAが中胚葉分化・ペリサイト静止・線維化に共通する代謝制御のハブとして機能することを示した成果であり、多臓器の抗線維化標的として期待される。",
     background:"肝線維化の中核はHSCが静止期から筋線維芽細胞へ形質転換することにあり、TGFβ等の外来シグナルがその引き金として知られてきた。しかし「qHSCが細胞同一性（ビタミンAペリサイト）をいかに確立・維持するか」という発生的・代謝的基盤は未解明であった。発生期のHSCで高発現する転写因子が活性化時に低下するという知見はあったものの、分化軌跡全体での変動パターンと代謝リプログラミングとの連動は体系的に示されていなかった。iPSCからHSCへの時系列プロテオームを構築することで、分化と線維化に共通するシグナル交差点を網羅的に探索するというアプローチが取られた。",
     achievements:[
       "iPSC→diHSC分化の**7タイムポイントMS-basedプロテオーム軌跡**（3,064タンパク・2,475定量）を構築し、**RORA**を分化コミットメントと静止維持の新規キー転写因子として同定した。",
-      "RORA欠損iPSCではdiHSCへの分化が障害され、**活性化様遺伝子発現（αSMA/COL1A1）が促進**されることをRORA-KO iPSCで実証した。",
+      "ヘテロ接合RORA-KO iPSCでは分化初期（day 4以降）に約80%の細胞が死滅して中胚葉分化が障害され、分化後半にdox誘導でRORAを欠失させる（またはRORA拮抗薬SR1001を投与する）と**活性化型の表現型（紡錘形・ECM産生増加）**が強まった。",
       "RORAは**糖解・OXPHOSを抑制**してHSCを低エネルギー代謝状態に保っており、RORA低下が活性化の代謝スイッチの引き金となることを示した。",
-      "**RORA欠損マウスで線維化増悪**、**RORAアゴニストが肝・多臓器（ペリサイト）の線維化を軽減**し、ペリサイト静止の汎臓器性を実証した。",
-      "**ヒトMASH患者コホート**においてRORA発現が線維化グレード・HSC活性化マーカーと逆相関し、臨床的関連性を示した。"
+      "**RORA欠損マウス（staggerer、およびHSC特異的Rora欠失）でCCl4線維化が増悪**し、**RORAアゴニストSR1078が肝・心臓・腎臓の線維化を軽減**した（腎UUOではヒドロキシプロリン低下のみで、αSMAは有意差なし）。ペリサイト静止の汎臓器性を示唆する。",
+      "**ヒト慢性肝疾患検体・コホート**において、RORA発現が肝硬変で低下し、Metavir F1–4で低下・FIB4と負に相関、HSC活性化マーカーとも逆相関することを示した。"
     ],
     limitations:[
-      "diHSCは胎児型に近く、成体型qHSCとの転写・機能差は残る。",
-      "RORA欠損マウスは全身性KOであり、**HSC特異的寄与**の切り分けは限定的（条件付きKOが必要）。",
+      "diHSCは初代ヒトHSCとプロテオームの60%超を共有する一方、増殖性が高いなどiPSC由来細胞に特有の差が残り、初代qHSCと完全には一致しない。",
+      "staggererマウスは全身性変異であり、HSC特異的Rora欠失（Lrat-Cre、ヘテロ接合）でも線維化は増悪したが、**ホモ欠失での検証**は未実施。RORA-KO iPSCもヘテロ接合のみ。",
       "RORAは肝以外にも広く発現する核内受容体であり、全身性アゴニスト投与の**副作用リスク**は未解決。",
       "RORA下流で糖解/OXPHOSを具体的にどの因子を介して制御するかの完全な分子機序は部分的にしか解明されていない。"
     ],
@@ -53,7 +53,7 @@ LP.paper(
     struct:{
       model:"in vitro + in vivo + ヒト組織",
       cells:["diHSC（iPSC由来）","マウスHSC"],
-      triggers:["RORA欠損（遺伝子KO）","慢性肝傷害（CCl4/食餌モデル）"],
+      triggers:["RORA欠損（遺伝子KO）","慢性肝傷害（CCl4）"],
       steatosis:"—",
       inflammation:"—",
       fibrosis:"○",
@@ -107,7 +107,7 @@ LP.paper(
   <text x='237' y='256' text-anchor='middle' font-size='8.5' fill='var(--H)'>→ 多臓器線維化軽減</text>
   <!-- Human correlation -->
   <rect x='476' y='40' width='148' height='90' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/>
-  <text x='550' y='58' text-anchor='middle' font-size='9.5' fill='var(--ink)' font-weight='600'>ヒトMASH患者</text>
+  <text x='550' y='58' text-anchor='middle' font-size='9.5' fill='var(--ink)' font-weight='600'>ヒト慢性肝疾患患者</text>
   <text x='550' y='74' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>RORA発現↓</text>
   <text x='550' y='88' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>↕ 逆相関</text>
   <text x='550' y='102' text-anchor='middle' font-size='8.5' fill='var(--B)'>線維化グレード↑</text>
@@ -117,7 +117,7 @@ LP.paper(
   <rect x='476' y='148' width='148' height='80' rx='8' fill='var(--paper)' stroke='var(--accent)' stroke-width='1.5'/>
   <text x='550' y='166' text-anchor='middle' font-size='9.5' fill='var(--ink)' font-weight='600'>プロテオーム軌跡</text>
   <text x='550' y='181' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>iPSC→diHSC D0→D12</text>
-  <text x='550' y='196' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>3,064タンパク定量</text>
+  <text x='550' y='196' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>3,064タンパク同定</text>
   <text x='550' y='211' text-anchor='middle' font-size='8.5' fill='var(--accent)'>→ RORA同定</text>
   <!-- bottom note -->
   <text x='320' y='276' text-anchor='middle' font-size='9' fill='var(--ink-soft)'>RORA欠損マウス：線維化増悪｜RORAアゴニスト：肝・多臓器（ペリサイト）線維化を軽減</text>
@@ -139,7 +139,7 @@ LP.paper(
   <path d='M263,52 L280,52' stroke='var(--E)' stroke-width='1.5' marker-end='url(#m21)'/>
   <rect x='282' y='30' width='110' height='44' rx='6' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>
   <text x='337' y='46' text-anchor='middle' font-size='9' fill='var(--ink)' font-weight='600'>MS-basedプロテオーム</text>
-  <text x='337' y='59' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>3,064タンパク定量</text>
+  <text x='337' y='59' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>3,064タンパク同定</text>
   <path d='M393,52 L410,52' stroke='var(--E)' stroke-width='1.5' marker-end='url(#m21)'/>
   <rect x='412' y='30' width='110' height='44' rx='6' fill='var(--paper-2)' stroke='var(--B)' stroke-width='1.8'/>
   <text x='467' y='46' text-anchor='middle' font-size='9' fill='var(--B)' font-weight='600'>RORA同定</text>
@@ -163,10 +163,10 @@ LP.paper(
   <path d='M133,184 L164,184' stroke='var(--H)' stroke-width='1.5' marker-end='url(#m21h)'/>
   <rect x='166' y='162' width='148' height='44' rx='6' fill='var(--paper-2)' stroke='var(--H)' stroke-width='1.5'/>
   <text x='240' y='180' text-anchor='middle' font-size='9' fill='var(--H)' font-weight='600'>多臓器線維化モデル</text>
-  <text x='240' y='193' text-anchor='middle' font-size='8' fill='var(--H)'>肝・腎・肺ペリサイト線維化軽減</text>
+  <text x='240' y='193' text-anchor='middle' font-size='8' fill='var(--H)'>肝・心・腎の線維化軽減</text>
   <!-- Row 4: Human -->
   <rect x='14' y='228' width='148' height='44' rx='6' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.5'/>
-  <text x='88' y='246' text-anchor='middle' font-size='9' fill='var(--ink)' font-weight='600'>ヒトMASH患者コホート</text>
+  <text x='88' y='246' text-anchor='middle' font-size='9' fill='var(--ink)' font-weight='600'>ヒト慢性肝疾患コホート</text>
   <text x='88' y='259' text-anchor='middle' font-size='8' fill='var(--ink-soft)'>RORA発現 vs 線維化グレード相関</text>
   <rect x='350' y='162' width='138' height='110' rx='8' fill='var(--paper)' stroke='var(--B)' stroke-width='1.6'/>
   <text x='419' y='180' text-anchor='middle' font-size='9.5' fill='var(--B)' font-weight='600'>主結果</text>
@@ -180,11 +180,11 @@ LP.paper(
 );
 
 /* ----- 登場要素（イラスト）：ic は js/core.js の ICONS のキー ----- */
-LP.icons("21", [{ic:"stellate",cap:"iPSC→diHSC プロテオーム軌跡"},{ic:"stellate",cap:"RORA：代謝制御で静止維持"},{ic:"mouse",cap:"RORA-KOマウス線維化増悪"},{ic:"drug",cap:"RORAアゴニスト多臓器線維化軽減"},{ic:"human",cap:"ヒトMASH患者RORA逆相関"}]);
+LP.icons("21", [{ic:"stellate",cap:"iPSC→diHSC プロテオーム軌跡"},{ic:"stellate",cap:"RORA：代謝制御で静止維持"},{ic:"mouse",cap:"RORA-KOマウス線維化増悪"},{ic:"drug",cap:"RORAアゴニスト多臓器線維化軽減"},{ic:"human",cap:"ヒト肝疾患でRORA逆相関"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 21 Martínez García de la Torre/Affo/Sancho-Bru Nat Commun 2025: iPSC→diHSCプロテオーム軌跡+RORA-KO+RORAアゴニスト+ヒト相関 */
-LP.methods("21", ["invitro","mouse","human","crispr","drug","proteomics","qpcr","wb","imaging"]);
+LP.methods("21", ["invitro","mouse","human","crispr","drug","proteomics","rnaseq","qpcr","wb","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №21 RORA依存的代謝制御がHSC静止を維持——低下で代謝スイッチ→活性化・線維化 ===== */
@@ -200,7 +200,7 @@ LP.cinema("21", {
     +GLYPH.mol("atp21",340,378,"ATP過剰","var(--D)",true)
     +GLYPH.layer("col21")
     +GLYPH.pill("agon21",596,88,"RORAアゴニスト",106)
-    +GLYPH.badge("res21",596,348,"線維化","退縮 ✓","var(--E)"),
+    +GLYPH.badge("res21",596,348,"線維化","軽減 ✓","var(--E)"),
   build(K){
     return [
       {color:"E",t:2400,
@@ -232,7 +232,7 @@ LP.cinema("21", {
         }
       },
       {color:"H",t:4000,
-        cap:"③ RORAアゴニスト（SR1078等）を投与するとRORAが核内に回復し、代謝スイッチが抑制されてHSCが静止様表現型を維持する。マウスの肝・多臓器線維化が退縮し、ヒトMASH患者でもRORA発現は線維化と逆相関する。",
+        cap:"③ RORAアゴニスト（SR1078等）を投与するとRORAが核内に回復し、代謝スイッチが抑制されてHSCが静止様表現型を維持する。マウスの肝・多臓器線維化が軽減し、ヒト慢性肝疾患でもRORA発現は線維化と逆相関する。",
         run(){
           K.show(["agon21"]);
           K.T(()=>{
