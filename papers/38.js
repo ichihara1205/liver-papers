@@ -1,5 +1,5 @@
 /* ============================================================
-   №38 · American Journal of Pathology 2025 · （著者詳細：DOI 10.1016/j.ajpath.2025.02.003参照）
+   №38 · American Journal of Pathology 2025 · Zhong H, Liu C, Huang Z, Tan P, Chen H, Fu W
    MASHにおけるHSC-マクロファージ自己増幅クロストーク——JAK-STAT/PI3K-AKT/TLR4-NF-κB三軸が炎症と線維化を同時駆動
    ------------------------------------------------------------
    この1ファイルに論文1本分をまとめている：
@@ -13,10 +13,10 @@ LP.paper(
   {
     id:"38", primary:"B",
     title:"MASHにおけるHSC-マクロファージ自己増幅クロストーク——JAK-STAT/PI3K-AKT/TLR4-NF-κB三軸が炎症と線維化を同時駆動",
-    authors:"（著者詳細：DOI 10.1016/j.ajpath.2025.02.003参照）",
+    authors:"Zhong H, Liu C, Huang Z, Tan P, Chen H, Fu W",
     journal:"American Journal of Pathology",
     year:2025,
-    vol:"195(6):（2025 Jun 1）",
+    vol:"195(6):1040-1056",
     doi:"10.1016/j.ajpath.2025.02.003",
     url:"https://ajp.amjpathol.org/article/S0002-9440(25)00072-0/fulltext",
     catPrimary:"B",

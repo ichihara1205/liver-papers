@@ -28,12 +28,12 @@ LP.paper(
     achievements:[
       "ヒトMASH肝・FPC食・HF-CDAA食マウスのいずれでも**アポトーシス肝細胞（apHC）が蓄積**し、肝マクロファージの**efferocytosis障害**と**TIM4（Timd4）低下**に対応することをTUNEL/cleaved caspase-3とマクロファージマーカー共染色で定量。",
       "**中和抗TIM4抗体**または**KC特異的Timd4欠損（Clec4f-Cre）**でefferocytosisを下げると、HSC活性化（**αSMA・COL1A1・OPN**陽性域）が増しSirius red陽性線維化が増悪—efferocytosis低下が線維化を能動的に点火。",
-      "**誘導性マクロファージTimd4回復**および**TIM4+マクロファージ（マウスBMDM／ヒトHMDM）の細胞移植**が、apHCクリアランスを高めHSC活性化と線維化を低減—治療的に巻き戻せることを実証。",
+      "**誘導性マクロファージTimd4回復**および**TIM4+マクロファージの細胞移植（マウス：Timd4導入造血幹細胞由来マクロファージ／ヒト：TIMD4導入単球由来HMDM）**が、apHCクリアランスを高めHSC活性化と線維化を低減—治療的に巻き戻せることを実証。",
       "機構として、apHCを貪食したマクロファージが**IL-10分泌へリプログラム**され、HSC上の**IL-10R**を介して**Spp1・Timp1**などプロ線維化遺伝子を抑制（ex vivoクロストーク＋抗IL-10R抗体で確認）。"
     ],
     limitations:[
-      "因果実証はマウス（FPC・HF-CDAA食）と初代細胞・ex vivoクロストーク中心で、ヒトでのTIM4回復療法の有効性・安全性は未検証（産学連携・特許出願段階）。",
-      "TIM4は係留受容体であり、貪食実行段階を担うMERTK等やブリッジ分子（Gas6/Protein S）との相対寄与・冗長性の切り分けは限定的。",
+      "因果実証はマウス（FPC・HF-CDAA食）と初代細胞・ex vivoクロストーク中心で、ヒトでのTIM4回復療法の有効性・安全性は未検証で、マクロファージ細胞療法の反復投与は慢性疾患では拡張性に課題がある（mRNA等への置換を著者は展望）。",
+      "MERTK等の他のefferocytosis受容体のmRNAはMASHで低下しておらず（MerTK欠失の影響なしとする先行報告とも整合）TIM4低下が主因と位置づけられているが、TREM2など他受容体との相対寄与や、apHCがマクロファージに取り込まれてIL-10産生へリプログラムされる分子機構は未解明。",
       "IL-10経路がHSC沈静化の唯一の媒介とは限らず、efferocytosis後マクロファージが出す他の抗炎症・脂質代謝性メディエーターの寄与は完全には排除できていない。",
       "KC特異性はClec4f-Cre依存で、MASH進行に伴うKC減少・単球由来置換のなかでどの集団がTIM4回復の主役かは部分的にしか解像されていない。"
     ],
@@ -105,7 +105,7 @@ LP.paper(
   <path d='M476,300 L492,282 L484,296 L502,298 L485,304 L496,318 L476,306 L456,318 L467,304 L450,298 L468,296 L460,282 Z' fill='#d6a08e' stroke='var(--C)' stroke-width='1.4'/>
   <circle cx='476' cy='300' r='5' fill='#7a3a2c'/>
   <text x='476' y='270' text-anchor='middle' font-size='8.5' fill='var(--C)'>IL-10R</text>
-  <text x='476' y='335' text-anchor='middle' font-size='9' fill='var(--C)'>HSC沈静：Spp1/Timp1↓ → 線維化退縮</text>
+  <text x='476' y='335' text-anchor='middle' font-size='9' fill='var(--C)'>HSC活性化↓ → 線維化抑制</text>
 </svg>`,
     method_figure:`<svg viewBox='0 0 640 250' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'>
   <defs><marker id='m16' markerWidth='9' markerHeight='9' refX='7' refY='3' orient='auto'><path d='M0,0 L7,3 L0,6 Z' fill='var(--accent)'/></marker></defs>
@@ -149,7 +149,7 @@ LP.paper(
       {term:"COL1A1",full:"collagen type I alpha 1 chain",desc:"I型コラーゲンα1鎖。活性化HSCが過剰産生する線維化の主要ECM・読み出し指標。"},
       {term:"αSMA",full:"alpha-smooth muscle actin (ACTA2)",desc:"活性化HSC/筋線維芽細胞マーカー・線維化リードアウト。"},
       {term:"Clec4f",full:"C-type lectin domain family 4 member F",desc:"Kupffer細胞特異的マーカー。Clec4f-CreはKC選択的遺伝子操作の駆動系として使用。"},
-      {term:"BMDM",full:"bone marrow-derived macrophage",desc:"骨髄由来マクロファージ。Timd4導入のTIM4+細胞移植ソース（マウス）。"},
+      {term:"BMDM",full:"bone marrow-derived macrophage",desc:"骨髄由来マクロファージ。本論文では移植後の肝局在確認（Luc-Mϕ）などに用い、TIM4+移植細胞（マウス）はTimd4導入造血幹細胞から分化させたマクロファージ。"},
       {term:"HMDM",full:"human monocyte-derived macrophage",desc:"ヒト単球由来マクロファージ。TIMD4導入細胞療法のヒト版モデル。"},
       {term:"HF-CDAA",full:"high-fat choline-deficient L-amino acid-defined diet",desc:"高脂肪・コリン欠乏アミノ酸規定食。線維化を伴うMASHを再現するマウス食餌。"},
       {term:"FPC",full:"fructose-palmitate-cholesterol diet",desc:"果糖・パルミチン酸・コレステロール食。ヒトMASHに近い病態を再現するマウス食餌。"},
@@ -163,7 +163,7 @@ LP.icons("16", [{ic:"macrophage",cap:"KC/マクロファージのTIM4依存effer
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
 /* 16 Shi/Tabas Sci Transl Med 2025: 2MASHモデル+Clec4f-Cre TIM4 KO+細胞移植+ex vivo共培養+FACS+ELISA(IL-10) */
-LP.methods("16", ["mouse","human","invitro","crispr","facs","wb","qpcr","elisa","imaging"]);
+LP.methods("16", ["mouse","human","invitro","crispr","drug","facs","wb","qpcr","elisa","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №16 KC TIM4 efferocytosis障害→apHC蓄積→HSC活性化→線維化（TIM4回復/IL-10で抑制） ===== */
@@ -180,7 +180,7 @@ LP.cinema("16", {
     +GLYPH.receptor("il10r",560,268,"IL-10R","var(--C)")
     +GLYPH.layer("collagen")
     +GLYPH.pill("drug",606,72,"TIM4回復 / TIM4+MΦ移植",178)
-    +GLYPH.badge("good",642,322,"線維化","退縮 ✓","var(--C)"),
+    +GLYPH.badge("good",642,322,"線維化","抑制 ✓","var(--C)"),
   build(K){
     const dp=[[80,150],[120,172],[100,128],[152,158],[72,192]];
     return [
@@ -194,12 +194,12 @@ LP.cinema("16", {
         K.T(()=>{K.attr("tim4","opacity","0.3");K.show(["apAccum"]);},1300);
         K.T(()=>{K.flow(252,150,345,150,"var(--B)",{dur:0.9,loop:1});K.markX(320,150,"var(--B)");},2300);
       }},
-      {color:"B",t:4200,cap:"③ 蓄積したapHCと二次壊死シグナルがHSCをプロ線維化活性化。qHSC→aHSC(筋線維芽細胞)へ転換し、COL1A1/αSMA/OPNを産生して線維化が点火する。",run(){
+      {color:"B",t:4200,cap:"③ apHCが蓄積し、efferocytosis後のマクロファージIL-10産生も失われるためHSCへの抑制が外れ、プロ線維化活性化が進む。qHSC→aHSC(筋線維芽細胞)へ転換し、COL1A1/αSMA/OPNを産生して線維化が点火する。",run(){
         K.flow(330,220,560,300,"var(--B)",{dur:1.3,loop:2});
         K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC（aHSC）");},1400);
         K.T(()=>K.draw("collagen",GLYPH.collagenAt(560,386),{len:160}),2300);
       }},
-      {color:"H",t:4400,cap:"④ TIM4を回復、またはTIM4+マクロファージを移植するとefferocytosisが回復しapHCを処理。貪食したMΦはIL-10を分泌し、HSCのIL-10Rを介してSpp1/Timp1を抑制→HSCが静止化し線維化が退縮する。",run(){
+      {color:"H",t:4400,cap:"④ TIM4を回復、またはTIM4+マクロファージを移植するとefferocytosisが回復しapHCを処理。貪食したMΦはIL-10を分泌し、HSCのIL-10Rを介してSpp1/Timp1を抑制→HSCの活性化が抑えられ線維化の進行が抑制される。",run(){
         K.show(["drug"]);
         K.T(()=>{
           K.attr("tim4","opacity","1");

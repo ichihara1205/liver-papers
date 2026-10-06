@@ -23,18 +23,18 @@ LP.paper(
     tags:["A","I","C","H"],
     approach:"in vitro（hESC由来5細胞種＝肝細胞HEPs・胆管細胞CHO・HSC・内皮EC・Kupffer細胞KCを比率制御で集合させた3D MLHO）＋ 58薬剤スクリーニング ＋ scRNA-seq/scRank in silico摂動 ＋ エクソソーム解析（NTA/TEM/miRNA） ＋ in vivo（imipramine長期経口投与マウス）",
     added:"2026-06-03",
-    abstract_ja:"間接的肝毒性（indirect hepatotoxicity）は、薬剤が肝細胞を直接傷つけるのではなく細胞間相互作用を介して肝障害を起こす型で、評価ツールも機序理解も乏しいため創薬上の難題であり続けてきた。本研究はヒト胚性幹細胞（hESC）から肝細胞（HEPs）・胆管細胞（CHO）・肝星細胞（HSC）・内皮細胞（EC）・Kupffer細胞（KC）の5細胞種を分化させ、肝に近い比率（HEP 60％、他4種を各10％）で集合させた三次元マルチリネージ肝オルガノイド（3D MLHO）を構築した。3D MLHOは2D/3Dの肝細胞単独培養よりヒト肝組織に近い遺伝子発現（相関0.8）・高いCYP活性・アルブミン/尿素/脂質/グリコーゲン合成能を示し、LPS刺激に対しIL-1β/IL-6/TNF-αを強く分泌する免疫応答能も備えていた。58薬剤のスクリーニングで感度82.4％・特異度75％を達成し、肝細胞単独では毒性が出ないのに3D MLHOでのみ強い毒性を示す薬として三環系抗うつ薬imipramine（IMP）を同定した。機序解析の結果、IMPは肝細胞ではなくHSCに高発現する神経栄養因子受容体TrkB（NTRK2）に直接結合し、HSC内でp53/hnRNPA2B1/DGCR8経路を活性化してmiR-34a-3pをHSC由来エクソソームに選択的に濃縮させる（エクソソームの総量・サイズは不変で、積荷の組成だけが変わる『毒性エクソソーム化』）。この毒性エクソソームが肝細胞に取り込まれ、運ばれたmiR-34a-3pが抗アポトーシスタンパクXIAPを抑制してcaspase3を活性化し、肝細胞をアポトーシスへ導く。マウスにIMPを長期経口投与すると、まずHSCがアポトーシスし、遅れて肝細胞のmiR-34a-3pとアポトーシスが上昇する一方でp53は肝細胞では変化せず、TrkBノックダウン・エクソソーム阻害薬GW4869・antagomiR-34のいずれもがALT/AST上昇とcaspase3陽性域を軽減した。以上から本研究は、非実質細胞を含む生体模倣オルガノイドが間接的肝毒性の予測と機序解明に有効であること、そしてTrkB–miR-34a-3p–XIAP軸という細胞間コミュニケーションを介した新しいDILI機序を提示した。",
+    abstract_ja:"間接的肝毒性（indirect hepatotoxicity）は、薬剤が肝細胞を直接傷つけるのではなく細胞間相互作用を介して肝障害を起こす型で、評価ツールも機序理解も乏しいため創薬上の難題であり続けてきた。本研究はヒト胚性幹細胞（hESC）から肝細胞（HEPs）・胆管細胞（CHO）・肝星細胞（HSC）・内皮細胞（EC）・Kupffer細胞（KC）の5細胞種を分化させ、肝に近い比率（HEP 60％、他4種を各10％）で集合させた三次元マルチリネージ肝オルガノイド（3D MLHO）を構築した。3D MLHOは2D/3Dの肝細胞単独培養よりヒト肝組織に近い遺伝子発現（相関0.8）・高いCYP活性・アルブミン/尿素/脂質/グリコーゲン合成能を示し、LPS刺激に対しIL-1β/IL-6/TNF-αを強く分泌する免疫応答能も備えていた。58薬剤のスクリーニングで感度82.4％・特異度75％を達成し、肝細胞単独では毒性が出ないのに3D MLHOでのみ強い毒性を示す薬として三環系抗うつ薬imipramine（IMP）を同定した。機序解析の結果、IMPは肝細胞ではなくHSCに高発現する神経栄養因子受容体TrkB（NTRK2、IMPの既報の結合標的）に作用し、HSC内でp53/hnRNPA2B1/DGCR8経路を活性化してmiR-34a-3pをHSC由来エクソソームに選択的に濃縮させる（エクソソームの総量・サイズは不変で、積荷の組成だけが変わる『毒性エクソソーム化』）。この毒性エクソソームが肝細胞に取り込まれ、運ばれたmiR-34a-3pが抗アポトーシスタンパクXIAPを抑制してcaspase3を活性化し、肝細胞をアポトーシスへ導く。マウスにIMPを長期経口投与すると、まずHSCがアポトーシスし、遅れて肝細胞のmiR-34a-3pとアポトーシスが上昇する一方でp53は肝細胞では変化せず、TrkBノックダウン・エクソソーム阻害薬GW4869・antagomiR-34のいずれもがALT/AST上昇とcaspase3陽性域を軽減した。以上から本研究は、非実質細胞を含む生体模倣オルガノイドが間接的肝毒性の予測と機序解明に有効であること、そしてTrkB–miR-34a-3p–XIAP軸という細胞間コミュニケーションを介した新しいDILI機序を提示した。",
     background:"薬剤性肝障害（drug-induced liver injury; DILI）は直接型・特異体質型（idiosyncratic）・間接型に大別される。直接型は薬剤そのものの用量依存的な肝細胞毒性（例：アセトアミノフェン）で従来モデルでも捉えやすい一方、間接型は免疫活性化や細胞間シグナルの撹乱を介して肝障害を起こすため、肝細胞だけを見るアッセイでは見落とされやすい。これまでの肝オルガノイドの多くはKupffer細胞・内皮細胞・胆管細胞・HSCといった非実質細胞を欠いており、肝の微小環境や細胞間クロストークを再現できず、薬剤の毒性を『肝細胞への直接作用』としてしか評価できなかった。しかし細胞間シグナルの担い手としてエクソソーム（径100〜150 nmの細胞外小胞）が注目され、ドナー細胞が積み込んだmiRNAやタンパクがレシピエント細胞の遺伝子発現と運命を変えうることが分かってきた。そこで、複数の非実質細胞を含む生体模倣オルガノイドを作って間接的肝毒性を再現し、その分子機序——特にどの細胞が起点となり何を介して肝細胞を傷つけるのか——を解くことが課題となっていた。",
     achievements:[
       "hESCから**5細胞種（HEPs・CHO・HSC・EC・KC）**を分化・FACS精製し、肝に近い比率で集合させた**3D MLHO**を構築。35日間にわたり球状構造・アルブミン分泌・生存率を維持し、CK19+胆管様管腔やCD31+血管様構造の形成も確認した。",
       "3D MLHOは肝細胞単独培養よりヒト肝組織に近い**転写プロファイル（相関0.8）**を示し、CYP3A4/CYP1A2/CYP2C9活性は2D比で約6倍・アルブミン/尿素/脂質/グリコーゲン合成能も上回り、**LPS刺激でIL-1β/IL-6/TNF-α**を強く分泌する免疫応答能を備えた。",
       "**58薬剤のスクリーニング**で感度82.4％・特異度75％を達成。肝細胞単独では無毒なのに3D MLHOでのみ強毒性を示す薬として三環系抗うつ薬**imipramine（IMP）**を同定し、間接的肝毒性のモデル化に成功した。",
-      "IMPは肝細胞ではなく**HSCに高発現するTrkB（NTRK2）**に直接結合し、HSC内で**p53/hnRNPA2B1/DGCR8**経路を起動して**miR-34a-3p**をHSC由来エクソソームに選択的に濃縮（総量・サイズは不変＝**毒性エクソソーム化**）。TrkBノックダウンやscRank in silico摂動でもHSCが最応答性細胞と裏づけられた。",
+      "IMPは肝細胞ではなく**HSCに高発現するTrkB（NTRK2、IMPの既報の結合標的）**に作用し、HSC内で**p53/hnRNPA2B1/DGCR8**経路を起動して**miR-34a-3p**をHSC由来エクソソームに選択的に濃縮（総量・サイズは不変＝**毒性エクソソーム化**）。TrkBノックダウンやscRank in silico摂動でもHSCが最応答性細胞と裏づけられた。",
       "毒性エクソソームが肝細胞に取り込まれ、miR-34a-3pが抗アポトーシスタンパク**XIAP**を直接標的に抑制→**caspase3**活性化→肝細胞アポトーシスを誘導することを、ルシフェラーゼレポーター・p53過剰発現/ノックダウンで実証した。",
       "**in vivo**でIMP長期経口投与マウスは、まずHSCがアポトーシスし遅れて肝細胞のmiR-34a-3pとアポトーシスが上昇（肝細胞のp53は不変）。TrkB-KD・**GW4869**・**antagomiR-34**のいずれもALT/AST上昇とcleaved caspase3陽性域・TUNEL+肝細胞を軽減し、機序を裏づけた。"
     ],
     limitations:[
-      "深く解いた間接的肝毒性は**IMP1薬剤**のTrkB–miR-34a-3p–XIAP軸が中心で、スクリーニングで挙がった他6薬剤や他の間接機序（免疫介在・代謝物毒性）への一般性は限定的。",
+      "深く解いた間接的肝毒性は**IMP 1薬剤**のTrkB–miR-34a-3p–XIAP軸が中心で、スクリーニングで挙がった他6薬剤や他の間接機序（免疫介在・代謝物毒性）への一般性は限定的。",
       "オルガノイドは**hESC由来分化細胞**で、各細胞の成熟度・比率は生体と完全には一致せず、灌流血流やzonation・線維化アウトカムは評価対象外。HSCは静止期様で、活性化・線維化の点火は扱っていない。",
       "in vivoはマウス35日の**亜致死的**肝ストレスで死亡例はなく、ヒトでのIMP肝障害（しばしば胆汁うっ滞型）との対応や臨床用量での頻度は未検証。種差も残る。",
       "miR-34a-3p–XIAPを主軸に据えるが、毒性エクソソームには他の積荷（miR-200b-3p等の候補や蛋白）も含まれうるため、単一miRNAの寄与と他因子の相対重みは完全には切り分けられていない。"
@@ -154,7 +154,7 @@ LP.paper(
       {term:"HEPs",full:"hepatocytes",desc:"肝細胞。ALB/CYP3A4を発現する実質細胞で、3D MLHOの約60％を占める。"},
       {term:"CHO",full:"cholangiocytes",desc:"胆管細胞。CK19/SOX9/HNF6陽性で胆管様管腔を形成する。"},
       {term:"IMP",full:"imipramine",desc:"三環系抗うつ薬。肝細胞単独では無毒だが3D MLHOで間接的肝毒性を示し、本論文の主役となった薬剤。"},
-      {term:"TrkB",full:"tropomyosin receptor kinase B (NTRK2)",desc:"神経栄養因子受容体チロシンキナーゼ。HSCに高発現し、IMPが直接結合してHSC内シグナルを起動する間接的肝毒性の起点。"},
+      {term:"TrkB",full:"tropomyosin receptor kinase B (NTRK2)",desc:"神経栄養因子受容体チロシンキナーゼ。HSCに高発現し、IMPが作用してHSC内シグナルを起動する間接的肝毒性の起点（IMPの既報の結合標的）。"},
       {term:"NTRK2",full:"neurotrophic receptor tyrosine kinase 2",desc:"TrkBをコードする遺伝子。scRNA-seqでHSCに最も高発現することが示された。"},
       {term:"p53",full:"tumor protein p53 (TP53)",desc:"腫瘍抑制・ストレス応答転写因子。IMP–TrkB下流でHSCで上昇し、miR-34a-3pの産生を促す。"},
       {term:"hnRNPA2B1",full:"heterogeneous nuclear ribonucleoprotein A2/B1",desc:"miRNAのエクソソームへの選別的積み込みに関わるRNA結合タンパク。IMPで上昇する。"},
@@ -185,8 +185,8 @@ LP.paper(
 LP.icons("18", [{ic:"dish",cap:"hESC由来5細胞種・3D MLHO"},{ic:"hepatocyte",cap:"肝細胞(HEP)アポトーシス"},{ic:"stellate",cap:"HSCのTrkBが起点→毒性エクソソーム"},{ic:"drug",cap:"58薬剤→imipramine同定"},{ic:"mouse",cap:"IMP長期投与マウスで機序検証"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 18 Sun/Du Nat Commun 2026: hESC 5細胞MLHO+58薬剤+scRNA+エクソソーム(NTA/TEM)+FACS+qPCR+WB+マウスin vivo */
-LP.methods("18", ["invitro","mouse","nano","drug","scrna","facs","elisa","qpcr","wb","imaging"]);
+/* 18 Sun/Du Nat Commun 2026: hESC 5細胞MLHO+58薬剤+scRNA+エクソソーム(NTA/TEM)+bulk RNA-seq+FACS+ELISA(サイトカイン)+qPCR+WB+TrkB/p53 KD+scRank in silico摂動+マウスin vivo */
+LP.methods("18", ["invitro","mouse","nano","drug","crispr","scrna","rnaseq","insilico","facs","elisa","qpcr","wb","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №18 imipramine→HSCのTrkB→p53/DGCR8→miR-34a-3p搭載毒性エクソソーム→肝細胞XIAP↓→caspase3→アポトーシス（間接的肝毒性） ===== */
@@ -237,7 +237,7 @@ LP.cinema("18", {
     const QUIET="M0,-12 L26,-34 L9,-6 L40,-3 L11,6 L24,32 L1,10 L-22,34 L-6,6 L-38,5 L-8,-5 L-24,-32 Z";
     return [
       {color:"E",t:2600,cap:"健常な肝。肝細胞（HEP）と肝星細胞（HSC）が定常状態にあり、薬剤の直接毒性もない。HSC膜上には神経栄養因子受容体TrkBが立つ。",run(){}},
-      {color:"C",t:3800,cap:"① 三環系抗うつ薬imipramine（IMP）が投与される。IMPは肝細胞ではなくHSCに高発現するTrkB（NTRK2）に直接結合する——間接的肝毒性の起点はHSC側にある。",run(){
+      {color:"C",t:3800,cap:"① 三環系抗うつ薬imipramine（IMP）が投与される。IMPは肝細胞ではなくHSCに高発現するTrkB（NTRK2、既報のIMP結合標的）に作用する——間接的肝毒性の起点はHSC側にある。",run(){
         K.show(["pill"]);
         K.flow(96,96,178,222,"var(--C)",{dur:1.2,loop:2});
         K.T(()=>K.pulse("trkb"),1100);

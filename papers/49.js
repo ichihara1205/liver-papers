@@ -104,7 +104,7 @@ LP.cinema("49", {
         K.show(["vca49"]);
         const g=K.$("ecs49");
         ecPos.forEach((p,i)=>K.T(()=>{ const e=K.cE("ellipse",{cx:p[0],cy:p[1],rx:16,ry:9,fill:"#cfe0ee",stroke:"var(--E)","stroke-width":"1.6",opacity:"0"}); g.appendChild(e);
-          const t0=performance.now(); const st=now=>{const q=Math.min(1,(now-t0)/500);e.setAttribute("opacity",(0.9*q).toFixed(2));if(q<1)K.raf(st);};K.raf(st);
+          const t0=performance.now(); const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/500));e.setAttribute("opacity",(0.9*q).toFixed(2));if(q<1)K.raf(st);};K.raf(st);
         },i*220));
       }},
       {color:"D",t:4200,cap:"③ 空間解析で浮かんだのはIGF2-IGF1R-AKT/MAPK軸。内皮と肝細胞がIGF2をやり取りし、両方の生存と成熟を同時に押し上げる。",run(){

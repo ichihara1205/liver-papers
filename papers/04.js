@@ -26,7 +26,7 @@ LP.paper(
     struct:{
       model:"in vitro", cells:["iPSC肝細胞","iPSCマクロファージ","iPSC脂肪細胞"], triggers:["M1マクロファージ炎症","TNFα＋遊離脂肪酸"],
       steatosis:"○", inflammation:"○", fibrosis:"×", readout:["TNFα","遊離脂肪酸","HGP/インスリン抵抗性","肝脂質蓄積"],
-      ignite:"WAT量増大だけでは不十分、M1炎症（TNFα＋FFA）が病態ドライバー。線維化はHSC/LSEC欠如で未達。",
+      ignite:"WAT量増大だけでは不十分、M1マクロファージによる脂肪組織炎症（FFA放出・TNFα上昇）が病態ドライバー。線維化はHSC/LSEC欠如で未達。",
       params:[{name:"M1マクロファージ比 → TNFα分泌 → 肝脂質蓄積",note:"iADIPO-iHEP比 最大30:1"},{name:"培地 TNFα/FFA/アディポネクチン濃度",note:"クロストーク指標"}],
       todos:["培地のTNFα/FFA/アディポネクチン定量プロトコルを流用","4細胞でfibrosis達成を本論文の正統な発展に位置づけ"]
     },
@@ -35,9 +35,9 @@ LP.paper(
     abstract_ja:"本研究は、同一のヒトiPS細胞株から分化させたiADIPO・iHEP・iMACを相互接続型MPSで共培養した。その結果、WAT量の増大だけでは生理的範囲でHIRは誘導されず、むしろM1型iMACによる脂肪組織炎症こそがiHEPの脂質蓄積とMPS全体のインスリン抵抗性を惹起することを実証した。一方でセマグルチドは、肝細胞への直接作用は軽微で、主に脂肪細胞のGLP1Rを介して抗炎症・肝保護効果を発揮した。以上から本系は、MASLD発症の細胞間クロストーク解析や創薬スクリーニングを動物実験の代替として担う基盤として有望である。",
     background:"WATへのM1マクロファージ浸潤（炎症）がHIRを招くとされてきたが、WAT量の増大と炎症のどちらが主ドライバーなのかは、ヒト系では切り分けられていなかった。同様に、GLP-1受容体作動薬の肝保護機序が脂肪を介するのか肝への直接作用によるのかも、未解決のままであった。",
     achievements:[
-      "等遺伝子iPSC由来iADIPO・iHEP・iMACを相互接続した3臓器MPSを初構築。",
+      "等遺伝子iPSC由来iADIPO・iHEP・iMACを相互接続した3細胞種のMPSを構築。",
       "WAT量の増大のみ（iADIPO-iHEP比最大30:1）ではHIR未誘導。炎症（M1-iMAC）が決定的ドライバーと実証。",
-      "M1-iMAC由来TNFα＋遊離脂肪酸がiHEP脂質蓄積・HIRをドライブする機序を定量的に解明。",
+      "M1-iMACによる脂肪細胞の炎症化が脂肪分解亢進（遊離脂肪酸の放出）と炎症性サイトカイン（TNFαなど）の上昇を招き、iHEPの脂質蓄積・HIRを引き起こすことを示した（M1-iMAC単独の接続よりiADIPOを含めた方が悪化。TNFα自体の因果は未検証）。",
       "セマグルチドはiADIPO特異的GLP1R作動で肝保護 → セマグルチドの肝保護がアディポサイト依存であることを示した。"
     ],
     limitations:[
@@ -47,7 +47,7 @@ LP.paper(
       "PDMSによる疎水性薬物吸着の制限（一部検証済み）。"
     ],
     connection:[
-      "KC（≒M1-iMAC）導入の正当化：炎症性マクロファージが肝MASLD発症を駆動することの定量的根拠。LPS等セカンドヒット戦略の機序的支柱。",
+      "KC（≒M1-iMAC）導入の正当化：炎症性マクロファージが（脂肪組織を介して）肝MASLD発症を駆動することの定量的根拠。ただし本論文のM1-iMACは脂肪組織側に入れており、肝内KCではない点に注意。LPS等セカンドヒット戦略の機序的支柱。",
       "MPS培地中のTNFα・遊離脂肪酸・アディポネクチン定量は肝オープンオルガノイドの培地解析プロトコルの雛形になる。",
       "HSC・LSECを欠く点が自系との差別化軸。4細胞共培養でfibrosis達成すれば本論文の正統な発展として位置づけ可。",
       "#02（KC-NCF1→フェロトーシス）+ #03（ATF4→HSC活性化）と合わせKC→炎症→HSC→線維化の多段階カスケードの論拠が固まる。"
@@ -74,13 +74,13 @@ LP.paper(
 LP.icons("04", [{ic:"chip",cap:"iPSC-MPS"},{ic:"adipocyte",cap:"iADIPO"},{ic:"hepatocyte",cap:"iHEP"},{ic:"macrophage",cap:"M1-iMAC"},{ic:"drug",cap:"セマグルチド"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 04 Qi Nat Commun 2024: iPSC-MPS(脂肪+肝+MΦ)+scRNA+FACS+薬理(セマグルチド)+ELISA+ライブイメージング */
-LP.methods("04", ["invitro","scrna","facs","drug","elisa","qpcr","imaging"]);
+/* 04 Qi Nat Commun 2024: iPSC-MPS(脂肪+肝+MΦ)+qPCR+薬理(メトホルミン/ロシグリタゾン/デキサメタゾン/セマグルチド)+ELISA/LEGENDplex+蛍光脂肪酸イメージング */
+LP.methods("04", ["invitro","facs","drug","elisa","qpcr","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №04 iPSC統合MPS：脂肪組織炎症がMASLDドライバー ===== */
 LP.cinema("04", {
-  svg:GLYPH.bg("#eef1f4")+`<defs>${GLYPH.defsCommon}${GLYPH.lip("04")}${GLYPH.arrow("04","#3a9a5a")}${GLYPH.arrow("04r","var(--H)")}</defs>`+GLYPH.title("統合MPS：脂肪細胞由来FFA ＋ M1MΦ由来TNFα が共にMASLDを駆動")
+  svg:GLYPH.bg("#eef1f4")+`<defs>${GLYPH.defsCommon}${GLYPH.lip("04")}${GLYPH.arrow("04","#3a9a5a")}${GLYPH.arrow("04r","var(--H)")}</defs>`+GLYPH.title("統合MPS：M1MΦによる脂肪組織炎症（FFA↑・TNFα↑）がMASLDを駆動")
     +`<rect x="24" y="60" width="250" height="300" rx="16" fill="#fff" stroke="#caa53a" stroke-width="1.6"/><text x="149" y="84" text-anchor="middle" font-size="11" fill="#b88a2a">iADIPO-MPS（脂肪組織）</text>`
     +GLYPH.adipo(95,150,30)+GLYPH.adipo(170,185,34)+GLYPH.adipo(105,240,28)+GLYPH.adipo(185,265,26)
     +GLYPH.mac("m1",210,140,"M1 MΦ","#9c4f6c")
@@ -98,7 +98,7 @@ LP.cinema("04", {
         K.T(()=>K.flow(360,215,560,210,"#3a9a5a",{loop:3}),900);
         K.T(()=>addDrops(K,"hepDrops",dp,"lip04"),1600);
       }},
-      {color:"C",t:3800,cap:"② 脂肪組織のM1マクロファージはTNFα（赤）を放出する。脂肪細胞由来のFFA（緑）とM1由来のTNFα（赤）が“両方”そろうことがMASLD発症の主ドライバー。WAT量増大だけでは不十分。※本系はHSC/LSEC欠如のため線維化は未達。",run(){
+      {color:"C",t:3800,cap:"② 脂肪組織にM1マクロファージが入ると脂肪細胞が炎症化し、FFA（緑）の放出とTNFα（赤）などの炎症性サイトカインが増えて肝のインスリン抵抗性・脂質蓄積が進む。これがMASLD発症の主ドライバーで、WAT量増大だけでは不十分。※本系はHSC/LSEC欠如のため線維化は未達。",run(){
         K.attr("m1Body","fill","#9c4f6c"); K.pulse("m1");
         K.flow(218,150,560,205,"var(--H)",{dur:1.4,loop:3,r:4});
         ffaSrc.forEach((p,i)=>K.T(()=>K.flow(p[0],p[1],560,215,"#3a9a5a",{n:1,dur:1.3,loop:1}),i*200));

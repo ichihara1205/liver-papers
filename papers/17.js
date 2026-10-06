@@ -21,22 +21,22 @@ LP.paper(
     url:"https://www.nature.com/articles/s41467-025-57616-w",
     primary:"H",
     tags:["H","C","D"],
-    approach:"in vitro（パルボシクリブ誘導の肝細胞老化モデル・Huh7等）＋ in vivo（複数のMASLD進行/退縮マウスモデル）＋ 大規模ヒトコホートでのトランスクリプトーム照合 ＋ snRNA-seq ＋ 約2,100化合物の化学スクリーニング",
+    approach:"in vitro（パルボシクリブ誘導のHuh7老化モデル）＋ in vivo（NRAS誘導老化モデル、CDA-HFD MASHマウス、p21 KOマウス）＋ 大規模ヒトコホートでのトランスクリプトーム照合 ＋ snRNA-seq ＋ 約2,100化合物の化学スクリーニング",
     added:"2026-06-02",
-    abstract_ja:"老化（senescent）肝細胞は代謝機能障害関連脂肪性肝疾患（MASLD）で蓄積し臨床アウトカムの悪化と関連するが、その不均一性と特異的マーカーの欠如のため治療標的化が難しかった。本研究はin vitro・in vivoの肝細胞老化モデルを用いて「老化肝細胞遺伝子シグネチャ（senescent hepatocyte gene signature; SHGS）」を定義し、これが複数のマウスモデルおよび大規模ヒトコホートでMASLDの進行・退縮に一致して動くことを示した。単核RNA-seq（snRNA-seq）と機能解析から、SHGS陽性肝細胞はp21陽性細胞に由来し、肝細胞としての主要機能を失う一方で疾患進行を駆動する因子を放出することが明らかになった。その代表が増殖分化因子GDF15で、循環血中濃度がSHGS陽性細胞の量および疾患進行と並行して上昇し、分泌されたGDF15は近傍細胞のTGFBR2を介して病態を悪化させた。さらに化学ライブラリ（約2,100化合物）のスクリーニングから、非老化細胞を傷害せずSHGS陽性肝細胞を選択的に除去するセノリティック化合物DpCを同定し、雄マウスでMASLD（脂肪化・炎症・線維化・細胞死）を改善した。注目すべきことにSHGSの濃縮は肝以外の臓器機能障害とも相関しており、本研究は老化肝細胞をMASLDの鍵ドライバーとして位置づけ、老化細胞を標的とする治療戦略と血中バイオマーカー（GDF15）を提示した。",
+    abstract_ja:"老化（senescent）肝細胞は代謝機能障害関連脂肪性肝疾患（MASLD）で蓄積し臨床アウトカムの悪化と関連するが、その不均一性と特異的マーカーの欠如のため治療標的化が難しかった。本研究はin vitro・in vivoの肝細胞老化モデルを用いて「老化肝細胞遺伝子シグネチャ（senescent hepatocyte gene signature; SHGS）」を定義し、これが複数のマウスモデルおよび大規模ヒトコホートでMASLDの進行・退縮に一致して動くことを示した。単核RNA-seq（snRNA-seq）と機能解析から、SHGS陽性肝細胞はp21陽性細胞に由来し、肝細胞としての主要機能を失う一方で疾患進行を駆動する因子を放出することが明らかになった。その代表が増殖分化因子GDF15で、循環血中濃度がSHGS陽性細胞の量および疾患進行と並行して上昇し、細胞間相互作用解析ではGDF15がTGFBR2を介して肝の各細胞種へ作用しうると推定された。また、SHGS陽性肝細胞の培養上清は星細胞・マクロファージ・LSECを病的に再プログラムした。さらに化学ライブラリ（約2,100化合物）のスクリーニングで老化肝細胞に選択的な化合物（Dp44mTとその類縁体DpC、銅依存的に作用）を見出し、DpCは雄マウスのMASLD（脂肪化・炎症・線維化・細胞死）を改善した。注目すべきことにSHGSの濃縮は肝以外の臓器機能障害とも相関しており、本研究は老化肝細胞をMASLDの鍵ドライバーとして位置づけ、老化細胞を標的とする治療戦略と血中バイオマーカー（GDF15）を提示した。",
     background:"MASLDからMASH・線維化へ進む過程では、脂肪毒性・代謝ストレスにより一部の肝細胞が細胞周期を不可逆的に停止して細胞老化（cellular senescence）に陥り、SASP（senescence-associated secretory phenotype）として炎症性・線維化促進性の因子を放出すると考えられてきた。しかし肝細胞老化は不均一で、p16やp21などの単一マーカーだけでは捕捉しきれず、どの老化肝細胞集団が病態を駆動するのか、それを選択的に除けば疾患が改善するのかは不明だった。一方で全身性老化を狙ったセノリティック（dasatinib＋quercetin等）はマウスMASLDで効果が乏しい報告も多く、肝細胞の老化状態を精確に定義しその集団に効くセノリティックを設計することが課題だった。脂肪化から線維化への移行点をどう生理的に押さえるかという課題にも、老化肝細胞由来のSASPは新たな点火候補を与える。",
     achievements:[
-      "パルボシクリブ（CDK4/6阻害）で肝細胞に強固で不可逆的な老化を誘導するモデルを軸に、in vitro／in vivoを統合して**老化肝細胞遺伝子シグネチャ（SHGS）**を構築。SHGSが複数マウスモデルと**大規模ヒトコホート**でMASLDの進行・退縮に追従することを示した。",
+      "パルボシクリブ（CDK4/6阻害）でHuh7に老化を誘導したin vitroモデルと、NRAS(G12V)過剰発現による癌遺伝子誘導老化のin vivoモデル（GFP+肝細胞をFACS分取）のRNA-seqで共通に上昇する100遺伝子から**老化肝細胞遺伝子シグネチャ（SHGS）**を構築。SHGSが複数マウスモデルと**大規模ヒトコホート**でMASLDの進行・退縮に追従することを示した。",
       "snRNA-seqと機能解析で、**SHGS陽性肝細胞がp21陽性細胞に由来**し、肝細胞機能を失いながら疾患進行を駆動する分泌因子を放出することを実証。老化の進行段階を表す細胞集団として位置づけた。",
-      "放出因子の代表として**GDF15**を同定。**血中GDF15**がSHGS陽性細胞量・疾患進行と並行して上昇する**バイオマーカー**であり、分泌GDF15は近傍細胞の**TGFBR2**を介して病態悪化に寄与することを示した。",
-      "約**2,100化合物の化学スクリーニング**から、非老化細胞を傷つけずSHGS陽性肝細胞を選択的に殺すセノリティック**DpC**を同定。雄マウスで脂肪化・炎症・線維化・細胞死を低減しMASLDを改善した。",
-      "SHGSの濃縮が肝以外の臓器機能障害とも相関することを示し、老化肝細胞が**全身性（multi-organ）**の病態にも波及しうることを提示した。"
+      "放出因子の代表として**GDF15**を同定。**血中GDF15**がSHGS陽性細胞量・疾患進行と並行して上昇する**バイオマーカー**であり、snRNA-seqの細胞間相互作用解析から、SHGS+肝細胞が分泌するGDF15が**TGFBR2**を介して肝の各細胞種に作用しうると推定した（GDF15–TGFBR2軸自体の機能実証はない）。SHGS+肝細胞の培養上清は、非老化肝細胞に二次的な老化、HSC（LX2）に線維化遺伝子発現、マクロファージの活性化、LSECのcapillarizationを誘導した。",
+      "約**2,100化合物の化学スクリーニング**（パルボシクリブ誘導の老化Huh7）で、増殖中の肝細胞への毒性が小さく老化細胞に選択的な**Dp44mT**と、その類縁体で経口活性に優れる**DpC**を同定（銅依存的に作用）。DpCはCDA-HFD誘導MASHの雄マウスで老化・脂肪化・炎症・線維化・細胞死のマーカーを低減しMASLDを改善した。",
+      "SHGSの濃縮が肝以外の臓器（脂肪・膵島・心・腎）の機能障害とも相関すること、DpCが心筋症・糖尿病・がん関連の遺伝子発現も低下させることを示した（因果の方向は未解明で、**全身性（multi-organ）**病態への関与を示唆する段階）。"
     ],
     limitations:[
       "セノリティックDpCの薬効データは主に**雄マウス**で得られており、性差・ヒトでの有効性と安全性（標的選択性・長期影響）は未検証。",
       "SHGSは老化『肝細胞』のシグネチャで、HSC・LSEC・マクロファージなど他細胞種の老化やp16優位集団との関係づけは限定的。",
-      "線維化改善は示されたが主眼は肝細胞老化の除去であり、HSC活性化を直接操作した実験ではないため抗線維化が二次効果かの切り分けは部分的。",
-      "GDF15-TGFBR2軸は同定されたがSASPは多因子で、GDF15単独の寄与と他のSASP因子（炎症性サイトカイン等）との相対重みは完全には解像されていない。"
+      "線維化改善は示されたが主眼は肝細胞老化の除去であり、SHGS+肝細胞の上清がHSC株（LX2）を活性化することはin vitroで示されたものの、in vivoでHSC活性化を直接操作した実験ではないため抗線維化が二次効果かの切り分けは部分的。",
+      "GDF15-TGFBR2軸はsnRNA-seqの細胞間相互作用解析による推定にとどまり、GDF15の阻害・欠損による機能検証はない（GDF15は有益・有害の両作用が報告される）。SASPは多因子で、他のSASP因子との相対重みも未解像。"
     ],
     connection:[
       "線維化点火の新しい上流トリガーとして『老化肝細胞のSASP』を導入できる。脂肪毒性で生じた老化肝細胞がGDF15等を放出し近傍HSC・マクロファージを刺激する経路は、KCのLPSセカンドヒットや死細胞負荷（#16）とは独立した点火候補。共培養に老化肝細胞画分を意図的に作る（低用量パルボシクリブ等）操作を組み込める。",
@@ -53,7 +53,7 @@ LP.paper(
       inflammation:"○",
       fibrosis:"○",
       readout:["SHGSスコア(遺伝子セット)","p21+/SA-β-gal+細胞","血中・上清GDF15","線維化マーカー","肝細胞死/機能"],
-      ignite:"老化肝細胞(SHGS+)がGDF15等SASPを分泌→TGFBR2介して近傍HSC/MΦを刺激し線維化・炎症を駆動",
+      ignite:"老化肝細胞(SHGS+)がGDF15等SASPを分泌し近傍HSC/MΦ/LSECを病的に再プログラムして線維化・炎症を駆動（GDF15→TGFBR2は相互作用解析による推定）",
       params:[
         {name:"老化遷移確率",note:"肝細胞が脂質負荷・ストレス曝露時間の関数でp21+→SHGS+へ遷移し増殖停止"},
         {name:"GDF15分泌速度",note:"SHGS+エージェントが分泌。血中/上清濃度＝老化バーデンの代理指標"},
@@ -105,7 +105,7 @@ LP.paper(
   <rect x='16' y='42' width='150' height='84' rx='8' fill='var(--paper-2)' stroke='var(--accent)' stroke-width='1.4'/>
   <text x='91' y='62' text-anchor='middle' font-size='9.5' fill='var(--ink)' font-weight='600'>① 老化モデル</text>
   <text x='91' y='80' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>パルボシクリブ誘導</text>
-  <text x='91' y='95' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>in vitro/in vivo</text>
+  <text x='91' y='95' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>＋NRAS誘導(in vivo)</text>
   <text x='91' y='112' text-anchor='middle' font-size='8.5' fill='var(--C)'>SHGS定義</text>
   <path d='M166,84 L206,84' stroke='var(--accent)' stroke-width='1.3' marker-end='url(#m17)'/>
   <rect x='208' y='34' width='186' height='66' rx='8' fill='var(--paper-2)' stroke='var(--C)' stroke-width='1.5'/>
@@ -123,15 +123,15 @@ LP.paper(
   <text x='529' y='92' text-anchor='middle' font-size='9.5' fill='var(--H)' font-weight='600'>④ 化合物スクリーニング</text>
   <text x='529' y='110' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>約2,100化合物</text>
   <text x='529' y='128' text-anchor='middle' font-size='8.5' fill='var(--H)'>セノリティックDpC同定</text>
-  <text x='529' y='146' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>SHGS+を選択除去(健常温存)</text>
+  <text x='529' y='146' text-anchor='middle' font-size='8.5' fill='var(--ink-soft)'>SHGS+を選択除去(増殖細胞は温存)</text>
   <text x='529' y='164' text-anchor='middle' font-size='8' fill='var(--H)'>→ 雄マウスでMASLD改善</text>
 </svg>`,
     glossary:[
       {term:"SHGS",full:"senescent hepatocyte gene signature",desc:"老化肝細胞を捕捉するために本論文が定義した遺伝子シグネチャ。複数マウスモデルと大規模ヒトコホートでMASLDの進行・退縮に一致して動く。"},
       {term:"senolytic",full:"senolytic",desc:"老化細胞を選択的に除去する薬剤の総称。本論文では肝細胞老化に効くDpCを化合物スクリーニングで同定した。"},
-      {term:"DpC",full:"di-2-pyridylketone 4-cyclohexyl-4-methyl-3-thiosemicarbazone",desc:"スクリーニングで同定された、非老化細胞を傷つけずSHGS+肝細胞を選択的に殺すセノリティック。雄マウスMASLDを改善。"},
-      {term:"GDF15",full:"growth differentiation factor 15",desc:"老化肝細胞が分泌するSASP因子。血中濃度がSHGS量・疾患進行と相関するバイオマーカーで、近傍細胞のTGFBR2を介して病態悪化に寄与する。"},
-      {term:"TGFBR2",full:"TGF-β receptor type 2",desc:"TGF-βスーパーファミリー受容体。分泌GDF15の作用点として近傍細胞で病態進行を媒介する。"},
+      {term:"DpC",full:"di-2-pyridylketone 4-cyclohexyl-4-methyl-3-thiosemicarbazone",desc:"スクリーニングで選別されたDp44mTの類縁体（第二世代チオセミカルバゾン）。増殖中の肝細胞より老化肝細胞を選択的に殺し、銅依存的に作用するセノリティック。雄マウスMASHを改善。"},
+      {term:"GDF15",full:"growth differentiation factor 15",desc:"老化肝細胞が分泌するSASP因子。血中濃度がSHGS量・疾患進行と相関するバイオマーカー。細胞間相互作用解析では近傍細胞のTGFBR2を介して作用しうると推定された。"},
+      {term:"TGFBR2",full:"TGF-β receptor type 2",desc:"TGF-β受容体ファミリー。細胞間相互作用解析でGDF15の受け手側受容体として推定された（機能実証はなし）。"},
       {term:"p21",full:"cyclin-dependent kinase inhibitor 1A (CDKN1A)",desc:"細胞周期停止を担うCDK阻害因子。SHGS+肝細胞はp21+細胞に由来する。"},
       {term:"SASP",full:"senescence-associated secretory phenotype",desc:"老化細胞が放出する炎症・線維化促進性の分泌表現型。GDF15などを含み周囲組織の病態を駆動する。"},
       {term:"SA-β-gal",full:"senescence-associated β-galactosidase",desc:"細胞老化の代表的染色マーカー。パルボシクリブ誘導の老化肝細胞でほぼ100%陽性となる。"},
@@ -148,8 +148,8 @@ LP.paper(
 LP.icons("17", [{ic:"hepatocyte",cap:"老化肝細胞(SHGS+/p21+)"},{ic:"drug",cap:"セノリティックDpC(選択除去)"},{ic:"mouse",cap:"複数MASLD進行/退縮マウス"},{ic:"human",cap:"大規模ヒトコホート照合"},{ic:"omics",cap:"snRNA-seq＋化合物スクリーニング"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 17 Du/Diehl Nat Commun 2025: パルボシクリブ老化モデル+MASLDマウス+ヒトコホート+snRNA+薬剤スクリーニング+SA-β-gal染色 */
-LP.methods("17", ["mouse","human","invitro","drug","scrna","facs","elisa","qpcr","wb","imaging"]);
+/* 17 Du/Diehl Nat Commun 2025: パルボシクリブ老化モデル+MASLDマウス+ヒトコホート+snRNA+薬剤スクリーニング+p21 KOマウス+bulk RNA-seq+血清プロテオミクス(Olink/SOMAscan)+SA-β-gal染色 */
+LP.methods("17", ["mouse","human","invitro","crispr","drug","scrna","rnaseq","proteomics","facs","qpcr","wb","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* №17 老化肝細胞(SHGS+)→GDF15/TGFBR2→病態駆動／セノリティックDpCで選択除去 */
@@ -160,7 +160,7 @@ LP.cinema("17", {
     <radialGradient id="pillg17" cx="0.35" cy="0.3" r="0.9"><stop offset="0" stop-color="#d98a8a"/><stop offset="1" stop-color="#a23b3b"/></radialGradient>
   </defs>
   <rect x="0" y="0" width="720" height="430" fill="#eef3f6"/>
-  <text x="360" y="22" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">老化肝細胞(SHGS+)がGDF15を分泌→TGFBR2介して病態駆動／DpCで選択除去</text>
+  <text x="360" y="22" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">老化肝細胞(SHGS+)がGDF15等を分泌して病態を駆動／DpCで選択除去</text>
   <g id="hepN">
     <ellipse cx="130" cy="120" rx="58" ry="44" fill="url(#hepg17)" stroke="#c2a268" stroke-width="2.2"/>
     <ellipse cx="108" cy="108" rx="15" ry="12" fill="#b79a64"/>
@@ -203,7 +203,7 @@ LP.cinema("17", {
     const SPINDLE="M-40,-8 C-14,-15 16,-15 42,-7 C52,-3 52,3 42,7 C16,15 -14,15 -40,8 C-50,3 -50,-3 -40,-8 Z";
     function drop(layer,x,y){const c=K.cE("circle",{cx:x,cy:y,r:1,fill:"url(#dropg17)",stroke:"#b8862f","stroke-width":"0.7"});K.$(layer).appendChild(c);
       const t0=performance.now(),target=5+Math.random()*4,dur=1300;
-      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);}
+      const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/dur));c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);}
     return [
       {color:"E",t:2200,cap:"健常な肝。肝細胞は正常に機能し、細胞周期も保たれている。",run(){}},
       {color:"D",t:3600,cap:"① 過栄養・脂肪毒性で肝細胞に脂肪滴が蓄積し、一部の肝細胞がp21+となって細胞周期を停止→老化（SHGS+）に陥る。",run(){
@@ -211,14 +211,14 @@ LP.cinema("17", {
         K.T(()=>{K.attr("hepSbody","fill","#cfd3c4");K.attr("hepSbody","stroke","var(--C)");K.attr("hepSnuc","opacity","1");K.text("hepScap","老化肝細胞(SHGS+)");},900);
         K.T(()=>{K.show(["p21","bgal"]);K.pulse("p21");},1400);
       }},
-      {color:"C",t:4400,cap:"② SHGS+肝細胞はSASPとしてGDF15を分泌。GDF15は近傍細胞のTGFBR2に結合して線維化・炎症など病態進行を駆動し、血中GDF15も上昇して疾患重症度のバイオマーカーになる。",run(){
+      {color:"C",t:4400,cap:"② SHGS+肝細胞はSASPとしてGDF15などを分泌し、その培養上清はHSC・マクロファージ・LSECを病的に再プログラムする（GDF15は相互作用解析でTGFBR2を介して作用しうると推定）。血中GDF15も上昇し、疾患重症度のバイオマーカーになる。",run(){
         K.show(["gdf","tgfbr2","blood"]);
         K.flow(208,300,352,300,"var(--C)",{n:2,dur:1.1,loop:2});
         K.T(()=>{K.flow(368,300,532,298,"var(--C)",{n:2,dur:1.0,loop:2});K.flow(360,288,560,92,"var(--C)",{n:1,dur:1.3,loop:2});},1000);
         K.T(()=>{K.morph("hscShape",SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},2200);
         K.T(()=>K.draw("collagen",["M518,360 C546,348 574,352 606,350","M516,378 C554,392 576,382 609,386","M521,395 C549,382 573,400 609,394"],{len:150}),2900);
       }},
-      {color:"H",t:3600,cap:"③ 化合物スクリーニングで同定したセノリティックDpCがSHGS+肝細胞だけを選択的に除去（健常肝細胞は温存）→GDF15分泌が止まり線維化・炎症が軽減し、MASLDと全身が改善する。",run(){
+      {color:"H",t:3600,cap:"③ 化合物スクリーニングで同定したセノリティックDpCがSHGS+肝細胞を選択的に除去（増殖中の肝細胞への毒性は小さい）→老化・線維化・炎症のマーカーが低下してMASLDが改善し、肝外臓器障害に関連する遺伝子発現も低下する。",run(){
         K.show(["dpc"]);
         K.T(()=>{K.strike(610,200,150,300);
           K.T(()=>{K.markX(150,300);K.attr("hepS","opacity","0.3");K.hide(["gdf"]);

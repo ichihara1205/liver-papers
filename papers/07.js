@@ -50,13 +50,13 @@ LP.paper(
       "steatosisの分子基盤を補完：自系の堅牢な脂肪化の機構としてACLY（クエン酸→アセチルCoA）とACSS2（酢酸→アセチルCoA）の二経路が主要ドライバーと示す。SREBP1c・FASN・ACACへのリードアウトに加え、コレステロール合成（HMGCR）も評価軸に追加できる。",
       "線維化の点火ヒント：HSC活性化がHSC自身のACSS2依存酢酸代謝とコレステロール合成に必須。酢酸添加でHSCセカンドヒット設計、ACSS2阻害でネガコンが可能。",
       "ABM実装：「アセチルCoA産生速度→HSCコレステロール合成速度→HSC活性化確率→COL1A1産生速度」のルール化が可能。代謝フラックスを状態変数に。",
-      "既収録との接続：#03（TGFβ→ATF4→HSC転写）との組み合わせでHSC活性化の転写（#03）＋代謝（本論文）の二面が揃う。#04（炎症→DNL亢進）と合わせ炎症→代謝→steatosis連鎖モデルへ。#06（ABM/iHSC再活性化）のエネルギー源としてACSS2依存酢酸代謝をHSCエージェントパラメータに組み込める。"
+      "既収録との接続：#03（TGFβ→ATF4→HSC転写）との組み合わせでHSC活性化の転写（#03）＋代謝（本論文）の二面が揃う。#04（iPSC-MPSでの脂肪組織炎症→肝脂質蓄積・インスリン抵抗性）と合わせ炎症→代謝→steatosis連鎖モデルへ。#06（Kappa規則ベースのHSC多スケールモデル／iHSC再活性化ループ）のエネルギー源としてACSS2依存酢酸代謝をHSCエージェントパラメータに組み込める。"
     ],
     glossary:[
       {term:"ACLY",full:"ATP citrate lyase",desc:"クエン酸→アセチルCoAを産生する酵素。DNL・コレステロール合成の主要供給源"},
       {term:"ACSS2",full:"acyl-CoA synthetase short chain 2",desc:"酢酸→アセチルCoAを産生する酵素。HSCの活性化・線維化に必要"},
       {term:"DNL",full:"de novo lipogenesis",desc:"アセチルCoAから脂肪酸を新規合成する経路。肝steatosisの主因"},
-      {term:"EVT0185",full:"EVT0185 (Espervita dual ACLY/ACSS2 inhibitor)",desc:"ACLYとACSS2の初の二重阻害薬。MASH・線維化を前臨床で解消"},
+      {term:"EVT0185",full:"EVT0185 (Espervita dual ACLY/ACSS2 inhibitor)",desc:"ACLYとACSS2の二重阻害薬。MASH・線維化を前臨床で解消"},
       {term:"SREBP1c",full:"sterol regulatory element-binding protein 1c",desc:"インスリン・糖応答性の脂肪酸合成マスター転写因子"},
       {term:"HMGCR",full:"3-hydroxy-3-methylglutaryl-CoA reductase",desc:"コレステロール合成の律速酵素（スタチン標的）"},
       {term:"bempedoic acid",full:"bempedoic acid (ETC-1002)",desc:"ACLY単独阻害薬（高コレステロール血症承認済み）。EVT0185との比較対照"}
@@ -123,11 +123,11 @@ LP.cinema("07", {
     function addDrops(){const g=K.$("drops");dropPos.forEach((p,i)=>K.T(()=>{
       const c=K.cE("circle",{cx:p[0],cy:p[1],r:1,fill:"url(#dropg7)",stroke:"#b8862f","stroke-width":"0.7"});g.appendChild(c);
       const t0=performance.now(),target=8+Math.random()*7,dur=1400;
-      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+      const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/dur));c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
     },i*160));}
     function shrinkDrops(){const g=K.$("drops");[...g.children].forEach((c,i)=>K.T(()=>{
       const from=+c.getAttribute("r"),t0=performance.now(),dur=1300;
-      const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(from*(1-0.8*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+      const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/dur));c.setAttribute("r",(from*(1-0.8*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
     },i*70));}
     return [
       {color:"E",cap:"健常な肝類洞。肝細胞・LSEC・KC・HSCが定常状態にある。",run(){K.show(["feed"]);}},

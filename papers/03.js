@@ -1,5 +1,5 @@
 /* ============================================================
-   №03 · Nature Communications 2025 · Feng Y-X, et al.
+   №03 · Nature Communications 2025 · Yang L-X, Qi C, … Li W, Feng Y-X.
    ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動
    ------------------------------------------------------------
    この1ファイルに論文1本分をまとめている：
@@ -14,7 +14,7 @@ LP.paper(
     id:"03",
     added:"2026-05-29",
     title:"ATF4の非定型エンハンサープログラムがHSCを活性化し肝線維化を駆動",
-    authors:"Feng Y-X, et al.",
+    authors:"Yang L-X, Qi C, … Li W, Feng Y-X.",
     journal:"Nature Communications",
     year:2025,
     vol:"16, 524",
@@ -37,7 +37,7 @@ LP.paper(
     achievements:[
       "ATF4をHSC活性化・線維化の新規ドライバーとして同定(ERストレス/UPRとは独立の機能)。",
       "TGFβがATF4を再構成し、プロ線維化EMT遺伝子を駆動する固有のエンハンサープログラムを編成することをエピゲノム的に解明。",
-      "HSC特異的ATF4欠損でin vivo線維化が抑制されることを実証。",
+      "HSC特異的ATF4欠損でCCl4モデルのin vivo線維化（間葉系・線維化遺伝子の誘導）が抑制されることを実証。",
       "ヒトデータでHSC ATF4発現と線維化進行の強い相関を確認。",
       "ATF4翻訳を標的とする低分子阻害剤で線維化を軽減し創薬標的性を提示。"
     ],
@@ -71,8 +71,8 @@ LP.paper(
 LP.icons("03", [{ic:"mouse",cap:"ATF4-KOマウス"},{ic:"stellate",cap:"HSC"},{ic:"drug",cap:"翻訳阻害剤"},{ic:"human",cap:"ヒト相関"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 03 Feng Nat Commun 2025: HSC特異的ATF4-KOマウス+ChIP-seq(エンハンサー)+scRNA+ヒトデータ+低分子 */
-LP.methods("03", ["mouse","human","crispr","scrna","chipseq","qpcr","wb","drug","imaging"]);
+/* 03 Yang&Feng Nat Commun 2025: Lrat-Cre HSC特異的Atf4-KOマウス(CCl4)+LX-2/HMLE(RNA-seq, ATF4/H3K27ac ChIP-seq)+ISRIB(CCl4/BDL/TAA)+ヒトscRNA-seq再解析・IHC */
+LP.methods("03", ["mouse","human","invitro","crispr","rnaseq","scrna","chipseq","qpcr","wb","drug","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №03 ATF4(転写因子)の非定型エンハンサーがHSC活性化 ===== */
@@ -86,8 +86,8 @@ LP.cinema("03", {
     +GLYPH.layer("collagen")+GLYPH.pill("drug",580,110,"ATF4阻害剤",96),
   build(K){
     return [
-      {color:"E",t:2400,cap:"静止期HSC（qHSC）。ATF4は転写因子で、ふだんは細胞質側に控えている。",run(){K.show(["atf4a","atf4b"]);}},
-      {color:"B",t:4000,cap:"① ATF4が核内へ移行し、非定型エンハンサープログラムを起動。これが活性化HSCの内部スイッチとなり qHSC→aHSC へ転換する。",run(){
+      {color:"E",t:2400,cap:"静止期HSC（qHSC）。転写因子ATF4は、TGFβなどの線維化刺激に応じて誘導される。",run(){K.show(["atf4a","atf4b"]);}},
+      {color:"B",t:4000,cap:"① TGFβ刺激下でATF4がゲノム上の特定のエンハンサー領域に結合し、非定型エンハンサープログラムを起動。これが活性化HSCの内部スイッチとなり qHSC→aHSC へ転換する。",run(){
         K.flow(120,125,300,235,"var(--B)",{dur:1.2,loop:2});K.flow(150,155,300,235,"var(--B)",{dur:1.2,loop:2});
         K.attr("atf4a","opacity","0.2");K.attr("atf4b","opacity","0.2");
         K.T(()=>{K.show(["enh"]);K.pulse("enh");},1300);

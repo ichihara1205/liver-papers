@@ -13,7 +13,7 @@ LP.paper(
   {
     id:"13",
     title:"肝細胞の非アポトーシス性caspase-8–Meteorin経路がMASH線維化を駆動",
-    authors:"Wang X, Moore MP, Shi H, Xiao Y, Zhang J, Faccioli LAP, Hu Z, Kisseleva T, Soto Gutierrez A, Lazar MA, Tabas I",
+    authors:"Wang X, Moore MP, Shi H, Xiao Y, Zhang J, Faccioli LAP, Hu Z, Khalid S, Saleheen D, Stupack DG, Kisseleva T, Soto Gutierrez A, Lazar MA, Tabas I",
     journal:"Nature Metabolism",
     year:2025,
     vol:"7(10):2067–2082",
@@ -42,7 +42,7 @@ LP.paper(
       "線維化点火の新ルート（KC非依存）：自系の最重要課題はfibrosisをどう生理的に点火するかで、直近はKC＋LPSのsecond hit路線を採る。本論文は脂肪化した肝細胞自身がcaspase-8→YY1→Meteorinで直接HSCを点火するKC非依存ルートを示す。自系でKC second hitと肝細胞Meteorinのどちらが（あるいは協調が）点火に効くかを切り分ける設計ができる。",
       "共培養系での検証：肝細胞・HSCの2細胞共培養（自系4細胞系のサブセット）で肝細胞にcaspase-8/Meteorinを操作しHSC活性化（αSMA・コラーゲン）が動くか直接検証できる。recombinant MeteorinをHSC培地に添加しc-Kit/STAT3依存的に活性化が誘導できるかもネガコン/ポジコン実験になる。",
       "ABM実装：肝細胞ノードの脂質負荷↑→caspase-8活性↑→YY1→Meteorin分泌量↑を肝細胞エージェントに、HSC近傍のMeteorin濃度がc-Kit閾値超→STAT3活性化→qHSC→aHSC遷移確率↑をHSCエージェントに実装可能。細胞死を介さず線維化が進む＝アポトーシス独立の点火ルールとして既存の炎症駆動ルートと並列に置ける。",
-      "既収録との接続：#03（ATF4がHSC内部でエンハンサー起動）・#09（HSC由来RSPO3が肝細胞を制御）がHSC起点だったのに対し、本論文は肝細胞起点でHSCを活性化する逆向きのパラクライン軸。#02（KC由来シグナル）・#10（IL32産生肝細胞→KC）と合わせると、肝細胞→HSC直接路と肝細胞→KC→HSC間接路を多細胞で対比でき、c-Kit/STAT3がHSC側の新リードアウト候補になる。"
+      "既収録との接続：#03（ATF4がHSC内部でエンハンサー起動）・#09（HSC由来RSPO3が肝細胞を制御）がHSC起点だったのに対し、本論文は肝細胞起点でHSCを活性化する逆向きのパラクライン軸。#02（NCF1がKCのフェロトーシス感受性を制御）・#10（GPNMB+マクロファージとIL32産生肝細胞）と合わせると、肝細胞→HSC直接路と肝細胞→KC→HSC間接路を多細胞で対比でき、c-Kit/STAT3がHSC側の新リードアウト候補になる。"
     ],
     glossary:[
       {term:"caspase-8",full:"cysteine-aspartic protease 8 (CASP8)",desc:"アポトーシス開始カスパーゼ。本論文では非アポトーシス機能でYY1→Meteorinを誘導しMASH線維化を駆動"},
@@ -82,8 +82,8 @@ LP.paper(
 LP.icons("13", [{ic:"mouse",cap:"肝細胞特異的caspase-8 KOマウス"},{ic:"human",cap:"ヒトMASH肝で相関"},{ic:"hepatocyte",cap:"caspase-8→YY1→Meteorin分泌"},{ic:"stellate",cap:"HSCをc-Kit/STAT3で活性化"}]);
 
 /* ----- 使用手法：js/core.js の METHOD_LABELS のキー（総説は []） ----- */
-/* 13 Wang/Tabas Nat Metab 2025: 肝細胞特異的caspase-8 KO+初代肝細胞+ヒト試料+ELISA(Meteorin)+IHC */
-LP.methods("13", ["mouse","human","invitro","crispr","qpcr","wb","elisa","imaging"]);
+/* 13 Wang/Tabas Nat Metab 2025: 肝細胞特異的caspase-8 KO(AAV8-TBG-Cre)+初代肝細胞+ヒト試料+LC-MS/MS・RNA-seq(分泌因子絞込み)+WB/IHC/IF+caspase阻害薬 */
+LP.methods("13", ["mouse","human","invitro","crispr","drug","qpcr","wb","rnaseq","proteomics","imaging"]);
 
 /* ----- アニメーション（CINEMA）：部品は js/cinema.js の GLYPH / CinemaKit ----- */
 /* ===== №01 ヒトMASLD空間マルチオミクスatlas ===== */
@@ -109,7 +109,7 @@ LP.cinema("13", {
         addDrops(K,"hepDrops",dp,"lip13");
         K.show(["casp8"]); K.T(()=>K.pulse("casp8"),900);
       }},
-      {color:"B",t:4200,cap:"② caspase-8が核内でYY1を介し、分泌型Meteorin（Metrn）の転写を誘導。Metrnが細胞外へ放出される（肝細胞自体はアポトーシスせず生存）。",run(){
+      {color:"B",t:4200,cap:"② caspase-8（非アポトーシス機能）が核内YY1を介して分泌型Meteorin（Metrn）の転写を誘導。Metrnが細胞外へ放出される（肝細胞自体はアポトーシスせず生存）。",run(){
         K.show(["yy1"]); K.flow(170,168,78,142,"var(--B)",{dur:1.0,loop:2});
         K.T(()=>{K.pulse("yy1"); K.show(["metrnLayer"]);},1300);
         K.T(()=>{K.flow(95,140,290,150,"var(--B)",{dur:1.1,loop:2}); K.pulse("metrn");},2300);
@@ -120,7 +120,7 @@ LP.cinema("13", {
         K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC（aHSC）");},2300);
         K.T(()=>K.draw("collagen",GLYPH.collagenAt(520,365),{len:160}),3100);
       }},
-      {color:"H",t:3600,cap:"④ 肝細胞caspase-8の欠損やMetrnのサイレンシングがこの経路を遮断→HSCが静止化し線維化が退縮。アポトーシスには影響しない＝新たな抗線維化標的。",run(){
+      {color:"H",t:3600,cap:"④ 肝細胞caspase-8の欠損やMetrnのサイレンシングがこの経路を遮断→HSC活性化と線維化が抑制される（Metrnサイレンシングでは進行した線維化が退縮）。アポトーシスには影響しない＝新たな抗線維化標的。",run(){
         K.show(["drug"]);
         K.T(()=>{K.strike(600,80,170,170); K.strike(600,80,300,150);
           K.T(()=>{

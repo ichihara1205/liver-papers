@@ -118,7 +118,7 @@ function mountCinema(mount, def){
     markX(x,y,color){const fl=fluxLayer();const t=cE("text",{x:x,y:y+5,"text-anchor":"middle","font-size":"17","font-weight":"700",fill:color||"var(--H)"},fl);t.textContent="⊣";
       cE("animate",{attributeName:"opacity",values:"0;1",dur:(0.3*SP())+"s",fill:"freeze"},t).beginElement();},
     grow(id,to,dur,from){const e=svg.querySelector('#'+id),c=(e&&(e.querySelector('.box')||e));if(!c)return;const f=(from!=null?from:+(c.getAttribute("r")||3)),t0=performance.now(),D=dur*SP();
-      const st=now=>{const q=Math.min(1,(now-t0)/D);c.setAttribute("r",(f+(to-f)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);},
+      const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/D));c.setAttribute("r",(f+(to-f)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);},
     draw(parentId,paths,o){o=o||{};const dur=(o.dur||1.3)*SP(),gap=(o.gap||0.4)*SP(),w=o.w||2.6,color=o.color||"var(--B)",len=o.len||180;
       const g=svg.querySelector('#'+parentId); if(!g)return; g.setAttribute("opacity","1");
       paths.forEach((d,i)=>later(()=>{const p=cE("path",{d:d,fill:"none",stroke:color,"stroke-width":w,"stroke-dasharray":len,"stroke-dashoffset":len},g);
@@ -279,10 +279,10 @@ const GLYPH={
 function addDrops(K,layerId,pos,grad,delay){grad=grad||"lip01";const g=K.$(layerId);if(!g)return;pos.forEach((p,i)=>K.T(()=>{
   const c=K.cE("circle",{cx:p[0],cy:p[1],r:1,fill:`url(#${grad})`,stroke:"#b8862f","stroke-width":"0.7"});g.appendChild(c);
   const t0=performance.now(),target=5+Math.random()*5,dur=1300;
-  const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+  const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/dur));c.setAttribute("r",(1+(target-1)*q).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
 },(delay||0)+i*150));}
 function shrinkChildren(K,id){const g=K.$(id);if(!g)return;[...g.children].forEach((c,i)=>K.T(()=>{
   const from=+(c.getAttribute("r")||0),t0=performance.now(),dur=1200;
-  const st=now=>{const q=Math.min(1,(now-t0)/dur);c.setAttribute("r",(from*(1-0.85*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
+  const st=now=>{const q=Math.max(0,Math.min(1,(now-t0)/dur));c.setAttribute("r",(from*(1-0.85*q)).toFixed(1));if(q<1)K.raf(st);};K.raf(st);
 },i*60));}
 function radiate(K,cx,cy,color,n){for(let i=0;i<(n||6);i++){const ang=Math.PI*2*i/(n||6);K.flow(cx,cy,cx+Math.cos(ang)*34,cy+Math.sin(ang)*34,color,{n:1,dur:0.9,loop:1});}}

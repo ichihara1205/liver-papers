@@ -50,7 +50,7 @@ LP.paper(
       "リードアウト候補：KC鉄沈着・脂質過酸化(フェロトーシス指標)、ヘプシジン、MoMΦ浸潤マーカー。",
       "重要注意：高糖・高脂質＋好気条件でKC自身がフェロトーシスで脱落しうる→共培養でのKC生存・自己複製モニタリングが必要。",
       "ABM：KCのフェロトーシス／単球由来MΦへの置換を「細胞死・補充の確率ルール」として実装する好例。鉄・OxPL濃度を状態変数に。",
-      "#01との接続：#01はLAMのlp-PLA2(PLA2G7)がOxPL代謝を担うと示し、本論文がそのOxPL–KC鉄–フェロトーシス軸の因果を実証(#01は本論文を引用)。OxPLが共通ハブ。"
+      "#01との接続：#01はLAM特異的なlp-PLA2(PLA2G7)と空間メタボロームでのリン脂質蓄積の関連を示唆し、考察でOxPLによるKC鉄沈着・フェロトーシスに言及。本論文はそのOxPL–KC鉄–フェロトーシス軸をマウスで機構的に示した。OxPLが共通ハブ。"
     ],
     glossary:[
       {term:"NCF1", full:"neutrophil cytosolic factor 1", desc:"NADPHオキシダーゼ構成因子。KC鉄恒常性を制御"},
@@ -78,9 +78,9 @@ LP.cinema("02", {
   svg:GLYPH.bg()+`<defs>${GLYPH.defsCommon}${GLYPH.lip("02")}${GLYPH.arrow("02","var(--C)")}</defs>`+GLYPH.title("NCF1→OxPL→TLR4→ヘプシジン→KC鉄沈着→フェロトーシス→MoMφ浸潤")
     +GLYPH.hep("hep",30,70,1.25,"肝細胞")
     +`<g id="kc" transform="translate(380,250)"><path id="kcBody" d="M0,-30 C24,-33 39,-12 32,9 C44,24 21,39 0,32 C-24,42 -42,21 -32,2 C-44,-18 -21,-35 0,-30 Z" fill="#5d6470" stroke="#828a96" stroke-width="1.5"/><circle cx="-4" cy="2" r="8" fill="#3a3f48"/><text x="0" y="56" text-anchor="middle" font-size="10" fill="var(--ink-soft)">常在クッパー細胞</text></g>`
-    +GLYPH.receptor("tlr4",380,219,"TLR4","var(--C)")
+    +GLYPH.receptor("tlr4",262,185,"TLR4","var(--C)")
     +GLYPH.tag("ncf1",405,265,"NCF1","var(--C)",54,true)
-    +GLYPH.cytokine("hepc",470,180,"ヘプシジン","var(--C)",true)
+    +GLYPH.cytokine("hepc",330,170,"ヘプシジン","var(--C)",true)
     +`<g id="iron" class="fade"></g>`
     +`<g id="momf" class="fade">`+GLYPH.mac("mo1",300,360,"単球由来MΦ(浸潤)","#9c4f6c")+`</g>`
     +GLYPH.stellate("hsc",610,310,"肝星細胞")+GLYPH.layer("collagen")
@@ -90,15 +90,15 @@ LP.cinema("02", {
     const oxpos=[[210,150],[230,185],[205,215]];
     const iron=[[372,245],[390,252],[380,265],[396,238],[366,258]];
     return [
-      {color:"E",t:2400,cap:"健常な肝類洞。常在クッパー細胞（KC）の膜には受容体TLR4が存在する。",run(){}},
-      {color:"D",t:3000,cap:"① 過栄養で肝細胞に脂肪滴が蓄積し、酸化リン脂質（OxPL）が生成・放出される。",run(){
+      {color:"E",t:2400,cap:"健常な肝類洞。肝細胞（TLR4を発現）と常在クッパー細胞（KC）が並ぶ。",run(){}},
+      {color:"D",t:3000,cap:"① 過栄養で肝細胞に脂肪滴が蓄積する。マクロファージのNCF1が活性酸素を介して酸化リン脂質（OxPL）を増やす。",run(){
         addDrops(K,"hepDrops",dp,"lip02"); K.show(["oxpl"]);
         oxpos.forEach((p,i)=>K.T(()=>{K.$("oxpl").insertAdjacentHTML("beforeend",GLYPH.metab("ox"+i,p[0],p[1],i===1?"OxPL":"","var(--C)"));},700+i*200));
       }},
-      {color:"C",t:4400,cap:"② KC内のNCF1がOxPL産生を促し、OxPLが膜のTLR4に結合→ヘプシジン誘導→KCに鉄が沈着し、フェロトーシス感受性が上昇する。",run(){
+      {color:"C",t:4400,cap:"② 増えたOxPLが肝細胞のTLR4を介してヘプシジン産生を促す→KCに鉄が沈着し、フェロトーシスを起こしやすくなる。",run(){
         K.show(["ncf1"]); K.pulse("ncf1");
-        oxpos.forEach((p,i)=>K.flow(p[0],p[1],380,219,"var(--C)",{n:1,dur:1.1,loop:2}));
-        K.T(()=>{K.show(["hepc"]); K.flow(470,188,392,240,"var(--C)",{loop:2});},1400);
+        oxpos.forEach((p,i)=>K.flow(p[0],p[1],262,185,"var(--C)",{n:1,dur:1.1,loop:2}));
+        K.T(()=>{K.show(["hepc"]); K.flow(338,178,380,236,"var(--C)",{loop:2});},1400);
         K.T(()=>{K.show(["iron"]); iron.forEach((p,i)=>K.T(()=>{K.cE("circle",{cx:p[0],cy:p[1],r:3.6,fill:"#8a5a2a",stroke:"#5a3a18","stroke-width":"0.6"},K.$("iron"));},i*180));},2400);
         K.T(()=>{K.attr("kcBody","fill","#7a4a4a");},3600);
       }},
@@ -107,7 +107,7 @@ LP.cinema("02", {
         K.T(()=>{K.show(["momf"]); K.move("momf",0,0,90,-110,1.4);},800);
         K.T(()=>radiate(K,390,250,"var(--C)"),1900);
       }},
-      {color:"B",t:3000,cap:"④ 増幅した炎症がHSCを刺激し線維化が進む（部分的）。",run(){
+      {color:"B",t:3000,cap:"④ 炎症が増幅してMASHが悪化する。HSCへの波及・線維化は要旨では直接示されておらず、概念上の接続。",run(){
         K.flow(420,250,610,310,"var(--B)",{dur:1.2,loop:2});
         K.T(()=>{K.morph("hscShape",GLYPH.SPINDLE);K.attr("hscShape","fill","#b0432f");K.text("hscCap","活性化HSC");},1000);
         K.T(()=>K.draw("collagen",GLYPH.collagenAt(610,370),{len:150}),1700);
