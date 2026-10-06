@@ -196,7 +196,7 @@ document.getElementById("randbtn").addEventListener("click",()=>{
 syncChipActive();
 setFilterLabel();
 const qInput=document.getElementById("q");
-qInput.addEventListener("input",e=>{ setQuery(e.target.value); refresh(); commitState("typing"); });
+qInput.addEventListener("input",e=>{ setQuery(e.target.value); if(openPaper){ openPaper=""; } refresh(); commitState("typing"); });
 
 // view tabs
 const viewtabs=document.getElementById("viewtabs");
@@ -208,7 +208,8 @@ moretab.addEventListener("click",()=>{
 });
 viewtabs.addEventListener("click",e=>{
   const t=e.target.closest(".vtab"); if(!t)return;
-  currentView=t.dataset.view;
+  if(currentView==="papers"&&openPaper==="") listScrollY=scrollY;
+  currentView=t.dataset.view; openPaper="";   // タブは常に一覧・各ビューの入口へ
   syncViewTabs();
   tabmore.classList.remove("open"); moretab.classList.remove("open");
   refresh(); commitState();
@@ -226,9 +227,12 @@ const zoneview=document.getElementById("zoneview");
 const quizview=document.getElementById("quizview");
 const feedview=document.getElementById("feedview");
 function refresh(){
-  const v=currentView;
-  grid.style.display=v==="papers"?"grid":"none";
-  document.getElementById("pager").style.display=v==="papers"?"":"none";
+  const v=currentView, pageMode=(v==="papers"&&!!openPaper);
+  stopPaperCinema();
+  grid.style.display=(v==="papers"&&!pageMode)?"grid":"none";
+  document.getElementById("pager").style.display=(v==="papers"&&!pageMode)?"":"none";
+  paperview.style.display=pageMode?"block":"none";
+  document.getElementById("countline").style.display=pageMode?"none":"";
   glosview.style.display=v==="terms"?"block":"none";
   netview.style.display=v==="net"?"block":"none";
   boardview.style.display=v==="board"?"block":"none";
@@ -237,12 +241,14 @@ function refresh(){
   feedview.style.display=v==="feed"?"block":"none";
   statsview.style.display=v==="stats"?"block":"none";
   document.getElementById("sortbar").style.display=v==="terms"?"flex":"none";
-  document.getElementById("psortbar").style.display=v==="papers"?"flex":"none";
-  document.getElementById("filterbar").style.display=v==="papers"?"flex":"none";
-  chipsBox.style.display=v==="papers"?"flex":"none";
-  // テーマ絞り込みUIは論文ビューのみ
-  document.querySelector(".controls").classList.toggle("terms",v!=="papers");
-  if(v==="papers") render();
+  document.getElementById("psortbar").style.display=(v==="papers"&&!pageMode)?"flex":"none";
+  document.getElementById("filterbar").style.display=(v==="papers"&&!pageMode)?"flex":"none";
+  chipsBox.style.display=(v==="papers"&&!pageMode)?"flex":"none";
+  if(pageMode) mchipsBox.classList.remove("show");
+  // テーマ絞り込みUIは論文一覧のみ
+  document.querySelector(".controls").classList.toggle("terms",v!=="papers"||pageMode);
+  if(pageMode) renderPaperPage(openPaper);
+  else if(v==="papers") render();
   else if(v==="terms") renderGlossary();
   else if(v==="net") renderNetwork();
   else if(v==="board") renderBoard();
@@ -322,7 +328,9 @@ function emphasize(html){
   // タグ(<...>)はそのまま、テキスト断片だけキーワードを<b>で囲む
   return String(html).replace(/(<[^>]+>)|([^<]+)/g,(m,tag,txt)=>tag?tag:txt.replace(KWRE,'<b class="kw">$1</b>'));
 }
-function em(text){ return emphasize(annotate(text)); }
+// 本文中の **太字**（Markdown 記法）を太字として表示する。データ側は書き換えない
+function mdBold(html){ return String(html||"").replace(/\*\*([^*]+?)\*\*/g,'<strong class="mdb">$1</strong>'); }
+function em(text){ return mdBold(emphasize(annotate(text))); }
 // 「この論文のキモ」：線維化点火のカギ→接続→達成 の順で1文拾う
 function keyTakeaway(p){
   const s=p.struct||{};
@@ -435,13 +443,17 @@ function modelBadges(p){
 
 /* 詳細を開いた時にアニメを生成し、自動再生する（1回だけ）。
    自動再生オフ・OS の「視差効果を減らす」が有効な時は再生しない */
-function initCinema(card){
-  const mount=card.querySelector(".cinema-mount");
+function initCinema(root){
+  const mount=root.querySelector(".cinema-mount");
   if(!mount||mount.dataset.init)return;
   const def=CINEMA[mount.dataset.id]; if(!def)return;
   mount.dataset.init="1";
   const ctrl=mountCinema(mount,def);
-  if(cinemaAutoplayAllowed()) setTimeout(()=>{ if(card.classList.contains("open")) ctrl.play(); },350);
+  if(cinemaAutoplayAllowed()) setTimeout(()=>{ if(mount.isConnected) ctrl.play(); },350);
+}
+// 論文ページを離れるときにアニメを止める
+function stopPaperCinema(){
+  paperview.querySelectorAll(".cinema-mount").forEach(m=>{ if(m._cinema){ m._cinema.pause(); m._cinema.exitFull(); } });
 }
 
 function render(){
@@ -459,97 +471,173 @@ function render(){
   const methodNote = activeMethods.size ? `　｜　手法 ${[...activeMethods].map(k=>METHOD_LABELS[k]||k).join(" / ")}` : "";
   document.getElementById("countline").textContent=
     `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+methodNote+(favOnly?"　｜　★のみ":"")+(query?`　｜　"${query}"`:"");
-  if(openPaper && !list.some(p=>p.id===openPaper)) openPaper="";
   if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません'+(queryTerms.length>1?'<br><small>（スペース区切りの語は「すべて含む」で絞り込みます）</small>':'')+'</div>';pagerEl.innerHTML="";return;}
-  grid.innerHTML=list.map((p,i)=>`
+  grid.innerHTML=list.map((p,i)=>{
+    const kimo=keyTakeaway(p);
+    return `
     <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
       <div class="card-top">
-        <div class="left"><span class="num">No.${p.id}</span><button class="fav${isFav(p.id)?" on":""}" title="お気に入り" aria-label="お気に入り">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${ud(p.id).read||"none"}" title="読了ステータス（端末内保存）"><option value=""${(ud(p.id).read||"")===""?" selected":""}>未読</option><option value="skim"${ud(p.id).read==="skim"?" selected":""}>流し読み</option><option value="deep"${ud(p.id).read==="deep"?" selected":""}>精読</option></select></div>
+        <div class="left">${paperMetaHTML(p)}</div>
         <div class="tags">${tagHTML(p)}</div>
       </div>
-      <h2 class="title">${hl(p.title)}</h2>
+      <h2 class="title"><a href="#paper=${p.id}" data-open="${p.id}">${hl(p.title)}</a></h2>
       <div class="cite"><span class="j">${hl(p.journal)}</span> ${p.vol||""} (${p.year})　${hl(p.authors)}　<span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
+      ${kimo?`<p class="cardkimo"><span class="kimo-tag">キモ</span>${em(kimo)}</p>`:""}
       <span class="approach">${hl(p.approach||"")}</span>
       ${queryTerms.length?`<div class="matchhint">🔎 一致：${matchedFields(p).join("・")}</div>`:""}
       <div class="row-actions">
-        <button class="btn toggle"><span class="arr">▶</span> 詳細を${"開く"}</button>
+        <a class="readbtn" href="#paper=${p.id}" data-open="${p.id}">この論文を読む <span class="arr">▶</span></a>
         <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文を開く（DOI: ${p.doi}）</a>
       </div>
-      <div class="detail"><div class="detail-inner">
-        ${keyTakeaway(p)?`<div class="kimo"><span class="kimo-ic">💡</span><div><span class="kimo-lbl">この論文のキモ</span>${em(keyTakeaway(p))}</div></div>`:""}
-        <div class="sec"><h4>メモ（自分用・端末内保存）</h4><div class="memo"><textarea placeholder="この論文についてのメモ…">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div></div>
-        ${(paperIcons[p.id]&&paperIcons[p.id].length)?`<div class="sec"><h4>登場要素（イラスト）</h4><div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div></div>`:""}
-        ${(()=>{const ms=paperMethods[p.id]||[];if(!ms.length)return"";const exp=ms.filter(k=>METHOD_CAT[k]==="exp");const ana=ms.filter(k=>METHOD_CAT[k]==="ana");const row=(keys,cat,label)=>keys.length?`<div class="mth-row"><span class="mth-label ${cat}">${label}</span><div class="mth-illus illus">${keys.map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:"";return`<div class="sec"><h4>使用手法</h4>${row(exp,"exp","実験系")}${row(ana,"ana","解析系")}</div>`;})()}
-        ${p.method_figure?`<div class="sec"><h4>実験系（Method図）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">＋ 拡大</span>${p.method_figure}</div></div>`:""}
-        ${p.figure?`<div class="sec"><h4>概念図（わかったこと）</h4><div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">＋ 拡大</span>${p.figure}</div></div>`:""}
-        ${(typeof CINEMA!=="undefined"&&CINEMA[p.id])?`<div class="sec"><h4>アニメーション（病態の流れ）</h4>${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div></div>`:""}
-        <div class="sec"><h4>Abstract（和訳要約）</h4><p class="abst-strong">${annotate(p.abstract_ja||p.abstract||"")}</p></div>
-        <div class="sec"><h4>背景と課題</h4><p>${em(p.background)}</p></div>
-        <div class="sec"><h4>達成したこと</h4><ul>${(p.achievements||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
-        <div class="sec"><h4>Limitation</h4><ul>${(p.limitations||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
-        <div class="sec connect"><h4>自分の研究との接続</h4><ul>${(p.connection||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul></div>
-        ${(p.glossary&&p.glossary.length)?`<div class="sec"><h4>用語メモ</h4><table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table></div>`:""}
-        ${(()=>{ const rel=relatedPapers(p); return rel.length?`<div class="sec"><h4>関連論文</h4><div class="related">${rel.map(o=>`<button class="relchip" data-id="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">No.${o.q.id}</span> ${o.q.title}</button>`).join("")}</div></div>`:""; })()}
-        <div class="sec closebar"><button class="btn toggle-bottom"><span class="arr">▲</span> 詳細を閉じる</button></div>
-      </div></div>
-    </article>`).join("");
-  grid.querySelectorAll(".card").forEach(card=>{
-    const id=card.dataset.id;
-    card.querySelector(".toggle").addEventListener("click",()=>{
-      const open=!card.classList.contains("open");
-      setCardOpen(card,open);
-      if(open) openPaper=id; else if(openPaper===id) openPaper="";
-      commitState();
-    });
-    // 詳細末尾の「閉じる」→閉じてカード冒頭へ戻る
-    const tb=card.querySelector(".toggle-bottom");
-    if(tb) tb.addEventListener("click",()=>{
-      setCardOpen(card,false);
-      if(openPaper===id){ openPaper=""; commitState(); }
-      card.scrollIntoView({behavior:"smooth",block:"start"});
-    });
-    // ★お気に入り
-    card.querySelector(".fav").addEventListener("click",e=>{
-      e.stopPropagation();
-      const f=!isFav(id); ud(id).fav=f; saveUserData();
-      const b=e.currentTarget; b.classList.toggle("on",f); b.textContent=f?"★":"☆";
-      if(favOnly) render();
-    });
-    // メモ（入力のたびに保存）
-    const ta=card.querySelector(".memo textarea"), saved=card.querySelector(".memo .saved");
-    let tmr;
-    ta.addEventListener("input",()=>{
-      ud(id).memo=ta.value; saveUserData();
-      saved.classList.add("show"); clearTimeout(tmr); tmr=setTimeout(()=>saved.classList.remove("show"),1200);
-    });
-    // 📖 読了ステータス
-    const rsel=card.querySelector(".readsel");
-    rsel.addEventListener("click",e=>e.stopPropagation());
-    rsel.addEventListener("change",()=>{
-      ud(id).read=rsel.value; saveUserData();
-      rsel.className="readsel rs-"+(rsel.value||"none");
-      if(readFilter) render();
-    });
-    // 関連論文リンク
-    card.querySelectorAll(".relchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
-  });
+    </article>`;}).join("");
+  bindPaperMeta(grid);
   populateCitations(grid);
   renderPager(full.length);
   highlightIn(grid,queryTerms);
-  if(openPaper){ const c=grid.querySelector(`.card[data-id="${openPaper}"]`); if(c) setCardOpen(c,true); }
 }
-function setCardOpen(card,open){
-  // 詳細欄は中身の高さまで開き、開き終わったら高さ制限を外す（長い論文でも下が切れない）
-  const d=card.querySelector(".detail");
-  if(d&&open!==card.classList.contains("open")){
-    clearTimeout(d._t);
-    if(open){ d.style.maxHeight=d.scrollHeight+"px"; d._t=setTimeout(()=>{ if(card.classList.contains("open")) d.style.maxHeight="none"; },550); }
-    else{ d.style.maxHeight=d.scrollHeight+"px"; void d.offsetHeight; d.style.maxHeight="0px"; }
-  }
-  card.classList.toggle("open",open);
-  card.querySelector(".toggle").innerHTML=`<span class="arr">▶</span> 詳細を${open?"閉じる":"開く"}`;
-  if(open) initCinema(card);
-  else{ const m=card.querySelector(".cinema-mount"); if(m&&m._cinema){ m._cinema.pause(); m._cinema.exitFull(); } }
+// ★・既読（一覧カードと論文ページで共通）
+function paperMetaHTML(p){
+  const r=ud(p.id).read||"";
+  return `<span class="num">No.${p.id}</span><button type="button" class="fav${isFav(p.id)?" on":""}" data-id="${p.id}" title="お気に入り" aria-label="お気に入り" aria-pressed="${isFav(p.id)}">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${r||"none"}" data-id="${p.id}" title="読了ステータス（端末内保存）" aria-label="読了ステータス"><option value=""${r===""?" selected":""}>未読</option><option value="skim"${r==="skim"?" selected":""}>流し読み</option><option value="deep"${r==="deep"?" selected":""}>精読</option></select>`;
+}
+function bindPaperMeta(root){
+  root.querySelectorAll(".fav[data-id]").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation();
+    const id=b.dataset.id, f=!isFav(id); ud(id).fav=f; saveUserData();
+    b.classList.toggle("on",f); b.textContent=f?"★":"☆"; b.setAttribute("aria-pressed",f);
+    if(favOnly&&!openPaper) render();
+  }));
+  root.querySelectorAll(".readsel[data-id]").forEach(sel=>sel.addEventListener("change",()=>{
+    ud(sel.dataset.id).read=sel.value; saveUserData();
+    sel.className="readsel rs-"+(sel.value||"none");
+    if(readFilter&&!openPaper) render();
+  }));
+}
+
+/* ============================================================
+   論文ページ（utelecon の記事ページにならった階層構造）
+   パンくず → h1 題名 → h2 大見出し（概要／研究の中身／接続／図とアニメ／資料／メモ／関連論文）
+   → h3 小見出し。デスクトップは右に固定の目次、スマホは折りたたみの目次。
+   ============================================================ */
+const paperview=document.getElementById("paperview");
+let listScrollY=0;
+function paperSections(p){
+  const ul=arr=>`<ul>${(arr||[]).map(x=>`<li>${em(x)}</li>`).join("")}</ul>`;
+  const sub=(id,title,body,cls)=>body?{id,title,html:`<div class="sec${cls?" "+cls:""}" id="${id}"><h3>${title}</h3>${body}</div>`}:null;
+  const kimo=keyTakeaway(p);
+  const ms=paperMethods[p.id]||[];
+  const mrow=(keys,cat,label)=>keys.length?`<div class="mth-row"><span class="mth-label ${cat}">${label}</span><div class="mth-illus illus">${keys.map(k=>`<figure>${METHOD_ICONS[k]||""}<figcaption>${METHOD_LABELS[k]||k}</figcaption></figure>`).join("")}</div></div>`:"";
+  const fig=svg=>`<div class="figbox" tabindex="0" role="button" aria-label="図を拡大表示"><span class="figzoom" aria-hidden="true">＋ 拡大</span>${svg}</div>`;
+  const rel=relatedPapers(p);
+  const groups=[
+    {id:"s-overview",title:"概要",lead:kimo?`<div class="kimo"><span class="kimo-ic">💡</span><div><span class="kimo-lbl">この論文のキモ</span>${em(kimo)}</div></div>`:"",
+     subs:[sub("s-abstract","Abstract（和訳要約）",(p.abstract_ja||p.abstract)?`<p class="abst-strong">${mdBold(annotate(p.abstract_ja||p.abstract))}</p>`:"")]},
+    {id:"s-content",title:"研究の中身",subs:[
+      sub("s-background","背景と課題",p.background?`<p>${em(p.background)}</p>`:""),
+      sub("s-achievements","達成したこと",(p.achievements||[]).length?ul(p.achievements):""),
+      sub("s-limitations","Limitation",(p.limitations||[]).length?ul(p.limitations):"")]},
+    {id:"s-connect",title:"自分の研究との接続",cls:"connect",lead:`<div class="sec connect">${ul(p.connection)}</div>`,subs:[]},
+    {id:"s-figures",title:"図とアニメーション",subs:[
+      sub("s-method-fig","実験系（Method図）",p.method_figure?fig(p.method_figure):""),
+      sub("s-concept-fig","概念図（わかったこと）",p.figure?fig(p.figure):""),
+      sub("s-cinema","アニメーション（病態の流れ）",CINEMA[p.id]?`${modelBadges(p)}<div class="cinema-mount" data-id="${p.id}"></div>`:"")]},
+    {id:"s-material",title:"資料",subs:[
+      sub("s-icons","登場要素（イラスト）",(paperIcons[p.id]||[]).length?`<div class="illus">${paperIcons[p.id].map(o=>`<figure>${ICONS[o.ic]||""}<figcaption>${o.cap}</figcaption></figure>`).join("")}</div>`:""),
+      sub("s-methods","使用手法",ms.length?mrow(ms.filter(k=>METHOD_CAT[k]==="exp"),"exp","実験系")+mrow(ms.filter(k=>METHOD_CAT[k]==="ana"),"ana","解析系"):""),
+      sub("s-glossary","用語メモ",(p.glossary||[]).length?`<table class="gloss"><tbody>${p.glossary.map(g=>`<tr><td><b>${g.term}</b></td><td>${g.full||""}</td><td>${g.desc||""}</td></tr>`).join("")}</tbody></table>`:"")]},
+    {id:"s-memo",title:"メモ（自分用・端末内保存）",lead:`<div class="memo"><textarea placeholder="この論文についてのメモ…" aria-label="メモ">${(ud(p.id).memo||"").replace(/</g,"&lt;")}</textarea><span class="saved">保存しました</span></div>`,subs:[]},
+    {id:"s-related",title:"関連論文",lead:rel.length?`<div class="related">${rel.map(o=>`<a class="relchip" href="#paper=${o.q.id}" data-open="${o.q.id}" style="--c:${THEMES[o.q.primary].c}" title="共有テーマ${o.st}・共通用語${o.sg}"><span class="rn">No.${o.q.id}</span> ${o.q.title}</a>`).join("")}</div>`:"",subs:[]}
+  ];
+  return groups.map(g=>({...g,subs:g.subs.filter(Boolean)})).filter(g=>g.lead||g.subs.length);
+}
+function neighborPapers(id){
+  let list=sortPapers(PAPERS.filter(matches));
+  if(!list.some(p=>p.id===id)) list=sortPapers(PAPERS);
+  const i=list.findIndex(p=>p.id===id);
+  return {prev:list[i-1]||null,next:list[i+1]||null};
+}
+function renderPaperPage(id){
+  const p=PAPERS.find(x=>x.id===id);
+  if(!p){ openPaper=""; render(); return; }
+  document.getElementById("total").textContent=PAPERS.length;
+  const th=THEMES[p.primary], groups=paperSections(p), nb=neighborPapers(p.id);
+  const toc=`<ol>${groups.map(g=>`<li><a href="#${g.id}" data-goto="${g.id}">${g.title}</a>${g.subs.length?`<ol>${g.subs.map(s=>`<li><a href="#${s.id}" data-goto="${s.id}">${s.title}</a></li>`).join("")}</ol>`:""}</li>`).join("")}</ol>`;
+  const navLink=(q,dir)=>q?`<a class="pnav-${dir}" href="#paper=${q.id}" data-open="${q.id}"><span class="pnav-lbl">${dir==="prev"?"◀ 前の論文":"次の論文 ▶"}</span><span class="pnav-t">No.${q.id}　${q.title}</span></a>`:`<span></span>`;
+  paperview.innerHTML=`
+    <nav class="crumb" aria-label="パンくずリスト"><ol>
+      <li><a href="#" data-crumb="list">論文一覧</a></li>
+      <li><a href="#theme=${p.primary}" data-crumb="theme" data-theme="${p.primary}">${p.primary}：${th.name}</a></li>
+      <li aria-current="page">No.${p.id}</li>
+    </ol></nav>
+    <article class="ppage" data-id="${p.id}" style="--c:${th.c}">
+      <div class="phead">
+        <div class="tags">${tagHTML(p)}</div>
+        <h1 class="ptitle">${p.title}</h1>
+        <div class="cite"><span class="j">${p.journal}</span> ${p.vol||""} (${p.year})　${p.authors}　<span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
+        <div class="pact">${paperMetaHTML(p)}<a class="doi" href="${p.url}" target="_blank" rel="noopener">原文を開く（DOI: ${p.doi}）</a><button type="button" class="favfilter" data-print>🖨 この論文を印刷 / PDF</button></div>
+        <p class="approach">${p.approach||""}</p>
+      </div>
+      <div class="pbody">
+        <aside class="toc" aria-label="目次"><details open><summary>目次</summary>${toc}</details></aside>
+        <div class="pmain">
+          ${groups.map(g=>`<section class="psec${g.cls?" "+g.cls:""}" aria-labelledby="${g.id}"><h2 id="${g.id}">${g.title}</h2>${g.lead||""}${g.subs.map(s=>s.html).join("")}</section>`).join("")}
+          <nav class="pnav" aria-label="前後の論文">${navLink(nb.prev,"prev")}${navLink(nb.next,"next")}</nav>
+        </div>
+      </div>
+    </article>`;
+  bindPaperMeta(paperview);
+  populateCitations(paperview);
+  const ta=paperview.querySelector(".memo textarea"), saved=paperview.querySelector(".memo .saved"); let tmr;
+  ta.addEventListener("input",()=>{ ud(p.id).memo=ta.value; saveUserData(); saved.classList.add("show"); clearTimeout(tmr); tmr=setTimeout(()=>saved.classList.remove("show"),1200); });
+  paperview.querySelector("[data-print]").addEventListener("click",()=>window.print());
+  // スマホでは目次を最初は閉じておく
+  if(matchMedia("(max-width:1023px)").matches) paperview.querySelector(".toc details").open=false;
+  initCinema(paperview);
+  highlightIn(paperview.querySelector(".pmain"),queryTerms);
+  watchToc();
+}
+// 目次：クリックでその見出しへ（URL のハッシュは状態に使っているので、アンカー移動はしない）
+paperview.addEventListener("click",e=>{
+  const g=e.target.closest("[data-goto]");
+  if(g){ e.preventDefault(); const t=document.getElementById(g.dataset.goto); if(t){ t.scrollIntoView({block:"start"}); t.setAttribute("tabindex","-1"); t.focus({preventScroll:true}); }
+    if(matchMedia("(max-width:1023px)").matches) paperview.querySelector(".toc details").open=false; return; }
+  const c=e.target.closest("[data-crumb]");
+  if(c){ e.preventDefault();
+    if(c.dataset.crumb==="theme"){ activeThemes=new Set([c.dataset.theme]); activeMethods.clear(); favOnly=false; readFilter=""; setQuery(""); listScrollY=0; }
+    closePaperPage(); }
+});
+// 今読んでいる見出しを目次で強調（固定バーの下を通り過ぎた最後の見出し）
+let tocTargets=[], tocRaf=0;
+function watchToc(){
+  tocTargets=[...paperview.querySelectorAll(".pmain h2[id],.pmain .sec[id]")];
+  markToc();
+}
+function markToc(){
+  tocRaf=0;
+  if(!tocTargets.length||paperview.style.display==="none") return;
+  const line=(parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sticky-h"))||0)+40;
+  let cur=tocTargets[0];
+  for(const t of tocTargets){ if(t.getBoundingClientRect().top<=line) cur=t; else break; }
+  paperview.querySelectorAll(".toc a[data-goto]").forEach(a=>a.classList.toggle("on",a.dataset.goto===cur.id));
+}
+addEventListener("scroll",()=>{ if(!tocRaf) tocRaf=requestAnimationFrame(markToc); },{passive:true});
+// 一覧・関連論文・前後リンクなど [data-open] で論文ページへ（新しいタブで開く操作はそのまま通す）
+document.addEventListener("click",e=>{
+  const a=e.target.closest("a[data-open]");
+  if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.button!==0) return;
+  e.preventDefault(); openPaperPage(a.dataset.open);
+});
+function openPaperPage(id){
+  id=String(id);
+  if(currentView==="papers"&&!openPaper) listScrollY=scrollY;
+  currentView="papers"; openPaper=id;
+  syncControls(); refresh(); commitState();
+  scrollTo({top:0,behavior:"instant"});
+}
+function closePaperPage(){
+  openPaper="";
+  syncControls(); refresh(); commitState();
+  scrollTo({top:listScrollY,behavior:"instant"});
 }
 /* ===== 用語ビュー ===== */
 function buildGlossaryIndex(){
@@ -640,21 +728,9 @@ function renderGlossary(){
   highlightIn(glosview,queryTerms);
 }
 function jumpToPaper(id){
-  // 論文ビューへ切替＆フィルタ解除して必ず表示（並び順は維持）。履歴に積むので「戻る」で元の画面へ戻れる
-  id=String(id);
-  currentView="papers"; setQuery(""); clearFilters(); openPaper=id;
-  const full=sortPapers(PAPERS.filter(matches));
-  const idx=full.findIndex(p=>p.id===id);
-  paperPage=idx>=0?Math.floor(idx/PAGE_SIZE)+1:1;
-  lastSig=filterSig();
-  syncControls(); refresh(); commitState();
-  revealCard(id);
-}
-function revealCard(id){
-  requestAnimationFrame(()=>{
-    const card=grid.querySelector(`.card[data-id="${id}"]`);
-    if(card){ setCardOpen(card,true); card.scrollIntoView({behavior:"smooth",block:"start"}); }
-  });
+  // 用語・ボードなどほかのビューから：その論文のページを開く（「戻る」で元のビューへ）
+  if(currentView!=="papers") setQuery("");
+  openPaperPage(id);
 }
 
 /* ===== 研究ボード（線維化点火・ABM台帳・実験ToDo） ===== */
@@ -1230,7 +1306,9 @@ function filterSig(){
   return query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
 }
 function clearFilters(){ activeThemes.clear(); activeMethods.clear(); favOnly=false; readFilter=""; }
-function stateToHash(omitPaper){
+function stateToHash(){
+  // 論文ページは #paper=NN だけの短いURL（共有しやすい）。一覧の絞り込みは端末内の状態として残る
+  if(currentView==="papers"&&openPaper) return "paper="+encodeURIComponent(openPaper);
   const q=new URLSearchParams();
   if(currentView!=="papers") q.set("view",currentView);
   if(query) q.set("q",query);
@@ -1242,7 +1320,6 @@ function stateToHash(omitPaper){
     if(readFilter) q.set("read",readFilter);
     if(paperSort!=="id") q.set("sort",paperSort);
     if(paperPage>1) q.set("page",String(paperPage));
-    if(openPaper&&!omitPaper) q.set("paper",openPaper);
   }
   if(currentView==="terms"&&sortMode!=="alpha") q.set("tsort",sortMode);
   return q.toString();
@@ -1255,6 +1332,14 @@ function commitState(kind){
   const replace = kind==="replace" || (kind==="typing" && typingEntry);
   typingEntry = kind==="typing";
   lastCommit=h;
+  setHash(h,replace);
+}
+// 空のハッシュ（"#"）を設定するとブラウザがページ先頭へ飛ぶので、空のときは # ごと消す
+function setHash(h,replace){
+  if(!h){
+    try{ history[replace?"replaceState":"pushState"](null,"",location.pathname+location.search); return; }
+    catch(e){ h="/"; }
+  }
   if(replace) location.replace("#"+h); else location.hash=h;
 }
 function syncControls(){
@@ -1271,42 +1356,39 @@ function syncControls(){
 function applyHash(hash,initial){
   const h=String(hash||"").replace(/^#/,"");
   const q=new URLSearchParams(h);
-  const prevKey=stateToHash(true), prevView=currentView;
+  const wasPage=currentView==="papers"&&!!openPaper, wasList=currentView==="papers"&&!openPaper;
+  if(wasList&&!initial) listScrollY=scrollY;
   applyingHash=true;
-  const v=q.get("view"); currentView=VIEWS.includes(v)?v:"papers";
-  setQuery(q.get("q")||"");
-  if(currentView==="papers"){
-    activeThemes=new Set((q.get("theme")||"").split(",").filter(t=>THEMES[t]));
-    themeMode=q.get("mode")==="and"?"AND":"OR";
-    activeMethods=new Set((q.get("method")||"").split(",").filter(k=>METHOD_LABELS[k]));
-    favOnly=q.get("fav")==="1";
-    readFilter=READ_FILTER_CYCLE.includes(q.get("read"))?q.get("read"):"";
-    paperSort=PSORTS.includes(q.get("sort"))?q.get("sort"):"id";
-    paperPage=Math.max(1,parseInt(q.get("page"),10)||1);
-    openPaper=q.get("paper")||"";
-    if(openPaper){
-      // 指定の論文が今の絞り込みで見えなければ絞り込みを外し、その論文のあるページへ
-      if(!PAPERS.some(p=>p.id===openPaper)) openPaper="";
-      else{
-        let full=sortPapers(PAPERS.filter(matches));
-        if(!full.some(p=>p.id===openPaper)){ clearFilters(); setQuery(""); full=sortPapers(PAPERS.filter(matches)); }
-        paperPage=Math.floor(full.findIndex(p=>p.id===openPaper)/PAGE_SIZE)+1;
-      }
+  const pid=q.get("paper");
+  if(pid&&PAPERS.some(p=>p.id===pid)){
+    // 論文ページ：一覧の絞り込み・検索は今の状態のまま残す
+    currentView="papers"; openPaper=pid;
+  }else{
+    openPaper="";
+    const v=q.get("view"); currentView=VIEWS.includes(v)?v:"papers";
+    setQuery(q.get("q")||"");
+    if(currentView==="papers"){
+      activeThemes=new Set((q.get("theme")||"").split(",").filter(t=>THEMES[t]));
+      themeMode=q.get("mode")==="and"?"AND":"OR";
+      activeMethods=new Set((q.get("method")||"").split(",").filter(k=>METHOD_LABELS[k]));
+      favOnly=q.get("fav")==="1";
+      readFilter=READ_FILTER_CYCLE.includes(q.get("read"))?q.get("read"):"";
+      paperSort=PSORTS.includes(q.get("sort"))?q.get("sort"):"id";
+      paperPage=Math.max(1,parseInt(q.get("page"),10)||1);
     }
+    if(currentView==="terms") sortMode=TSORTS.includes(q.get("tsort"))?q.get("tsort"):"alpha";
   }
-  if(currentView==="terms") sortMode=TSORTS.includes(q.get("tsort"))?q.get("tsort"):"alpha";
   lastSig=filterSig();
   syncControls();
-  // 論文の開閉だけが変わった場合は描画し直さず、カードの開閉だけを行う
-  const onlyPaper=!initial&&prevView==="papers"&&currentView==="papers"&&prevKey===stateToHash(true)&&grid.querySelector(".card");
-  if(onlyPaper){
-    grid.querySelectorAll(".card.open").forEach(c=>{ if(c.dataset.id!==openPaper) setCardOpen(c,false); });
-  }else refresh();
+  refresh();
   applyingHash=false;
   lastCommit=stateToHash();
-  if(lastCommit!==h && (h||lastCommit)) location.replace("#"+lastCommit);
+  if(lastCommit!==h) setHash(lastCommit,true);
   typingEntry=false;
-  if(currentView==="papers"&&openPaper) revealCard(openPaper);
+  if(!initial){
+    if(openPaper) scrollTo({top:0,behavior:"instant"});
+    else if(wasPage&&currentView==="papers") scrollTo({top:listScrollY,behavior:"instant"});
+  }
 }
 
 /* ============================================================
@@ -1478,7 +1560,7 @@ const lightbox=(()=>{
   // 一覧側：.figbox をクリック／Enter で開く（イベント委譲）
   const openFrom=fb=>{
     const s=fb.querySelector("svg"); if(!s) return;
-    const card=fb.closest(".card"), h=fb.closest(".sec")&&fb.closest(".sec").querySelector("h4");
+    const card=fb.closest(".card,.ppage"), h=fb.closest(".sec")&&fb.closest(".sec").querySelector("h3,h4");
     open(s,(card?"No."+card.dataset.id+" ":"")+(h?h.textContent:""));
   };
   document.addEventListener("click",e=>{ const fb=e.target.closest(".figbox"); if(fb) openFrom(fb); });
@@ -1549,4 +1631,7 @@ document.addEventListener("displaychange",()=>{ const c=document.querySelector("
 // updated date = newest entry year-ish placeholder → use today on open
 document.getElementById("updated").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit"});
 applyHash(location.hash,true);
-window.addEventListener("hashchange",()=>{ const h=location.hash.replace(/^#/,""); if(h!==lastCommit) applyHash(h,false); });
+// 「戻る」「進む」：hashchange と popstate のどちらでも来るので、同じ状態なら無視する
+const onHistoryNav=()=>{ const h=location.hash.replace(/^#/,""); if(h!==lastCommit) applyHash(h,false); };
+window.addEventListener("hashchange",onHistoryNav);
+window.addEventListener("popstate",onHistoryNav);
