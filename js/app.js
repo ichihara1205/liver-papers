@@ -23,7 +23,7 @@
 })();
 
 /* ===== 描画 ===== */
-let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id", activeMethods=new Set();
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id", activeMethods=new Set(), openPaper="";
 const READ_LABEL={"":"未読","skim":"流し読み","deep":"精読"};
 const READ_FILTER_CYCLE=["","unread","skim","deep"];
 const READ_FILTER_LABEL={"":"📖 すべて","unread":"📖 未読のみ","skim":"📖 流し読みのみ","deep":"📖 精読のみ"};
@@ -121,7 +121,7 @@ chipsBox.addEventListener("click",e=>{
   else { if(activeThemes.has(t)) activeThemes.delete(t); else activeThemes.add(t); }
   syncChipActive();
   setFilterLabel();
-  render();
+  render(); commitState();
 });
 
 /* ===== 手法フィルター ===== */
@@ -156,25 +156,28 @@ mchipsBox.addEventListener("click",e=>{
   if(k==="all") activeMethods.clear();
   else { if(activeMethods.has(k)) activeMethods.delete(k); else activeMethods.add(k); }
   buildMChips();
-  methodToggle.innerHTML=(activeMethods.size ? [...activeMethods].map(k=>METHOD_LABELS[k]).join(" / ") : "🔬 手法で絞り込み")+'<span class="fchev">▾</span>';
+  setMethodLabel();
   methodToggle.classList.toggle("open",true);
   mchipsBox.classList.add("show");
-  render();
+  render(); commitState();
 });
+function setMethodLabel(){
+  methodToggle.innerHTML=(activeMethods.size ? [...activeMethods].map(k=>METHOD_LABELS[k]).join(" / ") : "🔬 手法で絞り込み")+'<span class="fchev">▾</span>';
+}
 // AND/OR トグル
 const modetoggle=document.getElementById("modetoggle");
 modetoggle.addEventListener("click",()=>{
   themeMode = themeMode==="OR" ? "AND" : "OR";
   modetoggle.textContent=themeMode;
   modetoggle.classList.toggle("on",themeMode==="AND");
-  setFilterLabel(); render();
+  setFilterLabel(); render(); commitState();
 });
 // ★お気に入りのみ
 const favfilter=document.getElementById("favfilter");
 favfilter.addEventListener("click",()=>{
   favOnly=!favOnly;
   favfilter.classList.toggle("on",favOnly);
-  render();
+  render(); commitState();
 });
 // 📖 読了ステータス絞り込み（循環）
 const readfilter=document.getElementById("readfilter");
@@ -183,7 +186,7 @@ readfilter.addEventListener("click",()=>{
   readFilter=READ_FILTER_CYCLE[(i+1)%READ_FILTER_CYCLE.length];
   readfilter.textContent=READ_FILTER_LABEL[readFilter];
   readfilter.classList.toggle("on",readFilter!=="");
-  render();
+  render(); commitState();
 });
 document.getElementById("printbtn").addEventListener("click",()=>window.print());
 document.getElementById("randbtn").addEventListener("click",()=>{
@@ -192,7 +195,8 @@ document.getElementById("randbtn").addEventListener("click",()=>{
 });
 syncChipActive();
 setFilterLabel();
-document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();refresh();});
+const qInput=document.getElementById("q");
+qInput.addEventListener("input",e=>{ setQuery(e.target.value); refresh(); commitState("typing"); });
 
 // view tabs
 const viewtabs=document.getElementById("viewtabs");
@@ -205,15 +209,18 @@ moretab.addEventListener("click",()=>{
 viewtabs.addEventListener("click",e=>{
   const t=e.target.closest(".vtab"); if(!t)return;
   currentView=t.dataset.view;
-  viewtabs.querySelectorAll(".vtab").forEach(x=>x.classList.toggle("active",x===t));
-  // 「その他」内のタブが選択されたら親ボタンを強調＆ドロップダウンを閉じる
-  const inMore=tabmore.contains(t);
-  moretab.classList.toggle("has-active",inMore);
+  syncViewTabs();
   tabmore.classList.remove("open"); moretab.classList.remove("open");
-  document.getElementById("q").placeholder = currentView==="terms"
-    ? "略語・正式名・説明で用語検索…（例: TGFβ）" : "タイトル・著者・誌名・本文で検索…";
-  refresh();
+  refresh(); commitState();
 });
+function syncViewTabs(){
+  let act=null;
+  viewtabs.querySelectorAll(".vtab").forEach(x=>{ const on=x.dataset.view===currentView; x.classList.toggle("active",on); if(on) act=x; });
+  // 「その他」内のタブが選択されたら親ボタンを強調
+  moretab.classList.toggle("has-active",!!act&&tabmore.contains(act));
+  qInput.placeholder = currentView==="terms"
+    ? "略語・正式名・説明で用語検索…（例: TGFβ）" : "検索（本文・用語・手法も。スペースでAND）";
+}
 
 const zoneview=document.getElementById("zoneview");
 const quizview=document.getElementById("quizview");
@@ -251,14 +258,14 @@ sortbar.addEventListener("click",e=>{
   const b=e.target.closest(".sbtn"); if(!b)return;
   sortMode=b.dataset.sort;
   [...sortbar.querySelectorAll(".sbtn")].forEach(x=>x.classList.toggle("active",x===b));
-  renderGlossary();
+  renderGlossary(); commitState();
 });
 const psortbar=document.getElementById("psortbar");
 psortbar.addEventListener("click",e=>{
   const b=e.target.closest(".sbtn"); if(!b)return;
   paperSort=b.dataset.psort;
   [...psortbar.querySelectorAll(".sbtn")].forEach(x=>x.classList.toggle("active",x===b));
-  render();
+  render(); commitState();
   // 被引用数順：未取得ぶんを取得し終えたら再ソート
   if(paperSort==="cited") ensureAllCites().then(changed=>{ if(changed && paperSort==="cited") render(); });
 });
@@ -393,21 +400,10 @@ function matches(p){
     const pm=new Set(paperMethods[p.id]||[]);
     if(![...activeMethods].some(m=>pm.has(m))) return false;
   }
-  if(!query) return true;
-  const blob=[p.title,p.authors,p.journal,p.year,p.abstract,p.abstract_ja,p.background,
-    (p.achievements||[]).join(" "),(p.limitations||[]).join(" "),(p.connection||[]).join(" ")].join(" ").toLowerCase();
-  return blob.includes(query);
+  return matchesQuery(p);
 }
-// 検索語ハイライト（HTMLタグを壊さないようプレーン文字列にのみ適用）
-function hl(text){
-  if(!query||!text) return text==null?"":String(text);
-  const s=String(text);
-  const i=s.toLowerCase().indexOf(query);
-  if(i<0) return s;
-  let out="",pos=0,idx=i;
-  while(idx>=0){ out+=s.slice(pos,idx)+"<mark>"+s.slice(idx,idx+query.length)+"</mark>"; pos=idx+query.length; idx=s.toLowerCase().indexOf(query,pos); }
-  return out+s.slice(pos);
-}
+// 検索語ハイライトは描画後に DOM のテキストへ一括適用する（highlightIn）。ここは素通し。
+function hl(text){ return text==null?"":String(text); }
 const PAGE_SIZE=20; let paperPage=1, lastSig=null;
 const pagerEl=document.getElementById("pager");
 function renderPager(total){
@@ -417,7 +413,7 @@ function renderPager(total){
   for(let p=1;p<=pages;p++) btns+=`<button class="pgnum${p===paperPage?" on":""}" data-p="${p}">${p}</button>`;
   pagerEl.innerHTML=`<button class="pgnav" data-p="${paperPage-1}" ${paperPage<=1?"disabled":""}>← 前</button>${btns}<button class="pgnav" data-p="${paperPage+1}" ${paperPage>=pages?"disabled":""}>次 →</button>`;
   pagerEl.querySelectorAll("button[data-p]").forEach(b=>b.addEventListener("click",()=>{
-    const np=+b.dataset.p; if(np<1||np>pages)return; paperPage=np; render();
+    const np=+b.dataset.p; if(np<1||np>pages)return; paperPage=np; render(); commitState();
     grid.scrollIntoView({behavior:"smooth",block:"start"});
   }));
 }
@@ -452,7 +448,7 @@ function render(){
   document.getElementById("total").textContent=PAPERS.length;
   const themeNote = activeThemes.size ? `　·　テーマ ${[...activeThemes].sort().join(activeThemes.size>1?(themeMode==="AND"?"&":"/"):"")}` : "";
   // フィルタ・並び替えが変わったら1ページ目に戻す
-  const sig=query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
+  const sig=filterSig();
   if(sig!==lastSig){ paperPage=1; lastSig=sig; }
   const pages=Math.max(1,Math.ceil(full.length/PAGE_SIZE));
   if(paperPage>pages) paperPage=pages;
@@ -462,7 +458,8 @@ function render(){
   const methodNote = activeMethods.size ? `　·　手法 ${[...activeMethods].map(k=>METHOD_LABELS[k]||k).join(" / ")}` : "";
   document.getElementById("countline").textContent=
     `表示 ${full.length} / ${PAPERS.length} 本`+rangeNote+themeNote+methodNote+(favOnly?"　·　★のみ":"")+(query?`　·　"${query}"`:"");
-  if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません</div>';pagerEl.innerHTML="";return;}
+  if(openPaper && !list.some(p=>p.id===openPaper)) openPaper="";
+  if(!full.length){grid.innerHTML='<div class="empty">該当する論文がありません'+(queryTerms.length>1?'<br><small>（スペース区切りの語は「すべて含む」で絞り込みます）</small>':'')+'</div>';pagerEl.innerHTML="";return;}
   grid.innerHTML=list.map((p,i)=>`
     <article class="card" data-id="${p.id}" style="--c:${THEMES[p.primary].c};animation-delay:${i*60}ms">
       <div class="card-top">
@@ -472,6 +469,7 @@ function render(){
       <h2 class="title">${hl(p.title)}</h2>
       <div class="cite"><span class="j">${hl(p.journal)}</span> ${p.vol||""} (${p.year}) · ${hl(p.authors)} · <span class="cited" data-doi="${p.doi||""}" title="OpenAlex 被引用数">被引用 …</span></div>
       <span class="approach">${hl(p.approach||"")}</span>
+      ${queryTerms.length?`<div class="matchhint">🔎 一致：${matchedFields(p).join("・")}</div>`:""}
       <div class="row-actions">
         <button class="btn toggle"><span class="arr">▸</span> 詳細を${"開く"}</button>
         <a class="doi" href="${p.url}" target="_blank" rel="noopener">原文 · DOI: ${p.doi}</a>
@@ -497,15 +495,16 @@ function render(){
   grid.querySelectorAll(".card").forEach(card=>{
     const id=card.dataset.id;
     card.querySelector(".toggle").addEventListener("click",()=>{
-      const open=card.classList.toggle("open");
-      card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
-      if(open) initCinema(card);
+      const open=!card.classList.contains("open");
+      setCardOpen(card,open);
+      if(open) openPaper=id; else if(openPaper===id) openPaper="";
+      commitState();
     });
     // 詳細末尾の「閉じる」→閉じてカード冒頭へ戻る
     const tb=card.querySelector(".toggle-bottom");
     if(tb) tb.addEventListener("click",()=>{
-      card.classList.remove("open");
-      card.querySelector(".toggle").innerHTML='<span class="arr">▸</span> 詳細を開く';
+      setCardOpen(card,false);
+      if(openPaper===id){ openPaper=""; commitState(); }
       card.scrollIntoView({behavior:"smooth",block:"start"});
     });
     // ★お気に入り
@@ -534,7 +533,14 @@ function render(){
     card.querySelectorAll(".relchip").forEach(b=>b.addEventListener("click",()=>jumpToPaper(b.dataset.id)));
   });
   populateCitations(grid);
-  renderPager(PAPERS.filter(matches).length);
+  renderPager(full.length);
+  highlightIn(grid,queryTerms);
+  if(openPaper){ const c=grid.querySelector(`.card[data-id="${openPaper}"]`); if(c) setCardOpen(c,true); }
+}
+function setCardOpen(card,open){
+  card.classList.toggle("open",open);
+  card.querySelector(".toggle").innerHTML=`<span class="arr">▸</span> 詳細を${open?"閉じる":"開く"}`;
+  if(open) initCinema(card);
 }
 /* ===== 用語ビュー ===== */
 function buildGlossaryIndex(){
@@ -578,8 +584,8 @@ function glosRowHTML(g){
 }
 function renderGlossary(){
   const all=buildGlossaryIndex().map(enrich);
-  let list=query
-    ? all.filter(g=>[g.term,g.full,g.detail,g.cat].join(" ").toLowerCase().includes(query))
+  let list=queryTerms.length
+    ? all.filter(g=>{ const t=norm([g.term,g.full,g.detail,g.cat].join(" ")); return queryTerms.every(q=>t.includes(q)); })
     : all;
   const byAlpha=(a,b)=>a.term.toLowerCase().localeCompare(b.term.toLowerCase());
   document.getElementById("total").textContent=PAPERS.length;
@@ -622,31 +628,23 @@ function renderGlossary(){
   glosview.querySelectorAll(".pchip").forEach(b=>{
     b.addEventListener("click",()=>jumpToPaper(b.dataset.id));
   });
+  highlightIn(glosview,queryTerms);
 }
 function jumpToPaper(id){
-  // 論文ビューへ切替＆フィルタ解除して必ず表示
-  currentView="papers"; query=""; activeThemes.clear(); favOnly=false; readFilter=""; activeMethods.clear(); buildMChips(); methodToggle.innerHTML='🔬 手法で絞り込み<span class="fchev">▾</span>';
-  document.getElementById("q").value="";
-  favfilter.classList.remove("on");
-  readfilter.textContent=READ_FILTER_LABEL[""]; readfilter.classList.remove("on");
-  viewtabs.querySelectorAll(".vtab").forEach(x=>x.classList.toggle("active",x.dataset.view==="papers"));
-  moretab.classList.remove("has-active","open"); tabmore.classList.remove("open");
-  syncChipActive();
-  setFilterLabel();
-  document.getElementById("q").placeholder="検索…";
-  // 対象がどのページにあるか算出してそのページへ
-  const full=PAPERS.filter(matches).sort((a,b)=>Number(b.id)-Number(a.id));
-  const idx=full.findIndex(p=>String(p.id)===String(id));
-  if(idx>=0) paperPage=Math.floor(idx/PAGE_SIZE)+1;
-  lastSig=null; // ページ強制反映
-  refresh();
+  // 論文ビューへ切替＆フィルタ解除して必ず表示（並び順は維持）。履歴に積むので「戻る」で元の画面へ戻れる
+  id=String(id);
+  currentView="papers"; setQuery(""); clearFilters(); openPaper=id;
+  const full=sortPapers(PAPERS.filter(matches));
+  const idx=full.findIndex(p=>p.id===id);
+  paperPage=idx>=0?Math.floor(idx/PAGE_SIZE)+1:1;
+  lastSig=filterSig();
+  syncControls(); refresh(); commitState();
+  revealCard(id);
+}
+function revealCard(id){
   requestAnimationFrame(()=>{
-    const cards=[...grid.querySelectorAll(".card")];
-    const card=cards.find(c=>c.dataset.id===id);
-    if(card){
-      if(!card.classList.contains("open")) card.querySelector(".toggle").click();
-      card.scrollIntoView({behavior:"smooth",block:"start"});
-    }
+    const card=grid.querySelector(`.card[data-id="${id}"]`);
+    if(card){ setCardOpen(card,true); card.scrollIntoView({behavior:"smooth",block:"start"}); }
   });
 }
 
@@ -1133,6 +1131,237 @@ function renderNetwork(){
   rebuild();
 }
 
+/* ============================================================
+   検索：全角/半角・大文字/小文字を正規化（NFKC＋小文字化。ＭＡＳＨ＝MASH）し、
+   スペース区切りの語をすべて含む論文だけを残す（AND）。
+   対象：書誌・テーマ・手法（approach・手法名）・本文・接続・用語集・研究ボード(struct)
+   ============================================================ */
+function norm(s){ return String(s==null?"":s).normalize("NFKC").toLowerCase(); }
+let queryTerms=[];
+function setQuery(raw){
+  query=String(raw||"").trim();
+  queryTerms=[...new Set(norm(query).split(/\s+/).filter(Boolean))];
+}
+function flatText(v){
+  if(v==null) return "";
+  if(Array.isArray(v)) return v.map(flatText).join(" ");
+  if(typeof v==="object") return Object.values(v).map(flatText).join(" ");
+  return String(v);
+}
+const SEARCH_FIELDS=[
+  ["書誌",         p=>[p.title,p.authors,p.journal,p.year,p.vol,p.doi]],
+  ["テーマ",       p=>[...paperThemes(p)].map(t=>"テーマ"+t+" "+t+"·"+(THEMES[t]?THEMES[t].name:""))],
+  ["手法",         p=>[p.approach,p.methods,(paperMethods[p.id]||[]).map(k=>METHOD_LABELS[k]||k)]],
+  ["本文",         p=>[p.abstract_ja,p.abstract,p.background,p.achievements,p.limitations]],
+  ["研究との接続", p=>[p.connection]],
+  ["用語メモ",     p=>[(p.glossary||[]).map(g=>[g.term,g.full,g.desc])]],
+  ["研究ボード",   p=>[p.struct]]
+];
+const _searchCache=new Map();
+function searchFields(p){
+  let f=_searchCache.get(p);
+  if(!f){ f=SEARCH_FIELDS.map(([name,get])=>[name,norm(flatText(get(p)).replace(/\*\*/g,""))]); _searchCache.set(p,f); }
+  return f;
+}
+function matchesQuery(p){
+  if(!queryTerms.length) return true;
+  const all=searchFields(p).map(x=>x[1]).join("\n");
+  return queryTerms.every(q=>all.includes(q));
+}
+function matchedFields(p){
+  return searchFields(p).filter(([,t])=>queryTerms.some(q=>t.includes(q))).map(([n])=>n);
+}
+// text 中で terms（正規化済み）に一致する範囲を、元の文字位置で返す
+function findRanges(text,terms){
+  let ns="", st=[], en=[];
+  for(let i=0;i<text.length;){
+    const ch=String.fromCodePoint(text.codePointAt(i)), n=norm(ch);
+    for(let k=0;k<n.length;k++){ st.push(i); en.push(i+ch.length); }
+    ns+=n; i+=ch.length;
+  }
+  const r=[];
+  terms.forEach(t=>{ for(let x=ns.indexOf(t); x>=0; x=ns.indexOf(t,x+1)) r.push([st[x],en[x+t.length-1]]); });
+  r.sort((a,b)=>a[0]-b[0]);
+  const out=[];
+  r.forEach(([a,b])=>{ const last=out[out.length-1]; if(last&&a<=last[1]) last[1]=Math.max(last[1],b); else out.push([a,b]); });
+  return out;
+}
+// 描画済み DOM のテキストに <mark> を付ける（SVG・入力欄・ボタン類は対象外）
+function highlightIn(root,terms){
+  if(!root||!terms.length) return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){
+    const el=n.parentElement;
+    if(!el||el.closest("svg,textarea,select,option,script,style,mark,.matchhint,.cinema,.fav")) return NodeFilter.FILTER_REJECT;
+    return n.nodeValue.trim()?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+  }});
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n=>{
+    const text=n.nodeValue, ranges=findRanges(text,terms);
+    if(!ranges.length) return;
+    const frag=document.createDocumentFragment(); let pos=0;
+    ranges.forEach(([a,b])=>{
+      if(a>pos) frag.append(text.slice(pos,a));
+      const m=document.createElement("mark"); m.textContent=text.slice(a,b); frag.append(m); pos=b;
+    });
+    if(pos<text.length) frag.append(text.slice(pos));
+    n.replaceWith(frag);
+  });
+}
+
+/* ============================================================
+   URL ハッシュで状態を保持する（例 #paper=48 / #view=terms&q=TGF）
+   リンクで直接開けて、ブラウザの「戻る」で前の状態に戻れる。
+   file:// でも動くよう location.hash / location.replace だけを使う。
+   ============================================================ */
+const VIEWS=["papers","board","terms","net","zone","quiz","feed","stats"];
+const PSORTS=[...psortbar.querySelectorAll(".sbtn")].map(b=>b.dataset.psort);
+const TSORTS=[...sortbar.querySelectorAll(".sbtn")].map(b=>b.dataset.sort);
+let lastCommit=null, typingEntry=false, applyingHash=false;
+function filterSig(){
+  return query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
+}
+function clearFilters(){ activeThemes.clear(); activeMethods.clear(); favOnly=false; readFilter=""; }
+function stateToHash(omitPaper){
+  const q=new URLSearchParams();
+  if(currentView!=="papers") q.set("view",currentView);
+  if(query) q.set("q",query);
+  if(currentView==="papers"){
+    if(activeThemes.size) q.set("theme",[...activeThemes].sort().join(","));
+    if(activeThemes.size>=2&&themeMode==="AND") q.set("mode","and");
+    if(activeMethods.size) q.set("method",[...activeMethods].sort().join(","));
+    if(favOnly) q.set("fav","1");
+    if(readFilter) q.set("read",readFilter);
+    if(paperSort!=="id") q.set("sort",paperSort);
+    if(paperPage>1) q.set("page",String(paperPage));
+    if(openPaper&&!omitPaper) q.set("paper",openPaper);
+  }
+  if(currentView==="terms"&&sortMode!=="alpha") q.set("tsort",sortMode);
+  return q.toString();
+}
+// kind: 省略=履歴に積む / "replace"=今の履歴を置き換え / "typing"=入力中は1件にまとめる
+function commitState(kind){
+  if(applyingHash) return;
+  const h=stateToHash();
+  if(h===lastCommit) return;
+  const replace = kind==="replace" || (kind==="typing" && typingEntry);
+  typingEntry = kind==="typing";
+  lastCommit=h;
+  if(replace) location.replace("#"+h); else location.hash=h;
+}
+function syncControls(){
+  qInput.value=query;
+  syncViewTabs();
+  syncChipActive(); setFilterLabel();
+  modetoggle.textContent=themeMode; modetoggle.classList.toggle("on",themeMode==="AND");
+  buildMChips(); setMethodLabel();
+  favfilter.classList.toggle("on",favOnly);
+  readfilter.textContent=READ_FILTER_LABEL[readFilter]; readfilter.classList.toggle("on",readFilter!=="");
+  psortbar.querySelectorAll(".sbtn").forEach(x=>x.classList.toggle("active",x.dataset.psort===paperSort));
+  sortbar.querySelectorAll(".sbtn").forEach(x=>x.classList.toggle("active",x.dataset.sort===sortMode));
+}
+function applyHash(hash,initial){
+  const h=String(hash||"").replace(/^#/,"");
+  const q=new URLSearchParams(h);
+  const prevKey=stateToHash(true), prevView=currentView;
+  applyingHash=true;
+  const v=q.get("view"); currentView=VIEWS.includes(v)?v:"papers";
+  setQuery(q.get("q")||"");
+  if(currentView==="papers"){
+    activeThemes=new Set((q.get("theme")||"").split(",").filter(t=>THEMES[t]));
+    themeMode=q.get("mode")==="and"?"AND":"OR";
+    activeMethods=new Set((q.get("method")||"").split(",").filter(k=>METHOD_LABELS[k]));
+    favOnly=q.get("fav")==="1";
+    readFilter=READ_FILTER_CYCLE.includes(q.get("read"))?q.get("read"):"";
+    paperSort=PSORTS.includes(q.get("sort"))?q.get("sort"):"id";
+    paperPage=Math.max(1,parseInt(q.get("page"),10)||1);
+    openPaper=q.get("paper")||"";
+    if(openPaper){
+      // 指定の論文が今の絞り込みで見えなければ絞り込みを外し、その論文のあるページへ
+      if(!PAPERS.some(p=>p.id===openPaper)) openPaper="";
+      else{
+        let full=sortPapers(PAPERS.filter(matches));
+        if(!full.some(p=>p.id===openPaper)){ clearFilters(); setQuery(""); full=sortPapers(PAPERS.filter(matches)); }
+        paperPage=Math.floor(full.findIndex(p=>p.id===openPaper)/PAGE_SIZE)+1;
+      }
+    }
+  }
+  if(currentView==="terms") sortMode=TSORTS.includes(q.get("tsort"))?q.get("tsort"):"alpha";
+  lastSig=filterSig();
+  syncControls();
+  // 論文の開閉だけが変わった場合は描画し直さず、カードの開閉だけを行う
+  const onlyPaper=!initial&&prevView==="papers"&&currentView==="papers"&&prevKey===stateToHash(true)&&grid.querySelector(".card");
+  if(onlyPaper){
+    grid.querySelectorAll(".card.open").forEach(c=>{ if(c.dataset.id!==openPaper) setCardOpen(c,false); });
+  }else refresh();
+  applyingHash=false;
+  lastCommit=stateToHash();
+  if(lastCommit!==h && (h||lastCommit)) location.replace("#"+lastCommit);
+  typingEntry=false;
+  if(currentView==="papers"&&openPaper) revealCard(openPaper);
+}
+
+/* ============================================================
+   端末内データ（既読・★・メモ・ToDo）の JSON 書き出し／読み込み
+   PC とスマホの間で移すためのもの。読み込みは今のデータと統合する。
+   ============================================================ */
+function exportUserData(){
+  // 中身のない項目（描画時に作られる空オブジェクト）は省く
+  const data=Object.fromEntries(Object.entries(userData).filter(([,v])=>v&&typeof v==="object"&&Object.keys(v).length));
+  const payload={app:"liver-papers",kind:"userData",version:1,key:UD_KEY,exportedAt:new Date().toISOString(),userData:data};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const d=new Date(), pad=n=>String(n).padStart(2,"0");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=`liver-papers-userdata-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1500);
+}
+function mergeUserData(inc){
+  let papers=0, memoBoth=0;
+  for(const [k,v] of Object.entries(inc)){
+    if(!v||typeof v!=="object"||Array.isArray(v)) continue;
+    const cur=userData[k]||(userData[k]={});
+    if(k.startsWith("_")){ Object.assign(cur,v); continue; }
+    papers++;
+    for(const [f,val] of Object.entries(v)){
+      if(f==="memo"){
+        const a=cur.memo||"", b=val||"";
+        if(!a||b.includes(a)) cur.memo=b;
+        else if(b&&!a.includes(b)){ cur.memo=a+"\n\n――（読み込んだメモ）――\n"+b; memoBoth++; }
+      }else if(f==="todos"&&val&&typeof val==="object") cur.todos=Object.assign(cur.todos||{},val);
+      else cur[f]=val;
+    }
+  }
+  return {papers,memoBoth};
+}
+function importUserDataFile(file){
+  const rd=new FileReader();
+  rd.onload=()=>{
+    let obj;
+    try{ obj=JSON.parse(rd.result); }catch(e){ alert("JSON として読めませんでした："+e.message); return; }
+    const inc=obj&&obj.app==="liver-papers"&&obj.userData ? obj.userData : obj;
+    if(!inc||typeof inc!=="object"||Array.isArray(inc)){ alert("このライブラリの書き出しファイルではないようです。"); return; }
+    const n=Object.keys(inc).filter(k=>!k.startsWith("_")).length;
+    if(!confirm(`${n} 本ぶんの既読・★・メモを読み込み、この端末のデータと統合します。\n同じ項目は読み込んだ内容で上書きし、メモが食い違う場合は両方を残します。\nよろしいですか？`)) return;
+    const r=mergeUserData(inc);
+    saveUserData(); refresh();
+    alert(`読み込みました（${r.papers} 本${r.memoBoth?`、うちメモを両方残したもの ${r.memoBoth} 本`:""}）。`);
+  };
+  rd.readAsText(file);
+}
+const udFile=document.getElementById("udFile");
+document.querySelectorAll("[data-ud=export]").forEach(b=>b.addEventListener("click",exportUserData));
+document.querySelectorAll("[data-ud=import]").forEach(b=>b.addEventListener("click",()=>udFile.click()));
+udFile.addEventListener("change",()=>{ if(udFile.files[0]) importUserDataFile(udFile.files[0]); udFile.value=""; });
+
+// 固定表示の操作バーの高さを CSS 変数へ（カードへスクロールした時に隠れないように）
+(function trackStickyHeight(){
+  const c=document.querySelector(".controls"); if(!c) return;
+  const set=()=>document.documentElement.style.setProperty("--sticky-h",c.offsetHeight+"px");
+  set(); if(window.ResizeObserver) new ResizeObserver(set).observe(c); else addEventListener("resize",set);
+})();
+
 // updated date = newest entry year-ish placeholder → use today on open
 document.getElementById("updated").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit"});
-refresh();
+applyHash(location.hash,true);
+window.addEventListener("hashchange",()=>{ const h=location.hash.replace(/^#/,""); if(h!==lastCommit) applyHash(h,false); });
