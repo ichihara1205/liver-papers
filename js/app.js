@@ -23,10 +23,17 @@
 })();
 
 /* ===== 描画 ===== */
-let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", catSel=new Set(), paperSort="id", activeMethods=new Set(), openPaper="";
+let activeThemes=new Set(), themeMode="OR", favOnly=false, query="", currentView="papers", sortMode="alpha", readFilter="", originFilter="", catSel=new Set(), paperSort="id", activeMethods=new Set(), openPaper="";
 const READ_LABEL={"":"未読","skim":"流し読み","deep":"精読"};
 const READ_FILTER_CYCLE=["","unread","skim","deep"];
 const READ_FILTER_LABEL={"":"📖 すべて","unread":"📖 未読のみ","skim":"📖 流し読みのみ","deep":"📖 精読のみ"};
+// 出典フィルタ（js/core.js の ORIGINS）。"none" は origin のない論文
+const ORIGIN_FILTER_CYCLE=["",...Object.keys(ORIGINS),"none"];
+function originFilterLabel(k){
+  if(!k) return "📍 出典：すべて";
+  if(k==="none") return "📍 出典の記録なし";
+  return ORIGINS[k].icon+" "+ORIGINS[k].label+"のみ";
+}
 const grid=document.getElementById("grid");
 const glosview=document.getElementById("glosview");
 const statsview=document.getElementById("statsview");
@@ -186,6 +193,18 @@ readfilter.addEventListener("click",()=>{
   readFilter=READ_FILTER_CYCLE[(i+1)%READ_FILTER_CYCLE.length];
   readfilter.textContent=READ_FILTER_LABEL[readFilter];
   readfilter.classList.toggle("on",readFilter!=="");
+  render(); commitState();
+});
+// 📍 出典で絞り込み（循環）
+const originfilter=document.getElementById("originfilter");
+function syncOriginFilter(){
+  originfilter.textContent=originFilterLabel(originFilter);
+  originfilter.classList.toggle("on",originFilter!=="");
+}
+originfilter.addEventListener("click",()=>{
+  const i=ORIGIN_FILTER_CYCLE.indexOf(originFilter);
+  originFilter=ORIGIN_FILTER_CYCLE[(i+1)%ORIGIN_FILTER_CYCLE.length];
+  syncOriginFilter();
   render(); commitState();
 });
 document.getElementById("printbtn").addEventListener("click",()=>window.print());
@@ -410,6 +429,10 @@ function matches(p){
     if(readFilter==="unread" && rs!=="") return false;
     if((readFilter==="skim"||readFilter==="deep") && rs!==readFilter) return false;
   }
+  if(originFilter){
+    const via=(p.origin&&p.origin.via)||"none";
+    if(via!==originFilter) return false;
+  }
   if(activeThemes.size){
     const pt=paperThemes(p);
     const ok = themeMode==="AND"
@@ -511,8 +534,16 @@ function render(){
 // ★・既読（一覧カードと論文ページで共通）
 function paperMetaHTML(p){
   const r=ud(p.id).read||"";
-  return `<span class="num">No.${p.id}</span><button type="button" class="fav${isFav(p.id)?" on":""}" data-id="${p.id}" title="お気に入り" aria-label="お気に入り" aria-pressed="${isFav(p.id)}">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${r||"none"}" data-id="${p.id}" title="読了ステータス（端末内保存）" aria-label="読了ステータス"><option value=""${r===""?" selected":""}>未読</option><option value="skim"${r==="skim"?" selected":""}>流し読み</option><option value="deep"${r==="deep"?" selected":""}>精読</option></select>`;
+  return `<span class="num">No.${p.id}</span><button type="button" class="fav${isFav(p.id)?" on":""}" data-id="${p.id}" title="お気に入り" aria-label="お気に入り" aria-pressed="${isFav(p.id)}">${isFav(p.id)?"★":"☆"}</button><select class="readsel rs-${r||"none"}" data-id="${p.id}" title="読了ステータス（端末内保存）" aria-label="読了ステータス"><option value=""${r===""?" selected":""}>未読</option><option value="skim"${r==="skim"?" selected":""}>流し読み</option><option value="deep"${r==="deep"?" selected":""}>精読</option></select>${originBadge(p)}`;
 }
+// 出典バッジ（origin がある論文だけ）
+function originBadge(p){
+  const o=p.origin, d=o&&ORIGINS[o.via];
+  if(!d) return "";
+  const tip=[d.label+"由来",o.date,o.topic].filter(Boolean).join(" ｜ ");
+  return `<span class="originbadge" title="${escAttr(tip)}">${d.icon} ${d.label}${o.date?" "+o.date:""}</span>`;
+}
+function escAttr(t){ return String(t).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
 function bindPaperMeta(root){
   root.querySelectorAll(".fav[data-id]").forEach(b=>b.addEventListener("click",e=>{
     e.stopPropagation();
@@ -616,7 +647,7 @@ paperview.addEventListener("click",e=>{
     if(matchMedia("(max-width:1023px)").matches) paperview.querySelector(".toc details").open=false; return; }
   const c=e.target.closest("[data-crumb]");
   if(c){ e.preventDefault();
-    if(c.dataset.crumb==="theme"){ activeThemes=new Set([c.dataset.theme]); activeMethods.clear(); favOnly=false; readFilter=""; setQuery(""); listScrollY=0; }
+    if(c.dataset.crumb==="theme"){ activeThemes=new Set([c.dataset.theme]); activeMethods.clear(); favOnly=false; readFilter=""; originFilter=""; setQuery(""); listScrollY=0; }
     closePaperPage(); }
 });
 // 今読んでいる見出しを目次で強調（固定バーの下を通り過ぎた最後の見出し）
@@ -1407,9 +1438,9 @@ const PSORTS=[...psortbar.querySelectorAll(".sbtn")].map(b=>b.dataset.psort);
 const TSORTS=[...sortbar.querySelectorAll(".sbtn")].map(b=>b.dataset.sort);
 let lastCommit=null, typingEntry=false, applyingHash=false;
 function filterSig(){
-  return query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
+  return query+"|"+[...activeThemes].sort().join(",")+"|"+themeMode+"|"+favOnly+"|"+readFilter+"|"+originFilter+"|"+paperSort+"|"+[...activeMethods].sort().join(",");
 }
-function clearFilters(){ activeThemes.clear(); activeMethods.clear(); favOnly=false; readFilter=""; }
+function clearFilters(){ activeThemes.clear(); activeMethods.clear(); favOnly=false; readFilter=""; originFilter=""; }
 function stateToHash(){
   // 論文ページは #paper=NN だけの短いURL（共有しやすい）。一覧の絞り込みは端末内の状態として残る
   if(currentView==="papers"&&openPaper) return "paper="+encodeURIComponent(openPaper);
@@ -1422,6 +1453,7 @@ function stateToHash(){
     if(activeMethods.size) q.set("method",[...activeMethods].sort().join(","));
     if(favOnly) q.set("fav","1");
     if(readFilter) q.set("read",readFilter);
+    if(originFilter) q.set("origin",originFilter);
     if(paperSort!=="id") q.set("sort",paperSort);
     if(paperPage>1) q.set("page",String(paperPage));
   }
@@ -1454,6 +1486,7 @@ function syncControls(){
   buildMChips(); setMethodLabel();
   favfilter.classList.toggle("on",favOnly);
   readfilter.textContent=READ_FILTER_LABEL[readFilter]; readfilter.classList.toggle("on",readFilter!=="");
+  syncOriginFilter();
   psortbar.querySelectorAll(".sbtn").forEach(x=>x.classList.toggle("active",x.dataset.psort===paperSort));
   sortbar.querySelectorAll(".sbtn").forEach(x=>x.classList.toggle("active",x.dataset.sort===sortMode));
 }
@@ -1477,6 +1510,7 @@ function applyHash(hash,initial){
       activeMethods=new Set((q.get("method")||"").split(",").filter(k=>METHOD_LABELS[k]));
       favOnly=q.get("fav")==="1";
       readFilter=READ_FILTER_CYCLE.includes(q.get("read"))?q.get("read"):"";
+      originFilter=ORIGIN_FILTER_CYCLE.includes(q.get("origin"))?q.get("origin"):"";
       paperSort=PSORTS.includes(q.get("sort"))?q.get("sort"):"id";
       paperPage=Math.max(1,parseInt(q.get("page"),10)||1);
     }

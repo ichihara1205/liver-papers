@@ -367,6 +367,7 @@ mark{background:var(--mark);color:inherit;border-radius:2px;padding:0 1px}
 .modetoggle.on{background:var(--accent);color:var(--on-c);border-color:var(--accent)}
 .favfilter{font-family:var(--font-sans);font-size:calc(11px*var(--fs));cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 12px}
 .favfilter.on{background:var(--D);color:var(--on-c);border-color:var(--D)}
+.originbadge{font-family:var(--font-sans);font-size:calc(10.5px*var(--fs));color:var(--ink-soft);border:1px dashed var(--line);border-radius:999px;padding:2px 9px;white-space:nowrap}
 .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 /* stats view */
 #statsview{display:none}
@@ -663,6 +664,7 @@ footer .footinner{margin-top:8px}
     <button class="modetoggle" id="modetoggle" title="複数テーマ選択時の論理">OR</button>
     <button class="favfilter" id="favfilter">★ お気に入りのみ</button>
     <button class="favfilter" id="readfilter" title="読了ステータスで絞り込み">📖 すべて</button>
+    <button class="favfilter" id="originfilter" title="出典（チャット / daily-paper-research / 自分で検索）で絞り込み">📍 出典：すべて</button>
     <button class="favfilter" id="printbtn" title="表示中の論文をPDF/印刷（ブラウザのPDF保存が使えます）">🖨 PDF / 印刷</button>
   </div>
   <div class="chips" id="chips"></div>
