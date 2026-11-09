@@ -71,9 +71,21 @@ const METHOD_CAT={
   proteomics:"ana", insilico:"ana"
 };
 
+/* ===== 出典（どこで出会った論文か） =====
+   LP.paper の任意項目 origin:{via, date, topic} の via に使うキー。
+     origin:{via:"chat", date:"2026-11-09", topic:"HSC インフラマソーム / IL-1β"}
+   via だけ必須。date は "YYYY-MM-DD"、topic は議論の見出し（どちらも省略可）。
+   Notion 文献 DB の「出典」（チャット / daily-paper-research / 自分で検索）と対応させてある。
+   origin のない論文は一覧のフィルタで「出典の記録なし」に入る。 */
+const ORIGINS={
+  chat:  {label:"チャット",             icon:"💬"},
+  daily: {label:"daily-paper-research", icon:"🗞"},
+  search:{label:"自分で検索",           icon:"🔍"}
+};
+
 /* ===== 論文データの登録先 =====
    各 papers/NN.js が下の LP API で自分を登録する（1本＝1ファイル）。
-     LP.paper({...})          本文データ（PAPERS に追加）
+     LP.paper({...})          本文データ（PAPERS に追加。任意項目 origin は上の ORIGINS を参照）
      LP.icons(id,[...])        登場要素イラスト（ic は上の ICONS のキー）
      LP.methods(id,[...])      使用手法（METHOD_LABELS のキー。総説は []）
      LP.cinema(id,{svg,build}) アニメーション（js/cinema.js の CinemaKit を使う）

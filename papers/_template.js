@@ -24,6 +24,7 @@ LP.paper(
     tags:["A","D"],                // 関連テーマ（A〜I の配列。primary を含めてもよい）
     approach:"in vitro（…）＋ in vivo（…）＋ 解析手法（…）",   // カードに出る1行の研究手法
     added:"2026-10-06",            // 収録日 YYYY-MM-DD（統計ビューの月別集計に使う）
+    origin:{via:"chat", date:"2026-11-09", topic:"議論の見出し"},   // 任意。via は chat / daily / search（js/core.js の ORIGINS）。不要なら行ごと消す
     abstract_ja:"Abstract の和訳要約（パラフレーズ）。",
     background:"背景と課題。",
     achievements:["達成したこと1。**太字**も書ける。", "達成したこと2。"],   // 配列（文字列1つでも [] で囲む）

@@ -74,8 +74,8 @@ if (fs.existsSync(tpl)) {
   try { new vm.Script(fs.readFileSync(tpl, "utf8"), { filename: "papers/_template.js" }); }
   catch (e) { err("papers/_template.js", `文法エラー：${e.message}`); }
 }
-const G = vm.runInContext(`({calls:__calls, THEMES, ICONS, METHOD_LABELS, CATINFO})`, ctx);
-const { calls, THEMES, ICONS, METHOD_LABELS, CATINFO } = G;
+const G = vm.runInContext(`({calls:__calls, THEMES, ICONS, METHOD_LABELS, CATINFO, ORIGINS})`, ctx);
+const { calls, THEMES, ICONS, METHOD_LABELS, CATINFO, ORIGINS } = G;
 
 /* ---------- 3. ファイル単位：LP 呼び出しの過不足と ID の一致 ---------- */
 const byFile = new Map();
@@ -133,6 +133,18 @@ for (const { file: f, p, icons, methods, cinema } of papers) {
   if (!THEMES[p.primary]) err(f, `primary "${p.primary}" はテーマ記号（${Object.keys(THEMES).join("")} のいずれか1文字）ではありません`);
   if (!isArr(p.tags)) err(f, `tags は配列 ["A","D"] にしてください`);
   else p.tags.filter(t => !THEMES[t]).forEach(t => err(f, `tags の "${t}" はテーマ記号（${Object.keys(THEMES).join("")}）ではありません`));
+  // 出典（任意。ある場合だけ形式を確認する）
+  if (p.origin != null) {
+    const o = p.origin, vias = Object.keys(ORIGINS).join(" / ");
+    if (typeof o !== "object" || isArr(o)) err(f, `origin は {via:"chat", date:"2026-11-09", topic:"…"} の形のオブジェクトにしてください`);
+    else {
+      if (!isStr(o.via)) err(f, `origin.via がありません（${vias} のいずれか）`);
+      else if (!ORIGINS[o.via]) err(f, `origin.via "${o.via}" は ${vias} のいずれかにしてください`);
+      if (o.date != null && !/^\d{4}-\d{2}-\d{2}$/.test(o.date)) err(f, `origin.date は "2026-11-09" の形式にしてください（現在: ${JSON.stringify(o.date)}）`);
+      if (o.topic != null && !isStr(o.topic)) err(f, `origin.topic は空でない文字列にしてください`);
+      Object.keys(o).filter(k => !["via", "date", "topic"].includes(k)).forEach(k => warn(f, `origin に未知の項目 "${k}" があります（via / date / topic のみ）`));
+    }
+  }
   // 用語集
   if (!isArr(p.glossary)) err(f, `glossary は配列にしてください`);
   else p.glossary.forEach((g, i) => {

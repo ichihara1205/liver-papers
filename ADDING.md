@@ -38,6 +38,10 @@ cp papers/_template.js papers/49.js
   - G オミクス・空間解析 ／ H 治療・創薬標的/再生 ／ I 共培養
 - `year`：数値（`2026`）
 - `added`：収録日（`"2026-10-06"`）
+- `origin`（任意）：どこで出会った論文か。`origin:{via:"chat", date:"2026-11-09", topic:"HSC インフラマソーム / IL-1β"}`
+  - `via` は `chat`（チャット）・`daily`（daily-paper-research）・`search`（自分で検索）のどれか。`js/core.js` の `ORIGINS` で定義しています
+  - `date`（`"YYYY-MM-DD"`）と `topic` は省略できます
+  - 書いた論文は一覧の「📍 出典」フィルタで絞り込め、論文ページに出典バッジが出ます。書かなければ「出典の記録なし」に入ります
 - `achievements` ・ `limitations` ・ `connection`：配列です。1項目でも `["…"]` と書きます
 - `struct` の `steatosis` ・ `inflammation` ・ `fibrosis`：`○` `△` `×` `—` のどれかで始めます
 - `figure` ・ `method_figure`：`viewBox='0 0 640 232'` の SVG 文字列です
@@ -74,6 +78,7 @@ node scripts/check.mjs
   - アイコン名・手法名の誤り
   - ファイル名と id の不一致
   - 一覧への書き忘れ
+  - `origin` を書いた場合の形式（`via` の値・`date` の形式・`topic` の空文字）
 - **警告**
   - vol や図の欠け
   - 用語カテゴリ未登録の用語
